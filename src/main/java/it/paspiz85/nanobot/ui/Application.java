@@ -16,7 +16,7 @@ Constants {
 	public static void main(String[] args) {
 		Logging.initialize();
 		try {
-			launch(args);
+			launch(Application.class, args);
 		} finally {
 			Logging.close();
 		}

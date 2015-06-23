@@ -77,7 +77,7 @@
                   <TextArea fx:id="textArea" editable="false" prefHeight="483.0" prefWidth="500.0" AnchorPane.bottomAnchor="50.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
                   <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <Button fx:id="setupButton" mnemonicParsing="false" onAction="#handleSetupButtonAction" text="Setup" />
+                        <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#handleSettingsButtonAction" text="Settings" />
                         <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStartButtonAction" text="Start" />
                         <Button fx:id="stopButton" mnemonicParsing="false" onAction="#handleStopButtonAction" text="Stop" />
                      </children>

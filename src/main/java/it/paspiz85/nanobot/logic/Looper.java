@@ -99,8 +99,4 @@ public final class Looper {
 			context.setWaitDone(false);
 		}
 	}
-
-	public void tearDown() {
-		// TODO Setup.tearDown();
-	}
 }

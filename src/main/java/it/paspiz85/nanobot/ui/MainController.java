@@ -1,14 +1,25 @@
 package it.paspiz85.nanobot.ui;
 
+import it.paspiz85.nanobot.logic.Looper;
+import it.paspiz85.nanobot.logic.Setup;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Config;
 import it.paspiz85.nanobot.util.Constants;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 
 import javafx.application.Application;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -17,7 +28,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -61,7 +71,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
 	@FXML
 	TextField maxThField;
-	final MainModel model = new MainModel();
 	@FXML
 	CheckBox playSoundCheckBox;
 	@FXML
@@ -73,7 +82,7 @@ public class MainController implements ApplicationAwareController, Constants {
 	@FXML
 	ComboBox<String> rax4ComboBox;
 	@FXML
-	Button setupButton;
+	Button settingsButton;
 	@FXML
 	AnchorPane setupPane;
 
@@ -137,25 +146,105 @@ public class MainController implements ApplicationAwareController, Constants {
 	}
 
 	@FXML
-	public void handleSetupButtonAction() {
+	public void handleSettingsButtonAction() {
 		showSettings(true);
 	}
 
 	@FXML
 	public void handleStartButtonAction() {
-		model.start();
+		if (setupDone && runnerService.getState() == State.READY) {
+			runnerService.start();
+		}
 	}
 
 	@FXML
 	public void handleStopButtonAction() {
-		model.stop();
+		if (setupService.isRunning()) {
+			setupService.cancel();
+			setupService.reset();
+		}
+		if (runnerService.isRunning()) {
+			runnerService.cancel();
+			runnerService.reset();
+		}
+	}
+
+	private boolean setupDone = false;
+
+	private Service<Void> setupService = null;
+
+	private Service<Void> runnerService = null;
+	
+	void initializeRunnerService() {
+		runnerService = new Service<Void>() {
+
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+
+					@Override
+					protected Void call() throws Exception {
+						Looper.instance().start();
+						return null;
+					}
+				};
+			}
+		};
+
+		runnerService.setOnCancelled(event -> {
+			logger.warning("runner is cancelled.");
+			runnerService.reset();
+		});
+
+		runnerService.setOnFailed(event -> {
+			logger.log(Level.SEVERE, "runner is failed: "
+					+ runnerService.getException().getMessage(),
+					runnerService.getException());
+			runnerService.reset();
+		});
+	}
+
+	 void initializeSetupService() {
+		setupService = new Service<Void>() {
+
+			@Override
+			protected Task<Void> createTask() {
+				return new Task<Void>() {
+
+					@Override
+					protected Void call() throws Exception {
+						// TODO Setup.instance().tearDown();
+						Setup.instance().setup();
+						return null;
+					}
+				};
+			}
+		};
+		setupService.setOnSucceeded(event -> {
+			setupDone = true;
+			logger.info("Setup is successful.");
+			logger.info("Click start to run.");
+		});
+
+		setupService.setOnFailed(event -> {
+			setupDone = false;
+			logger.log(Level.SEVERE, "Setup is failed: "
+					+ setupService.getException().getMessage(),
+					setupService.getException());
+			setupService.reset();
+		});
+
+		setupService.setOnCancelled(event -> {
+			setupDone = false;
+			logger.warning("Setup is cancelled.");
+			setupService.reset();
+		});
 	}
 
 	@FXML
 	void initialize() {
 		LogHandler.initialize(textArea);
-		model.initialize();
-
+		Setup.instance().initialize();
 		initializeLinks();
 		initializeLabels();
 		initializeTextFields();
@@ -164,10 +253,45 @@ public class MainController implements ApplicationAwareController, Constants {
 
 		initializeComboBox();
 		updateConfigGridPane();
-		if (model.checkForUpdate()) {
+		initializeSetupService();
+		initializeRunnerService();
+
+		if (setupService.getState() == State.READY) {
+			setupService.start();
+		}
+		if (checkForUpdate()) {
 			updateLabel.setVisible(true);
 		}
 	}
+	/**
+	 * GitHub dependency is only used here and unused parts are excluded. Make
+	 * sure it works fine if it is used somewhere else.
+	 */
+	 boolean checkForUpdate() {
+		try {
+			String current = getClass().getPackage().getImplementationVersion();
+			if (current == null) {
+				// IDE run
+				return false;
+			}
+			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(
+					current);
+			GitHub github = GitHub.connectAnonymously();
+			GHRepository repository = github.getRepository(REPOSITORY_NAME);
+			for (GHRelease r : repository.listReleases()) {
+				String release = r.getName().substring(1);
+				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(
+						release);
+				if (currentVersion.compareTo(releaseVersion) < 0) {
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Unable to get latest version", e);
+		}
+		return false;
+	}
+
 
 	void initializeComboBox() {
 		autoAttackComboBox.getItems().addAll(
@@ -199,11 +323,11 @@ public class MainController implements ApplicationAwareController, Constants {
 			application.getHostServices().showDocument(githubLink.getText());
 			githubLink.setVisited(false);
 		});
-
+/*
 		Image heartIcon = new Image(getClass().getResourceAsStream(
 				"/images/heart.png"));
 		donateLink.setGraphic(new ImageView(heartIcon));
-
+*/
 		donateLink.setOnAction(event -> {
 			application.getHostServices().showDocument(
 					REPOSITORY_URL + "#donate");
@@ -234,7 +358,7 @@ public class MainController implements ApplicationAwareController, Constants {
 		this.application = application;
 	}
 
-	private void showSettings(boolean value) {
+	 void showSettings(boolean value) {
 		setupPane.setVisible(value);
 		controlPane.setVisible(!value);
 	}
