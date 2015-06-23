@@ -1,4 +1,4 @@
-##PokuBot
+##NanoBot
 An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 
 ###Features
@@ -22,7 +22,7 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * Run the game in **English,** some users reported errors in other languages.
 
 ###Instructions
-Download the latest version of PokuBot from [releases page](https://github.com/norecha/pokubot/releases) and run the .jar file.
+Download the latest version of NanoBot from [releases page](https://github.com/norecha/nanobot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
 Right click to .jar file, Properties -> Open with -> Change -> Browse.
@@ -30,12 +30,12 @@ Then choose javaw.exe in your jre8 or jdk8 installation path, ex: C:\Program Fil
 
 BlueStacks must run in 860x720 resolution, it will automatically set that up, but in case it fails, you have to do it manually.
 
-After PokuBot is opened, click start to go through setup, write down your settings and hit save.
+After NanoBot is opened, click start to go through setup, write down your settings and hit save.
 You can change the values while bot is running too, just don't forget to click save.
 
 If you need help with setting up first barracks, you can watch [this video.](https://www.youtube.com/watch?v=sUN-im0Zt8s) (Thanks to frank1cangri)
 
-All settings are saved under %appdata%/PokuBot/config.properties.
+All settings are saved under %appdata%/NanoBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
 ###Recommended Settings
@@ -63,9 +63,9 @@ Bot is still in its early stages, I have not tested with different machines. If 
 
 * Barracks are scrolling to dark barracks/spells instead of next barracks
 
-    Your first barracks was improperly configured. All settings are saved under %appdata%/PokuBot/config.properties. Delete this file and reconfigure.
+    Your first barracks was improperly configured. All settings are saved under %appdata%/NanoBot/config.properties. Delete this file and reconfigure.
 
 
 ###Donate
-If you like PokuBot consider a donation to support further development. Click
-[here!](https://cdn.rawgit.com/norecha/pokubot/master/donate2.html)
+If you like NanoBot consider a donation to support further development. Click
+[here!](https://cdn.rawgit.com/norecha/nanobot/master/donate2.html)
