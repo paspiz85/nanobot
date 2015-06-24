@@ -56,9 +56,10 @@ public class StateAttack extends State {
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateAttack is interrupted.");
             }
+            long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
                 try {
-                    OS.instance().saveScreenShot(Area.FULLSCREEN, "enemies", "base_" + System.currentTimeMillis());
+                    OS.instance().saveScreenShot(Area.FULLSCREEN, "shots", "base_" + id);
                 } catch (IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
@@ -75,7 +76,7 @@ public class StateAttack extends State {
                                 .isCollectorFullBase());
             } catch (BotBadBaseException e) {
                 try {
-                    OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
+                    OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
                 } catch (IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
