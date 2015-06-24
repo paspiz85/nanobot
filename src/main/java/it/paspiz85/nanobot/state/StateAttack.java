@@ -6,8 +6,8 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parsers;
-import it.paspiz85.nanobot.util.Config;
 import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.util.Settings;
 
 import java.io.IOException;
 import java.net.URL;
@@ -19,7 +19,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
 public class StateAttack extends State {
-	
+
 	private static final StateAttack instance = new StateAttack();
 
 	public static StateAttack instance() {
@@ -29,6 +29,26 @@ public class StateAttack extends State {
 	private int[] prevLoot;
 
 	private StateAttack() {
+	}
+
+	public boolean doConditionsMatch(int gold, int elixir, int de) {
+		// if threshold is 0 or not set, do not match based on them
+		int goldThreshold = Settings.instance().getGoldThreshold();
+		int elixirThreshold = Settings.instance().getElixirThreshold();
+		int darkElixirThreshold = Settings.instance().getDarkElixirThreshold();
+		if (Settings.instance().isMatchAllConditions()) {
+			gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
+			elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
+			de = darkElixirThreshold == 0 ? Integer.MAX_VALUE : de;
+			return gold >= goldThreshold && elixir >= elixirThreshold
+					&& de >= darkElixirThreshold;
+		} else {
+			gold = goldThreshold == 0 ? Integer.MIN_VALUE : gold;
+			elixir = elixirThreshold == 0 ? Integer.MIN_VALUE : elixir;
+			de = darkElixirThreshold == 0 ? Integer.MIN_VALUE : de;
+			return gold >= goldThreshold || elixir >= elixirThreshold
+					|| de >= darkElixirThreshold;
+		}
 	}
 
 	@Override
@@ -58,17 +78,18 @@ public class StateAttack extends State {
 			int elixir = loot[1];
 			int de = loot[2];
 
-			if (Config.instance().doConditionsMatch(gold, elixir, de)
-					&& (!Config.instance().isDetectEmptyCollectors() || Parsers
-							.getAttackScreen().isCollectorFullBase())) {
+			boolean doAttack = doConditionsMatch(gold, elixir, de)
+					&& (!Settings.instance().isDetectEmptyCollectors() || Parsers
+							.getAttackScreen().isCollectorFullBase());
+			if (doAttack) {
 
 				// // debug
 				// if (true) {
 				// attack or let user manually attack
-				if (Config.instance().getAttackStrategy() != ManualAttack
+				if (Settings.instance().getAttackStrategy() != ManualAttack
 						.instance()) {
 					playAttackReady();
-					Config.instance().getAttackStrategy()
+					Settings.instance().getAttackStrategy()
 							.attack(loot, attackGroup);
 					Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE,
 							1200);
@@ -117,7 +138,7 @@ public class StateAttack extends State {
 	}
 
 	void playAttackReady() {
-		if (!Config.instance().isPlaySound()) {
+		if (!Settings.instance().isPlaySound()) {
 			return;
 		}
 		String[] clips = new String[] { "../audio/fight.wav",

@@ -1,18 +1,14 @@
 package it.paspiz85.nanobot.ui;
 
+import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.logic.Setup;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.util.Config;
+import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Constants;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
 
 import javafx.application.Application;
 import javafx.beans.property.StringProperty;
@@ -31,6 +27,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+
+import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
+import org.kohsuke.github.GHRelease;
+import org.kohsuke.github.GHRepository;
+import org.kohsuke.github.GitHub;
 
 public class MainController implements ApplicationAwareController, Constants {
 
@@ -99,6 +100,41 @@ public class MainController implements ApplicationAwareController, Constants {
 	@FXML
 	Label versionLabel;
 
+	private boolean setupDone = false;
+
+	private Service<Void> setupService = null;
+
+	private Service<Void> runnerService = null;
+
+	/**
+	 * GitHub dependency is only used here and unused parts are excluded. Make
+	 * sure it works fine if it is used somewhere else.
+	 */
+	boolean checkForUpdate() {
+		try {
+			String current = getClass().getPackage().getImplementationVersion();
+			if (current == null) {
+				// IDE run
+				return false;
+			}
+			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(
+					current);
+			GitHub github = GitHub.connectAnonymously();
+			GHRepository repository = github.getRepository(REPOSITORY_NAME);
+			for (GHRelease r : repository.listReleases()) {
+				String release = r.getName().substring(1);
+				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(
+						release);
+				if (currentVersion.compareTo(releaseVersion) < 0) {
+					return true;
+				}
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Unable to get latest version", e);
+		}
+		return false;
+	}
+
 	@FXML
 	public void handleCancelButtonAction() {
 		showSettings(false);
@@ -107,41 +143,41 @@ public class MainController implements ApplicationAwareController, Constants {
 	@FXML
 	public void handleSaveButtonAction() {
 		if (!goldField.getText().isEmpty()) {
-			Config.instance().setGoldThreshold(
+			Settings.instance().setGoldThreshold(
 					Integer.parseInt(goldField.getText()));
 		}
 
 		if (!elixirField.getText().isEmpty()) {
-			Config.instance().setElixirThreshold(
+			Settings.instance().setElixirThreshold(
 					Integer.parseInt(elixirField.getText()));
 		}
 
 		if (!deField.getText().isEmpty()) {
-			Config.instance().setDarkElixirThreshold(
+			Settings.instance().setDarkElixirThreshold(
 					Integer.parseInt(deField.getText()));
 		}
 
 		if (!maxThField.getText().isEmpty()) {
-			Config.instance().setMaxThThreshold(
+			Settings.instance().setMaxThThreshold(
 					Integer.parseInt(maxThField.getText()));
 		}
 
-		Config.instance().setMatchAllConditions(
+		Settings.instance().setMatchAllConditions(
 				isMatchAllConditionsCheckBox.isSelected());
-		Config.instance().setDetectEmptyCollectors(
+		Settings.instance().setDetectEmptyCollectors(
 				detectEmptyCollectorsCheckBox.isSelected());
-		Config.instance().setPlaySound(playSoundCheckBox.isSelected());
-		Config.instance().setAttackStrategy(autoAttackComboBox.getValue());
-		Config.instance().getRaxInfo()[0] = Clickable
+		Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
+		Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
+		Settings.instance().getRaxInfo()[0] = Clickable
 				.fromDescription(rax1ComboBox.getValue());
-		Config.instance().getRaxInfo()[1] = Clickable
+		Settings.instance().getRaxInfo()[1] = Clickable
 				.fromDescription(rax2ComboBox.getValue());
-		Config.instance().getRaxInfo()[2] = Clickable
+		Settings.instance().getRaxInfo()[2] = Clickable
 				.fromDescription(rax3ComboBox.getValue());
-		Config.instance().getRaxInfo()[3] = Clickable
+		Settings.instance().getRaxInfo()[3] = Clickable
 				.fromDescription(rax4ComboBox.getValue());
 
-		Config.instance().save();
+		Settings.instance().save();
 		showSettings(false);
 	}
 
@@ -169,12 +205,76 @@ public class MainController implements ApplicationAwareController, Constants {
 		}
 	}
 
-	private boolean setupDone = false;
+	@FXML
+	void initialize() {
+		LogHandler.initialize(textArea);
+		Setup.instance().initialize();
+		initializeLinks();
+		initializeLabels();
+		initializeTextFields();
+		githubLink.setText(REPOSITORY_URL);
+		githubLink.setVisible(true);
 
-	private Service<Void> setupService = null;
+		initializeComboBox();
+		updateConfigGridPane();
+		initializeSetupService();
+		initializeRunnerService();
 
-	private Service<Void> runnerService = null;
-	
+		if (setupService.getState() == State.READY) {
+			setupService.start();
+		}
+		if (checkForUpdate()) {
+			updateLabel.setVisible(true);
+		}
+	}
+
+	void initializeComboBox() {
+		Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
+		String[] attackStrategies = new String[availableAttackStrategies.length];
+		for (int i = 0; i < availableAttackStrategies.length; i++) {
+			Attack a = availableAttackStrategies[i];
+			attackStrategies[i] = a.getClass().getSimpleName();
+		}
+		autoAttackComboBox.getItems().addAll(attackStrategies);
+		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
+
+		Clickable[] availableTroops = Settings.instance().getAvailableTroops();
+		String[] troops = new String[availableTroops.length];
+		for (int i = 0; i < availableTroops.length; i++) {
+			Clickable c = availableTroops[i];
+			troops[i] = c.getDescription();
+		}
+
+		rax1ComboBox.getItems().addAll(troops);
+		rax2ComboBox.getItems().addAll(troops);
+		rax3ComboBox.getItems().addAll(troops);
+		rax4ComboBox.getItems().addAll(troops);
+	}
+
+	void initializeLabels() {
+		String version = getClass().getPackage().getImplementationVersion();
+		if (version != null) {
+			versionLabel.setText(NAME + " v" + version);
+		}
+	}
+
+	void initializeLinks() {
+		githubLink.setOnAction(t -> {
+			application.getHostServices().showDocument(githubLink.getText());
+			githubLink.setVisited(false);
+		});
+		/*
+		 * Image heartIcon = new Image(getClass().getResourceAsStream(
+		 * "/images/heart.png")); donateLink.setGraphic(new
+		 * ImageView(heartIcon));
+		 */
+		donateLink.setOnAction(event -> {
+			application.getHostServices().showDocument(
+					REPOSITORY_URL + "#donate");
+			donateLink.setVisited(false);
+		});
+	}
+
 	void initializeRunnerService() {
 		runnerService = new Service<Void>() {
 
@@ -204,7 +304,7 @@ public class MainController implements ApplicationAwareController, Constants {
 		});
 	}
 
-	 void initializeSetupService() {
+	void initializeSetupService() {
 		setupService = new Service<Void>() {
 
 			@Override
@@ -241,116 +341,22 @@ public class MainController implements ApplicationAwareController, Constants {
 		});
 	}
 
-	@FXML
-	void initialize() {
-		LogHandler.initialize(textArea);
-		Setup.instance().initialize();
-		initializeLinks();
-		initializeLabels();
-		initializeTextFields();
-		githubLink.setText(REPOSITORY_URL);
-		githubLink.setVisible(true);
-
-		initializeComboBox();
-		updateConfigGridPane();
-		initializeSetupService();
-		initializeRunnerService();
-
-		if (setupService.getState() == State.READY) {
-			setupService.start();
-		}
-		if (checkForUpdate()) {
-			updateLabel.setVisible(true);
-		}
-	}
-	/**
-	 * GitHub dependency is only used here and unused parts are excluded. Make
-	 * sure it works fine if it is used somewhere else.
-	 */
-	 boolean checkForUpdate() {
-		try {
-			String current = getClass().getPackage().getImplementationVersion();
-			if (current == null) {
-				// IDE run
-				return false;
-			}
-			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(
-					current);
-			GitHub github = GitHub.connectAnonymously();
-			GHRepository repository = github.getRepository(REPOSITORY_NAME);
-			for (GHRelease r : repository.listReleases()) {
-				String release = r.getName().substring(1);
-				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(
-						release);
-				if (currentVersion.compareTo(releaseVersion) < 0) {
-					return true;
-				}
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Unable to get latest version", e);
-		}
-		return false;
-	}
-
-
-	void initializeComboBox() {
-		autoAttackComboBox.getItems().addAll(
-				Config.instance().getAttackStrategies());
-		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-
-		Clickable[] availableTroops = Config.instance().getAvailableTroops();
-		String[] troops = new String[availableTroops.length];
-		for (int i = 0; i < availableTroops.length; i++) {
-			Clickable c = availableTroops[i];
-			troops[i] = c.getDescription();
-		}
-
-		rax1ComboBox.getItems().addAll(troops);
-		rax2ComboBox.getItems().addAll(troops);
-		rax3ComboBox.getItems().addAll(troops);
-		rax4ComboBox.getItems().addAll(troops);
-	}
-
-	void initializeLabels() {
-		String version = getClass().getPackage().getImplementationVersion();
-		if (version != null) {
-			versionLabel.setText(NAME + " v" + version);
-		}
-	}
-
-	void initializeLinks() {
-		githubLink.setOnAction(t -> {
-			application.getHostServices().showDocument(githubLink.getText());
-			githubLink.setVisited(false);
-		});
-/*
-		Image heartIcon = new Image(getClass().getResourceAsStream(
-				"/images/heart.png"));
-		donateLink.setGraphic(new ImageView(heartIcon));
-*/
-		donateLink.setOnAction(event -> {
-			application.getHostServices().showDocument(
-					REPOSITORY_URL + "#donate");
-			donateLink.setVisited(false);
-		});
-	}
-
 	void initializeTextFields() {
 		ChangeListener<String> intFieldListener = (observable, oldValue,
 				newValue) -> {
-					try {
-						if (!newValue.isEmpty()) {
-							Integer.parseInt(newValue);
-						}
-					} catch (NumberFormatException e) {
-						((TextField) ((StringProperty) observable).getBean())
+			try {
+				if (!newValue.isEmpty()) {
+					Integer.parseInt(newValue);
+				}
+			} catch (NumberFormatException e) {
+				((TextField) ((StringProperty) observable).getBean())
 						.setText(oldValue);
-					}
-				};
-				goldField.textProperty().addListener(intFieldListener);
-				elixirField.textProperty().addListener(intFieldListener);
-				deField.textProperty().addListener(intFieldListener);
-				maxThField.textProperty().addListener(intFieldListener);
+			}
+		};
+		goldField.textProperty().addListener(intFieldListener);
+		elixirField.textProperty().addListener(intFieldListener);
+		deField.textProperty().addListener(intFieldListener);
+		maxThField.textProperty().addListener(intFieldListener);
 	}
 
 	@Override
@@ -358,33 +364,33 @@ public class MainController implements ApplicationAwareController, Constants {
 		this.application = application;
 	}
 
-	 void showSettings(boolean value) {
+	void showSettings(boolean value) {
 		setupPane.setVisible(value);
 		controlPane.setVisible(!value);
 	}
 
 	void updateConfigGridPane() {
-		goldField.setText(Config.instance().getGoldThreshold() + "");
-		elixirField.setText(Config.instance().getElixirThreshold() + "");
-		deField.setText(Config.instance().getDarkElixirThreshold() + "");
-		maxThField.setText(Config.instance().getMaxThThreshold() + "");
+		goldField.setText(Settings.instance().getGoldThreshold() + "");
+		elixirField.setText(Settings.instance().getElixirThreshold() + "");
+		deField.setText(Settings.instance().getDarkElixirThreshold() + "");
+		maxThField.setText(Settings.instance().getMaxThThreshold() + "");
 
-		isMatchAllConditionsCheckBox.setSelected(Config.instance()
+		isMatchAllConditionsCheckBox.setSelected(Settings.instance()
 				.isMatchAllConditions());
-		detectEmptyCollectorsCheckBox.setSelected(Config.instance()
+		detectEmptyCollectorsCheckBox.setSelected(Settings.instance()
 				.isDetectEmptyCollectors());
-		playSoundCheckBox.setSelected(Config.instance().isPlaySound());
+		playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
 		autoAttackComboBox.getSelectionModel().select(
-				Config.instance().getAttackStrategy().getClass()
-						.getSimpleName());
+				Settings.instance().getAttackStrategy().getClass()
+				.getSimpleName());
 		rax1ComboBox.getSelectionModel().select(
-				Config.instance().getRaxInfo()[0].getDescription());
+				Settings.instance().getRaxInfo()[0].getDescription());
 		rax2ComboBox.getSelectionModel().select(
-				Config.instance().getRaxInfo()[1].getDescription());
+				Settings.instance().getRaxInfo()[1].getDescription());
 		rax3ComboBox.getSelectionModel().select(
-				Config.instance().getRaxInfo()[2].getDescription());
+				Settings.instance().getRaxInfo()[2].getDescription());
 		rax4ComboBox.getSelectionModel().select(
-				Config.instance().getRaxInfo()[3].getDescription());
+				Settings.instance().getRaxInfo()[3].getDescription());
 
 		configGridPane.setVisible(true);
 	}

@@ -10,24 +10,25 @@ import java.util.logging.Logger;
 public final class Looper {
 
 	private static final Looper instance = new Looper();
+
 	public static Looper instance() {
 		return instance;
-	}
-	
-	private Looper() {
-		
 	}
 
 	protected final Logger logger = Logger.getLogger(getClass().getName());
 
 	private boolean waitingForDcChecker = false;
 
+	private Looper() {
+
+	}
+
 	public boolean isWaitingForDcChecker() {
 		return waitingForDcChecker;
 	}
 
 	private void loop(Context context) throws InterruptedException,
-	BotException {
+			BotException {
 		Exception botException; // throw in case of timeout
 		try {
 			while (true) {

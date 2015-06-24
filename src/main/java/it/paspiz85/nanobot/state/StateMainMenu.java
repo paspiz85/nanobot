@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Robot;
 
 import java.awt.Point;
@@ -19,7 +20,7 @@ public class StateMainMenu extends State {
 
 	@Override
 	public void handle(Context context) throws BotConfigurationException,
-	InterruptedException {
+			InterruptedException {
 		logger.info("StateMainMenu");
 		if (Thread.interrupted()) {
 			throw new InterruptedException("StateMainMenu is interrupted.");
@@ -27,13 +28,14 @@ public class StateMainMenu extends State {
 		Robot.instance().zoomUp();
 
 		Robot.instance().sleepRandom(350);
-		Robot.instance().leftClick(Clickable.UNIT_FIRST_RAX, 500);
+		Point firstRax = Settings.instance().getFirstBarrackPosition();
+		Robot.instance().leftClick(firstRax.x, firstRax.y, 500);
 
 		Point trainButton = Parsers.getMainscreen().findTrainButton();
 		if (trainButton == null) {
 			// maybe rax was already open and we closed it back. try one more
 			// time
-			Robot.instance().leftClick(Clickable.UNIT_FIRST_RAX, 500);
+			Robot.instance().leftClick(firstRax.x, firstRax.y, 500);
 			trainButton = Parsers.getMainscreen().findTrainButton();
 		}
 

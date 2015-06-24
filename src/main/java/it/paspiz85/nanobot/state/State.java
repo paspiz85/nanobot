@@ -9,6 +9,6 @@ public abstract class State {
 	protected final Logger logger = Logger.getLogger(getClass().getName());
 
 	public abstract void handle(Context context) throws BotException,
-			InterruptedException;
+	InterruptedException;
 
 }

@@ -125,7 +125,7 @@ public final class AttackScreenParser extends AbstractParser {
 				if (c > 0) {
 					logger.finest(String.format(
 							"\tfound %d elixirs matching %s\n", c, next
-							.getFileName().toString()));
+									.getFileName().toString()));
 				}
 			}
 

@@ -142,8 +142,7 @@ public class Robot {
 
 	public void leftClick(Clickable clickable, int sleepInMs)
 			throws InterruptedException {
-		boolean randomize = clickable != Clickable.UNIT_FIRST_RAX;
-		leftClickWin32(clickable.getX(), clickable.getY(), randomize);
+		leftClickWin32(clickable.getX(), clickable.getY(), true);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
 
@@ -169,7 +168,7 @@ public class Robot {
 		while (isCtrlKeyDown()) {
 		}
 		User32.INSTANCE
-		.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
+				.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
 		User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
 	}
 
@@ -252,7 +251,7 @@ public class Robot {
 			while (isCtrlKeyDown()) {
 			}
 			User32.INSTANCE
-			.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
+					.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
 			User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
 			Thread.sleep(1000);
 		}

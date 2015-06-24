@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.util.Config;
+import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Robot;
 
 public class StateTrainTroops extends State {
@@ -19,7 +19,7 @@ public class StateTrainTroops extends State {
 		logger.info("StateTrainTroops");
 		// first barracks must be opened at this point
 
-		Clickable[] raxInfo = Config.instance().getRaxInfo();
+		Clickable[] raxInfo = Settings.instance().getRaxInfo();
 		for (int currRax = 0; currRax < raxInfo.length; currRax++) {
 			Clickable troop = raxInfo[currRax];
 

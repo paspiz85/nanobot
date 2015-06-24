@@ -1,11 +1,11 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.util.Config;
+import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Robot;
 import it.paspiz85.nanobot.win32.User32;
 
+import java.awt.Point;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -25,10 +25,19 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 public class Setup {
 
 	private static final Setup instance = new Setup();
+	public static final int BS_RES_X = 860;
+
+	public static final int BS_RES_Y = 720;
+
+	private static final String BS_WINDOW_NAME = "BlueStacks App Player";
+
 	public static Setup instance() {
 		return instance;
 	}
-	
+
+	private HWND bsHwnd = null;
+	private final Logger logger = Logger.getLogger(getClass().getName());
+
 	private Setup() {
 	}
 
@@ -40,21 +49,10 @@ public class Setup {
 		// setup configUtils
 		logger.info("Setting up ConfigUtils...");
 		logger.info("Make sure in-game language is English.");
-		Config.initialize();
+		Settings.initialize();
 	}
 
-	public static final int BS_RES_X = 860;
-	public static final int BS_RES_Y = 720;
-	private static final String BS_WINDOW_NAME = "BlueStacks App Player";
-
-	private  HWND bsHwnd = null;
-
-	private  final Logger logger = Logger
-			.getLogger(getClass().getName());
-
-
-	public void setup() throws BotConfigurationException,
-	InterruptedException {
+	public void setup() throws BotConfigurationException, InterruptedException {
 		if (!Robot.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
 			throw new BotConfigurationException(
 					"Bot is only available for Windows OS.");
@@ -83,9 +81,9 @@ public class Setup {
 	}
 
 	private void setupBarracks() throws BotConfigurationException,
-	InterruptedException {
+			InterruptedException {
 
-		if (!Config.instance().isBarracksConfigDone()) {
+		if (Settings.instance().getFirstBarrackPosition() == null) {
 			Robot.instance().zoomUp();
 			boolean confirmed = Robot
 					.instance()
@@ -104,7 +102,6 @@ public class Setup {
 				throw new BotConfigurationException(
 						"Cannot proceed without barracks");
 			}
-
 			// read mouse click
 			try {
 				GlobalScreen.registerNativeHook();
@@ -122,9 +119,10 @@ public class Setup {
 								POINT screenPoint = new POINT(x, y);
 								User32.INSTANCE.ScreenToClient(bsHwnd,
 										screenPoint);
-
-								Clickable.UNIT_FIRST_RAX.setX(screenPoint.x);
-								Clickable.UNIT_FIRST_RAX.setY(screenPoint.y);
+								Settings.instance()
+										.setFirstBarrackPosition(
+												new Point(screenPoint.x,
+														screenPoint.y));
 
 								synchronized (GlobalScreen.getInstance()) {
 									GlobalScreen.getInstance().notify();
@@ -142,15 +140,13 @@ public class Setup {
 
 				logger.info("Waiting for user to click on first barracks.");
 				synchronized (GlobalScreen.getInstance()) {
-					while (Clickable.UNIT_FIRST_RAX.getX() == null) {
+					while (Settings.instance().getFirstBarrackPosition() == null) {
 						GlobalScreen.getInstance().wait();
 					}
 				}
 				logger.info(String.format("Set barracks location to <%d, %d>",
-						Clickable.UNIT_FIRST_RAX.getX(),
-						Clickable.UNIT_FIRST_RAX.getY()));
-
-				Config.instance().setBarracksConfigDone(true);
+						Settings.instance().getFirstBarrackPosition().getX(),
+						Settings.instance().getFirstBarrackPosition().getY()));
 
 				GlobalScreen.unregisterNativeHook();
 			} catch (NativeHookException e) {
@@ -160,7 +156,7 @@ public class Setup {
 		}
 	}
 
-	private  void setupBsRect() throws BotConfigurationException {
+	private void setupBsRect() throws BotConfigurationException {
 		bsHwnd = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
 		if (bsHwnd == null) {
 			throw new BotConfigurationException(BS_WINDOW_NAME
@@ -255,9 +251,9 @@ public class Setup {
 		}
 	}
 
-	public  void tearDown() {
-		if (Config.isInitialized()) {
-			Config.close();
+	public void tearDown() {
+		if (Settings.isInitialized()) {
+			Settings.close();
 		}
 	}
 
