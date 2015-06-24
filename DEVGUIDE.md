@@ -33,7 +33,7 @@ mvnDebug clean compile exec:exec
 
 ##### Prepare a release
 ```
-mvn release:prepare
+mvn -B release:clean release:prepare
 ```
 
 
