@@ -38,7 +38,7 @@ If you need help with setting up first barracks, you can watch [this video.](htt
 All settings are saved under %appdata%/NanoBot/config.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
-###Recommended Settings
+####Recommended Settings
 * At least 170k for resources, so you increase the chance of getting a base with full collectors.
 * Auto Attack: Attack 4 Side Parallel 2 Half Wave
 * Detect empty collectors: true
