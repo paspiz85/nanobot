@@ -25,6 +25,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -270,11 +271,8 @@ public class MainController implements ApplicationAwareController, Constants {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
         });
-        /*
-         * Image heartIcon = new Image(getClass().getResourceAsStream(
-         * "/images/heart.png")); donateLink.setGraphic(new
-         * ImageView(heartIcon));
-         */
+        Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
+        donateLink.setGraphic(new ImageView(heartIcon));
         donateLink.setOnAction(event -> {
             application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
             donateLink.setVisited(false);

@@ -11,3 +11,5 @@ code
 check english lang
 unittests
 checkstyle
+
+donate
