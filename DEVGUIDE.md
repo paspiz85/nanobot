@@ -34,9 +34,13 @@ mvnDebug clean compile exec:exec
 ##### Releasing
 Check that your SSH key (~/.ssh/id_rsa.pub) is configured on GitHub (https://github.com/settings/ssh).
 
-To prepare a release:
+To prepare a release (POM changes and tag create):
 ```
 mvn -B release:clean release:prepare
+```
+To perform:
+```
+mvn release:perform
 ```
 
 
