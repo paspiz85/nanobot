@@ -16,6 +16,7 @@ Move into "nanobot" folder.
 ```
 mvn clean install
 ```
+
 Skipping tests and checkstyle:
 ```
 mvn clean install -Dmaven.test.skip=true -Dcheckstyle.skip=true
@@ -36,9 +37,11 @@ Check that your SSH key (~/.ssh/id_rsa.pub) is configured on GitHub (https://git
 
 To prepare a release (POM changes and tag create):
 ```
-mvn -B release:clean release:prepare
+mvn release:clean release:prepare
 ```
-To perform:
+
+Then go on 
+To perform ():
 ```
 mvn release:perform
 ```
