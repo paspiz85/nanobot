@@ -7,6 +7,7 @@ import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -208,7 +209,13 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     void initialize() {
         LogHandler.initialize(textArea);
-        Setup.instance().initialize();
+        // set system locale to ROOT, Turkish clients will break because
+        // jnativehook dependency has Turkish I bug
+        Locale.setDefault(Locale.ROOT);
+        // setup configUtils
+        logger.info("Setting up ConfigUtils...");
+        logger.info("Make sure in-game language is English.");
+        Settings.initialize();
         initializeLinks();
         initializeLabels();
         initializeTextFields();
@@ -305,7 +312,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
                     @Override
                     protected Void call() throws Exception {
-                        // TODO Setup.instance().tearDown();
                         Setup.instance().setup();
                         return null;
                     }

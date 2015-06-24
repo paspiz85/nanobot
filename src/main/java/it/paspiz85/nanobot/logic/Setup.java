@@ -40,16 +40,6 @@ public class Setup implements Constants {
     private Setup() {
     }
 
-    public void initialize() {
-        // set system locale to ROOT, Turkish clients will break because
-        // jnativehook dependency has Turkish I bug
-        Locale.setDefault(Locale.ROOT);
-        // setup configUtils
-        logger.info("Setting up ConfigUtils...");
-        logger.info("Make sure in-game language is English.");
-        Settings.initialize();
-    }
-
     public void setup() throws BotConfigurationException, InterruptedException {
         if (!Robot.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
             throw new BotConfigurationException("Bot is only available for Windows OS.");
@@ -184,12 +174,6 @@ public class Setup implements Constants {
             throw e;
         } catch (Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
-        }
-    }
-
-    public void tearDown() {
-        if (Settings.isInitialized()) {
-            Settings.close();
         }
     }
 }
