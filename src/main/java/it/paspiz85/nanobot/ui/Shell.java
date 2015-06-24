@@ -11,8 +11,7 @@ import java.util.logging.Logger;
 
 public class Shell {
 
-	private static final Logger logger = Logger
-			.getLogger(Shell.class.getName());
+	private static final Logger logger = Logger.getLogger(Shell.class.getName());
 
 	public static void main(String[] args) {
 		Logging.initialize();
@@ -33,5 +32,4 @@ public class Shell {
 			Logging.close();
 		}
 	}
-
 }

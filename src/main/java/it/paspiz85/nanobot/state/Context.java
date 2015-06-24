@@ -31,8 +31,7 @@ public class Context {
 	}
 
 	public void setState(State state) {
-		logger.finest("Setting next state to: "
-				+ state.getClass().getSimpleName());
+		logger.finest("Setting next state to: " + state.getClass().getSimpleName());
 		this.current = state;
 	}
 

@@ -20,21 +20,18 @@ public final class Looper {
 	private boolean waitingForDcChecker = false;
 
 	private Looper() {
-
 	}
 
 	public boolean isWaitingForDcChecker() {
 		return waitingForDcChecker;
 	}
 
-	private void loop(Context context) throws InterruptedException,
-			BotException {
+	private void loop(Context context) throws InterruptedException, BotException {
 		Exception botException; // throw in case of timeout
 		try {
 			while (true) {
 				if (Thread.interrupted()) {
-					throw new InterruptedException(
-							"BotLauncher is interrupted.");
+					throw new InterruptedException("BotLauncher is interrupted.");
 				}
 				context.handle();
 			}
@@ -54,20 +51,16 @@ public final class Looper {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 			botException = e;
 		}
-
 		final long timeout = 10 * 60 * 1000;
 		// wait for dc checker to wake me up
 		synchronized (context) {
 			while (!context.isWaitDone()) {
 				long tBefore = System.currentTimeMillis();
-
 				logger.info("Waiting for dc checker to wake me up...");
 				this.waitingForDcChecker = true;
-
 				// if user interrupts here while it is waiting, make sure
 				// waitingForDcChecker is set to false
 				context.wait(timeout);
-
 				if (System.currentTimeMillis() - tBefore > timeout) {
 					throw new BotException("Timed Out.", botException);
 				}
@@ -81,14 +74,11 @@ public final class Looper {
 	public void start() throws InterruptedException, BotException {
 		// state pattern
 		Context context = new Context();
-
 		// start daemon thread that checks if you are DC'ed etc
 		logger.info("Starting disconnect detector...");
-		Thread dcThread = new Thread(new DisconnectChecker(context,
-				Thread.currentThread()), "DisconnectCheckerThread");
+		Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()), "DisconnectCheckerThread");
 		dcThread.setDaemon(true);
 		dcThread.start();
-
 		try {
 			while (true) {
 				context.setState(StateIdle.instance());

@@ -4,8 +4,8 @@ import com.sun.jna.Native;
 import com.sun.jna.win32.W32APIOptions;
 
 public interface User32 extends com.sun.jna.platform.win32.User32 {
-	User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class,
-			W32APIOptions.DEFAULT_OPTIONS);
+
+	User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
 
 	boolean BlockInput(boolean block);
 
@@ -35,6 +35,5 @@ public interface User32 extends com.sun.jna.platform.win32.User32 {
 	@Override
 	boolean SetForegroundWindow(HWND hWnd);
 
-	boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx,
-			int cy, int uFlags);
+	boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 }

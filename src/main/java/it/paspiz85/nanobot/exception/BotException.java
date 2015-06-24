@@ -14,5 +14,4 @@ public class BotException extends Exception {
 	public BotException(String msg, Throwable t) {
 		super(msg, t);
 	}
-
 }

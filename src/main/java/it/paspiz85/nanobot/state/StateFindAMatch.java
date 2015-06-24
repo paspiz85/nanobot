@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Robot;
 
 public class StateFindAMatch extends State {
+
 	private static final StateFindAMatch instance = new StateFindAMatch();
 
 	public static StateFindAMatch instance() {
@@ -23,11 +24,9 @@ public class StateFindAMatch extends State {
 			Robot.instance().leftClick(Clickable.BUTTON_FIND_A_MATCH, 300);
 			Robot.instance().leftClick(Clickable.BUTTON_SHIELD_DISABLE, 100);
 			Robot.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
-
 			context.setState(StateAttack.instance());
 		} else {
 			context.setState(StateIdle.instance());
 		}
 	}
-
 }

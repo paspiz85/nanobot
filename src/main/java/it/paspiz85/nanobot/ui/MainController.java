@@ -4,8 +4,8 @@ import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.logic.Setup;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Settings;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,20 +51,28 @@ public class MainController implements ApplicationAwareController, Constants {
 
 	@FXML
 	TextField deField;
+
 	@FXML
 	CheckBox detectEmptyCollectorsCheckBox;
+
 	@FXML
 	Label donateLabel;
+
 	@FXML
 	Hyperlink donateLink;
+
 	@FXML
 	TextField elixirField;
+
 	@FXML
 	Hyperlink githubLink;
+
 	@FXML
 	TextField goldField;
+
 	@FXML
 	ImageView heartImage;
+
 	@FXML
 	CheckBox isMatchAllConditionsCheckBox;
 
@@ -72,18 +80,25 @@ public class MainController implements ApplicationAwareController, Constants {
 
 	@FXML
 	TextField maxThField;
+
 	@FXML
 	CheckBox playSoundCheckBox;
+
 	@FXML
 	ComboBox<String> rax1ComboBox;
+
 	@FXML
 	ComboBox<String> rax2ComboBox;
+
 	@FXML
 	ComboBox<String> rax3ComboBox;
+
 	@FXML
 	ComboBox<String> rax4ComboBox;
+
 	@FXML
 	Button settingsButton;
+
 	@FXML
 	AnchorPane setupPane;
 
@@ -92,11 +107,13 @@ public class MainController implements ApplicationAwareController, Constants {
 
 	@FXML
 	Button stopButton;
+
 	@FXML
 	TextArea textArea;
 
 	@FXML
 	Label updateLabel;
+
 	@FXML
 	Label versionLabel;
 
@@ -117,14 +134,12 @@ public class MainController implements ApplicationAwareController, Constants {
 				// IDE run
 				return false;
 			}
-			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(
-					current);
+			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
 			GitHub github = GitHub.connectAnonymously();
 			GHRepository repository = github.getRepository(REPOSITORY_NAME);
 			for (GHRelease r : repository.listReleases()) {
 				String release = r.getName().substring(1);
-				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(
-						release);
+				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
 				if (currentVersion.compareTo(releaseVersion) < 0) {
 					return true;
 				}
@@ -143,40 +158,25 @@ public class MainController implements ApplicationAwareController, Constants {
 	@FXML
 	public void handleSaveButtonAction() {
 		if (!goldField.getText().isEmpty()) {
-			Settings.instance().setGoldThreshold(
-					Integer.parseInt(goldField.getText()));
+			Settings.instance().setGoldThreshold(Integer.parseInt(goldField.getText()));
 		}
-
 		if (!elixirField.getText().isEmpty()) {
-			Settings.instance().setElixirThreshold(
-					Integer.parseInt(elixirField.getText()));
+			Settings.instance().setElixirThreshold(Integer.parseInt(elixirField.getText()));
 		}
-
 		if (!deField.getText().isEmpty()) {
-			Settings.instance().setDarkElixirThreshold(
-					Integer.parseInt(deField.getText()));
+			Settings.instance().setDarkElixirThreshold(Integer.parseInt(deField.getText()));
 		}
-
 		if (!maxThField.getText().isEmpty()) {
-			Settings.instance().setMaxThThreshold(
-					Integer.parseInt(maxThField.getText()));
+			Settings.instance().setMaxThThreshold(Integer.parseInt(maxThField.getText()));
 		}
-
-		Settings.instance().setMatchAllConditions(
-				isMatchAllConditionsCheckBox.isSelected());
-		Settings.instance().setDetectEmptyCollectors(
-				detectEmptyCollectorsCheckBox.isSelected());
+		Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
+		Settings.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
 		Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
 		Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
-		Settings.instance().getRaxInfo()[0] = Clickable
-				.fromDescription(rax1ComboBox.getValue());
-		Settings.instance().getRaxInfo()[1] = Clickable
-				.fromDescription(rax2ComboBox.getValue());
-		Settings.instance().getRaxInfo()[2] = Clickable
-				.fromDescription(rax3ComboBox.getValue());
-		Settings.instance().getRaxInfo()[3] = Clickable
-				.fromDescription(rax4ComboBox.getValue());
-
+		Settings.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
+		Settings.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
+		Settings.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
+		Settings.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
 		Settings.instance().save();
 		showSettings(false);
 	}
@@ -214,12 +214,10 @@ public class MainController implements ApplicationAwareController, Constants {
 		initializeTextFields();
 		githubLink.setText(REPOSITORY_URL);
 		githubLink.setVisible(true);
-
 		initializeComboBox();
 		updateConfigGridPane();
 		initializeSetupService();
 		initializeRunnerService();
-
 		if (setupService.getState() == State.READY) {
 			setupService.start();
 		}
@@ -237,14 +235,12 @@ public class MainController implements ApplicationAwareController, Constants {
 		}
 		autoAttackComboBox.getItems().addAll(attackStrategies);
 		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-
 		Clickable[] availableTroops = Settings.instance().getAvailableTroops();
 		String[] troops = new String[availableTroops.length];
 		for (int i = 0; i < availableTroops.length; i++) {
 			Clickable c = availableTroops[i];
 			troops[i] = c.getDescription();
 		}
-
 		rax1ComboBox.getItems().addAll(troops);
 		rax2ComboBox.getItems().addAll(troops);
 		rax3ComboBox.getItems().addAll(troops);
@@ -269,8 +265,7 @@ public class MainController implements ApplicationAwareController, Constants {
 		 * ImageView(heartIcon));
 		 */
 		donateLink.setOnAction(event -> {
-			application.getHostServices().showDocument(
-					REPOSITORY_URL + "#donate");
+			application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
 			donateLink.setVisited(false);
 		});
 	}
@@ -290,15 +285,12 @@ public class MainController implements ApplicationAwareController, Constants {
 				};
 			}
 		};
-
 		runnerService.setOnCancelled(event -> {
 			logger.warning("runner is cancelled.");
 			runnerService.reset();
 		});
-
 		runnerService.setOnFailed(event -> {
-			logger.log(Level.SEVERE, "runner is failed: "
-					+ runnerService.getException().getMessage(),
+			logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
 					runnerService.getException());
 			runnerService.reset();
 		});
@@ -325,15 +317,12 @@ public class MainController implements ApplicationAwareController, Constants {
 			logger.info("Setup is successful.");
 			logger.info("Click start to run.");
 		});
-
 		setupService.setOnFailed(event -> {
 			setupDone = false;
-			logger.log(Level.SEVERE, "Setup is failed: "
-					+ setupService.getException().getMessage(),
+			logger.log(Level.SEVERE, "Setup is failed: " + setupService.getException().getMessage(),
 					setupService.getException());
 			setupService.reset();
 		});
-
 		setupService.setOnCancelled(event -> {
 			setupDone = false;
 			logger.warning("Setup is cancelled.");
@@ -342,21 +331,19 @@ public class MainController implements ApplicationAwareController, Constants {
 	}
 
 	void initializeTextFields() {
-		ChangeListener<String> intFieldListener = (observable, oldValue,
-				newValue) -> {
-			try {
-				if (!newValue.isEmpty()) {
-					Integer.parseInt(newValue);
-				}
-			} catch (NumberFormatException e) {
-				((TextField) ((StringProperty) observable).getBean())
-						.setText(oldValue);
-			}
-		};
-		goldField.textProperty().addListener(intFieldListener);
-		elixirField.textProperty().addListener(intFieldListener);
-		deField.textProperty().addListener(intFieldListener);
-		maxThField.textProperty().addListener(intFieldListener);
+		ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
+					try {
+						if (!newValue.isEmpty()) {
+							Integer.parseInt(newValue);
+						}
+					} catch (NumberFormatException e) {
+						((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
+					}
+				};
+				goldField.textProperty().addListener(intFieldListener);
+				elixirField.textProperty().addListener(intFieldListener);
+				deField.textProperty().addListener(intFieldListener);
+				maxThField.textProperty().addListener(intFieldListener);
 	}
 
 	@Override
@@ -374,25 +361,15 @@ public class MainController implements ApplicationAwareController, Constants {
 		elixirField.setText(Settings.instance().getElixirThreshold() + "");
 		deField.setText(Settings.instance().getDarkElixirThreshold() + "");
 		maxThField.setText(Settings.instance().getMaxThThreshold() + "");
-
-		isMatchAllConditionsCheckBox.setSelected(Settings.instance()
-				.isMatchAllConditions());
-		detectEmptyCollectorsCheckBox.setSelected(Settings.instance()
-				.isDetectEmptyCollectors());
+		isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
+		detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
 		playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
 		autoAttackComboBox.getSelectionModel().select(
-				Settings.instance().getAttackStrategy().getClass()
-				.getSimpleName());
-		rax1ComboBox.getSelectionModel().select(
-				Settings.instance().getRaxInfo()[0].getDescription());
-		rax2ComboBox.getSelectionModel().select(
-				Settings.instance().getRaxInfo()[1].getDescription());
-		rax3ComboBox.getSelectionModel().select(
-				Settings.instance().getRaxInfo()[2].getDescription());
-		rax4ComboBox.getSelectionModel().select(
-				Settings.instance().getRaxInfo()[3].getDescription());
-
+				Settings.instance().getAttackStrategy().getClass().getSimpleName());
+		rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0].getDescription());
+		rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1].getDescription());
+		rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2].getDescription());
+		rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3].getDescription());
 		configGridPane.setVisible(true);
 	}
-
 }

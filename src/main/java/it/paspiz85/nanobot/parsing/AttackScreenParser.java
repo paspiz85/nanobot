@@ -36,9 +36,11 @@ public final class AttackScreenParser extends AbstractParser {
 
 	// boundaries of base according to Area.ENEMY_BASE
 	private static final Point ENEMY_BASE_LEFT = new Point(13, 313);
+
 	private static final Polygon ENEMY_BASE_POLY = new Polygon();
 
 	private static final Point ENEMY_BASE_RIGHT = new Point(779, 312);
+
 	private static final Point ENEMY_BASE_TOP = new Point(401, 16);
 
 	private static final int ATTACK_GROUP_UNIT_DIFF = 72;
@@ -52,10 +54,8 @@ public final class AttackScreenParser extends AbstractParser {
 
 	public boolean hasDE(BufferedImage image) throws BotBadBaseException {
 		int deCheck = image.getRGB(20, 0);
-
 		// 0x80752B
-		if (Robot.instance().compareColor(deCheck,
-				new Color(128, 117, 43).getRGB(), 7)) {
+		if (Robot.instance().compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
 			return true;
 		} else if (Robot.instance().compareColor(deCheck, 0xffb1a841, 7)) {
 			return false;
@@ -69,21 +69,18 @@ public final class AttackScreenParser extends AbstractParser {
 	}
 
 	public boolean isCollectorFullBase(BufferedImage image) throws BotException {
-
 		FileSystem fileSystem = null;
 		Stream<Path> walk = null;
 		try {
 			URI uri = getClass().getResource("elixirs").toURI();
 			Path images;
 			if (uri.getScheme().equals("jar")) {
-				fileSystem = FileSystems.newFileSystem(uri,
-						Collections.emptyMap());
+				fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
 				images = fileSystem.getPath("/elixir_images");
 			} else {
 				images = Paths.get(uri);
 			}
 			walk = Files.walk(images, 1);
-
 			List<Rectangle> matchedElixirs = new ArrayList<>();
 			int attackableElixirs = 0;
 			for (Iterator<Path> it = walk.iterator(); it.hasNext();) {
@@ -91,21 +88,15 @@ public final class AttackScreenParser extends AbstractParser {
 				if (Files.isDirectory(next)) {
 					continue;
 				}
-				BufferedImage tar = ImageIO.read(Files.newInputStream(next,
-						StandardOpenOption.READ));
-				List<RegionMatch> doFindAll = TemplateMatcher
-						.findMatchesByGrayscaleAtOriginalResolution(image, tar,
-								7, 0.8);
-
+				BufferedImage tar = ImageIO.read(Files.newInputStream(next, StandardOpenOption.READ));
+				List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image, tar, 7,
+						0.8);
 				int c = 0;
-
 				RECT_LOOP: for (RegionMatch i : doFindAll) {
-
 					// if matched area is out of enemy poly
 					if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
 						continue;
 					}
-
 					// check if it's an existing match
 					for (Rectangle r : matchedElixirs) {
 						if (r.intersects(i.getBounds())) {
@@ -119,16 +110,12 @@ public final class AttackScreenParser extends AbstractParser {
 					} else if (next.getFileName().toString().startsWith("full")) {
 						attackableElixirs++;
 					}
-					logger.finest("\t" + i.getBounds() + " score: "
-							+ i.getScore());
+					logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
 				}
 				if (c > 0) {
-					logger.finest(String.format(
-							"\tfound %d elixirs matching %s\n", c, next
-									.getFileName().toString()));
+					logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
 				}
 			}
-
 			boolean result = attackableElixirs >= 0;
 			if (result == false) {
 				logger.info("empty collectors");
@@ -155,7 +142,6 @@ public final class AttackScreenParser extends AbstractParser {
 		if (rectangle == null) {
 			return null;
 		}
-
 		return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
 	}
 
@@ -164,7 +150,6 @@ public final class AttackScreenParser extends AbstractParser {
 		if (rectangle == null) {
 			return null;
 		}
-
 		return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
 	}
 
@@ -176,18 +161,15 @@ public final class AttackScreenParser extends AbstractParser {
 	}
 
 	public int parseElixir(BufferedImage image) throws BotBadBaseException {
-		return parseNumber(image, 1, 33, 29 + (hasDE(image) ? 0 : 1),
-				image.getWidth() - 43);
+		return parseNumber(image, 1, 33, 29 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
 	}
 
 	public int parseGold(BufferedImage image) throws BotBadBaseException {
-		return parseNumber(image, 0, 33, 0 + (hasDE(image) ? 0 : 1),
-				image.getWidth() - 43);
+		return parseNumber(image, 0, 33, 0 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
 	}
 
 	public int[] parseLoot() throws BotBadBaseException {
 		BufferedImage image = Robot.instance().screenShot(Area.ENEMY_LOOT);
-
 		return parseLoot(image);
 	}
 
@@ -195,9 +177,7 @@ public final class AttackScreenParser extends AbstractParser {
 		int gold = parseGold(image);
 		int elixir = parseElixir(image);
 		int de = parseDarkElixir(image);
-		logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold,
-				elixir, de));
-
+		logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, de));
 		return new int[] { gold, elixir, de };
 	}
 
@@ -210,15 +190,12 @@ public final class AttackScreenParser extends AbstractParser {
 
 	public int[] parseTroopCount(BufferedImage image) {
 		int[] tmp = new int[11]; // max group size
-
 		int xStart = 20;
 		final int yStart = 11;
-
 		int no;
 		int curr = 0;
 		while (true) {
-			no = parseNumber(image, 3, xStart, yStart,
-					ATTACK_GROUP_UNIT_DIFF - 10);
+			no = parseNumber(image, 3, xStart, yStart, ATTACK_GROUP_UNIT_DIFF - 10);
 			if (no == 0) {
 				break;
 			}
@@ -232,27 +209,22 @@ public final class AttackScreenParser extends AbstractParser {
 			curr++;
 			xStart += ATTACK_GROUP_UNIT_DIFF;
 		}
-
 		Integer barbKingSlot = parseBarbKingSlot(image);
 		if (barbKingSlot != null) {
 			tmp[barbKingSlot] = 1;
-
 			// if BK was found after a 0 slot, new length should be adjusted
 			// according to BK
 			// ie [110, 90, 0, BK] -> len = 4
 			curr = Math.max(curr + 1, barbKingSlot + 1);
 		}
-
 		Integer archerQueenSlot = parseArcherQueenSlot(image);
 		if (archerQueenSlot != null) {
 			tmp[archerQueenSlot] = 1;
-
 			// if AQ was found after a 0 slot, new length should be adjusted
 			// according to AQ
 			// ie [110, 90, 0, AQ] -> len = 4
 			curr = Math.max(curr + 1, archerQueenSlot + 1);
 		}
-
 		return Arrays.copyOf(tmp, curr);
 	}
 
@@ -263,5 +235,4 @@ public final class AttackScreenParser extends AbstractParser {
 			return parseNumber(image, 3, 33, 90, image.getWidth() - 43);
 		}
 	}
-
 }

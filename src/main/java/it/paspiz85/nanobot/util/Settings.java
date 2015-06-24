@@ -16,19 +16,16 @@ public final class Settings {
 	private static final Settings instance = new Settings();
 
 	public synchronized static void close() {
-
 		if (!instance.isInitialized) {
 			throw new IllegalStateException("ConfigUtils is not initialized.");
 		}
-
 		instance.isInitialized = false;
 	}
 
 	public synchronized static void initialize() throws IllegalStateException {
 		// Throw exception if called twice
 		if (instance.isInitialized) {
-			throw new IllegalStateException(
-					"ConfigUtils is already initialized.");
+			throw new IllegalStateException("ConfigUtils is already initialized.");
 		}
 		instance.configPersister.reload(instance);
 		instance.isInitialized = true;
@@ -41,8 +38,7 @@ public final class Settings {
 		if (!instance.isInitialized) {
 			synchronized (Settings.class) {
 				if (!instance.isInitialized) {
-					throw new IllegalStateException(
-							"ConfigUtils is not initialized.");
+					throw new IllegalStateException("ConfigUtils is not initialized.");
 				}
 			}
 		}
@@ -70,6 +66,7 @@ public final class Settings {
 	private Point firstBarrackPosition = null;
 
 	private int goldThreshold = 0;
+
 	private boolean isInitialized = false;
 
 	private boolean logEnemyBase = false;
@@ -80,28 +77,23 @@ public final class Settings {
 
 	private boolean playSound = false;
 
-	private final Clickable[] raxInfo = new Clickable[] {
-			Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_BARB,
+	private final Clickable[] raxInfo = new Clickable[] { Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_BARB,
 			Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, };
 
 	private Settings() {
-		availableAttackStrategies = new Attack[] { ManualAttack.instance(),
-				Attack2Side.instance(), Attack4Side.instance(),
-				Attack4SideParallel.instance(),
-				Attack4SideParallelHalf2Wave.instance(),
+		availableAttackStrategies = new Attack[] { ManualAttack.instance(), Attack2Side.instance(),
+				Attack4Side.instance(), Attack4SideParallel.instance(), Attack4SideParallelHalf2Wave.instance(),
 				Attack4SideParallelFull2Wave.instance(), };
-		availableTroops = new Clickable[] { Clickable.BUTTON_RAX_NO_UNIT,
-				Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_ARCHER,
-				Clickable.BUTTON_RAX_GIANT, Clickable.BUTTON_RAX_GOBLIN,
-				Clickable.BUTTON_RAX_WB, Clickable.BUTTON_RAX_BALLOON,
-				Clickable.BUTTON_RAX_WIZARD, Clickable.BUTTON_RAX_HEALER,
-				Clickable.BUTTON_RAX_DRAGON, Clickable.BUTTON_RAX_PEKKA };
+		availableTroops = new Clickable[] { Clickable.BUTTON_RAX_NO_UNIT, Clickable.BUTTON_RAX_BARB,
+				Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_GIANT, Clickable.BUTTON_RAX_GOBLIN,
+				Clickable.BUTTON_RAX_WB, Clickable.BUTTON_RAX_BALLOON, Clickable.BUTTON_RAX_WIZARD,
+				Clickable.BUTTON_RAX_HEALER, Clickable.BUTTON_RAX_DRAGON, Clickable.BUTTON_RAX_PEKKA };
 	}
 
 	public Attack getAttackStrategy() {
 		return this.attackStrategy;
 	}
-	
+
 	public Attack[] getAvailableAttackStrategies() {
 		return availableAttackStrategies;
 	}
@@ -216,5 +208,4 @@ public final class Settings {
 			raxInfo[i] = Clickable.fromDescription(split);
 		}
 	}
-
 }

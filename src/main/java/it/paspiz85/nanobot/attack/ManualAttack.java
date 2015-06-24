@@ -14,5 +14,4 @@ public class ManualAttack extends Attack {
 	@Override
 	protected void doDropUnits(int[] attackGroup) throws InterruptedException {
 	}
-
 }

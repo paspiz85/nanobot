@@ -23,17 +23,16 @@ public class LogHandler extends Handler {
 	private static class LogFormatter extends Formatter {
 
 		private static final String FORMAT = "[%1$tm.%1$td.%1$ty %1$tl:%1$tM:%1$tS %1$Tp] %4$s: %5$s %n";
+
 		private final Date date = new Date();
 
 		@Override
 		public String format(LogRecord record) {
 			date.setTime(record.getMillis());
 			String message = formatMessage(record);
-
-			return String.format(FORMAT, date, null, record.getLoggerName(),
-					record.getLevel().getLocalizedName(), message, null);
+			return String.format(FORMAT, date, null, record.getLoggerName(), record.getLevel().getLocalizedName(),
+					message, null);
 		}
-
 	}
 
 	static void initialize(TextArea textArea) {
@@ -62,15 +61,12 @@ public class LogHandler extends Handler {
 		if (record.getLevel().intValue() < Level.CONFIG.intValue()) {
 			return;
 		}
-
 		if (textArea != null) {
-			Platform.runLater(() -> textArea.appendText(formatter
-					.format(record)));
+			Platform.runLater(() -> textArea.appendText(formatter.format(record)));
 		}
 	}
 
 	public void setTextArea(TextArea textArea) {
 		this.textArea = textArea;
 	}
-
 }

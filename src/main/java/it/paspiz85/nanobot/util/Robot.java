@@ -30,17 +30,21 @@ public class Robot {
 	private static final Robot instance = new Robot();
 
 	private static Random random = new Random();
-	public static final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit()
-			.getScreenSize().height;
 
-	public static final int SCREEN_WIDTH = Toolkit.getDefaultToolkit()
-			.getScreenSize().width;
+	public static final int SCREEN_HEIGHT = Toolkit.getDefaultToolkit().getScreenSize().height;
+
+	public static final int SCREEN_WIDTH = Toolkit.getDefaultToolkit().getScreenSize().width;
 
 	public static final String SYSTEM_OS = System.getProperty("os.name");
+
 	public static final String USER_HOME_DIR = System.getProperty("user.home");
+
 	public static final String USER_NAME = System.getProperty("user.name");
+
 	public static final int VK_CONTROL = 0x11;
+
 	public static final int VK_DOWN = 0x28;
+
 	public static final int WM_COMMAND = 0x111;
 
 	public static final int WM_KEYDOWN = 0x100;
@@ -50,13 +54,20 @@ public class Robot {
 	public static final int WM_LBUTTONDBLCLK = 0x203;
 
 	public static final int WM_LBUTTONDOWN = 0x201;
+
 	public static final int WM_LBUTTONUP = 0x202;
+
 	public static final int WM_MOUSEWHEEL = 0x20A;
+
 	// user32
 	public static final int WM_NULL = 0x000;
+
 	public static final int WM_RBUTTONDBLCLK = 0x206;
+
 	public static final int WM_RBUTTONDOWN = 0x204;
+
 	public static final int WM_RBUTTONUP = 0x205;
+
 	public static final String WORKING_DIR = System.getProperty("user.dir");
 
 	public static Robot instance() {
@@ -69,8 +80,9 @@ public class Robot {
 	}
 
 	private static void msgBox(String Text, String Title) {
-		JOptionPane.showMessageDialog(null, Text, Title,
-				JOptionPane.PLAIN_MESSAGE); // Show message box
+		JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); // Show
+																						// message
+																						// box
 	}
 
 	public static Random random() {
@@ -99,15 +111,11 @@ public class Robot {
 	public boolean compareColor(int c1, int c2, int var) {
 		int r1 = c1 >> 16 & 0xFF;
 		int r2 = c2 >> 16 & 0xFF;
-
 		int g1 = c1 >> 8 & 0xFF;
 		int g2 = c2 >> 8 & 0xFF;
-
 		int b1 = c1 >> 0 & 0xFF;
 		int b2 = c2 >> 0 & 0xFF;
-
-		if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var
-				|| Math.abs(b1 - b2) > var) {
+		if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var) {
 			return false;
 		} else {
 			return true;
@@ -115,9 +123,7 @@ public class Robot {
 	}
 
 	public boolean confirmationBox(String msg, String title) {
-		int result = JOptionPane.showConfirmDialog(null, msg, title,
-				JOptionPane.YES_NO_OPTION);
-
+		int result = JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION);
 		if (result == JOptionPane.YES_OPTION) {
 			return true;
 		} else {
@@ -129,10 +135,8 @@ public class Robot {
 		if (clickable.getColor() == null) {
 			throw new IllegalArgumentException(clickable.name());
 		}
-
 		int tarColor = clickable.getColor().getRGB();
-		int actualColor = pixelGetColor(clickable.getX(), clickable.getY())
-				.getRGB();
+		int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
 		return compareColor(tarColor, actualColor, 5);
 	}
 
@@ -140,8 +144,7 @@ public class Robot {
 		return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
 	}
 
-	public void leftClick(Clickable clickable, int sleepInMs)
-			throws InterruptedException {
+	public void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
 		leftClickWin32(clickable.getX(), clickable.getY(), true);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
@@ -150,8 +153,7 @@ public class Robot {
 		leftClickWin32(x, y, false);
 	}
 
-	public void leftClick(int x, int y, int sleepInMs)
-			throws InterruptedException {
+	public void leftClick(int x, int y, int sleepInMs) throws InterruptedException {
 		leftClickWin32(x, y, false);
 		Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
 	}
@@ -164,11 +166,9 @@ public class Robot {
 		}
 		logger.finest("clicking " + x + " " + y);
 		int lParam = makeParam(x, y);
-
 		while (isCtrlKeyDown()) {
 		}
-		User32.INSTANCE
-				.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
+		User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
 		User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
 	}
 
@@ -183,14 +183,12 @@ public class Robot {
 		return pixel;
 	}
 
-	public File saveScreenShot(Area area, String filePathFirst,
-			String... filePathRest) throws IOException {
-		return saveScreenShot(area.getX1(), area.getY1(), area.getX2(),
-				area.getY2(), filePathFirst, filePathRest);
+	public File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
+		return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
 	}
 
-	public File saveScreenShot(int x1, int y1, int x2, int y2,
-			String filePathFirst, String... filePathRest) throws IOException {
+	public File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest)
+			throws IOException {
 		Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
 		String fileName = path.getFileName().toString();
 		if (!path.getFileName().toString().toLowerCase().endsWith(".png")) {
@@ -206,15 +204,13 @@ public class Robot {
 	}
 
 	public BufferedImage screenShot(Area area) {
-		return screenShot(area.getX1(), area.getY1(), area.getX2(),
-				area.getY2());
+		return screenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2());
 	}
 
 	public BufferedImage screenShot(int x1, int y1, int x2, int y2) {
 		POINT point = new POINT(x1, y1);
 		clientToScreen(point);
-		return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1,
-				y2 - y1));
+		return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
 	}
 
 	public void setupWin32(HWND handler) {
@@ -225,8 +221,7 @@ public class Robot {
 		Thread.sleep(i + random.nextInt(i));
 	}
 
-	public void sleepTillClickableIsActive(Clickable clickable)
-			throws InterruptedException {
+	public void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException {
 		while (true) {
 			if (isClickableActive(clickable)) {
 				return;
@@ -242,19 +237,15 @@ public class Robot {
 	public void zoomUp(int notch) throws InterruptedException {
 		logger.info("Zooming out...");
 		int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
-
 		WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
 		LPARAM lparamDown = new WinDef.LPARAM(lParam);
 		LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
-
 		for (int i = 0; i < notch; i++) {
 			while (isCtrlKeyDown()) {
 			}
-			User32.INSTANCE
-					.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
+			User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
 			User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
 			Thread.sleep(1000);
 		}
 	}
-
 }

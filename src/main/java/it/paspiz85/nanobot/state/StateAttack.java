@@ -40,63 +40,50 @@ public class StateAttack extends State {
 			gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
 			elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
 			de = darkElixirThreshold == 0 ? Integer.MAX_VALUE : de;
-			return gold >= goldThreshold && elixir >= elixirThreshold
-					&& de >= darkElixirThreshold;
+			return gold >= goldThreshold && elixir >= elixirThreshold && de >= darkElixirThreshold;
 		} else {
 			gold = goldThreshold == 0 ? Integer.MIN_VALUE : gold;
 			elixir = elixirThreshold == 0 ? Integer.MIN_VALUE : elixir;
 			de = darkElixirThreshold == 0 ? Integer.MIN_VALUE : de;
-			return gold >= goldThreshold || elixir >= elixirThreshold
-					|| de >= darkElixirThreshold;
+			return gold >= goldThreshold || elixir >= elixirThreshold || de >= darkElixirThreshold;
 		}
 	}
 
 	@Override
-	public void handle(Context context) throws InterruptedException,
-			BotException {
+	public void handle(Context context) throws InterruptedException, BotException {
 		while (true) {
 			logger.info("StateAttack");
 			if (Thread.interrupted()) {
 				throw new InterruptedException("StateAttack is interrupted.");
 			}
-
 			int[] loot;
 			try {
 				loot = Parsers.getAttackScreen().parseLoot();
 			} catch (BotBadBaseException e) {
 				try {
-					Robot.instance().saveScreenShot(Area.ENEMY_LOOT, "bug",
-							"bad_base_" + System.currentTimeMillis());
+					Robot.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
 				} catch (IOException e1) {
 					logger.log(Level.SEVERE, e1.getMessage(), e1);
 				}
 				throw e;
 			}
 			int[] attackGroup = Parsers.getAttackScreen().parseTroopCount();
-
 			int gold = loot[0];
 			int elixir = loot[1];
 			int de = loot[2];
-
 			boolean doAttack = doConditionsMatch(gold, elixir, de)
-					&& (!Settings.instance().isDetectEmptyCollectors() || Parsers
-							.getAttackScreen().isCollectorFullBase());
+					&& (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
+							.isCollectorFullBase());
 			if (doAttack) {
-
 				// // debug
 				// if (true) {
 				// attack or let user manually attack
-				if (Settings.instance().getAttackStrategy() != ManualAttack
-						.instance()) {
+				if (Settings.instance().getAttackStrategy() != ManualAttack.instance()) {
 					playAttackReady();
-					Settings.instance().getAttackStrategy()
-							.attack(loot, attackGroup);
-					Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE,
-							1200);
-					Robot.instance().leftClick(
-							Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
-					Robot.instance().leftClick(
-							Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
+					Settings.instance().getAttackStrategy().attack(loot, attackGroup);
+					Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE, 1200);
+					Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
+					Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
 				} else {
 					if (Arrays.equals(prevLoot, loot)) {
 						logger.info("User is manually attacking/deciding.");
@@ -104,7 +91,6 @@ public class StateAttack extends State {
 						playAttackReady();
 					}
 					prevLoot = loot;
-
 					/**
 					 * NOTE: minor race condition 1. Matching base found. 2.
 					 * sound is played. 3. prevLoot is set to full available
@@ -118,19 +104,14 @@ public class StateAttack extends State {
 					 */
 					Thread.sleep(5000);
 				}
-
 				context.setState(StateIdle.instance());
-
 				break;
 			} else {
 				// next
 				// make sure you dont immediately check for next button because
 				// you may see the original one
 				Robot.instance().leftClick(Clickable.BUTTON_NEXT, 666);
-
-				Robot.instance().sleepTillClickableIsActive(
-						Clickable.BUTTON_NEXT);
-
+				Robot.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
 				// to avoid server/client sync from nexting too fast
 				Robot.instance().sleepRandom(1000);
 			}
@@ -141,14 +122,10 @@ public class StateAttack extends State {
 		if (!Settings.instance().isPlaySound()) {
 			return;
 		}
-		String[] clips = new String[] { "../audio/fight.wav",
-				"../audio/finishim.wav", "../audio/getoverhere.wav" };
-		URL resource = this.getClass().getResource(
-				clips[Robot.random().nextInt(clips.length)]);
+		String[] clips = new String[] { "../audio/fight.wav", "../audio/finishim.wav", "../audio/getoverhere.wav" };
+		URL resource = this.getClass().getResource(clips[Robot.random().nextInt(clips.length)]);
 		try (Clip clip = AudioSystem.getClip();
-				AudioInputStream audioInputStream = AudioSystem
-						.getAudioInputStream(resource)) {
-
+				AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
 			clip.open(audioInputStream);
 			clip.start();
 			Thread.sleep(2000);
@@ -156,5 +133,4 @@ public class StateAttack extends State {
 			logger.log(Level.WARNING, "Unable to play audio.", ex);
 		}
 	}
-
 }

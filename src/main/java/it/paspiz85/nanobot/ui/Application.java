@@ -10,8 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Application extends javafx.application.Application implements
-		Constants {
+public class Application extends javafx.application.Application implements Constants {
 
 	public static void main(String[] args) {
 		Logging.initialize();

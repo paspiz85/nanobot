@@ -17,14 +17,11 @@ public class Logging {
 	}
 
 	public static void initialize() {
-		try (InputStream inputStream = Application.class
-				.getResourceAsStream("/logging.properties")) {
+		try (InputStream inputStream = Application.class.getResourceAsStream("/logging.properties")) {
 			LogManager.getLogManager().readConfiguration(inputStream);
 		} catch (final IOException e) {
-			Logger.getAnonymousLogger().severe(
-					"Could not load default logging.properties file");
+			Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
 			Logger.getAnonymousLogger().severe(e.getMessage());
 		}
 	}
-
 }
