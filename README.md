@@ -26,7 +26,7 @@ An usefull Clash of Clans bot.
 * You need to have at least level 4 barracks(it should have boost and boost all options because bot will click train button according to that. It will not boost it for you automatically.)
 * Run the game in **English,** some users reported errors in other languages.
 
-####Running Clash of Clans on BlueStacks
+####Running the bot
 Download the latest version of NanoBot from [releases page](https://github.com/paspiz85/nanobot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
