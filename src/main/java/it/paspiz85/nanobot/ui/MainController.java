@@ -292,9 +292,6 @@ public class MainController implements ApplicationAwareController, Constants {
                 };
             }
         };
-        runnerService.setOnRunning(event -> {
-            updateButtons(false);
-        });
         runnerService.setOnCancelled(event -> {
             updateButtons(false);
             logger.warning("runner is cancelled.");
