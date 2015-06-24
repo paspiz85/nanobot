@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.paspiz85</groupId>
 	<artifactId>nanobot</artifactId>
-	<version>1.0.4-SNAPSHOT</version>
+	<version>1.0.4</version>
 
 	<properties>
 		<mainClass>it.paspiz85.nanobot.Start</mainClass>
