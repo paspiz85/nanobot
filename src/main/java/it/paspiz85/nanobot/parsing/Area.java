@@ -1,8 +1,10 @@
 package it.paspiz85.nanobot.parsing;
 
-public enum Area {
+import it.paspiz85.nanobot.util.Constants;
+
+public enum Area implements Constants {
     ATTACK_GROUP(24, 554, 836, 653), BARRACKS_BUTTONS(188, 581, 679, 679), ENEMY_BASE(31, 0, 831, 510), ENEMY_LOOT(17,
-            68, 138, 240);
+            68, 138, 240), FULLSCREEN(0, 0, BS_RES_X - 1, BS_RES_Y - 1);
 
     private int x1;
 

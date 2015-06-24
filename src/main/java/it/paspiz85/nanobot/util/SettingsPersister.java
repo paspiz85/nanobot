@@ -135,8 +135,8 @@ public final class SettingsPersister implements Constants {
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
             Point firstBarrackPosition = settings.getFirstBarrackPosition();
             if (firstBarrackPosition != null) {
-                configProperties.setProperty(PROPERTY_BARRACKS_COORDS, firstBarrackPosition.getX() + " "
-                        + firstBarrackPosition.getY());
+                configProperties.setProperty(PROPERTY_BARRACKS_COORDS, (int) firstBarrackPosition.getX() + " "
+                        + (int) firstBarrackPosition.getY());
             }
             Clickable[] raxInfo = settings.getRaxInfo();
             StringBuilder raxProp = new StringBuilder();

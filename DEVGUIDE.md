@@ -19,5 +19,10 @@ mvn clean install
 
 ##### Running from source
 ```
-mvn compile exec:exec
+mvn clean compile exec:exec
+```
+
+##### Debugging
+```
+mvnDebug clean compile exec:exec
 ```

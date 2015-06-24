@@ -21,7 +21,7 @@ public class StateMainMenu extends State {
 
     @Override
     public void handle(Context context) throws BotConfigurationException, InterruptedException {
-        //logger.info("StateMainMenu");
+        // logger.info("StateMainMenu");
         if (Thread.interrupted()) {
             throw new InterruptedException("StateMainMenu is interrupted.");
         }

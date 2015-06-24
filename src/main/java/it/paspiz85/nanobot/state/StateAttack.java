@@ -58,7 +58,7 @@ public class StateAttack extends State {
             }
             if (Settings.instance().isLogEnemyBase()) {
                 try {
-                    OS.instance().saveScreenShot(Area.ENEMY_BASE, "enemies", "base_" + System.currentTimeMillis());
+                    OS.instance().saveScreenShot(Area.FULLSCREEN, "enemies", "base_" + System.currentTimeMillis());
                 } catch (IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
