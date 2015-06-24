@@ -56,9 +56,23 @@ public class StateAttack extends State {
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateAttack is interrupted.");
             }
+            if (Settings.instance().isLogEnemyBase()) {
+                try {
+                    OS.instance().saveScreenShot(Area.ENEMY_BASE, "enemies", "base_" + System.currentTimeMillis());
+                } catch (IOException e1) {
+                    logger.log(Level.SEVERE, e1.getMessage(), e1);
+                }
+            }
             int[] loot;
+            boolean doAttack = false;
             try {
                 loot = Parsers.getAttackScreen().parseLoot();
+                int gold = loot[0];
+                int elixir = loot[1];
+                int de = loot[2];
+                doAttack = doConditionsMatch(gold, elixir, de)
+                        && (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
+                                .isCollectorFullBase());
             } catch (BotBadBaseException e) {
                 try {
                     OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
@@ -68,12 +82,6 @@ public class StateAttack extends State {
                 throw e;
             }
             int[] attackGroup = Parsers.getAttackScreen().parseTroopCount();
-            int gold = loot[0];
-            int elixir = loot[1];
-            int de = loot[2];
-            boolean doAttack = doConditionsMatch(gold, elixir, de)
-                    && (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
-                            .isCollectorFullBase());
             if (doAttack) {
                 // // debug
                 // if (true) {

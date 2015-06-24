@@ -48,6 +48,9 @@ public class MainController implements ApplicationAwareController, Constants {
     GridPane configGridPane;
 
     @FXML
+    CheckBox saveEnemyCheckBox;
+
+    @FXML
     AnchorPane controlPane;
 
     @FXML
@@ -170,9 +173,10 @@ public class MainController implements ApplicationAwareController, Constants {
         if (!maxThField.getText().isEmpty()) {
             Settings.instance().setMaxThThreshold(Integer.parseInt(maxThField.getText()));
         }
-        Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
         Settings.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
+        Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
         Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
+        Settings.instance().setLogEnemyBase(saveEnemyCheckBox.isSelected());
         Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
         Settings.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
         Settings.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
@@ -355,6 +359,7 @@ public class MainController implements ApplicationAwareController, Constants {
     @Override
     public void setApplication(Application application) {
         this.application = application;
+        showSettings(false);
     }
 
     void showSettings(boolean value) {
