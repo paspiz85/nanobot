@@ -124,8 +124,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private boolean setupDone = false;
 
-    private Service<Void> setupService = null;
-
     private Service<Void> runnerService = null;
 
     /**
@@ -201,10 +199,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     public void handleStopButtonAction() {
-        if (setupService.isRunning()) {
-            setupService.cancel();
-            setupService.reset();
-        }
         if (runnerService.isRunning()) {
             runnerService.cancel();
             runnerService.reset();
@@ -229,11 +223,7 @@ public class MainController implements ApplicationAwareController, Constants {
         initializeComboBox();
         updateConfigGridPane();
         updateButtons();
-        initializeSetupService();
         initializeRunnerService();
-        if (setupService.getState() == State.READY) {
-            setupService.start();
-        }
         if (checkForUpdate()) {
             updateLabel.setVisible(true);
         }
@@ -289,6 +279,11 @@ public class MainController implements ApplicationAwareController, Constants {
 
                     @Override
                     protected Void call() throws Exception {
+                        if (!setupDone) {
+                            Setup.instance().setup();
+                            setupDone = true;
+                            logger.info("Setup is successful.");
+                        }
                         Looper.instance().start();
                         return null;
                     }
@@ -308,39 +303,6 @@ public class MainController implements ApplicationAwareController, Constants {
             logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
                     runnerService.getException());
             runnerService.reset();
-        });
-    }
-
-    void initializeSetupService() {
-        setupService = new Service<Void>() {
-
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-
-                    @Override
-                    protected Void call() throws Exception {
-                        Setup.instance().setup();
-                        return null;
-                    }
-                };
-            }
-        };
-        setupService.setOnSucceeded(event -> {
-            setupDone = true;
-            logger.info("Setup is successful.");
-            logger.info("Click start to run.");
-        });
-        setupService.setOnFailed(event -> {
-            setupDone = false;
-            logger.log(Level.SEVERE, "Setup is failed: " + setupService.getException().getMessage(),
-                    setupService.getException());
-            setupService.reset();
-        });
-        setupService.setOnCancelled(event -> {
-            setupDone = false;
-            logger.warning("Setup is cancelled.");
-            setupService.reset();
         });
     }
 
