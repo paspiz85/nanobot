@@ -33,19 +33,11 @@ mvnDebug clean compile exec:exec
 ```
 
 ##### Releasing
-Check that your SSH key (~/.ssh/id_rsa.pub) is configured on GitHub (https://github.com/settings/ssh).
+Check that your SSH key (~/.ssh/id_rsa.pub) is configured on [GitHub] (https://github.com/settings/ssh).
 
 To prepare a release (POM changes and tag create):
 ```
 mvn release:clean release:prepare
 ```
 
-Then go on 
-To perform ():
-```
-mvn release:perform
-```
-
-
-mvn release:update-versions
-
+Then continue release on [GitHub] (https://github.com/paspiz85/nanobot/releases) and edit tag adding description and executable jar.
