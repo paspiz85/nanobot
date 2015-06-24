@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.parsing.Parsers;
-import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.win32.OS;
 
 import java.util.logging.Logger;
 
@@ -50,7 +50,7 @@ public abstract class Attack {
 
     public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
-        Robot.instance().zoomUp();
+        OS.instance().zoomUp();
         doDropUnits(attackGroup);
         sleepUntilLootDoesNotChange(loot);
         logger.info("No more loot.");

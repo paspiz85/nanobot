@@ -1,6 +1,6 @@
 package it.paspiz85.nanobot.parsing;
 
-import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -12,7 +12,7 @@ public final class MainScreenParser extends AbstractParser {
     }
 
     public Point findTrainButton() {
-        BufferedImage image = Robot.instance().screenShot(Area.BARRACKS_BUTTONS);
+        BufferedImage image = OS.instance().screenShot(Area.BARRACKS_BUTTONS);
         Rectangle rectangle = findArea(image, getClass().getResource("train.png"));
         if (rectangle == null) {
             return null;

@@ -6,8 +6,8 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parsers;
-import it.paspiz85.nanobot.util.Robot;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.win32.OS;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,7 +61,7 @@ public class StateAttack extends State {
                 loot = Parsers.getAttackScreen().parseLoot();
             } catch (BotBadBaseException e) {
                 try {
-                    Robot.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
+                    OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + System.currentTimeMillis());
                 } catch (IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
@@ -81,9 +81,9 @@ public class StateAttack extends State {
                 if (Settings.instance().getAttackStrategy() != ManualAttack.instance()) {
                     playAttackReady();
                     Settings.instance().getAttackStrategy().attack(loot, attackGroup);
-                    Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE, 1200);
-                    Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
-                    Robot.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE, 1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
                 } else {
                     if (Arrays.equals(prevLoot, loot)) {
                         logger.info("User is manually attacking/deciding.");
@@ -110,10 +110,10 @@ public class StateAttack extends State {
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                Robot.instance().leftClick(Clickable.BUTTON_NEXT, 666);
-                Robot.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                OS.instance().leftClick(Clickable.BUTTON_NEXT, 666);
+                OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
                 // to avoid server/client sync from nexting too fast
-                Robot.instance().sleepRandom(1000);
+                OS.instance().sleepRandom(1000);
             }
         }
     }
@@ -123,7 +123,7 @@ public class StateAttack extends State {
             return;
         }
         String[] clips = new String[] { "../audio/fight.wav", "../audio/finishim.wav", "../audio/getoverhere.wav" };
-        URL resource = this.getClass().getResource(clips[Robot.random().nextInt(clips.length)]);
+        URL resource = this.getClass().getResource(clips[OS.random().nextInt(clips.length)]);
         try (Clip clip = AudioSystem.getClip();
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
             clip.open(audioInputStream);

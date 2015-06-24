@@ -1,8 +1,7 @@
-package it.paspiz85.nanobot.util;
+package it.paspiz85.nanobot.win32;
 
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.win32.User32;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -25,9 +24,9 @@ import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
 
-public final class Robot {
+public final class OS {
 
-    private static final Robot instance = new Robot();
+    private static final OS instance = new OS();
 
     private static Random random = new Random();
 
@@ -70,7 +69,7 @@ public final class Robot {
 
     public static final String WORKING_DIR = System.getProperty("user.dir");
 
-    public static Robot instance() {
+    public static OS instance() {
         return instance;
     }
 
@@ -81,8 +80,8 @@ public final class Robot {
 
     private static void msgBox(String Text, String Title) {
         JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); // Show
-                                                                                     // message
-                                                                                     // box
+        // message
+        // box
     }
 
     public static Random random() {
@@ -96,7 +95,7 @@ public final class Robot {
 
     private java.awt.Robot r;
 
-    private Robot() {
+    private OS() {
         try {
             r = new java.awt.Robot();
         } catch (AWTException e) {
@@ -183,24 +182,28 @@ public final class Robot {
         return pixel;
     }
 
-    public File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
-        return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
-    }
-
-    public File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest)
-            throws IOException {
+    public File saveImage(BufferedImage img, String filePathFirst, String... filePathRest) throws IOException {
         Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
         String fileName = path.getFileName().toString();
         if (!path.getFileName().toString().toLowerCase().endsWith(".png")) {
             fileName = path.getFileName().toString() + ".png";
         }
-        BufferedImage img = screenShot(x1, y1, x2, y2);
         File file = new File(path.getParent().toString(), fileName);
         if (!file.getParentFile().isDirectory()) {
             file.getParentFile().mkdirs();
         }
         ImageIO.write(img, "png", file);
         return file;
+    }
+
+    public File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
+        return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
+    }
+
+    public File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest)
+            throws IOException {
+        BufferedImage img = screenShot(x1, y1, x2, y2);
+        return saveImage(img, filePathFirst, filePathRest);
     }
 
     public BufferedImage screenShot(Area area) {

@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.state.Context;
 import it.paspiz85.nanobot.state.StateIdle;
-import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.win32.OS;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,7 +29,7 @@ public class DisconnectChecker implements Runnable {
                 if (Thread.interrupted()) {
                     throw new InterruptedException("Disconnect detector is interrupted.");
                 }
-                if (Robot.instance().isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
+                if (OS.instance().isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
                     logger.info("Detected disconnect.");
                     // There are 2 cases:
                     // 1. launcher was running and it will be interrupted.
@@ -58,7 +58,7 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    Robot.instance().leftClick(Clickable.UNIT_RECONNECT, 5000);
+                    OS.instance().leftClick(Clickable.UNIT_RECONNECT, 5000);
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);
                 }

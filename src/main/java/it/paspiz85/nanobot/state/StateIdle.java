@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.win32.OS;
 
 public class StateIdle extends State {
 
@@ -29,17 +29,17 @@ public class StateIdle extends State {
                 Thread.sleep(2000);
                 continue;
             }
-            if (Robot.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE)
-                    || Robot.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
+            if (OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE)
+                    || OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
                 logger.info("Was attacked.");
-                Robot.instance().leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
-            } else if (Robot.instance().isClickableActive(Clickable.BUTTON_ATTACK)) {
+                OS.instance().leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
+            } else if (OS.instance().isClickableActive(Clickable.BUTTON_ATTACK)) {
                 nextState = StateMainMenu.instance();
                 break;
-            } else if (Robot.instance().isClickableActive(Clickable.BUTTON_NEXT)) {
+            } else if (OS.instance().isClickableActive(Clickable.BUTTON_NEXT)) {
                 nextState = StateAttack.instance();
                 break;
-            } else if (Robot.instance().isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
+            } else if (OS.instance().isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
                 nextState = StateFindAMatch.instance();
                 break;
             }

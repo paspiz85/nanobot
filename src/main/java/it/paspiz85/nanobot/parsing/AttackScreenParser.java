@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.util.Robot;
+import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Color;
 import java.awt.Point;
@@ -55,9 +55,9 @@ public final class AttackScreenParser extends AbstractParser {
     public boolean hasDE(BufferedImage image) throws BotBadBaseException {
         int deCheck = image.getRGB(20, 0);
         // 0x80752B
-        if (Robot.instance().compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
+        if (OS.instance().compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
             return true;
-        } else if (Robot.instance().compareColor(deCheck, 0xffb1a841, 7)) {
+        } else if (OS.instance().compareColor(deCheck, 0xffb1a841, 7)) {
             return false;
         } else {
             throw new BotBadBaseException("de: " + Integer.toHexString(deCheck));
@@ -65,7 +65,7 @@ public final class AttackScreenParser extends AbstractParser {
     }
 
     public boolean isCollectorFullBase() throws BotException {
-        return isCollectorFullBase(Robot.instance().screenShot(Area.ENEMY_BASE));
+        return isCollectorFullBase(OS.instance().screenShot(Area.ENEMY_BASE));
     }
 
     public boolean isCollectorFullBase(BufferedImage image) throws BotException {
@@ -169,7 +169,7 @@ public final class AttackScreenParser extends AbstractParser {
     }
 
     public int[] parseLoot() throws BotBadBaseException {
-        BufferedImage image = Robot.instance().screenShot(Area.ENEMY_LOOT);
+        BufferedImage image = OS.instance().screenShot(Area.ENEMY_LOOT);
         return parseLoot(image);
     }
 
@@ -182,7 +182,7 @@ public final class AttackScreenParser extends AbstractParser {
     }
 
     public int[] parseTroopCount() {
-        BufferedImage image = Robot.instance().screenShot(Area.ATTACK_GROUP);
+        BufferedImage image = OS.instance().screenShot(Area.ATTACK_GROUP);
         int[] troopCount = parseTroopCount(image);
         logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
         return troopCount;

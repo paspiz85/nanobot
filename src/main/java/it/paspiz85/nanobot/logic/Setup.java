@@ -2,8 +2,8 @@ package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Constants;
-import it.paspiz85.nanobot.util.Robot;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.win32.OS;
 import it.paspiz85.nanobot.win32.User32;
 
 import java.awt.Point;
@@ -41,7 +41,7 @@ public class Setup implements Constants {
     }
 
     public void setup() throws BotConfigurationException, InterruptedException {
-        if (!Robot.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
+        if (!OS.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
             throw new BotConfigurationException("Bot is only available for Windows OS.");
         }
         // disable display off
@@ -55,7 +55,7 @@ public class Setup implements Constants {
         setupResolution();
         // setup RobotUtils
         logger.info("Setting up RobotUtils...");
-        Robot.instance().setupWin32(bsHwnd);
+        OS.instance().setupWin32(bsHwnd);
         // setup barracks
         logger.info("Setting up Barracks...");
         setupBarracks();
@@ -63,8 +63,8 @@ public class Setup implements Constants {
 
     private void setupBarracks() throws BotConfigurationException, InterruptedException {
         if (Settings.instance().getFirstBarrackPosition() == null) {
-            Robot.instance().zoomUp();
-            boolean confirmed = Robot.instance().confirmationBox(
+            OS.instance().zoomUp();
+            boolean confirmed = OS.instance().confirmationBox(
                     "You must configure the location "
                             + "of first Barracks. First Barracks is the leftmost one when you \n"
                             + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
@@ -160,7 +160,7 @@ public class Setup implements Constants {
             }
             String msg = String.format("%s must run in resolution %dx%d.\n"
                     + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y);
-            boolean ret = Robot.instance().confirmationBox(msg, "Change resolution");
+            boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
             if (!ret) {
                 throw new BotConfigurationException("Re-run when resolution is fixed.");
             }
