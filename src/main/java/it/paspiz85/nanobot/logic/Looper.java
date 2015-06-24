@@ -19,7 +19,13 @@ public final class Looper {
 
     private boolean waitingForDcChecker = false;
 
+    private boolean running = false;
+
     private Looper() {
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     public boolean isWaitingForDcChecker() {
@@ -80,11 +86,13 @@ public final class Looper {
         dcThread.setDaemon(true);
         dcThread.start();
         try {
+            running = true;
             while (true) {
                 context.setState(StateIdle.instance());
                 loop(context);
             }
         } finally {
+            running = false;
             dcThread.interrupt();
             this.waitingForDcChecker = false;
             context.setWaitDone(false);

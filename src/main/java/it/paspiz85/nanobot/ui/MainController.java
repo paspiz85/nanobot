@@ -228,6 +228,7 @@ public class MainController implements ApplicationAwareController, Constants {
         githubLink.setVisible(true);
         initializeComboBox();
         updateConfigGridPane();
+        updateButtons();
         initializeSetupService();
         initializeRunnerService();
         if (setupService.getState() == State.READY) {
@@ -294,11 +295,16 @@ public class MainController implements ApplicationAwareController, Constants {
                 };
             }
         };
+        runnerService.setOnRunning(event -> {
+            updateButtons();
+        });
         runnerService.setOnCancelled(event -> {
+            updateButtons();
             logger.warning("runner is cancelled.");
             runnerService.reset();
         });
         runnerService.setOnFailed(event -> {
+            updateButtons();
             logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
                     runnerService.getException());
             runnerService.reset();
@@ -365,14 +371,22 @@ public class MainController implements ApplicationAwareController, Constants {
         controlPane.setVisible(!value);
     }
 
+    void updateButtons() {
+        boolean value = Looper.instance().isRunning();
+        settingsButton.setDisable(value);
+        startButton.setDisable(value);
+        stopButton.setDisable(!value);
+    }
+
     void updateConfigGridPane() {
         goldField.setText(Settings.instance().getGoldThreshold() + "");
         elixirField.setText(Settings.instance().getElixirThreshold() + "");
         deField.setText(Settings.instance().getDarkElixirThreshold() + "");
         maxThField.setText(Settings.instance().getMaxThThreshold() + "");
-        isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
         detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
+        isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
         playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
+        saveEnemyCheckBox.setSelected(Settings.instance().isLogEnemyBase());
         autoAttackComboBox.getSelectionModel().select(
                 Settings.instance().getAttackStrategy().getClass().getSimpleName());
         rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0].getDescription());

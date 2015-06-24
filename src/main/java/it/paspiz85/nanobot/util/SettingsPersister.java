@@ -112,7 +112,7 @@ public final class SettingsPersister implements Constants {
                 }
             }
             String logEnemyBase = configProperties.getProperty(PROPERTY_LOG_ENEMY_BASE);
-            if (playSoundProperty != null) {
+            if (logEnemyBase != null) {
                 settings.setLogEnemyBase(Boolean.parseBoolean(logEnemyBase));
             }
         } catch (Exception e) {
