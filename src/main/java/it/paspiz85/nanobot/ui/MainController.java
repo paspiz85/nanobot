@@ -336,7 +336,6 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     void updateButtons(boolean value) {
-        settingsButton.setDisable(value);
         startButton.setDisable(value);
         stopButton.setDisable(!value);
     }
