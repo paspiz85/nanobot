@@ -13,6 +13,5 @@ import javafx.application.Application;
  */
 public interface ApplicationAwareController {
 
-	void setApplication(Application application);
-
+    void setApplication(Application application);
 }

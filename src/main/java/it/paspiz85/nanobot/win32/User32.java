@@ -4,37 +4,36 @@ import com.sun.jna.Native;
 import com.sun.jna.win32.W32APIOptions;
 
 public interface User32 extends com.sun.jna.platform.win32.User32 {
-	User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class,
-			W32APIOptions.DEFAULT_OPTIONS);
 
-	boolean BlockInput(boolean block);
+    User32 INSTANCE = (User32) Native.loadLibrary("user32", User32.class, W32APIOptions.DEFAULT_OPTIONS);
 
-	boolean ClientToScreen(HWND hWnd, POINT lpPoint);
+    boolean BlockInput(boolean block);
 
-	@Override
-	HWND FindWindow(String lpClassName, String lpWindowName);
+    boolean ClientToScreen(HWND hWnd, POINT lpPoint);
 
-	@Override
-	short GetAsyncKeyState(int key);
+    @Override
+    HWND FindWindow(String lpClassName, String lpWindowName);
 
-	HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
+    @Override
+    short GetAsyncKeyState(int key);
 
-	short GetKeyState(int key);
+    HWND GetDlgItem(HWND hDlg, int nIDDlgItem);
 
-	HDC GetWindowDC(HWND hWnd);
+    short GetKeyState(int key);
 
-	int GetWindowRect(HWND handle, int[] rect);
+    HDC GetWindowDC(HWND hWnd);
 
-	boolean ScreenToClient(HWND hWnd, POINT lpPoint);
+    int GetWindowRect(HWND handle, int[] rect);
 
-	LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
+    boolean ScreenToClient(HWND hWnd, POINT lpPoint);
 
-	@Override
-	HWND SetFocus(HWND hWnd);
+    LRESULT SendMessage(HWND hWnd, int Msg, int wParam, int lParam);
 
-	@Override
-	boolean SetForegroundWindow(HWND hWnd);
+    @Override
+    HWND SetFocus(HWND hWnd);
 
-	boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx,
-			int cy, int uFlags);
+    @Override
+    boolean SetForegroundWindow(HWND hWnd);
+
+    boolean SetWindowPos(HWND hWnd, int hWndInsertAfter, int X, int Y, int cx, int cy, int uFlags);
 }

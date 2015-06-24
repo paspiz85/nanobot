@@ -11,9 +11,13 @@ package it.paspiz85.nanobot.util;
  */
 public interface Constants {
 
-	public static final String NAME = "NanoBot";
-	public static final String REPOSITORY_NAME = "paspiz85/nanobot";
-	public static final String REPOSITORY_URL = "https://github.com/"
-			+ REPOSITORY_NAME;
+    public static final String NAME = "NanoBot";
 
+    public static final String REPOSITORY_NAME = "paspiz85/nanobot";
+
+    public static final String REPOSITORY_URL = "https://github.com/" + REPOSITORY_NAME;
+
+    public static final int BS_RES_X = 860;
+
+    public static final int BS_RES_Y = 720;
 }

@@ -4,19 +4,17 @@ import it.paspiz85.nanobot.exception.BotException;
 
 public class StateNoAction extends State {
 
-	private static StateNoAction instance = new StateNoAction();
+    private static StateNoAction instance = new StateNoAction();
 
-	public static StateNoAction instance() {
-		return instance;
-	}
+    public static StateNoAction instance() {
+        return instance;
+    }
 
-	private StateNoAction() {
-	}
+    private StateNoAction() {
+    }
 
-	@Override
-	public void handle(Context context) throws BotException,
-			InterruptedException {
-		logger.info("StateNoAction");
-	}
-
+    @Override
+    public void handle(Context context) throws BotException, InterruptedException {
+        logger.info("StateNoAction");
+    }
 }
