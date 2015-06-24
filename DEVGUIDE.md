@@ -10,7 +10,7 @@ Download source code with:
 ```
 git clone https://github.com/paspiz85/nanobot.git
 ```
-Move into nanoblot folder.
+Move into "nanobot" folder.
 
 ##### Complete build
 ```
