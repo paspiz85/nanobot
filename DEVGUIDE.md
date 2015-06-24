@@ -16,6 +16,10 @@ Move into "nanobot" folder.
 ```
 mvn clean install
 ```
+Skipping tests and checkstyle:
+```
+mvn clean install -Dmaven.test.skip=true -Dcheckstyle.skip=true
+```
 
 ##### Running from source
 ```
@@ -31,3 +35,5 @@ mvnDebug clean compile exec:exec
 ```
 mvn release:prepare
 ```
+
+

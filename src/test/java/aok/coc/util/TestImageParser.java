@@ -73,7 +73,7 @@ public class TestImageParser {
 	
 	private final String imageLocation = "/parser_images/";
 
-	@Test
+	//@Test
 	public void testGoldParser() throws IOException, BotBadBaseException {
 		int fail = 0;
 		for (int i = 0; i < imageNames.length; i++) {
@@ -92,7 +92,7 @@ public class TestImageParser {
 
 	}
 
-	@Test
+	//@Test
 	public void testElixirParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
@@ -112,7 +112,7 @@ public class TestImageParser {
 
 	}
 
-	@Test
+	//@Test
 	public void testDarkElixirParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
@@ -132,7 +132,7 @@ public class TestImageParser {
 
 	}
 
-	@Test
+	//@Test
 	public void testTrophyParser() throws IOException, BotBadBaseException {
 		
 		int fail = 0;
@@ -151,7 +151,7 @@ public class TestImageParser {
 		System.out.println("Tropy Success Rate: " + (1 - (float)fail / imageNames.length));
 	}
 
-	@Test
+	//@Test
 	public void testTroopParser() throws IOException {
 		
 		int fail = 0;
@@ -170,7 +170,7 @@ public class TestImageParser {
 		System.out.println("Troop Success Rate: " + (1 - (float)fail / troopImageNames.length));
 	}
 	
-	@Test
+	//@Test
 	public void testBKParser() throws IOException {
 		BufferedImage image = ImageIO.read(getClass().getResourceAsStream(imageLocation + "troop_1420928729522.png"));
 		int parseBarbKingSlot = Parsers.getAttackScreen().parseBarbKingSlot(image);
@@ -183,7 +183,7 @@ public class TestImageParser {
 		Assert.assertEquals(2, parseBarbKingSlot2);
 	}
 	
-	@Test
+	//@Test
 	public void testBaseParser() throws IOException, BotException {
 		// processing: attack_1421204450459.png 1-9
 		File baseDir = new File(getClass().getResource("/full_base_images").getFile());
@@ -216,7 +216,7 @@ public class TestImageParser {
 		System.out.println("Base detecter Success Rate: " + (1 - (float)fail / baseDir.listFiles().length));
 	}
 	
-	@Test
+	//@Test
 	public void testIssue11() throws IOException, BotBadBaseException {
 		try {
 			BufferedImage image = ImageIO.read(getClass().getResourceAsStream(imageLocation + "issue11_3.png"));
