@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
+import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Robot;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.User32;
@@ -22,13 +23,9 @@ import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
-public class Setup {
+public class Setup implements Constants {
 
     private static final Setup instance = new Setup();
-
-    public static final int BS_RES_X = 860;
-
-    public static final int BS_RES_Y = 720;
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 

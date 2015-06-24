@@ -31,7 +31,7 @@ public final class Looper {
         try {
             while (true) {
                 if (Thread.interrupted()) {
-                    throw new InterruptedException("BotLauncher is interrupted.");
+                    throw new InterruptedException(getClass().getName() + " is interrupted.");
                 }
                 context.handle();
             }
