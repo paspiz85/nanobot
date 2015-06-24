@@ -35,7 +35,7 @@ You can change the values while bot is running too, just don't forget to click s
 
 If you need help with setting up first barracks, you can watch [this video.](https://www.youtube.com/watch?v=sUN-im0Zt8s) (Thanks to frank1cangri)
 
-All settings are saved under %appdata%/NanoBot/config.properties.
+All settings are saved under %appdata%/nanobot.properties.
 In case barracks configuration went wrong and you want to reset it, you can delete this file.
 
 ####Recommended Settings
@@ -65,7 +65,8 @@ Bot is still in its early stages, I have not tested with different machines. If 
 
     Your first barracks was improperly configured. All settings are saved under %appdata%/NanoBot/config.properties. Delete this file and reconfigure.
 
-
+<!--
 ###Donate
 If you like NanoBot consider a donation to support further development. Click
 [here!](https://cdn.rawgit.com/paspiz85/nanobot/master/donate2.html)
+-->
