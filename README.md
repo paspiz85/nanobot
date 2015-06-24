@@ -4,10 +4,9 @@ An usefull Clash of Clans bot.
 ###Features
 * Automatic troops training (all except dark troops)
 * Automatic attacks
-** Opponent finder matching gold, elixir, dark elixir criterias
-** Detect empty collectors
-** Different attack strategies
-<!-- * Attack with Barb King/Archer Queen and use the ability. -->
+  * Opponent finder matching gold, elixir, dark elixir criterias
+  * Detect empty collectors
+  * Different attack strategies <!-- * Attack with Barb King/Archer Queen and use the ability. -->
 * Notified when there is a match, and manual attack (optionally)
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
 
