@@ -192,7 +192,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     public void handleStartButtonAction() {
-        if (setupDone && runnerService.getState() == State.READY) {
+        if (runnerService.getState() == State.READY) {
             runnerService.start();
         }
     }
@@ -282,8 +282,8 @@ public class MainController implements ApplicationAwareController, Constants {
                         if (!setupDone) {
                             Setup.instance().setup();
                             setupDone = true;
-                            logger.info("Setup is successful.");
                         }
+                        logger.info("Setup is successful.");
                         Looper.instance().start();
                         return null;
                     }
