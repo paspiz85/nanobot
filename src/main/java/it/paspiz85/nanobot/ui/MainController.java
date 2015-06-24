@@ -35,341 +35,341 @@ import org.kohsuke.github.GitHub;
 
 public class MainController implements ApplicationAwareController, Constants {
 
-	Application application;
+    Application application;
 
-	@FXML
-	ComboBox<String> autoAttackComboBox;
+    @FXML
+    ComboBox<String> autoAttackComboBox;
 
-	@FXML
-	Button cancelButton;
+    @FXML
+    Button cancelButton;
 
-	@FXML
-	GridPane configGridPane;
+    @FXML
+    GridPane configGridPane;
 
-	@FXML
-	AnchorPane controlPane;
+    @FXML
+    AnchorPane controlPane;
 
-	@FXML
-	TextField deField;
+    @FXML
+    TextField deField;
 
-	@FXML
-	CheckBox detectEmptyCollectorsCheckBox;
+    @FXML
+    CheckBox detectEmptyCollectorsCheckBox;
 
-	@FXML
-	Label donateLabel;
+    @FXML
+    Label donateLabel;
 
-	@FXML
-	Hyperlink donateLink;
+    @FXML
+    Hyperlink donateLink;
 
-	@FXML
-	TextField elixirField;
+    @FXML
+    TextField elixirField;
 
-	@FXML
-	Hyperlink githubLink;
+    @FXML
+    Hyperlink githubLink;
 
-	@FXML
-	TextField goldField;
+    @FXML
+    TextField goldField;
 
-	@FXML
-	ImageView heartImage;
+    @FXML
+    ImageView heartImage;
 
-	@FXML
-	CheckBox isMatchAllConditionsCheckBox;
+    @FXML
+    CheckBox isMatchAllConditionsCheckBox;
 
-	protected final Logger logger = Logger.getLogger(getClass().getName());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
-	@FXML
-	TextField maxThField;
+    @FXML
+    TextField maxThField;
 
-	@FXML
-	CheckBox playSoundCheckBox;
+    @FXML
+    CheckBox playSoundCheckBox;
 
-	@FXML
-	ComboBox<String> rax1ComboBox;
+    @FXML
+    ComboBox<String> rax1ComboBox;
 
-	@FXML
-	ComboBox<String> rax2ComboBox;
+    @FXML
+    ComboBox<String> rax2ComboBox;
 
-	@FXML
-	ComboBox<String> rax3ComboBox;
+    @FXML
+    ComboBox<String> rax3ComboBox;
 
-	@FXML
-	ComboBox<String> rax4ComboBox;
+    @FXML
+    ComboBox<String> rax4ComboBox;
 
-	@FXML
-	Button settingsButton;
+    @FXML
+    Button settingsButton;
 
-	@FXML
-	AnchorPane setupPane;
+    @FXML
+    AnchorPane setupPane;
 
-	@FXML
-	Button startButton;
+    @FXML
+    Button startButton;
 
-	@FXML
-	Button stopButton;
+    @FXML
+    Button stopButton;
 
-	@FXML
-	TextArea textArea;
+    @FXML
+    TextArea textArea;
 
-	@FXML
-	Label updateLabel;
+    @FXML
+    Label updateLabel;
 
-	@FXML
-	Label versionLabel;
+    @FXML
+    Label versionLabel;
 
-	private boolean setupDone = false;
+    private boolean setupDone = false;
 
-	private Service<Void> setupService = null;
+    private Service<Void> setupService = null;
 
-	private Service<Void> runnerService = null;
+    private Service<Void> runnerService = null;
 
-	/**
-	 * GitHub dependency is only used here and unused parts are excluded. Make
-	 * sure it works fine if it is used somewhere else.
-	 */
-	boolean checkForUpdate() {
-		try {
-			String current = getClass().getPackage().getImplementationVersion();
-			if (current == null) {
-				// IDE run
-				return false;
-			}
-			DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
-			GitHub github = GitHub.connectAnonymously();
-			GHRepository repository = github.getRepository(REPOSITORY_NAME);
-			for (GHRelease r : repository.listReleases()) {
-				String release = r.getName().substring(1);
-				DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-				if (currentVersion.compareTo(releaseVersion) < 0) {
-					return true;
-				}
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Unable to get latest version", e);
-		}
-		return false;
-	}
+    /**
+     * GitHub dependency is only used here and unused parts are excluded. Make
+     * sure it works fine if it is used somewhere else.
+     */
+    boolean checkForUpdate() {
+        try {
+            String current = getClass().getPackage().getImplementationVersion();
+            if (current == null) {
+                // IDE run
+                return false;
+            }
+            DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
+            GitHub github = GitHub.connectAnonymously();
+            GHRepository repository = github.getRepository(REPOSITORY_NAME);
+            for (GHRelease r : repository.listReleases()) {
+                String release = r.getName().substring(1);
+                DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
+                if (currentVersion.compareTo(releaseVersion) < 0) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            logger.log(Level.WARNING, "Unable to get latest version", e);
+        }
+        return false;
+    }
 
-	@FXML
-	public void handleCancelButtonAction() {
-		showSettings(false);
-	}
+    @FXML
+    public void handleCancelButtonAction() {
+        showSettings(false);
+    }
 
-	@FXML
-	public void handleSaveButtonAction() {
-		if (!goldField.getText().isEmpty()) {
-			Settings.instance().setGoldThreshold(Integer.parseInt(goldField.getText()));
-		}
-		if (!elixirField.getText().isEmpty()) {
-			Settings.instance().setElixirThreshold(Integer.parseInt(elixirField.getText()));
-		}
-		if (!deField.getText().isEmpty()) {
-			Settings.instance().setDarkElixirThreshold(Integer.parseInt(deField.getText()));
-		}
-		if (!maxThField.getText().isEmpty()) {
-			Settings.instance().setMaxThThreshold(Integer.parseInt(maxThField.getText()));
-		}
-		Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
-		Settings.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
-		Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
-		Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
-		Settings.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
-		Settings.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
-		Settings.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
-		Settings.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
-		Settings.instance().save();
-		showSettings(false);
-	}
+    @FXML
+    public void handleSaveButtonAction() {
+        if (!goldField.getText().isEmpty()) {
+            Settings.instance().setGoldThreshold(Integer.parseInt(goldField.getText()));
+        }
+        if (!elixirField.getText().isEmpty()) {
+            Settings.instance().setElixirThreshold(Integer.parseInt(elixirField.getText()));
+        }
+        if (!deField.getText().isEmpty()) {
+            Settings.instance().setDarkElixirThreshold(Integer.parseInt(deField.getText()));
+        }
+        if (!maxThField.getText().isEmpty()) {
+            Settings.instance().setMaxThThreshold(Integer.parseInt(maxThField.getText()));
+        }
+        Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
+        Settings.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
+        Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
+        Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
+        Settings.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
+        Settings.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
+        Settings.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
+        Settings.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
+        Settings.instance().save();
+        showSettings(false);
+    }
 
-	@FXML
-	public void handleSettingsButtonAction() {
-		showSettings(true);
-	}
+    @FXML
+    public void handleSettingsButtonAction() {
+        showSettings(true);
+    }
 
-	@FXML
-	public void handleStartButtonAction() {
-		if (setupDone && runnerService.getState() == State.READY) {
-			runnerService.start();
-		}
-	}
+    @FXML
+    public void handleStartButtonAction() {
+        if (setupDone && runnerService.getState() == State.READY) {
+            runnerService.start();
+        }
+    }
 
-	@FXML
-	public void handleStopButtonAction() {
-		if (setupService.isRunning()) {
-			setupService.cancel();
-			setupService.reset();
-		}
-		if (runnerService.isRunning()) {
-			runnerService.cancel();
-			runnerService.reset();
-		}
-	}
+    @FXML
+    public void handleStopButtonAction() {
+        if (setupService.isRunning()) {
+            setupService.cancel();
+            setupService.reset();
+        }
+        if (runnerService.isRunning()) {
+            runnerService.cancel();
+            runnerService.reset();
+        }
+    }
 
-	@FXML
-	void initialize() {
-		LogHandler.initialize(textArea);
-		Setup.instance().initialize();
-		initializeLinks();
-		initializeLabels();
-		initializeTextFields();
-		githubLink.setText(REPOSITORY_URL);
-		githubLink.setVisible(true);
-		initializeComboBox();
-		updateConfigGridPane();
-		initializeSetupService();
-		initializeRunnerService();
-		if (setupService.getState() == State.READY) {
-			setupService.start();
-		}
-		if (checkForUpdate()) {
-			updateLabel.setVisible(true);
-		}
-	}
+    @FXML
+    void initialize() {
+        LogHandler.initialize(textArea);
+        Setup.instance().initialize();
+        initializeLinks();
+        initializeLabels();
+        initializeTextFields();
+        githubLink.setText(REPOSITORY_URL);
+        githubLink.setVisible(true);
+        initializeComboBox();
+        updateConfigGridPane();
+        initializeSetupService();
+        initializeRunnerService();
+        if (setupService.getState() == State.READY) {
+            setupService.start();
+        }
+        if (checkForUpdate()) {
+            updateLabel.setVisible(true);
+        }
+    }
 
-	void initializeComboBox() {
-		Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
-		String[] attackStrategies = new String[availableAttackStrategies.length];
-		for (int i = 0; i < availableAttackStrategies.length; i++) {
-			Attack a = availableAttackStrategies[i];
-			attackStrategies[i] = a.getClass().getSimpleName();
-		}
-		autoAttackComboBox.getItems().addAll(attackStrategies);
-		autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-		Clickable[] availableTroops = Settings.instance().getAvailableTroops();
-		String[] troops = new String[availableTroops.length];
-		for (int i = 0; i < availableTroops.length; i++) {
-			Clickable c = availableTroops[i];
-			troops[i] = c.getDescription();
-		}
-		rax1ComboBox.getItems().addAll(troops);
-		rax2ComboBox.getItems().addAll(troops);
-		rax3ComboBox.getItems().addAll(troops);
-		rax4ComboBox.getItems().addAll(troops);
-	}
+    void initializeComboBox() {
+        Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
+        String[] attackStrategies = new String[availableAttackStrategies.length];
+        for (int i = 0; i < availableAttackStrategies.length; i++) {
+            Attack a = availableAttackStrategies[i];
+            attackStrategies[i] = a.getClass().getSimpleName();
+        }
+        autoAttackComboBox.getItems().addAll(attackStrategies);
+        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
+        Clickable[] availableTroops = Settings.instance().getAvailableTroops();
+        String[] troops = new String[availableTroops.length];
+        for (int i = 0; i < availableTroops.length; i++) {
+            Clickable c = availableTroops[i];
+            troops[i] = c.getDescription();
+        }
+        rax1ComboBox.getItems().addAll(troops);
+        rax2ComboBox.getItems().addAll(troops);
+        rax3ComboBox.getItems().addAll(troops);
+        rax4ComboBox.getItems().addAll(troops);
+    }
 
-	void initializeLabels() {
-		String version = getClass().getPackage().getImplementationVersion();
-		if (version != null) {
-			versionLabel.setText(NAME + " v" + version);
-		}
-	}
+    void initializeLabels() {
+        String version = getClass().getPackage().getImplementationVersion();
+        if (version != null) {
+            versionLabel.setText(NAME + " v" + version);
+        }
+    }
 
-	void initializeLinks() {
-		githubLink.setOnAction(t -> {
-			application.getHostServices().showDocument(githubLink.getText());
-			githubLink.setVisited(false);
-		});
-		/*
-		 * Image heartIcon = new Image(getClass().getResourceAsStream(
-		 * "/images/heart.png")); donateLink.setGraphic(new
-		 * ImageView(heartIcon));
-		 */
-		donateLink.setOnAction(event -> {
-			application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
-			donateLink.setVisited(false);
-		});
-	}
+    void initializeLinks() {
+        githubLink.setOnAction(t -> {
+            application.getHostServices().showDocument(githubLink.getText());
+            githubLink.setVisited(false);
+        });
+        /*
+         * Image heartIcon = new Image(getClass().getResourceAsStream(
+         * "/images/heart.png")); donateLink.setGraphic(new
+         * ImageView(heartIcon));
+         */
+        donateLink.setOnAction(event -> {
+            application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
+            donateLink.setVisited(false);
+        });
+    }
 
-	void initializeRunnerService() {
-		runnerService = new Service<Void>() {
+    void initializeRunnerService() {
+        runnerService = new Service<Void>() {
 
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
 
-					@Override
-					protected Void call() throws Exception {
-						Looper.instance().start();
-						return null;
-					}
-				};
-			}
-		};
-		runnerService.setOnCancelled(event -> {
-			logger.warning("runner is cancelled.");
-			runnerService.reset();
-		});
-		runnerService.setOnFailed(event -> {
-			logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
-					runnerService.getException());
-			runnerService.reset();
-		});
-	}
+                    @Override
+                    protected Void call() throws Exception {
+                        Looper.instance().start();
+                        return null;
+                    }
+                };
+            }
+        };
+        runnerService.setOnCancelled(event -> {
+            logger.warning("runner is cancelled.");
+            runnerService.reset();
+        });
+        runnerService.setOnFailed(event -> {
+            logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
+                    runnerService.getException());
+            runnerService.reset();
+        });
+    }
 
-	void initializeSetupService() {
-		setupService = new Service<Void>() {
+    void initializeSetupService() {
+        setupService = new Service<Void>() {
 
-			@Override
-			protected Task<Void> createTask() {
-				return new Task<Void>() {
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
 
-					@Override
-					protected Void call() throws Exception {
-						// TODO Setup.instance().tearDown();
-						Setup.instance().setup();
-						return null;
-					}
-				};
-			}
-		};
-		setupService.setOnSucceeded(event -> {
-			setupDone = true;
-			logger.info("Setup is successful.");
-			logger.info("Click start to run.");
-		});
-		setupService.setOnFailed(event -> {
-			setupDone = false;
-			logger.log(Level.SEVERE, "Setup is failed: " + setupService.getException().getMessage(),
-					setupService.getException());
-			setupService.reset();
-		});
-		setupService.setOnCancelled(event -> {
-			setupDone = false;
-			logger.warning("Setup is cancelled.");
-			setupService.reset();
-		});
-	}
+                    @Override
+                    protected Void call() throws Exception {
+                        // TODO Setup.instance().tearDown();
+                        Setup.instance().setup();
+                        return null;
+                    }
+                };
+            }
+        };
+        setupService.setOnSucceeded(event -> {
+            setupDone = true;
+            logger.info("Setup is successful.");
+            logger.info("Click start to run.");
+        });
+        setupService.setOnFailed(event -> {
+            setupDone = false;
+            logger.log(Level.SEVERE, "Setup is failed: " + setupService.getException().getMessage(),
+                    setupService.getException());
+            setupService.reset();
+        });
+        setupService.setOnCancelled(event -> {
+            setupDone = false;
+            logger.warning("Setup is cancelled.");
+            setupService.reset();
+        });
+    }
 
-	void initializeTextFields() {
-		ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
-					try {
-						if (!newValue.isEmpty()) {
-							Integer.parseInt(newValue);
-						}
-					} catch (NumberFormatException e) {
-						((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
-					}
-				};
-				goldField.textProperty().addListener(intFieldListener);
-				elixirField.textProperty().addListener(intFieldListener);
-				deField.textProperty().addListener(intFieldListener);
-				maxThField.textProperty().addListener(intFieldListener);
-	}
+    void initializeTextFields() {
+        ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
+            try {
+                if (!newValue.isEmpty()) {
+                    Integer.parseInt(newValue);
+                }
+            } catch (NumberFormatException e) {
+                ((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
+            }
+        };
+        goldField.textProperty().addListener(intFieldListener);
+        elixirField.textProperty().addListener(intFieldListener);
+        deField.textProperty().addListener(intFieldListener);
+        maxThField.textProperty().addListener(intFieldListener);
+    }
 
-	@Override
-	public void setApplication(Application application) {
-		this.application = application;
-	}
+    @Override
+    public void setApplication(Application application) {
+        this.application = application;
+    }
 
-	void showSettings(boolean value) {
-		setupPane.setVisible(value);
-		controlPane.setVisible(!value);
-	}
+    void showSettings(boolean value) {
+        setupPane.setVisible(value);
+        controlPane.setVisible(!value);
+    }
 
-	void updateConfigGridPane() {
-		goldField.setText(Settings.instance().getGoldThreshold() + "");
-		elixirField.setText(Settings.instance().getElixirThreshold() + "");
-		deField.setText(Settings.instance().getDarkElixirThreshold() + "");
-		maxThField.setText(Settings.instance().getMaxThThreshold() + "");
-		isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
-		detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
-		playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
-		autoAttackComboBox.getSelectionModel().select(
-				Settings.instance().getAttackStrategy().getClass().getSimpleName());
-		rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0].getDescription());
-		rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1].getDescription());
-		rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2].getDescription());
-		rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3].getDescription());
-		configGridPane.setVisible(true);
-	}
+    void updateConfigGridPane() {
+        goldField.setText(Settings.instance().getGoldThreshold() + "");
+        elixirField.setText(Settings.instance().getElixirThreshold() + "");
+        deField.setText(Settings.instance().getDarkElixirThreshold() + "");
+        maxThField.setText(Settings.instance().getMaxThThreshold() + "");
+        isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
+        detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
+        playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
+        autoAttackComboBox.getSelectionModel().select(
+                Settings.instance().getAttackStrategy().getClass().getSimpleName());
+        rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0].getDescription());
+        rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1].getDescription());
+        rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2].getDescription());
+        rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3].getDescription());
+        configGridPane.setVisible(true);
+    }
 }

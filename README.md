@@ -22,7 +22,7 @@ An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
 * Run the game in **English,** some users reported errors in other languages.
 
 ###Instructions
-Download the latest version of NanoBot from [releases page](https://github.com/norecha/nanobot/releases) and run the .jar file.
+Download the latest version of NanoBot from [releases page](https://github.com/paspiz85/nanobot/releases) and run the .jar file.
 
 Make sure you are running it with java 8, not with an older version of Java.
 Right click to .jar file, Properties -> Open with -> Change -> Browse.
@@ -68,4 +68,4 @@ Bot is still in its early stages, I have not tested with different machines. If 
 
 ###Donate
 If you like NanoBot consider a donation to support further development. Click
-[here!](https://cdn.rawgit.com/norecha/nanobot/master/donate2.html)
+[here!](https://cdn.rawgit.com/paspiz85/nanobot/master/donate2.html)
