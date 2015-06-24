@@ -1,13 +1,14 @@
 ##NanoBot
-An open source Clash of Clans bot. Read [FAQ](#faq) for most common issues.
+An usefull Clash of Clans bot.
 
 ###Features
-* Auto train troops(all troops)
-* Auto opponent finder matching gold, elixir, dark elixir criterias
-* Auto attack with different attack strategies
-* Attack with Barb King/Archer Queen and use the ability.
-* Or you can just use it to find opponents, be notified when there is a match, and attack manually.
-* Detect empty collectors
+* Automatic troops training (all except dark troops)
+* Automatic attacks
+** Opponent finder matching gold, elixir, dark elixir criterias
+** Detect empty collectors
+** Different attack strategies
+<!-- * Attack with Barb King/Archer Queen and use the ability. -->
+* Notified when there is a match, and manual attack (optionally)
 * Disconnect detector. You cannot run game for more than 6 hours at a time, you will be disconnected after that for 5 min, it will reload you again. Or in case something goes wrong and bot dies, you will get disconnected from inactivity, and it will log you back in and start again.
 
 ###Requirements

@@ -20,7 +20,7 @@ public class StateIdle extends State {
     public void handle(Context context) throws InterruptedException {
         State nextState = null;
         while (true) {
-            logger.info("StateIdle");
+            logger.info("Idle");
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateIdle is interrupted.");
             }

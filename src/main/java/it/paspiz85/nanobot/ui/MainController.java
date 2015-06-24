@@ -282,6 +282,7 @@ public class MainController implements ApplicationAwareController, Constants {
                         updateButtons(true);
                         if (!setupDone) {
                             Setup.instance().setup();
+                            Settings.instance().save();
                             setupDone = true;
                         }
                         logger.info("Setup is successful.");

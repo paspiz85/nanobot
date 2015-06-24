@@ -44,17 +44,13 @@ public class Setup implements Constants {
         if (!OS.SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
             throw new BotConfigurationException("Bot is only available for Windows OS.");
         }
-        // disable display off
-        // Kernel32.INSTANCE.SetThreadExecutionState(Kernel32.ES_SYSTEM_REQUIRED
-        // | Kernel32.ES_CONTINUOUS | Kernel32.ES_DISPLAY_REQUIRED);
-        // setup bs window handle
         logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
         setupBsRect();
         // setup resolution
         logger.info(String.format("Setting up %s resolution...", BS_WINDOW_NAME));
         setupResolution();
         // setup RobotUtils
-        logger.info("Setting up RobotUtils...");
+        logger.info("Setting up OS handler...");
         OS.instance().setupWin32(bsHwnd);
         // setup barracks
         logger.info("Setting up Barracks...");

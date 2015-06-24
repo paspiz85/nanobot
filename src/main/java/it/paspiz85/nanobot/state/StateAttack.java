@@ -52,7 +52,7 @@ public class StateAttack extends State {
     @Override
     public void handle(Context context) throws InterruptedException, BotException {
         while (true) {
-            logger.info("StateAttack");
+            logger.info("Searching opponent...");
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateAttack is interrupted.");
             }
