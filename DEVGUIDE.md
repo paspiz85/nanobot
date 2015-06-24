@@ -26,3 +26,8 @@ mvn clean compile exec:exec
 ```
 mvnDebug clean compile exec:exec
 ```
+
+##### Prepare a release
+```
+mvn release:prepare
+```
