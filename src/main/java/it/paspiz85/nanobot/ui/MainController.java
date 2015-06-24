@@ -222,7 +222,7 @@ public class MainController implements ApplicationAwareController, Constants {
         githubLink.setVisible(true);
         initializeComboBox();
         updateConfigGridPane();
-        updateButtons();
+        updateButtons(false);
         initializeRunnerService();
         if (checkForUpdate()) {
             updateLabel.setVisible(true);
@@ -279,6 +279,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
                     @Override
                     protected Void call() throws Exception {
+                        updateButtons(true);
                         if (!setupDone) {
                             Setup.instance().setup();
                             setupDone = true;
@@ -291,15 +292,15 @@ public class MainController implements ApplicationAwareController, Constants {
             }
         };
         runnerService.setOnRunning(event -> {
-            updateButtons();
+            updateButtons(false);
         });
         runnerService.setOnCancelled(event -> {
-            updateButtons();
+            updateButtons(false);
             logger.warning("runner is cancelled.");
             runnerService.reset();
         });
         runnerService.setOnFailed(event -> {
-            updateButtons();
+            updateButtons(false);
             logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
                     runnerService.getException());
             runnerService.reset();
@@ -333,8 +334,7 @@ public class MainController implements ApplicationAwareController, Constants {
         controlPane.setVisible(!value);
     }
 
-    void updateButtons() {
-        boolean value = Looper.instance().isRunning();
+    void updateButtons(boolean value) {
         settingsButton.setDisable(value);
         startButton.setDisable(value);
         stopButton.setDisable(!value);
