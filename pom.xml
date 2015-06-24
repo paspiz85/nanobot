@@ -12,7 +12,6 @@
 		<connection>scm:git:git@github.com:paspiz85/nanobot.git</connection>
 		<url>scm:git:git@github.com:paspiz85/nanobot.git</url>
 		<developerConnection>scm:git:git@github.com:paspiz85/nanobot.git</developerConnection>
-		<tag>nanobot-1.0.4</tag>
 	</scm>
 
 	<repositories>
