@@ -109,8 +109,8 @@ public class Setup implements Constants {
                         GlobalScreen.getInstance().wait();
                     }
                 }
-                logger.info(String.format("Set barracks location to <%d, %d>", Settings.instance()
-                        .getFirstBarrackPosition().getX(), Settings.instance().getFirstBarrackPosition().getY()));
+                logger.info(String.format("Set barracks location to <%d, %d>", (int) Settings.instance()
+                        .getFirstBarrackPosition().getX(), (int) Settings.instance().getFirstBarrackPosition().getY()));
                 GlobalScreen.unregisterNativeHook();
             } catch (NativeHookException e) {
                 throw new BotConfigurationException("Unable to capture mouse movement.", e);
