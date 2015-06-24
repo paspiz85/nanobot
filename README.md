@@ -49,13 +49,10 @@ In case barracks configuration went wrong and you want to reset it, you can dele
 
 *If one or more of your barracks are upgrading, you need to set remaining ones to "No Unit"
 
-###Issues
-Bot is still in its early stages, I have not tested with different machines. If there are bugs/suggestions, create an issue and attach the log file.
-
 ###FAQ
 * Stuck in StateIdle
 
-    Your resolution is not right. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your BlueStacks(from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
+    Your resolution is wrong. If bot fails to automatically change it, you need to manually change values from registry. Google how to change resolution for bluestacks. You need to **restart** your BlueStacks (from system tray icon) after you change resolution. If it still looks wrong, restart your pc.
 
 * Not attacking, bot dies after first opponent.
 
@@ -64,6 +61,9 @@ Bot is still in its early stages, I have not tested with different machines. If 
 * Barracks are scrolling to dark barracks/spells instead of next barracks
 
     Your first barracks was improperly configured. All settings are saved under %appdata%/NanoBot/config.properties. Delete this file and reconfigure.
+
+###Issues
+If there are suggestions/bug, open an issue and attach the log file.
 
 <!--
 ###Donate
