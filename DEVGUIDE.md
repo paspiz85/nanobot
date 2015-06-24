@@ -1,4 +1,6 @@
-##NanoBot
+##Developer Guide
+Download source code with:
+
 An usefull Clash of Clans bot.
 
 ###Features
