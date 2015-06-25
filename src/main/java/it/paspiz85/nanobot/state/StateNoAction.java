@@ -4,7 +4,7 @@ import it.paspiz85.nanobot.exception.BotException;
 
 /**
  * Mock state that do nothing.
- * 
+ *
  * @author v-ppizzuti
  *
  */

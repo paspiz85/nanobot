@@ -6,13 +6,17 @@ import it.paspiz85.nanobot.win32.OS;
 
 /**
  * Training state is when bot train troops.
- * 
+ *
  * @author v-ppizzuti
  *
  */
 public final class StateTrainTroops extends State {
 
     private static StateTrainTroops instance;
+
+    private static final int BARRACK_LV1_SIZE = 20;
+
+    private static final int BARB_TRAIN_MS = 20000;
 
     public static StateTrainTroops instance() {
         if (instance == null) {
@@ -43,9 +47,9 @@ public final class StateTrainTroops extends State {
                 OS.instance().sleepRandom(350);
             }
         }
-        OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(),true);
+        OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(), true);
         OS.instance().sleepRandom(250);
         context.setState(StateMainMenu.instance());
-        OS.instance().sleepRandom(20*20000/2);
+        OS.instance().sleepRandom(BARRACK_LV1_SIZE * BARB_TRAIN_MS / 2);
     }
 }

@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.util;
 
 /**
  * Model a point in a 2D display.
- * 
+ *
  * @author v-ppizzuti
  *
  */

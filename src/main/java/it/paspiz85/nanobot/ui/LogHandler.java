@@ -12,7 +12,7 @@ import javafx.scene.control.TextArea;
 
 /**
  * Handler for logging in a textarea on GUI.
- * 
+ *
  * @author v-ppizzuti
  *
  */

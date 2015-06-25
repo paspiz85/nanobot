@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 /**
  * Useful logging utils.
- * 
+ *
  * @author v-ppizzuti
  *
  */

@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.util;
 
 /**
  * Application constants.
- * 
+ *
  * @author v-ppizzuti
  */
 public interface Constants {

@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 /**
  * Logic to check if game disconnected.
- * 
+ *
  * @author v-ppizzuti
  *
  */

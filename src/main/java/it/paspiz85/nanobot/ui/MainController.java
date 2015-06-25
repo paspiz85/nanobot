@@ -37,7 +37,7 @@ import org.kohsuke.github.GitHub;
 
 /**
  * Main GUI controller.
- * 
+ *
  * @author v-ppizzuti
  *
  */

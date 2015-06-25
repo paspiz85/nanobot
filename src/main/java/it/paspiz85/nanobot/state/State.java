@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * State in which bot can be.
- * 
+ *
  * @author v-ppizzuti
  *
  */

@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 
 /**
  * Bot main logic that loop between training and attacking.
- * 
+ *
  * @author v-ppizzuti
  *
  */

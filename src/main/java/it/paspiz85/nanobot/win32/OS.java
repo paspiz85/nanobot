@@ -27,7 +27,7 @@ import com.sun.jna.platform.win32.WinDef.WPARAM;
 
 /**
  * This class wraps Operating System functionalities.
- * 
+ *
  * @author v-ppizzuti
  *
  */
@@ -211,7 +211,7 @@ public final class OS {
 
     /**
      * Sleep random interval between sleepInMs and 2*sleepInMs.
-     * 
+     *
      * @param sleepInMs
      *            minimum sleep time.
      * @throws InterruptedException

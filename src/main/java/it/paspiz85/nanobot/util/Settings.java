@@ -11,7 +11,7 @@ import it.paspiz85.nanobot.parsing.Clickable;
 
 /**
  * Bot settings.
- * 
+ *
  * @author v-ppizzuti
  *
  */

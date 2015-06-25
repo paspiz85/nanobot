@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 /**
  * Execution context of bot.
- * 
+ *
  * @author v-ppizzuti
  *
  */
@@ -37,7 +37,7 @@ public final class Context {
     }
 
     public void setState(final State state) {
-        logger.finest("Setting next state to: " + state.getClass().getSimpleName());
+        logger.fine("Setting next state to: " + state.getClass().getSimpleName());
         this.current = state;
     }
 

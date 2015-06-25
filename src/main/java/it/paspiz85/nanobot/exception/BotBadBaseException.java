@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.exception;
 
 /**
  * Exception raised when bad base found.
- * 
+ *
  * @author v-ppizzuti
  *
  */

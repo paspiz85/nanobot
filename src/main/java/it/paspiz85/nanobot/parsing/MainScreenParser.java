@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * Parser for main mode screen.
- * 
+ *
  * @author v-ppizzuti
  *
  */

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  * Util class for persist settings.
- * 
+ *
  * @author v-ppizzuti
  *
  */

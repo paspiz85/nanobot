@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 /**
  * Main class for GUI.
- * 
+ *
  * @author v-ppizzuti
  *
  */

@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 
 /**
  * Main class for running in batch mode.
- * 
+ *
  * @author v-ppizzuti
  *
  */

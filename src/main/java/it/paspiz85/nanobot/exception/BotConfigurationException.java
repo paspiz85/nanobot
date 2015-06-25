@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.exception;
 
 /**
  * Wrong bot configuration.
- * 
+ *
  * @author v-ppizzuti
  *
  */

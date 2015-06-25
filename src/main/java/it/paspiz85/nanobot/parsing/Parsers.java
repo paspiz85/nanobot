@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.parsing;
 
 /**
  * Factory of parsers.
- * 
+ *
  * @author v-ppizzuti
  *
  */

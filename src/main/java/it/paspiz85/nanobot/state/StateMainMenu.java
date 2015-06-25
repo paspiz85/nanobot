@@ -9,7 +9,7 @@ import it.paspiz85.nanobot.win32.OS;
 
 /**
  * This state is when bot is in main menu.
- * 
+ *
  * @author v-ppizzuti
  *
  */
