@@ -3,10 +3,9 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
-
-import java.awt.Point;
 
 public final class StateMainMenu extends State {
 
@@ -31,18 +30,18 @@ public final class StateMainMenu extends State {
         OS.instance().zoomUp();
         OS.instance().sleepRandom(350);
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
-        OS.instance().leftClick(firstRax.x, firstRax.y, 500);
+        OS.instance().leftClick(firstRax, 500);
         Point trainButton = Parsers.getMainscreen().findTrainButton();
         if (trainButton == null) {
             // maybe rax was already open and we closed it back. try one more
             // time
-            OS.instance().leftClick(firstRax.x, firstRax.y, 500);
+            OS.instance().leftClick(firstRax, 500);
             trainButton = Parsers.getMainscreen().findTrainButton();
         }
         if (trainButton == null) {
             throw new BotConfigurationException("Barracks location is not correct.");
         }
-        OS.instance().leftClick(trainButton.x, trainButton.y, 500);
+        OS.instance().leftClick(trainButton, 500);
         // camp is full
         if (OS.instance().isClickableActive(Clickable.BUTTON_RAX_FULL)) {
             logger.info("Camp is full");

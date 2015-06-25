@@ -6,4 +6,4 @@ check english lang
 unittests
 checkstyle
 
-remove v-ppizzuti
+remove v-ppizzuti norecha

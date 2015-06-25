@@ -2,10 +2,10 @@ package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
@@ -46,10 +46,10 @@ public final class AttackScreenParser extends AbstractParser {
     private static final int ATTACK_GROUP_UNIT_DIFF = 72;
 
     AttackScreenParser() {
-        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x, ENEMY_BASE_LEFT.y);
-        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_TOP.x, ENEMY_BASE_TOP.y);
-        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_RIGHT.x, ENEMY_BASE_RIGHT.y);
-        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x, ENEMY_BASE_BOTTOM.y);
+        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x(), ENEMY_BASE_LEFT.y());
+        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_TOP.x(), ENEMY_BASE_TOP.y());
+        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_RIGHT.x(), ENEMY_BASE_RIGHT.y());
+        ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x(), ENEMY_BASE_BOTTOM.y());
     }
 
     public boolean hasDE(final BufferedImage image) throws BotBadBaseException {
@@ -143,7 +143,8 @@ public final class AttackScreenParser extends AbstractParser {
         Integer result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
         if (rectangle != null) {
-            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;;
+            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
+            ;
         }
         return result;
     }
@@ -160,17 +161,17 @@ public final class AttackScreenParser extends AbstractParser {
     public int parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
         int result = 0;
         if (hasDE(image)) {
-            result = parseNumber(image, 2, 33, 57, image.getWidth() - 43);
+            result = parseNumber(image, 2, new Point(33, 57), image.getWidth() - 43);
         }
         return result;
     }
 
     public int parseElixir(final BufferedImage image) throws BotBadBaseException {
-        return parseNumber(image, 1, 33, 29 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
+        return parseNumber(image, 1, new Point(33, 29 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
     }
 
     public int parseGold(final BufferedImage image) throws BotBadBaseException {
-        return parseNumber(image, 0, 33, 0 + (hasDE(image) ? 0 : 1), image.getWidth() - 43);
+        return parseNumber(image, 0, new Point(33, 0 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
     }
 
     public int[] parseLoot() throws BotBadBaseException {
@@ -200,7 +201,7 @@ public final class AttackScreenParser extends AbstractParser {
         int no;
         int curr = 0;
         while (true) {
-            no = parseNumber(image, 3, xStart, yStart, ATTACK_GROUP_UNIT_DIFF - 10);
+            no = parseNumber(image, 3, new Point(xStart, yStart), ATTACK_GROUP_UNIT_DIFF - 10);
             if (no == 0) {
                 break;
             }
@@ -235,9 +236,9 @@ public final class AttackScreenParser extends AbstractParser {
 
     public int parseTrophy(final BufferedImage image) throws BotBadBaseException {
         if (!hasDE(image)) {
-            return parseNumber(image, 3, 33, 62, image.getWidth() - 43);
+            return parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);
         } else {
-            return parseNumber(image, 3, 33, 90, image.getWidth() - 43);
+            return parseNumber(image, 3, new Point(33, 90), image.getWidth() - 43);
         }
     }
 }

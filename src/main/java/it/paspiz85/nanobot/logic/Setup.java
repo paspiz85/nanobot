@@ -2,11 +2,11 @@ package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 import it.paspiz85.nanobot.win32.User32;
 
-import java.awt.Point;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.logging.Logger;
@@ -108,8 +108,8 @@ public final class Setup implements Constants {
                         GlobalScreen.getInstance().wait();
                     }
                 }
-                logger.info(String.format("Set barracks location to <%d, %d>", (int) Settings.instance()
-                        .getFirstBarrackPosition().getX(), (int) Settings.instance().getFirstBarrackPosition().getY()));
+                logger.info(String.format("Set barracks location to <%d, %d>", Settings.instance()
+                        .getFirstBarrackPosition().x(), Settings.instance().getFirstBarrackPosition().y()));
                 GlobalScreen.unregisterNativeHook();
             } catch (final NativeHookException e) {
                 throw new BotConfigurationException("Unable to capture mouse movement.", e);

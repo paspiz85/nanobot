@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
 
 public final class Attack2Side extends Attack {
@@ -24,13 +25,12 @@ public final class Attack2Side extends Attack {
             final int unitCount = attackGroup[unitIdx];
             // select unit
             OS.instance().leftClick(Clickable.getButtonAttackUnit(unitIdx + 1), 100);
-            final int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y, unitCount / 2
-                    + unitCount % 2);
-            final int[][] topToLeftPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, LEFT_X, LEFT_Y, unitCount / 2);
+            final Point[] topToRightPoints = pointsBetweenFromToInclusive(TOP, RIGHT, unitCount / 2 + unitCount % 2);
+            final Point[] topToLeftPoints = pointsBetweenFromToInclusive(TOP, LEFT, unitCount / 2);
             // drop units
-            for (final int[][] points : new int[][][] { topToRightPoints, topToLeftPoints }) {
-                for (final int[] point : points) {
-                    OS.instance().leftClick(point[0], point[1], PAUSE_BETWEEN_UNIT_DROP);
+            for (final Point[] points : new Point[][] { topToRightPoints, topToLeftPoints }) {
+                for (final Point point : points) {
+                    OS.instance().leftClick(point, PAUSE_BETWEEN_UNIT_DROP);
                 }
             }
         }

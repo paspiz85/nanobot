@@ -4,4 +4,7 @@
   <suppress files="Kernel32.java" checks=".*" />
   <suppress files="User32.java" checks=".*" />
   <suppress files="MainController.java" checks="VisibilityModifier" />
+  <suppress files="Constants.java" checks="InterfaceIsType" />
+  <suppress files="SettingsPersister.java" checks="CyclomaticComplexity|MethodLength|NPathComplexity" />
+  <suppress files="Clickable" checks="LineLength" />
 </suppressions>

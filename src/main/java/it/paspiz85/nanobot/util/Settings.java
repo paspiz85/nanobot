@@ -9,26 +9,24 @@ import it.paspiz85.nanobot.attack.Attack4SideParallelHalf2Wave;
 import it.paspiz85.nanobot.attack.ManualAttack;
 import it.paspiz85.nanobot.parsing.Clickable;
 
-import java.awt.Point;
-
 public final class Settings {
 
-    private static final Settings instance = new Settings();
+    private static final Settings INSTANCE = new Settings();
 
-    public synchronized static void close() {
-        if (!instance.isInitialized) {
+    public static synchronized void close() {
+        if (!INSTANCE.isInitialized) {
             throw new IllegalStateException("ConfigUtils is not initialized.");
         }
-        instance.isInitialized = false;
+        INSTANCE.isInitialized = false;
     }
 
-    public synchronized static void initialize() throws IllegalStateException {
+    public static synchronized void initialize() throws IllegalStateException {
         // Throw exception if called twice
-        if (instance.isInitialized) {
+        if (INSTANCE.isInitialized) {
             throw new IllegalStateException("ConfigUtils is already initialized.");
         }
-        instance.configPersister.reload(instance);
-        instance.isInitialized = true;
+        INSTANCE.configPersister.reload(INSTANCE);
+        INSTANCE.isInitialized = true;
     }
 
     /**
@@ -36,18 +34,18 @@ public final class Settings {
      */
     // TODO refactore singleton
     public static Settings instance() {
-        if (!instance.isInitialized) {
+        if (!INSTANCE.isInitialized) {
             synchronized (Settings.class) {
-                if (!instance.isInitialized) {
+                if (!INSTANCE.isInitialized) {
                     throw new IllegalStateException("ConfigUtils is not initialized.");
                 }
             }
         }
-        return instance;
+        return INSTANCE;
     }
 
     public static boolean isInitialized() {
-        return instance.isInitialized;
+        return INSTANCE.isInitialized;
     }
 
     private Attack attackStrategy = ManualAttack.instance();

@@ -1,39 +1,27 @@
 package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Point;
 
 public enum Area implements Constants {
-    ATTACK_GROUP(24, 554, 836, 653), BARRACKS_BUTTONS(188, 581, 679, 679), ENEMY_BASE(31, 0, 831, 510), ENEMY_LOOT(17,
-            68, 138, 240), FULLSCREEN(0, 0, BS_RES_X - 1, BS_RES_Y - 1);
+    ATTACK_GROUP(new Point(24, 554), new Point(836, 653)), BARRACKS_BUTTONS(new Point(188, 581), new Point(679, 679)), ENEMY_BASE(
+            new Point(31, 0), new Point(831, 510)), ENEMY_LOOT(new Point(17, 68), new Point(138, 240)), FULLSCREEN(
+                    new Point(0, 0), new Point(BS_RES_X - 1, BS_RES_Y - 1));
 
-    private int x1;
+    private final Point p1;
 
-    private int x2;
+    private final Point p2;
 
-    private int y1;
-
-    private int y2;
-
-    private Area(final int x1, final int y1, final int x2, final int y2) {
-        this.x1 = x1;
-        this.y1 = y1;
-        this.x2 = x2;
-        this.y2 = y2;
+    private Area(final Point p1, final Point p2) {
+        this.p1 = p1;
+        this.p2 = p2;
     }
 
-    public int getX1() {
-        return x1;
+    public Point getP1() {
+        return p1;
     }
 
-    public int getX2() {
-        return x2;
-    }
-
-    public int getY1() {
-        return y1;
-    }
-
-    public int getY2() {
-        return y2;
+    public Point getP2() {
+        return p2;
     }
 }

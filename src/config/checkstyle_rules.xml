@@ -69,7 +69,7 @@
 		</module>
 		<module name="LineLength">
 			<property name="severity" value="error" />
-			<property name="max" value="120" />
+			<property name="max" value="160" />
 		</module>
 		<module name="MethodLength">
 			<property name="max" value="40" />
@@ -233,10 +233,12 @@
 		<module name="UnnecessaryParentheses">
 			<property name="severity" value="error" />
 		</module>
+		<!-- 
 		<module name="Indentation">
 			<property name="severity" value="error" />
 			<property name="caseIndent" value="0" />
 		</module>
+		 -->
 		<module name="ExplicitInitialization">
 			<property name="severity" value="error" />
 		</module>
@@ -311,11 +313,13 @@
 			<property name="max" value="15" />
 			<property name="id" value="ClassDataAbstractionCoupling_Error" />
 		</module>
+		<!-- 
 		<module name="InnerTypeLast">
 			<property name="severity" value="error" />
 		</module>
+		 -->
 		<module name="NestedForDepth">
-			<property name="max" value="1" />
+			<property name="max" value="2" />
 			<property name="severity" value="error" />
 		</module>
 		<module name="MethodCount">

@@ -8,7 +8,7 @@ import java.util.logging.Handler;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-public class Logging {
+public final class Logging {
 
     public static void close() {
         for (final Handler h : Logger.getLogger("").getHandlers()) {
@@ -23,5 +23,8 @@ public class Logging {
             Logger.getAnonymousLogger().severe("Could not load default logging.properties file");
             Logger.getAnonymousLogger().severe(e.getMessage());
         }
+    }
+
+    private Logging() {
     }
 }

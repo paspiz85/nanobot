@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.parsing;
 
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Rectangle;
@@ -103,7 +104,7 @@ class AbstractParser {
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
         Rectangle result = null;
         try {
-            BufferedImage tar = ImageIO.read(url);
+            final BufferedImage tar = ImageIO.read(url);
             final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar,
                     1, 0.9);
             result = doFindAll.isEmpty() ? null : doFindAll.get(0).getBounds();
@@ -113,12 +114,12 @@ class AbstractParser {
         return result;
     }
 
-    protected final Integer parseDigit(final BufferedImage image, final int xStart, final int yStart, final int type) {
+    private Integer parseDigit(final BufferedImage image, final Point start, final int type) {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
             boolean found = true;
             for (int j = 0; j < offsets[i].length; j++) {
-                final int actual = image.getRGB(xStart + offsets[i][j][0], yStart + offsets[i][j][1]);
+                final int actual = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
                 final int expected = colors[i][type][j];
                 if (!OS.instance().compareColor(actual, expected, VAR)) {
                     found = false;
@@ -133,12 +134,12 @@ class AbstractParser {
         return result;
     }
 
-    protected final int parseNumber(final BufferedImage image, final int type, final int xStart, final int yStart,
+    protected final int parseNumber(final BufferedImage image, final int type, final Point start,
             final int maxSearchWidth) {
         String no = "";
-        int curr = xStart;
-        while (curr < xStart + maxSearchWidth) {
-            final Integer i = parseDigit(image, curr, yStart, type);
+        int curr = start.x();
+        while (curr < start.x() + maxSearchWidth) {
+            final Integer i = parseDigit(image, new Point(curr, start.y()), type);
             if (i != null) {
                 no += i;
                 curr += widths[i] - 1;
@@ -146,6 +147,6 @@ class AbstractParser {
                 curr++;
             }
         }
-        return no.isEmpty() ? 0 :Integer.parseInt(no);
+        return no.isEmpty() ? 0 : Integer.parseInt(no);
     }
 }

@@ -2,7 +2,6 @@ package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.parsing.Clickable;
 
-import java.awt.Point;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -37,7 +36,6 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
-    @Deprecated
     private File configFile;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
@@ -135,8 +133,8 @@ public final class SettingsPersister implements Constants {
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
             final Point firstBarrackPosition = settings.getFirstBarrackPosition();
             if (firstBarrackPosition != null) {
-                configProperties.setProperty(PROPERTY_BARRACKS_COORDS, (int) firstBarrackPosition.getX() + " "
-                        + (int) firstBarrackPosition.getY());
+                configProperties.setProperty(PROPERTY_BARRACKS_COORDS, firstBarrackPosition.x() + " "
+                        + firstBarrackPosition.y());
             }
             final Clickable[] raxInfo = settings.getRaxInfo();
             final StringBuilder raxProp = new StringBuilder();

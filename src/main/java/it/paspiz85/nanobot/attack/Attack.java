@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
 
 import java.util.logging.Logger;
@@ -14,27 +15,17 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
-    protected static int BOTTOM_LEFT_X = 300;
+    protected static Point BOTTOM_LEFT = new Point(300, 536);
 
-    protected static int BOTTOM_LEFT_Y = 536;
+    protected static Point BOTTOM_RIGHT = new Point(537, 538);
 
-    protected static int BOTTOM_RIGHT_X = 537;
-
-    protected static int BOTTOM_RIGHT_Y = 538;
-
-    protected static int LEFT_X = 19;
-
-    protected static int LEFT_Y = 307;
+    protected static Point LEFT = new Point(19, 307);
 
     protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
 
-    protected static int RIGHT_X = 836;
+    protected static Point RIGHT = new Point(836, 307);
 
-    protected static int RIGHT_Y = 307;
-
-    protected static int TOP_X = 429;
-
-    protected static int TOP_Y = 18;
+    protected static Point TOP = new Point(429, 18);
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -49,20 +40,18 @@ public abstract class Attack {
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
     // TODO
-    protected final int[][] pointsBetweenFromToInclusive(final int fromX, final int fromY, final int toX,
-            final int toY, final int count) {
-        int[][] result;
+    protected final Point[] pointsBetweenFromToInclusive(final Point from, final Point to, final int count) {
+        Point[] result;
         if (count <= 0) {
-            result = new int[0][0];
+            result = new Point[0];
         } else if (count == 1) {
-            result =  new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
+            result = new Point[] { new Point((to.x() + from.x()) / 2, (to.y() + from.y()) / 2) };
         } else {
-            result = new int[count][2];
-            final double deltaX = (toX - fromX) / (count - 1);
-            final double deltaY = (toY - fromY) / (count - 1);
+            result = new Point[count];
+            final double deltaX = (to.x() - from.x()) / (count - 1);
+            final double deltaY = (to.y() - from.y()) / (count - 1);
             for (int i = 0; i < count; i++) {
-                result[i][0] = (int) (fromX + deltaX * i);
-                result[i][1] = (int) (fromY + deltaY * i);
+                result[i] = new Point((int) (from.x() + deltaX * i), (int) (from.y() + deltaY * i));
             }
         }
         return result;

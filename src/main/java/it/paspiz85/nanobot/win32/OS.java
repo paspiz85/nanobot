@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.win32;
 
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.util.Point;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -132,7 +133,7 @@ public final class OS {
             throw new IllegalArgumentException(clickable.name());
         }
         final int tarColor = clickable.getColor().getRGB();
-        final int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
+        final int actualColor = pixelGetColor(clickable.getPoint()).getRGB();
         return compareColor(tarColor, actualColor, 5);
     }
 
@@ -141,21 +142,23 @@ public final class OS {
     }
 
     public void leftClick(final Clickable clickable, final int sleepInMs) throws InterruptedException {
-        leftClickWin32(clickable.getX(), clickable.getY(), true);
+        leftClickWin32(clickable.getPoint(), true);
         Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
     }
 
-    public void leftClick(final int x, final int y) {
-        leftClickWin32(x, y, false);
+    public void leftClick(final Point p) throws InterruptedException {
+        leftClickWin32(p, false);
     }
 
-    public void leftClick(final int x, final int y, final int sleepInMs) throws InterruptedException {
-        leftClickWin32(x, y, false);
+    public void leftClick(final Point p, final int sleepInMs) throws InterruptedException {
+        leftClickWin32(p, false);
         Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
     }
 
-    private void leftClickWin32(int x, int y, final boolean randomize) {
+    private void leftClickWin32(final Point p, final boolean randomize) throws InterruptedException {
         // randomize coordinates little bit
+        int x = p.x();
+        int y = p.y();
         if (randomize) {
             x += -1 + random.nextInt(3);
             y += -1 + random.nextInt(3);
@@ -163,6 +166,7 @@ public final class OS {
         logger.finest("clicking " + x + " " + y);
         final int lParam = makeParam(x, y);
         while (isCtrlKeyDown()) {
+            Thread.sleep(100);
         }
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
@@ -172,8 +176,8 @@ public final class OS {
         msgBox(text, "");
     }
 
-    public Color pixelGetColor(final int x, final int y) {
-        final POINT point = new POINT(x, y);
+    public Color pixelGetColor(final Point p) {
+        final POINT point = new POINT(p.x(), p.y());
         clientToScreen(point);
         final Color pixel = r.getPixelColor(point.x, point.y);
         return pixel;
@@ -196,23 +200,23 @@ public final class OS {
 
     public File saveScreenShot(final Area area, final String filePathFirst, final String... filePathRest)
             throws IOException {
-        return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
+        return saveScreenShot(area.getP1(), area.getP2(), filePathFirst, filePathRest);
     }
 
-    public File saveScreenShot(final int x1, final int y1, final int x2, final int y2, final String filePathFirst,
-            final String... filePathRest) throws IOException {
-        final BufferedImage img = screenShot(x1, y1, x2, y2);
+    public File saveScreenShot(final Point p1, final Point p2, final String filePathFirst, final String... filePathRest)
+            throws IOException {
+        final BufferedImage img = screenShot(p1, p2);
         return saveImage(img, filePathFirst, filePathRest);
     }
 
     public BufferedImage screenShot(final Area area) {
-        return screenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2());
+        return screenShot(area.getP1(), area.getP2());
     }
 
-    public BufferedImage screenShot(final int x1, final int y1, final int x2, final int y2) {
-        final POINT point = new POINT(x1, y1);
+    public BufferedImage screenShot(final Point p1, final Point p2) {
+        final POINT point = new POINT(p1.x(), p1.y());
         clientToScreen(point);
-        return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
+        return r.createScreenCapture(new Rectangle(point.x, point.y, p2.x() - p1.x(), p2.y() - p1.y()));
     }
 
     public void setupWin32(final HWND handler) {
@@ -244,6 +248,7 @@ public final class OS {
         final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
         for (int i = 0; i < notch; i++) {
             while (isCtrlKeyDown()) {
+                Thread.sleep(100);
             }
             User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
             User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
