@@ -9,9 +9,12 @@ import java.util.logging.Logger;
 
 public final class Looper {
 
-    private static final Looper instance = new Looper();
+    private static Looper instance;
 
     public static Looper instance() {
+        if (instance == null) {
+            instance = new Looper();
+        }
         return instance;
     }
 

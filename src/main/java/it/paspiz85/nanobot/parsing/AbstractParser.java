@@ -101,23 +101,20 @@ class AbstractParser {
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
-        BufferedImage tar;
+        Rectangle result = null;
         try {
-            tar = ImageIO.read(url);
+            BufferedImage tar = ImageIO.read(url);
+            final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar,
+                    1, 0.9);
+            result = doFindAll.isEmpty() ? null : doFindAll.get(0).getBounds();
         } catch (final IOException e) {
             logger.log(Level.SEVERE, "Unable to read url " + url, e);
-            return null;
         }
-        final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar, 1,
-                0.9);
-        if (doFindAll.isEmpty()) {
-            return null;
-        } else {
-            return doFindAll.get(0).getBounds();
-        }
+        return result;
     }
 
     protected final Integer parseDigit(final BufferedImage image, final int xStart, final int yStart, final int type) {
+        Integer result = null;
         for (int i = 0; i < 10; i++) {
             boolean found = true;
             for (int j = 0; j < offsets[i].length; j++) {
@@ -129,10 +126,11 @@ class AbstractParser {
                 }
             }
             if (found) {
-                return i;
+                result = i;
+                break;
             }
         }
-        return null;
+        return result;
     }
 
     protected final int parseNumber(final BufferedImage image, final int type, final int xStart, final int yStart,
@@ -148,10 +146,6 @@ class AbstractParser {
                 curr++;
             }
         }
-        if (!no.isEmpty()) {
-            return Integer.parseInt(no);
-        } else {
-            return 0;
-        }
+        return no.isEmpty() ? 0 :Integer.parseInt(no);
     }
 }

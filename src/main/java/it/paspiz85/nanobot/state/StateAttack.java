@@ -19,11 +19,14 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
-public class StateAttack extends State {
+public final class StateAttack extends State {
 
-    private static final StateAttack instance = new StateAttack();
+    private static StateAttack instance;
 
     public static StateAttack instance() {
+        if (instance == null) {
+            instance = new StateAttack();
+        }
         return instance;
     }
 

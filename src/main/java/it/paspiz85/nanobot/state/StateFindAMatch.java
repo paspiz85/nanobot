@@ -3,11 +3,14 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.win32.OS;
 
-public class StateFindAMatch extends State {
+public final class StateFindAMatch extends State {
 
-    private static final StateFindAMatch instance = new StateFindAMatch();
+    private static StateFindAMatch instance;
 
     public static StateFindAMatch instance() {
+        if (instance == null) {
+            instance = new StateFindAMatch();
+        }
         return instance;
     }
 

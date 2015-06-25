@@ -34,6 +34,7 @@ public final class Settings {
     /**
      * Singleton accessor method.
      */
+    // TODO refactore singleton
     public static Settings instance() {
         if (!instance.isInitialized) {
             synchronized (Settings.class) {

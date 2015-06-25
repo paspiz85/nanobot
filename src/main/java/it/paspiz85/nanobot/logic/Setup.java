@@ -23,13 +23,16 @@ import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
-public class Setup implements Constants {
+public final class Setup implements Constants {
 
-    private static final Setup instance = new Setup();
+    private static Setup instance;
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
     public static Setup instance() {
+        if (instance == null) {
+            instance = new Setup();
+        }
         return instance;
     }
 
@@ -147,25 +150,24 @@ public class Setup implements Constants {
             User32.INSTANCE.GetWindowRect(control, rect);
             final int bsX = rect[2] - rect[0];
             final int bsY = rect[3] - rect[1];
-            if (bsX == BS_RES_X && bsY == BS_RES_Y) {
-                return;
+            if (bsX != BS_RES_X || bsY != BS_RES_Y) {
+                logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
+                if (w1 != BS_RES_X || h1 != BS_RES_Y || w2 != BS_RES_X || h2 != BS_RES_Y) {
+                    final String msg = String.format("%s must run in resolution %dx%d.\n"
+                            + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X,
+                            BS_RES_Y);
+                    final boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
+                    if (!ret) {
+                        throw new BotConfigurationException("Re-run when resolution is fixed.");
+                    }
+                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", BS_RES_Y);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_X);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
+                    throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
+                }
             }
-            logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
-            if (w1 == BS_RES_X && h1 == BS_RES_Y && w2 == BS_RES_X && h2 == BS_RES_Y) {
-                return;
-            }
-            final String msg = String.format("%s must run in resolution %dx%d.\n"
-                    + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y);
-            final boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
-            if (!ret) {
-                throw new BotConfigurationException("Re-run when resolution is fixed.");
-            }
-            Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
-            Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", BS_RES_Y);
-            Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_X);
-            Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
-            Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
-            throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
         } catch (final BotConfigurationException e) {
             throw e;
         } catch (final Exception e) {

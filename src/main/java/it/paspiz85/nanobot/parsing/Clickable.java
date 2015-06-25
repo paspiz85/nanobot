@@ -41,24 +41,33 @@ public enum Clickable {
     }
 
     public static Clickable getButtonAttackUnit(final int x) {
+        Clickable result;
         switch (x) {
         case 1:
-            return BUTTON_ATTACK_UNIT_1;
+            result = BUTTON_ATTACK_UNIT_1;
+            break;
         case 2:
-            return BUTTON_ATTACK_UNIT_2;
+            result = BUTTON_ATTACK_UNIT_2;
+            break;
         case 3:
-            return BUTTON_ATTACK_UNIT_3;
+            result = BUTTON_ATTACK_UNIT_3;
+            break;
         case 4:
-            return BUTTON_ATTACK_UNIT_4;
+            result = BUTTON_ATTACK_UNIT_4;
+            break;
         case 5:
-            return BUTTON_ATTACK_UNIT_5;
+            result = BUTTON_ATTACK_UNIT_5;
+            break;
         case 6:
-            return BUTTON_ATTACK_UNIT_6;
+            result = BUTTON_ATTACK_UNIT_6;
+            break;
         case 7:
-            return BUTTON_ATTACK_UNIT_7;
+            result = BUTTON_ATTACK_UNIT_7;
+            break;
         default:
             throw new IllegalArgumentException(x + "");
         }
+        return result;
     }
 
     private Color color;

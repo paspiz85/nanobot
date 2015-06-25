@@ -55,13 +55,15 @@ public final class AttackScreenParser extends AbstractParser {
     public boolean hasDE(final BufferedImage image) throws BotBadBaseException {
         final int deCheck = image.getRGB(20, 0);
         // 0x80752B
+        boolean result;
         if (OS.instance().compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
-            return true;
+            result = true;
         } else if (OS.instance().compareColor(deCheck, 0xffb1a841, 7)) {
-            return false;
+            result = false;
         } else {
             throw new BotBadBaseException("de: " + Integer.toHexString(deCheck));
         }
+        return result;
     }
 
     public boolean isCollectorFullBase() throws BotException {
@@ -138,26 +140,29 @@ public final class AttackScreenParser extends AbstractParser {
     }
 
     public Integer parseArcherQueenSlot(final BufferedImage image) {
+        Integer result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
-        if (rectangle == null) {
-            return null;
+        if (rectangle != null) {
+            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;;
         }
-        return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
+        return result;
     }
 
     public Integer parseBarbKingSlot(final BufferedImage image) {
+        Integer result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource("bk.png"));
-        if (rectangle == null) {
-            return null;
+        if (rectangle != null) {
+            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
         }
-        return rectangle.x / ATTACK_GROUP_UNIT_DIFF;
+        return result;
     }
 
     public int parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
-        if (!hasDE(image)) {
-            return 0;
+        int result = 0;
+        if (hasDE(image)) {
+            result = parseNumber(image, 2, 33, 57, image.getWidth() - 43);
         }
-        return parseNumber(image, 2, 33, 57, image.getWidth() - 43);
+        return result;
     }
 
     public int parseElixir(final BufferedImage image) throws BotBadBaseException {

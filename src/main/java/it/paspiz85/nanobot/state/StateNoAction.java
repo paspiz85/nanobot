@@ -2,11 +2,14 @@ package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.exception.BotException;
 
-public class StateNoAction extends State {
+public final class StateNoAction extends State {
 
-    private static StateNoAction instance = new StateNoAction();
+    private static StateNoAction instance;
 
     public static StateNoAction instance() {
+        if (instance == null) {
+            instance = new StateNoAction();
+        }
         return instance;
     }
 

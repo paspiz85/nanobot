@@ -4,11 +4,14 @@ import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 
-public class StateTrainTroops extends State {
+public final class StateTrainTroops extends State {
 
-    private static StateTrainTroops instance = new StateTrainTroops();
+    private static StateTrainTroops instance;
 
     public static StateTrainTroops instance() {
+        if (instance == null) {
+            instance = new StateTrainTroops();
+        }
         return instance;
     }
 

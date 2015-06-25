@@ -3,11 +3,14 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.win32.OS;
 
-public class StateIdle extends State {
+public final class StateIdle extends State {
 
-    private static final StateIdle instance = new StateIdle();
+    private static StateIdle instance;
 
     public static StateIdle instance() {
+        if (instance == null) {
+            instance = new StateIdle();
+        }
         return instance;
     }
 

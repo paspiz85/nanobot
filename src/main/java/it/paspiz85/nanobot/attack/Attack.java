@@ -51,17 +51,19 @@ public abstract class Attack {
     // TODO
     protected final int[][] pointsBetweenFromToInclusive(final int fromX, final int fromY, final int toX,
             final int toY, final int count) {
+        int[][] result;
         if (count <= 0) {
-            return new int[0][0];
+            result = new int[0][0];
         } else if (count == 1) {
-            return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
-        }
-        final int[][] result = new int[count][2];
-        final double deltaX = (toX - fromX) / (count - 1);
-        final double deltaY = (toY - fromY) / (count - 1);
-        for (int i = 0; i < count; i++) {
-            result[i][0] = (int) (fromX + deltaX * i);
-            result[i][1] = (int) (fromY + deltaY * i);
+            result =  new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
+        } else {
+            result = new int[count][2];
+            final double deltaX = (toX - fromX) / (count - 1);
+            final double deltaY = (toY - fromY) / (count - 1);
+            for (int i = 0; i < count; i++) {
+                result[i][0] = (int) (fromX + deltaX * i);
+                result[i][1] = (int) (fromY + deltaY * i);
+            }
         }
         return result;
     }

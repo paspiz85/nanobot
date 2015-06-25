@@ -4,7 +4,7 @@ import it.paspiz85.nanobot.exception.BotException;
 
 import java.util.logging.Logger;
 
-public class Context {
+public final class Context {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 

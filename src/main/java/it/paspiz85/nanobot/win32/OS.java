@@ -26,7 +26,7 @@ import com.sun.jna.platform.win32.WinDef.WPARAM;
 
 public final class OS {
 
-    private static final OS instance = new OS();
+    private static OS instance;
 
     private static Random random = new Random();
 
@@ -70,6 +70,9 @@ public final class OS {
     public static final String WORKING_DIR = System.getProperty("user.dir");
 
     public static OS instance() {
+        if (instance == null) {
+            instance = new OS();
+        }
         return instance;
     }
 
@@ -78,10 +81,8 @@ public final class OS {
         return high << 16 | low << 16 >>> 16;
     }
 
-    private static void msgBox(final String Text, final String Title) {
-        JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); // Show
-        // message
-        // box
+    private static void msgBox(final String text, final String title) {
+        JOptionPane.showMessageDialog(null, text, title, JOptionPane.PLAIN_MESSAGE);
     }
 
     public static Random random() {
@@ -114,11 +115,7 @@ public final class OS {
         final int g2 = c2 >> 8 & 0xFF;
         final int b1 = c1 >> 0 & 0xFF;
         final int b2 = c2 >> 0 & 0xFF;
-        if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var) {
-            return false;
-        } else {
-            return true;
-        }
+        return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
 
     public boolean confirmationBox(final String msg, final String title) {
@@ -171,8 +168,8 @@ public final class OS {
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
     }
 
-    public void msgBox(final String Text) {
-        msgBox(Text, "");
+    public void msgBox(final String text) {
+        msgBox(text, "");
     }
 
     public Color pixelGetColor(final int x, final int y) {

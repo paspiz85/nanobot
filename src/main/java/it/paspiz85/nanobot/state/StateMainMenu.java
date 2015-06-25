@@ -8,11 +8,14 @@ import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Point;
 
-public class StateMainMenu extends State {
+public final class StateMainMenu extends State {
 
-    private static final StateMainMenu instance = new StateMainMenu();
+    private static StateMainMenu instance;
 
     public static StateMainMenu instance() {
+        if (instance == null) {
+            instance = new StateMainMenu();
+        }
         return instance;
     }
 

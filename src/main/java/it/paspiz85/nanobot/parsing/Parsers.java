@@ -13,4 +13,7 @@ public final class Parsers {
     public static MainScreenParser getMainscreen() {
         return mainScreen;
     }
+
+    private Parsers() {
+    }
 }
