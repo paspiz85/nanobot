@@ -29,19 +29,21 @@ public final class StateMainMenu extends State {
 
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
-        // logger.info("StateMainMenu");
+        // TODO fix log level and message
+        logger.fine("StateMainMenu");
         if (Thread.interrupted()) {
-            throw new InterruptedException("StateMainMenu is interrupted.");
+            throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
         OS.instance().zoomUp();
         OS.instance().sleepRandom(350);
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
+        logger.fine("Try open barracks");
         OS.instance().leftClick(firstRax, false);
         OS.instance().sleepRandom(500);
         Point trainButton = Parsers.getMainscreen().findTrainButton();
         if (trainButton == null) {
-            // maybe rax was already open and we closed it back. try one more
-            // time
+            // maybe rax was already open and we closed it back
+            logger.fine("Try open barracks again");
             OS.instance().leftClick(firstRax, false);
             OS.instance().sleepRandom(500);
             trainButton = Parsers.getMainscreen().findTrainButton();
@@ -49,19 +51,21 @@ public final class StateMainMenu extends State {
         if (trainButton == null) {
             throw new BotConfigurationException("Barracks location is not correct.");
         }
+        logger.fine("Press Train");
         OS.instance().leftClick(trainButton, false);
         OS.instance().sleepRandom(500);
-        // camp is full
         if (OS.instance().isClickableActive(Clickable.BUTTON_RAX_FULL)) {
             logger.info("Camp is full");
-            OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(), true);
+            logger.fine("Close barracks");
+            OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE, true);
             OS.instance().sleepRandom(200);
-            OS.instance().leftClick(Clickable.BUTTON_ATTACK.getPoint(), true);
+            logger.fine("Press Attack");
+            OS.instance().leftClick(Clickable.BUTTON_ATTACK, true);
             OS.instance().sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             context.setState(StateTrainTroops.instance());
         }
-        Thread.sleep(500 + OS.random().nextInt(500));
+        OS.instance().sleepRandom(500);
     }
 }

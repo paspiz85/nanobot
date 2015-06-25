@@ -46,7 +46,7 @@ public class MainController implements ApplicationAwareController, Constants {
     Application application;
 
     @FXML
-    ComboBox<String> autoAttackComboBox;
+    ComboBox<Attack> autoAttackComboBox;
 
     @FXML
     Button cancelButton;
@@ -96,16 +96,19 @@ public class MainController implements ApplicationAwareController, Constants {
     CheckBox playSoundCheckBox;
 
     @FXML
-    ComboBox<String> rax1ComboBox;
+    ComboBox<Level> logLevelComboBox;
 
     @FXML
-    ComboBox<String> rax2ComboBox;
+    ComboBox<Clickable> rax1ComboBox;
 
     @FXML
-    ComboBox<String> rax3ComboBox;
+    ComboBox<Clickable> rax2ComboBox;
 
     @FXML
-    ComboBox<String> rax4ComboBox;
+    ComboBox<Clickable> rax3ComboBox;
+
+    @FXML
+    ComboBox<Clickable> rax4ComboBox;
 
     @FXML
     Button settingsButton;
@@ -180,12 +183,13 @@ public class MainController implements ApplicationAwareController, Constants {
         Settings.instance().setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
         Settings.instance().setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
         Settings.instance().setPlaySound(playSoundCheckBox.isSelected());
+        Settings.instance().setLogLevel(logLevelComboBox.getValue());
         Settings.instance().setLogEnemyBase(saveEnemyCheckBox.isSelected());
         Settings.instance().setAttackStrategy(autoAttackComboBox.getValue());
-        Settings.instance().getRaxInfo()[0] = Clickable.fromDescription(rax1ComboBox.getValue());
-        Settings.instance().getRaxInfo()[1] = Clickable.fromDescription(rax2ComboBox.getValue());
-        Settings.instance().getRaxInfo()[2] = Clickable.fromDescription(rax3ComboBox.getValue());
-        Settings.instance().getRaxInfo()[3] = Clickable.fromDescription(rax4ComboBox.getValue());
+        Settings.instance().getRaxInfo()[0] = rax1ComboBox.getValue();
+        Settings.instance().getRaxInfo()[1] = rax2ComboBox.getValue();
+        Settings.instance().getRaxInfo()[2] = rax3ComboBox.getValue();
+        Settings.instance().getRaxInfo()[3] = rax4ComboBox.getValue();
         Settings.instance().save();
         showSettings(false);
     }
@@ -212,70 +216,25 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     void initialize() {
-        LogHandler.initialize(textArea);
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
-        logger.info("Setting up ConfigUtils...");
-        logger.info("Make sure in-game language is English.");
         Settings.initialize();
-        initializeLinks();
-        initializeLabels();
-        initializeTextFields();
-        githubLink.setText(REPOSITORY_URL);
-        githubLink.setVisible(true);
-        initializeComboBox();
-        updateConfigGridPane();
-        updateButtons(false);
+        LogHandler.initialize(textArea);
+        logger.info("Settings loaded...");
+        logger.info("Make sure in-game language is English.");
+        initLabels();
+        initLinks();
+        initSettingsPane();
         initializeRunnerService();
         if (checkForUpdate()) {
             updateLabel.setVisible(true);
         }
     }
 
-    void initializeComboBox() {
-        final Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
-        final String[] attackStrategies = new String[availableAttackStrategies.length];
-        for (int i = 0; i < availableAttackStrategies.length; i++) {
-            final Attack a = availableAttackStrategies[i];
-            attackStrategies[i] = a.getClass().getSimpleName();
-        }
-        autoAttackComboBox.getItems().addAll(attackStrategies);
-        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-        final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
-        final String[] troops = new String[availableTroops.length];
-        for (int i = 0; i < availableTroops.length; i++) {
-            final Clickable c = availableTroops[i];
-            troops[i] = c.getDescription();
-        }
-        rax1ComboBox.getItems().addAll(troops);
-        rax2ComboBox.getItems().addAll(troops);
-        rax3ComboBox.getItems().addAll(troops);
-        rax4ComboBox.getItems().addAll(troops);
-    }
-
-    void initializeLabels() {
-        final String version = getClass().getPackage().getImplementationVersion();
-        if (version != null) {
-            versionLabel.setText(NAME + " v" + version);
-        }
-    }
-
-    void initializeLinks() {
-        githubLink.setOnAction(t -> {
-            application.getHostServices().showDocument(githubLink.getText());
-            githubLink.setVisited(false);
-        });
-        final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
-        donateLink.setGraphic(new ImageView(heartIcon));
-        donateLink.setOnAction(event -> {
-            application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
-            donateLink.setVisited(false);
-        });
-    }
-
     void initializeRunnerService() {
+        updateButtons(false);
         runnerService = new Service<Void>() {
 
             @Override
@@ -310,7 +269,29 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
-    void initializeTextFields() {
+    void initLabels() {
+        final String version = getClass().getPackage().getImplementationVersion();
+        if (version != null) {
+            versionLabel.setText(NAME + " v" + version);
+        }
+    }
+
+    void initLinks() {
+        githubLink.setOnAction(t -> {
+            application.getHostServices().showDocument(githubLink.getText());
+            githubLink.setVisited(false);
+        });
+        githubLink.setText(REPOSITORY_URL);
+        githubLink.setVisible(true);
+        final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
+        donateLink.setGraphic(new ImageView(heartIcon));
+        donateLink.setOnAction(event -> {
+            application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
+            donateLink.setVisited(false);
+        });
+    }
+
+    void initSettingsPane() {
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
                 if (!newValue.isEmpty()) {
@@ -324,6 +305,30 @@ public class MainController implements ApplicationAwareController, Constants {
         elixirField.textProperty().addListener(intFieldListener);
         deField.textProperty().addListener(intFieldListener);
         maxThField.textProperty().addListener(intFieldListener);
+        logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
+        logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
+        autoAttackComboBox.getItems().addAll(Settings.instance().getAvailableAttackStrategies());
+        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
+        final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
+        rax1ComboBox.getItems().addAll(availableTroops);
+        rax2ComboBox.getItems().addAll(availableTroops);
+        rax3ComboBox.getItems().addAll(availableTroops);
+        rax4ComboBox.getItems().addAll(availableTroops);
+        goldField.setText(Settings.instance().getGoldThreshold() + "");
+        elixirField.setText(Settings.instance().getElixirThreshold() + "");
+        deField.setText(Settings.instance().getDarkElixirThreshold() + "");
+        maxThField.setText(Settings.instance().getMaxThThreshold() + "");
+        detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
+        isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
+        playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
+        logLevelComboBox.getSelectionModel().select(Settings.instance().getLogLevel());
+        saveEnemyCheckBox.setSelected(Settings.instance().isLogEnemyBase());
+        autoAttackComboBox.getSelectionModel().select(Settings.instance().getAttackStrategy());
+        rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0]);
+        rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1]);
+        rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2]);
+        rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3]);
+        configGridPane.setVisible(true);
     }
 
     @Override
@@ -340,23 +345,5 @@ public class MainController implements ApplicationAwareController, Constants {
     void updateButtons(final boolean value) {
         startButton.setDisable(value);
         stopButton.setDisable(!value);
-    }
-
-    void updateConfigGridPane() {
-        goldField.setText(Settings.instance().getGoldThreshold() + "");
-        elixirField.setText(Settings.instance().getElixirThreshold() + "");
-        deField.setText(Settings.instance().getDarkElixirThreshold() + "");
-        maxThField.setText(Settings.instance().getMaxThThreshold() + "");
-        detectEmptyCollectorsCheckBox.setSelected(Settings.instance().isDetectEmptyCollectors());
-        isMatchAllConditionsCheckBox.setSelected(Settings.instance().isMatchAllConditions());
-        playSoundCheckBox.setSelected(Settings.instance().isPlaySound());
-        saveEnemyCheckBox.setSelected(Settings.instance().isLogEnemyBase());
-        autoAttackComboBox.getSelectionModel().select(
-                Settings.instance().getAttackStrategy().getClass().getSimpleName());
-        rax1ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[0].getDescription());
-        rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1].getDescription());
-        rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2].getDescription());
-        rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3].getDescription());
-        configGridPane.setVisible(true);
     }
 }

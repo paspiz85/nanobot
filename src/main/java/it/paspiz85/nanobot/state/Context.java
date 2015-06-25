@@ -20,8 +20,18 @@ public final class Context {
 
     private boolean waitDone;
 
+    private int trainCount;
+
+    public int getTrainCount() {
+        return trainCount;
+    }
+
     public void handle() throws BotException, InterruptedException {
         current.handle(this);
+    }
+
+    public void incrementTrainCount() {
+        trainCount++;
     }
 
     public boolean isDisconnected() {
@@ -39,6 +49,13 @@ public final class Context {
     public void setState(final State state) {
         logger.fine("Setting next state to: " + state.getClass().getSimpleName());
         this.current = state;
+        if (state instanceof StateIdle) {
+            trainCount = 0;
+        }
+        if (state instanceof StateTrainTroops) {
+            trainCount++;
+            logger.fine("Train count is " + trainCount);
+        }
     }
 
     public void setWaitDone(final boolean waitDone) {

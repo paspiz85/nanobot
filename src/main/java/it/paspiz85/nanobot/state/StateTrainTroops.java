@@ -14,12 +14,6 @@ public final class StateTrainTroops extends State {
 
     private static StateTrainTroops instance;
 
-    private static final int BARRACK_LV1_SIZE = 20;
-
-    private static final int BARRACK_LV10_SIZE = 75;
-
-    private static final int BARB_TRAIN_MS = 20000;
-
     public static StateTrainTroops instance() {
         if (instance == null) {
             instance = new StateTrainTroops();
@@ -32,27 +26,30 @@ public final class StateTrainTroops extends State {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        logger.info("Training Troops");
         // first barracks must be opened at this point
+        logger.info("Training Troops");
         final Clickable[] raxInfo = Settings.instance().getRaxInfo();
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
             final Clickable troop = raxInfo[currRax];
             if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
-                for (int i = 0; i < BARRACK_LV10_SIZE / 2 + OS.random().nextInt(BARRACK_LV10_SIZE); i++) {
-                    OS.instance().leftClick(troop.getPoint(), true);
+                final int clicks = BARRACK_LV10_SIZE / 2 + OS.random().nextInt(BARRACK_LV10_SIZE);
+                logger.fine("Try training " + clicks + " " + troop.getDescription());
+                for (int i = 0; i < clicks; i++) {
+                    OS.instance().leftClick(troop, true);
                     OS.instance().sleepRandom(75);
                 }
             }
             if (currRax < raxInfo.length - 1) {
-                // select next rax
-                OS.instance().leftClick(Clickable.BUTTON_RAX_NEXT.getPoint(), true);
+                logger.fine("Goto next barrack");
+                OS.instance().leftClick(Clickable.BUTTON_RAX_NEXT, true);
                 OS.instance().sleepRandom(350);
             }
         }
-        OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(), true);
+        logger.fine("Close Training Troops");
+        OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE, true);
         OS.instance().sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time
-        OS.instance().sleepRandom(BARRACK_LV1_SIZE * BARB_TRAIN_MS / 2);
+        OS.instance().sleepRandom(Math.max(5000, BARRACK_LV1_SIZE * BARB_TRAIN_MS / (4 * context.getTrainCount())));
     }
 }

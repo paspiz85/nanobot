@@ -100,18 +100,29 @@ public final class OS {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private java.awt.Robot r;
+    private java.awt.Robot robot;
 
     private OS() {
         try {
-            r = new java.awt.Robot();
+            robot = new java.awt.Robot();
         } catch (final AWTException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean clientToScreen(final POINT clientPoint) {
+    private Point clientToScreen(final Point clientPoint) {
+        final POINT point = new POINT(clientPoint.x(), clientPoint.y());
+        User32.INSTANCE.ClientToScreen(handler, point);
+        return new Point(point.x, point.y);
+    }
+
+    @Deprecated
+    private boolean clientToScreene(final POINT clientPoint) {
         return User32.INSTANCE.ClientToScreen(handler, clientPoint);
+    }
+
+    private boolean compareColor(final Color c1, final Color c2, final int var) {
+        return compareColor(c1.getRGB(), c2.getRGB(), var);
     }
 
     public boolean compareColor(final int c1, final int c2, final int var) {
@@ -132,13 +143,18 @@ public final class OS {
         if (clickable.getColor() == null) {
             throw new IllegalArgumentException(clickable.name());
         }
-        final int tarColor = clickable.getColor().getRGB();
-        final int actualColor = pixelGetColor(clickable.getPoint()).getRGB();
-        return compareColor(tarColor, actualColor, 5);
+        Point point = clickable.getPoint();
+        point = clientToScreen(point);
+        final Color actualColor = robot.getPixelColor(point.x(), point.y());
+        return compareColor(clickable.getColor(), actualColor, 5);
     }
 
     private boolean isCtrlKeyDown() {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
+    }
+
+    public void leftClick(final Clickable clickable, final boolean randomize) throws InterruptedException {
+        leftClick(clickable.getPoint(), randomize);
     }
 
     public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
@@ -160,13 +176,6 @@ public final class OS {
 
     public void msgBox(final String text) {
         msgBox(text, "");
-    }
-
-    public Color pixelGetColor(final Point p) {
-        final POINT point = new POINT(p.x(), p.y());
-        clientToScreen(point);
-        final Color pixel = r.getPixelColor(point.x, point.y);
-        return pixel;
     }
 
     public File saveImage(final BufferedImage img, final String filePathFirst, final String... filePathRest)
@@ -200,9 +209,10 @@ public final class OS {
     }
 
     public BufferedImage screenShot(final Point p1, final Point p2) {
-        final POINT point = new POINT(p1.x(), p1.y());
-        clientToScreen(point);
-        return r.createScreenCapture(new Rectangle(point.x, point.y, p2.x() - p1.x(), p2.y() - p1.y()));
+        final Point anchor = clientToScreen(p1);
+        final int width = p2.x() - p1.x();
+        final int height = p2.y() - p1.y();
+        return robot.createScreenCapture(new Rectangle(anchor.x(), anchor.y(), width, height));
     }
 
     public void setupWin32(final HWND handler) {
@@ -218,7 +228,9 @@ public final class OS {
      *             thread interrupted.
      */
     public void sleepRandom(final int sleepInMs) throws InterruptedException {
-        Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
+        final int time = sleepInMs + random.nextInt(sleepInMs);
+        logger.fine("Sleeping for " + time + " ms");
+        Thread.sleep(time);
     }
 
     public void sleepTillClickableIsActive(final Clickable clickable) throws InterruptedException {

@@ -51,18 +51,20 @@
                         <CheckBox fx:id="isMatchAllConditionsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
                         <Label text="Play sound on match?" GridPane.rowIndex="6" />
                         <CheckBox fx:id="playSoundCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="Save enemy screenshot?" GridPane.rowIndex="7" />
-                        <CheckBox fx:id="saveEnemyCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Label text="Auto attack?" GridPane.rowIndex="8" />
-                        <ComboBox fx:id="autoAttackComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-                        <Label text="Rax 1" GridPane.rowIndex="9" />
-                        <Label text="Rax 2" GridPane.rowIndex="10" />
-                        <Label text="Rax 3" GridPane.rowIndex="11" />
-                        <Label text="Rax 4" GridPane.rowIndex="12" />
-                        <ComboBox fx:id="rax1ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <ComboBox fx:id="rax2ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <ComboBox fx:id="rax3ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <ComboBox fx:id="rax4ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <Label text="Log Level" GridPane.rowIndex="7" />
+                        <ComboBox fx:id="logLevelComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Label text="Save enemy screenshot?" GridPane.rowIndex="8" />
+                        <CheckBox fx:id="saveEnemyCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label text="Auto attack?" GridPane.rowIndex="9" />
+                        <ComboBox fx:id="autoAttackComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label text="Rax 1" GridPane.rowIndex="10" />
+                        <Label text="Rax 2" GridPane.rowIndex="11" />
+                        <Label text="Rax 3" GridPane.rowIndex="12" />
+                        <Label text="Rax 4" GridPane.rowIndex="13" />
+                        <ComboBox fx:id="rax1ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <ComboBox fx:id="rax2ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <ComboBox fx:id="rax3ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <ComboBox fx:id="rax4ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
                      </children>
                   </GridPane>
                   <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">

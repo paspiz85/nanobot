@@ -9,6 +9,8 @@ import it.paspiz85.nanobot.attack.Attack4SideParallelHalf2Wave;
 import it.paspiz85.nanobot.attack.ManualAttack;
 import it.paspiz85.nanobot.parsing.Clickable;
 
+import java.util.logging.Level;
+
 /**
  * Bot settings.
  *
@@ -70,6 +72,8 @@ public final class Settings {
 
     private Point firstBarrackPosition;
 
+    private Level logLevel = Level.INFO;
+
     private int goldThreshold;
 
     private boolean isInitialized;
@@ -123,6 +127,10 @@ public final class Settings {
         return goldThreshold;
     }
 
+    public Level getLogLevel() {
+        return logLevel;
+    }
+
     public int getMaxThThreshold() {
         return maxThThreshold;
     }
@@ -151,11 +159,11 @@ public final class Settings {
         configPersister.save(this);
     }
 
-    private void setAttackStrategy(final Attack attackStrategy) {
+    public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
     }
 
-    public void setAttackStrategy(final String attackStrategy) {
+    void setAttackStrategy(final String attackStrategy) {
         boolean found = false;
         for (final Attack attack : availableAttackStrategies) {
             if (attack.getClass().getSimpleName().equals(attackStrategy)) {
@@ -191,6 +199,10 @@ public final class Settings {
 
     public void setLogEnemyBase(final boolean logEnemyBase) {
         this.logEnemyBase = logEnemyBase;
+    }
+
+    public void setLogLevel(final Level logLevel) {
+        this.logLevel = logLevel;
     }
 
     public void setMatchAllConditions(final boolean matchAllConditions) {

@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.util.Constants;
 
 import java.util.logging.Logger;
 
@@ -10,7 +11,7 @@ import java.util.logging.Logger;
  * @author v-ppizzuti
  *
  */
-public abstract class State {
+public abstract class State implements Constants {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 

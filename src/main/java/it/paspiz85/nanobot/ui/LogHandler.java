@@ -1,9 +1,10 @@
 package it.paspiz85.nanobot.ui;
 
+import it.paspiz85.nanobot.util.Settings;
+
 import java.util.Date;
 import java.util.logging.Formatter;
 import java.util.logging.Handler;
-import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 
@@ -64,10 +65,7 @@ public class LogHandler extends Handler {
 
     @Override
     public void publish(final LogRecord record) {
-        if (record.getLevel().intValue() < Level.CONFIG.intValue()) {
-            return;
-        }
-        if (textArea != null) {
+        if (textArea != null && record.getLevel().intValue() >= Settings.instance().getLogLevel().intValue()) {
             Platform.runLater(() -> textArea.appendText(formatter.format(record)));
         }
     }

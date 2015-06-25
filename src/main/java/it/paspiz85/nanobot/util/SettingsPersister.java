@@ -34,6 +34,8 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_IS_MATCH_ALL_CONDS = "match_all";
 
+    private static final String PROPERTY_LOG_LEVEL = "log_level";
+
     private static final String PROPERTY_LOG_ENEMY_BASE = "log_enemy_base";
 
     private static final String PROPERTY_MAX_TH = "max_th";
@@ -119,6 +121,10 @@ public final class SettingsPersister implements Constants {
             if (logEnemyBase != null) {
                 settings.setLogEnemyBase(Boolean.parseBoolean(logEnemyBase));
             }
+            final String logLevel = configProperties.getProperty(PROPERTY_LOG_LEVEL);
+            if (logLevel != null) {
+                settings.setLogLevel(Level.parse(logLevel));
+            }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to read configuration file.", e);
         }
@@ -153,6 +159,7 @@ public final class SettingsPersister implements Constants {
             }
             configProperties.setProperty(PROPERTY_RAX_INFO, raxProp.toString());
             configProperties.setProperty(PROPERTY_LOG_ENEMY_BASE, String.valueOf(settings.isLogEnemyBase()));
+            configProperties.setProperty(PROPERTY_LOG_LEVEL, String.valueOf(settings.getLogLevel()));
             configProperties.store(fos, null);
             logger.info("Settings are saved.");
         } catch (final Exception e) {

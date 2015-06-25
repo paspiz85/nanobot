@@ -7,6 +7,12 @@ package it.paspiz85.nanobot.util;
  */
 public interface Constants {
 
+    int BARRACK_LV1_SIZE = 20;
+
+    int BARRACK_LV10_SIZE = 75;
+
+    int BARB_TRAIN_MS = 20000;
+
     String NAME = "NanoBot";
 
     String REPOSITORY_NAME = "paspiz85/nanobot";

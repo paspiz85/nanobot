@@ -25,14 +25,15 @@ public final class StateFindAMatch extends State {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
+        // TODO change
         logger.info("StateFindAMatch");
         if (Thread.interrupted()) {
-            throw new InterruptedException("StateFindAMatch is interrupted.");
+            throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
         if (OS.instance().isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
-            OS.instance().leftClick(Clickable.BUTTON_FIND_A_MATCH.getPoint(), true);
+            OS.instance().leftClick(Clickable.BUTTON_FIND_A_MATCH, true);
             OS.instance().sleepRandom(300);
-            OS.instance().leftClick(Clickable.BUTTON_SHIELD_DISABLE.getPoint(), true);
+            OS.instance().leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
             OS.instance().sleepRandom(100);
             OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
             context.setState(StateAttack.instance());
