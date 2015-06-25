@@ -72,11 +72,11 @@
 			<property name="max" value="160" />
 		</module>
 		<module name="MethodLength">
-			<property name="max" value="40" />
+			<property name="max" value="50" />
 		</module>
 		<module name="MethodLength">
 			<property name="severity" value="error" />
-			<property name="max" value="50" />
+			<property name="max" value="60" />
 			<property name="id" value="MethodLength_Error" />
 		</module>
 		<module name="ParameterNumber">
@@ -324,8 +324,8 @@
 		</module>
 		<module name="MethodCount">
 			<property name="maxTotal" value="40" />
-			<property name="maxPackage" value="8" />
-			<property name="maxProtected" value="8" />
+			<property name="maxPackage" value="10" />
+			<property name="maxProtected" value="10" />
 		</module>
 		<module name="MethodCount">
 			<property name="severity" value="error" />

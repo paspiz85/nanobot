@@ -36,9 +36,34 @@ public final class Setup implements Constants {
         return instance;
     }
 
-    private HWND bsHwnd = null;
+    private HWND bsHwnd;
 
     private final Logger logger = Logger.getLogger(getClass().getName());
+
+    private final NativeMouseListener firstBarrackMouseListener = new NativeMouseListener() {
+
+        @Override
+        public void nativeMouseClicked(final NativeMouseEvent e) {
+            // not relative to window
+            final int x = e.getX();
+            final int y = e.getY();
+            logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
+            final POINT screenPoint = new POINT(x, y);
+            User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
+            Settings.instance().setFirstBarrackPosition(new Point(screenPoint.x, screenPoint.y));
+            synchronized (GlobalScreen.getInstance()) {
+                GlobalScreen.getInstance().notify();
+            }
+        }
+
+        @Override
+        public void nativeMousePressed(final NativeMouseEvent e) {
+        }
+
+        @Override
+        public void nativeMouseReleased(final NativeMouseEvent e) {
+        }
+    };
 
     private Setup() {
     }
@@ -78,30 +103,7 @@ public final class Setup implements Constants {
             // read mouse click
             try {
                 GlobalScreen.registerNativeHook();
-                GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
-
-                    @Override
-                    public void nativeMouseClicked(final NativeMouseEvent e) {
-                        // not relative to window
-                        final int x = e.getX();
-                        final int y = e.getY();
-                        logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-                        final POINT screenPoint = new POINT(x, y);
-                        User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
-                        Settings.instance().setFirstBarrackPosition(new Point(screenPoint.x, screenPoint.y));
-                        synchronized (GlobalScreen.getInstance()) {
-                            GlobalScreen.getInstance().notify();
-                        }
-                    }
-
-                    @Override
-                    public void nativeMousePressed(final NativeMouseEvent e) {
-                    }
-
-                    @Override
-                    public void nativeMouseReleased(final NativeMouseEvent e) {
-                    }
-                });
+                GlobalScreen.getInstance().addNativeMouseListener(firstBarrackMouseListener);
                 logger.info("Waiting for user to click on first barracks.");
                 synchronized (GlobalScreen.getInstance()) {
                     while (Settings.instance().getFirstBarrackPosition() == null) {

@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class DisconnectChecker implements Runnable {
 
-    private static final Logger logger = Logger.getLogger(DisconnectChecker.class.getName());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private final Context context;
 
@@ -31,13 +31,10 @@ public class DisconnectChecker implements Runnable {
                 }
                 if (OS.instance().isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
                     logger.info("Detected disconnect.");
-                    // There are 2 cases:
-                    // 1. launcher was running and it will be interrupted.
-                    // It will go back to StateIdle start running immediately.
-                    // 2. launcher was already stopped and was waiting to be
-                    // woken up by this.
                     synchronized (context) {
-                        // case 1
+                        // case 1: launcher was running and it will be
+                        // interrupted. It will go back to StateIdle start
+                        // running immediately.
                         if (!Looper.instance().isWaitingForDcChecker()) {
                             context.setDisconnected(true);
                             // to fix a potential race condition.
@@ -46,7 +43,8 @@ public class DisconnectChecker implements Runnable {
                             // we don't want bot launcher to wait for this
                             context.setWaitDone(true);
                             mainThread.interrupt();
-                            // case 2
+                            // case 2: launcher was already stopped and was
+                            // waiting to be woken up by this.
                         } else {
                             context.setWaitDone(true);
                             context.notify();

@@ -14,7 +14,7 @@ public final class StateIdle extends State {
         return instance;
     }
 
-    boolean reloading = false;
+    boolean reloading;
 
     private StateIdle() {
     }

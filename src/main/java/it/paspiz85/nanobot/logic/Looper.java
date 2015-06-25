@@ -20,9 +20,9 @@ public final class Looper {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private boolean waitingForDcChecker = false;
+    private boolean waitingForDcChecker;
 
-    private boolean running = false;
+    private boolean running;
 
     private Looper() {
     }

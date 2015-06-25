@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
+import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
@@ -29,7 +30,7 @@ public abstract class Attack {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    public final void attack(final int[] loot, final int[] attackGroup) throws InterruptedException {
+    public final void attack(final Loot loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
         OS.instance().zoomUp();
         doDropUnits(attackGroup);
@@ -57,14 +58,14 @@ public abstract class Attack {
         return result;
     }
 
-    private void sleepUntilLootDoesNotChange(final int[] loot) throws InterruptedException {
+    private void sleepUntilLootDoesNotChange(final Loot loot) throws InterruptedException {
         Thread.sleep(10000);
-        int[] prevLoot = loot;
+        Loot prevLoot = loot;
         int diff = Integer.MAX_VALUE;
         final int delta = 500;
         while (diff > delta) {
             Thread.sleep(15000);
-            int[] currLoot;
+            Loot currLoot;
             try {
                 currLoot = Parsers.getAttackScreen().parseLoot();
             } catch (final BotBadBaseException e) {
@@ -74,14 +75,10 @@ public abstract class Attack {
                 return;
             }
             diff = 0;
-            for (int i = 0; i < prevLoot.length; i++) {
-                // in case of wrong parsing
-                // [01.21.15 11:45:13 PM] INFO: [gold: 20174, elixir: 93476, de:
-                // 218]
-                // [01.21.15 11:45:28 PM] INFO: [gold: 201758, elixir: 31364,
-                // de: 202]
-                diff += prevLoot[i] > currLoot[i] ? prevLoot[i] - currLoot[i] : 0;
-            }
+            diff += prevLoot.getGold() > currLoot.getGold() ? prevLoot.getGold() - currLoot.getGold() : 0;
+            diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
+            diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
+                    - currLoot.getDarkElixir() : 0;
             prevLoot = currLoot;
         }
     }

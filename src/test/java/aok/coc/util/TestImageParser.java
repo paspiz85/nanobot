@@ -18,7 +18,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class TestImageParser {
-	
+	/*
 	static {
 		try (InputStream inputStream = TestImageParser.class.getResourceAsStream("/logging.properties")) {
 			LogManager.getLogManager().readConfiguration(inputStream);
@@ -227,4 +227,5 @@ public class TestImageParser {
 			throw e;
 		}
 	}
+	*/
 }

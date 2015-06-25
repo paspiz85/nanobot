@@ -10,9 +10,9 @@ public final class Context {
 
     private State current;
 
-    private boolean disconnected = false;
+    private boolean disconnected;
 
-    private boolean waitDone = false;
+    private boolean waitDone;
 
     public void handle() throws BotException, InterruptedException {
         current.handle(this);

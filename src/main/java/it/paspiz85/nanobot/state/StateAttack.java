@@ -6,13 +6,13 @@ import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 import javax.sound.sampled.AudioInputStream;
@@ -30,27 +30,32 @@ public final class StateAttack extends State {
         return instance;
     }
 
-    private int[] prevLoot;
+    private Loot prevLoot;
 
     private StateAttack() {
     }
 
-    public boolean doConditionsMatch(int gold, int elixir, int de) {
+    public boolean doConditionsMatch(final Loot loot) {
+        int gold = loot.getGold();
+        int elixir = loot.getElixir();
+        int de = loot.getDarkElixir();
         // if threshold is 0 or not set, do not match based on them
         final int goldThreshold = Settings.instance().getGoldThreshold();
         final int elixirThreshold = Settings.instance().getElixirThreshold();
         final int darkElixirThreshold = Settings.instance().getDarkElixirThreshold();
+        boolean result = false;
         if (Settings.instance().isMatchAllConditions()) {
             gold = goldThreshold == 0 ? Integer.MAX_VALUE : gold;
             elixir = elixirThreshold == 0 ? Integer.MAX_VALUE : elixir;
             de = darkElixirThreshold == 0 ? Integer.MAX_VALUE : de;
-            return gold >= goldThreshold && elixir >= elixirThreshold && de >= darkElixirThreshold;
+            result = gold >= goldThreshold && elixir >= elixirThreshold && de >= darkElixirThreshold;
         } else {
             gold = goldThreshold == 0 ? Integer.MIN_VALUE : gold;
             elixir = elixirThreshold == 0 ? Integer.MIN_VALUE : elixir;
             de = darkElixirThreshold == 0 ? Integer.MIN_VALUE : de;
-            return gold >= goldThreshold || elixir >= elixirThreshold || de >= darkElixirThreshold;
+            result = gold >= goldThreshold || elixir >= elixirThreshold || de >= darkElixirThreshold;
         }
+        return result;
     }
 
     @Override
@@ -68,14 +73,11 @@ public final class StateAttack extends State {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
             }
-            int[] loot;
+            Loot loot;
             boolean doAttack = false;
             try {
                 loot = Parsers.getAttackScreen().parseLoot();
-                final int gold = loot[0];
-                final int elixir = loot[1];
-                final int de = loot[2];
-                doAttack = doConditionsMatch(gold, elixir, de)
+                doAttack = doConditionsMatch(loot)
                         && (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
                                 .isCollectorFullBase());
             } catch (final BotBadBaseException e) {
@@ -99,7 +101,7 @@ public final class StateAttack extends State {
                     OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
                     OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
                 } else {
-                    if (Arrays.equals(prevLoot, loot)) {
+                    if (loot.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
                     } else {
                         playAttackReady();

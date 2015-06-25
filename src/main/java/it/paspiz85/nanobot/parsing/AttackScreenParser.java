@@ -52,6 +52,36 @@ public final class AttackScreenParser extends AbstractParser {
         ENEMY_BASE_POLY.addPoint(ENEMY_BASE_BOTTOM.x(), ENEMY_BASE_BOTTOM.y());
     }
 
+    private int countAttackableElixirs(final List<RegionMatch> doFindAll, final List<Rectangle> matchedElixirs,
+            final Path next) {
+        int attackableElixirs = 0;
+        int c = 0;
+        RECT_LOOP: for (final RegionMatch i : doFindAll) {
+            // if matched area is out of enemy poly
+            if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
+                continue;
+            }
+            // check if it's an existing match
+            for (final Rectangle r : matchedElixirs) {
+                if (r.intersects(i.getBounds())) {
+                    break RECT_LOOP;
+                }
+            }
+            c++;
+            matchedElixirs.add(i.getBounds());
+            if (next.getFileName().toString().startsWith("empty")) {
+                attackableElixirs--;
+            } else if (next.getFileName().toString().startsWith("full")) {
+                attackableElixirs++;
+            }
+            logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
+        }
+        if (c > 0) {
+            logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
+        }
+        return attackableElixirs;
+    }
+
     public boolean hasDE(final BufferedImage image) throws BotBadBaseException {
         final int deCheck = image.getRGB(20, 0);
         // 0x80752B
@@ -76,7 +106,7 @@ public final class AttackScreenParser extends AbstractParser {
         try {
             final URI uri = getClass().getResource("elixirs").toURI();
             Path images;
-            if (uri.getScheme().equals("jar")) {
+            if ("jar".equals(uri.getScheme())) {
                 fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
                 images = fileSystem.getPath("/elixir_images");
             } else {
@@ -93,33 +123,10 @@ public final class AttackScreenParser extends AbstractParser {
                 final BufferedImage tar = ImageIO.read(Files.newInputStream(next, StandardOpenOption.READ));
                 final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image,
                         tar, 7, 0.8);
-                int c = 0;
-                RECT_LOOP: for (final RegionMatch i : doFindAll) {
-                    // if matched area is out of enemy poly
-                    if (!ENEMY_BASE_POLY.contains(i.x, i.y)) {
-                        continue;
-                    }
-                    // check if it's an existing match
-                    for (final Rectangle r : matchedElixirs) {
-                        if (r.intersects(i.getBounds())) {
-                            break RECT_LOOP;
-                        }
-                    }
-                    c++;
-                    matchedElixirs.add(i.getBounds());
-                    if (next.getFileName().toString().startsWith("empty")) {
-                        attackableElixirs--;
-                    } else if (next.getFileName().toString().startsWith("full")) {
-                        attackableElixirs++;
-                    }
-                    logger.finest("\t" + i.getBounds() + " score: " + i.getScore());
-                }
-                if (c > 0) {
-                    logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
-                }
+                attackableElixirs += countAttackableElixirs(doFindAll, matchedElixirs, next);
             }
             final boolean result = attackableElixirs >= 0;
-            if (result == false) {
+            if (!result) {
                 logger.info("empty collectors");
             }
             return result;
@@ -144,7 +151,7 @@ public final class AttackScreenParser extends AbstractParser {
         final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
         if (rectangle != null) {
             result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-            ;
+            
         }
         return result;
     }
@@ -174,17 +181,22 @@ public final class AttackScreenParser extends AbstractParser {
         return parseNumber(image, 0, new Point(33, 0 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
     }
 
-    public int[] parseLoot() throws BotBadBaseException {
+    public Loot parseLoot() throws BotBadBaseException {
         final BufferedImage image = OS.instance().screenShot(Area.ENEMY_LOOT);
         return parseLoot(image);
     }
 
-    public int[] parseLoot(final BufferedImage image) throws BotBadBaseException {
+    public Loot parseLoot(final BufferedImage image) throws BotBadBaseException {
         final int gold = parseGold(image);
         final int elixir = parseElixir(image);
-        final int de = parseDarkElixir(image);
-        logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, de));
-        return new int[] { gold, elixir, de };
+        final int darkElixir = parseDarkElixir(image);
+        final Loot loot = new Loot();
+        loot.setGold(gold);
+        loot.setElixir(elixir);
+        loot.setDarkElixir(darkElixir);
+        // TODO fix this log
+        logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, darkElixir));
+        return loot;
     }
 
     public int[] parseTroopCount() {
@@ -235,10 +247,12 @@ public final class AttackScreenParser extends AbstractParser {
     }
 
     public int parseTrophy(final BufferedImage image) throws BotBadBaseException {
+        int result;
         if (!hasDE(image)) {
-            return parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);
+            result = parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);
         } else {
-            return parseNumber(image, 3, new Point(33, 90), image.getWidth() - 43);
+            result = parseNumber(image, 3, new Point(33, 90), image.getWidth() - 43);
         }
+        return result;
     }
 }

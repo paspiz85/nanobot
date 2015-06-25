@@ -90,7 +90,7 @@ public final class OS {
         return random;
     }
 
-    private HWND handler = null;
+    private HWND handler;
 
     // MY_CLIENT_61.638==MY_WINDOW.64.668
     protected final Logger logger = Logger.getLogger(getClass().getName());
@@ -120,12 +120,7 @@ public final class OS {
     }
 
     public boolean confirmationBox(final String msg, final String title) {
-        final int result = JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION);
-        if (result == JOptionPane.YES_OPTION) {
-            return true;
-        } else {
-            return false;
-        }
+        return JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
     public boolean isClickableActive(final Clickable clickable) {

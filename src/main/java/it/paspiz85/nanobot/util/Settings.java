@@ -56,25 +56,25 @@ public final class Settings {
 
     private final SettingsPersister configPersister = new SettingsPersister();
 
-    private int darkElixirThreshold = 0;
+    private int darkElixirThreshold;
 
-    private boolean detectEmptyCollectors = false;
+    private boolean detectEmptyCollectors;
 
-    private int elixirThreshold = 0;
+    private int elixirThreshold;
 
-    private Point firstBarrackPosition = null;
+    private Point firstBarrackPosition;
 
-    private int goldThreshold = 0;
+    private int goldThreshold;
 
-    private boolean isInitialized = false;
+    private boolean isInitialized;
 
-    private boolean logEnemyBase = false;
+    private boolean logEnemyBase;
 
-    private boolean matchAllConditions = false;
+    private boolean matchAllConditions;
 
-    private int maxThThreshold = 0;
+    private int maxThThreshold;
 
-    private boolean playSound = false;
+    private boolean playSound;
 
     private final Clickable[] raxInfo = new Clickable[] { Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_BARB,
             Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, };

@@ -3,8 +3,11 @@
 <suppressions>
   <suppress files="Kernel32.java" checks=".*" />
   <suppress files="User32.java" checks=".*" />
-  <suppress files="MainController.java" checks="VisibilityModifier" />
+  <suppress files="MainController.java" checks="VisibilityModifier|FileLengthCheck|ClassFanOutComplexity" />
   <suppress files="Constants.java" checks="InterfaceIsType" />
   <suppress files="SettingsPersister.java" checks="CyclomaticComplexity|MethodLength|NPathComplexity" />
-  <suppress files="Clickable" checks="LineLength" />
+  <suppress files="Clickable.java" checks="LineLength" />
+  <suppress files="StateAttack.java" checks="MethodLength|CyclomaticComplexity" />
+  <suppress files="Context.java" checks="CyclomaticComplexity|NPathComplexity" />
+  <suppress files="Setup.java" checks="LocalFinalVariableName" />
 </suppressions>
