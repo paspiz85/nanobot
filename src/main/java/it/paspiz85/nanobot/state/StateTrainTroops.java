@@ -16,6 +16,8 @@ public final class StateTrainTroops extends State {
 
     private static final int BARRACK_LV1_SIZE = 20;
 
+    private static final int BARRACK_LV10_SIZE = 75;
+
     private static final int BARB_TRAIN_MS = 20000;
 
     public static StateTrainTroops instance() {
@@ -36,7 +38,7 @@ public final class StateTrainTroops extends State {
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
             final Clickable troop = raxInfo[currRax];
             if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
-                for (int i = 0; i < OS.random().nextInt(5) + 15; i++) {
+                for (int i = 0; i < BARRACK_LV10_SIZE / 2 + OS.random().nextInt(BARRACK_LV10_SIZE); i++) {
                     OS.instance().leftClick(troop.getPoint(), true);
                     OS.instance().sleepRandom(75);
                 }
@@ -50,6 +52,7 @@ public final class StateTrainTroops extends State {
         OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(), true);
         OS.instance().sleepRandom(250);
         context.setState(StateMainMenu.instance());
+        // waiting minimum time
         OS.instance().sleepRandom(BARRACK_LV1_SIZE * BARB_TRAIN_MS / 2);
     }
 }
