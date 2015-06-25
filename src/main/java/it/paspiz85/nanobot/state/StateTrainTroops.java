@@ -32,8 +32,7 @@ public final class StateTrainTroops extends State {
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
             final Clickable troop = raxInfo[currRax];
             if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
-                final int maxBarrackSize = BARRACK_SIZE_BY_LEVEL[BARRACK_SIZE_BY_LEVEL.length - 1];
-                final int clicks = maxBarrackSize / 2 + OS.random().nextInt(maxBarrackSize);
+                final int clicks = 10 + OS.random().nextInt(10);
                 logger.fine("Try training " + clicks + " " + troop.getDescription());
                 for (int i = 0; i < clicks; i++) {
                     OS.instance().leftClick(troop, true);
@@ -51,6 +50,6 @@ public final class StateTrainTroops extends State {
         OS.instance().sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time
-        OS.instance().sleepRandom(Math.max(5000, 30000 - 5000 * context.getTrainCount()));
+        OS.instance().sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
     }
 }
