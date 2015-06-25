@@ -8,6 +8,6 @@
   <suppress files="SettingsPersister.java" checks="CyclomaticComplexity|MethodLength|NPathComplexity" />
   <suppress files="Clickable.java" checks="LineLength" />
   <suppress files="StateAttack.java" checks="MethodLength|CyclomaticComplexity" />
-  <suppress files="Context.java" checks="CyclomaticComplexity|NPathComplexity" />
+  <suppress files="Loot.java" checks="CyclomaticComplexity|NPathComplexity" />
   <suppress files="Setup.java" checks="LocalFinalVariableName" />
 </suppressions>

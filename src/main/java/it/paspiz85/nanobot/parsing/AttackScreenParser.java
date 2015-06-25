@@ -151,7 +151,6 @@ public final class AttackScreenParser extends AbstractParser {
         final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
         if (rectangle != null) {
             result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-            
         }
         return result;
     }
