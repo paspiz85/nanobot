@@ -5,7 +5,7 @@ import javafx.application.Application;
 /**
  * Interface for controllers that know its application.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  */
 public interface ApplicationAwareController {
 

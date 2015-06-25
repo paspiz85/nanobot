@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 /**
  * Base attack strategy.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public abstract class Attack {
@@ -79,7 +79,7 @@ public abstract class Attack {
             diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
             diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
                     - currLoot.getDarkElixir() : 0;
-            prevLoot = currLoot;
+                    prevLoot = currLoot;
         }
     }
 

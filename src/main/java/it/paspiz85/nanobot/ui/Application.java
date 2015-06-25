@@ -13,7 +13,7 @@ import javafx.stage.Stage;
 /**
  * Main class for GUI.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class Application extends javafx.application.Application implements Constants {

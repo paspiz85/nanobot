@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.exception;
 /**
  * Wrong bot configuration.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class BotConfigurationException extends BotException {

@@ -22,7 +22,7 @@ import javax.sound.sampled.Clip;
 /**
  * Attack state is when bot find and attack an opponent.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class StateAttack extends State {

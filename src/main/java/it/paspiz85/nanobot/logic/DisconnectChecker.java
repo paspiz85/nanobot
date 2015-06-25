@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 /**
  * Logic to check if game disconnected.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class DisconnectChecker implements Runnable {

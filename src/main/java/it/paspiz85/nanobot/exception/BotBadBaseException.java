@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.exception;
 /**
  * Exception raised when bad base found.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class BotBadBaseException extends BotException {

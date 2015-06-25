@@ -38,7 +38,7 @@ import org.kohsuke.github.GitHub;
 /**
  * Main GUI controller.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class MainController implements ApplicationAwareController, Constants {

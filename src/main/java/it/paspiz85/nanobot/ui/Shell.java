@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 /**
  * Main class for running in batch mode.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Shell {

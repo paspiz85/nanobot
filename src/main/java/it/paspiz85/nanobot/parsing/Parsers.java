@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.parsing;
 /**
  * Factory of parsers.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Parsers {

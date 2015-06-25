@@ -6,7 +6,7 @@ import it.paspiz85.nanobot.win32.OS;
 /**
  * This state is when bot sleeps.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class StateIdle extends State {

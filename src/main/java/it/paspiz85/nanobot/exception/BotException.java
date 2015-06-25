@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.exception;
 /**
  * Base bot exception.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public class BotException extends Exception {

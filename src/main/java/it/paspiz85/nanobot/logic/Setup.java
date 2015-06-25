@@ -26,7 +26,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 /**
  * Steps to setup bot for interacting with game in BlueStacks.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Setup implements Constants {

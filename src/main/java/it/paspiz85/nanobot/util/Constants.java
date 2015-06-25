@@ -3,15 +3,13 @@ package it.paspiz85.nanobot.util;
 /**
  * Application constants.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  */
 public interface Constants {
 
-    int BARRACK_LV1_SIZE = 20;
+    int TRAIN_BARB_MS = 20000;
 
-    int BARRACK_LV10_SIZE = 75;
-
-    int BARB_TRAIN_MS = 20000;
+    int[] BARRACK_SIZE_BY_LEVEL = { 20, 25, 30, 35, 40, 45, 50, 55, 60, 75 };
 
     String NAME = "NanoBot";
 

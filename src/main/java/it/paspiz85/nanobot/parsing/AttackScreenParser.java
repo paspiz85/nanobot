@@ -33,7 +33,7 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
 /**
  * Parser for attack mode screen.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class AttackScreenParser extends AbstractParser {

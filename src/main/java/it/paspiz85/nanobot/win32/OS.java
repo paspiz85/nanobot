@@ -28,7 +28,7 @@ import com.sun.jna.platform.win32.WinDef.WPARAM;
 /**
  * This class wraps Operating System functionalities.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class OS {

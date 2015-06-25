@@ -6,7 +6,7 @@ import it.paspiz85.nanobot.win32.OS;
 /**
  * This state is when bot switch from training mode to attack mode.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class StateFindAMatch extends State {

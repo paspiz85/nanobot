@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 /**
  * Useful logging utils.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Logging {

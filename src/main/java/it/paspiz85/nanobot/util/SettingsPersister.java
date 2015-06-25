@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 /**
  * Util class for persist settings.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class SettingsPersister implements Constants {

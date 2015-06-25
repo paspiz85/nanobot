@@ -1,9 +1,11 @@
 donation
 javadoc
+checkstyle
+remove paspiz85 aok.coc
 
 code
 check english lang
 unittests
-checkstyle
-
-remove v-ppizzuti aok.coc
+count trofei
+raccolta risorse
+reset barrack location

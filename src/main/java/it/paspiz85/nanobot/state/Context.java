@@ -7,7 +7,7 @@ import java.util.logging.Logger;
 /**
  * Execution context of bot.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Context {

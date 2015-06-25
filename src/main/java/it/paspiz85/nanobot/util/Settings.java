@@ -14,7 +14,7 @@ import java.util.logging.Level;
 /**
  * Bot settings.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Settings {

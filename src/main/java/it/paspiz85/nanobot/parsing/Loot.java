@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.parsing;
 /**
  * Enemy loot.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public final class Loot {

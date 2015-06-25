@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 /**
  * State in which bot can be.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public abstract class State implements Constants {
