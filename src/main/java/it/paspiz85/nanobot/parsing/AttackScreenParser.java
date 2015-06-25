@@ -30,6 +30,12 @@ import javax.imageio.ImageIO;
 import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
+/**
+ * Parser for attack mode screen.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class AttackScreenParser extends AbstractParser {
 
     private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);

@@ -25,6 +25,12 @@ import com.sun.jna.platform.win32.WinDef.LPARAM;
 import com.sun.jna.platform.win32.WinDef.POINT;
 import com.sun.jna.platform.win32.WinDef.WPARAM;
 
+/**
+ * This class wraps Operating System functionalities.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class OS {
 
     private static OS instance;
@@ -135,29 +141,15 @@ public final class OS {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
     }
 
-    public void leftClick(final Clickable clickable, final int sleepInMs) throws InterruptedException {
-        leftClickWin32(clickable.getPoint(), true);
-        Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
-    }
-
-    public void leftClick(final Point p) throws InterruptedException {
-        leftClickWin32(p, false);
-    }
-
-    public void leftClick(final Point p, final int sleepInMs) throws InterruptedException {
-        leftClickWin32(p, false);
-        Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
-    }
-
-    private void leftClickWin32(final Point p, final boolean randomize) throws InterruptedException {
+    public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
         // randomize coordinates little bit
-        int x = p.x();
-        int y = p.y();
+        int x = point.x();
+        int y = point.y();
         if (randomize) {
             x += -1 + random.nextInt(3);
             y += -1 + random.nextInt(3);
         }
-        logger.finest("clicking " + x + " " + y);
+        logger.fine("clicking " + x + " " + y);
         final int lParam = makeParam(x, y);
         while (isCtrlKeyDown()) {
             Thread.sleep(100);
@@ -217,8 +209,16 @@ public final class OS {
         this.handler = handler;
     }
 
-    public void sleepRandom(final int i) throws InterruptedException {
-        Thread.sleep(i + random.nextInt(i));
+    /**
+     * Sleep random interval between sleepInMs and 2*sleepInMs.
+     * 
+     * @param sleepInMs
+     *            minimum sleep time.
+     * @throws InterruptedException
+     *             thread interrupted.
+     */
+    public void sleepRandom(final int sleepInMs) throws InterruptedException {
+        Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
     }
 
     public void sleepTillClickableIsActive(final Clickable clickable) throws InterruptedException {

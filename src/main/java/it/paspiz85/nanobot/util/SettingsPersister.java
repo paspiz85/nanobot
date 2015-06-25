@@ -12,6 +12,12 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Util class for persist settings.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_ATTACK_STRAT = "attack_strat";

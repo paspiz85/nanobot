@@ -1,10 +1,13 @@
 package it.paspiz85.nanobot.exception;
 
+/**
+ * Base bot exception.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class BotException extends Exception {
 
-    /**
-     *
-     */
     private static final long serialVersionUID = 1L;
 
     public BotException(final String msg) {

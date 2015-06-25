@@ -4,6 +4,12 @@ import it.paspiz85.nanobot.exception.BotException;
 
 import java.util.logging.Logger;
 
+/**
+ * Execution context of bot.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class Context {
 
     private final Logger logger = Logger.getLogger(getClass().getName());

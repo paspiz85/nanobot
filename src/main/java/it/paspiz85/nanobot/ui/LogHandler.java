@@ -10,6 +10,12 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
+/**
+ * Handler for logging in a textarea on GUI.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class LogHandler extends Handler {
 
     /**
@@ -18,7 +24,7 @@ public class LogHandler extends Handler {
      * Not only that, there is also no way to utilize
      * <code>SimpleFormatter.format()</code> method
      *
-     * @author norecha
+     * @author v-ppizzuti
      */
     private static class LogFormatter extends Formatter {
 

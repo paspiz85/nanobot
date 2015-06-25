@@ -5,9 +5,9 @@ import it.paspiz85.nanobot.util.Point;
 import java.awt.Color;
 
 /**
- * All coordinates are client coordinates
+ * All coordinates (are client coordinates) of clickable points.
  *
- * @author norecha
+ * @author v-ppizzuti
  */
 public enum Clickable {
     BUTTON_ATTACK(63, 599, new Color(0xF0E8D8)), // make sure to pick a solid

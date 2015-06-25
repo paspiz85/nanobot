@@ -6,6 +6,12 @@ import it.paspiz85.nanobot.win32.OS;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
+/**
+ * Parser for main mode screen.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class MainScreenParser extends AbstractParser {
 
     MainScreenParser() {

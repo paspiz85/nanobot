@@ -1,5 +1,11 @@
 package it.paspiz85.nanobot.exception;
 
+/**
+ * Exception raised when bad base found.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class BotBadBaseException extends BotException {
 
     private static final long serialVersionUID = 1L;

@@ -3,6 +3,12 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.win32.OS;
 
+/**
+ * This state is when bot sleeps.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class StateIdle extends State {
 
     private static StateIdle instance;
@@ -35,7 +41,8 @@ public final class StateIdle extends State {
             if (OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE)
                     || OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
                 logger.info("Was attacked.");
-                OS.instance().leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY, 250);
+                OS.instance().leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY.getPoint(), true);
+                OS.instance().sleepRandom(250);
             } else if (OS.instance().isClickableActive(Clickable.BUTTON_ATTACK)) {
                 nextState = StateMainMenu.instance();
                 break;

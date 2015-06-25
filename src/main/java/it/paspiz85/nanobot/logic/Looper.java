@@ -7,6 +7,12 @@ import it.paspiz85.nanobot.state.StateIdle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Bot main logic that loop between training and attacking.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class Looper {
 
     private static Looper instance;

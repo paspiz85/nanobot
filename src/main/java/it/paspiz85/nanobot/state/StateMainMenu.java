@@ -7,6 +7,12 @@ import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 
+/**
+ * This state is when bot is in main menu.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class StateMainMenu extends State {
 
     private static StateMainMenu instance;
@@ -30,23 +36,28 @@ public final class StateMainMenu extends State {
         OS.instance().zoomUp();
         OS.instance().sleepRandom(350);
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
-        OS.instance().leftClick(firstRax, 500);
+        OS.instance().leftClick(firstRax, false);
+        OS.instance().sleepRandom(500);
         Point trainButton = Parsers.getMainscreen().findTrainButton();
         if (trainButton == null) {
             // maybe rax was already open and we closed it back. try one more
             // time
-            OS.instance().leftClick(firstRax, 500);
+            OS.instance().leftClick(firstRax, false);
+            OS.instance().sleepRandom(500);
             trainButton = Parsers.getMainscreen().findTrainButton();
         }
         if (trainButton == null) {
             throw new BotConfigurationException("Barracks location is not correct.");
         }
-        OS.instance().leftClick(trainButton, 500);
+        OS.instance().leftClick(trainButton, false);
+        OS.instance().sleepRandom(500);
         // camp is full
         if (OS.instance().isClickableActive(Clickable.BUTTON_RAX_FULL)) {
             logger.info("Camp is full");
-            OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE, 200);
-            OS.instance().leftClick(Clickable.BUTTON_ATTACK, 1000);
+            OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE.getPoint(), true);
+            OS.instance().sleepRandom(200);
+            OS.instance().leftClick(Clickable.BUTTON_ATTACK.getPoint(), true);
+            OS.instance().sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             context.setState(StateTrainTroops.instance());

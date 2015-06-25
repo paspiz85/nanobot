@@ -10,6 +10,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ * Main class for GUI.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class Application extends javafx.application.Application implements Constants {
 
     public static void main(final String[] args) {

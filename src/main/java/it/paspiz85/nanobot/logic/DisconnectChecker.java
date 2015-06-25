@@ -8,6 +8,12 @@ import it.paspiz85.nanobot.win32.OS;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Logic to check if game disconnected.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class DisconnectChecker implements Runnable {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
@@ -56,7 +62,8 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    OS.instance().leftClick(Clickable.UNIT_RECONNECT, 5000);
+                    OS.instance().leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
+                    OS.instance().sleepRandom(5000);
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);
                 }

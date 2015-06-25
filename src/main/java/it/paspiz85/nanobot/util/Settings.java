@@ -9,6 +9,12 @@ import it.paspiz85.nanobot.attack.Attack4SideParallelHalf2Wave;
 import it.paspiz85.nanobot.attack.ManualAttack;
 import it.paspiz85.nanobot.parsing.Clickable;
 
+/**
+ * Bot settings.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class Settings {
 
     private static final Settings INSTANCE = new Settings();

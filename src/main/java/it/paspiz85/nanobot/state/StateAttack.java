@@ -19,6 +19,12 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 
+/**
+ * Attack state is when bot find and attack an opponent.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class StateAttack extends State {
 
     private static StateAttack instance;
@@ -97,9 +103,12 @@ public final class StateAttack extends State {
                 if (attackStrategy != ManualAttack.instance()) {
                     playAttackReady();
                     attackStrategy.attack(loot, attackGroup);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE, 1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY, 1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME, 1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
+                    OS.instance().sleepRandom(1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
+                    OS.instance().sleepRandom(1200);
+                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
+                    OS.instance().sleepRandom(1200);
                 } else {
                     if (loot.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
@@ -126,7 +135,8 @@ public final class StateAttack extends State {
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                OS.instance().leftClick(Clickable.BUTTON_NEXT, 666);
+                OS.instance().leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
+                OS.instance().sleepRandom(666);
                 OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
                 // to avoid server/client sync from nexting too fast
                 OS.instance().sleepRandom(1000);

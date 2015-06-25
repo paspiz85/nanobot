@@ -16,6 +16,12 @@ import javax.imageio.ImageIO;
 import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
+/**
+ * Abstract screen parse.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 class AbstractParser {
 
     private static final int[][] COLOR_EIGHT = new int[][] { { 0x27261F, 0x302F26, 0x26261F },

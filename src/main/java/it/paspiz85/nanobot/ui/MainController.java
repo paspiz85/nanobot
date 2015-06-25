@@ -35,6 +35,12 @@ import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
+/**
+ * Main GUI controller.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public class MainController implements ApplicationAwareController, Constants {
 
     Application application;

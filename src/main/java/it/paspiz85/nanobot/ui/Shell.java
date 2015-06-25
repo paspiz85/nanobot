@@ -9,6 +9,12 @@ import it.paspiz85.nanobot.util.Logging;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * Main class for running in batch mode.
+ * 
+ * @author v-ppizzuti
+ *
+ */
 public final class Shell {
 
     private static final int EXIT_CODE_1 = 1;
