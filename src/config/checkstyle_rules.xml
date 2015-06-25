@@ -116,11 +116,12 @@
 		<module name="WhitespaceAfter">
 			<property name="severity" value="error" />
 		</module>
-<!-- 		<module name="WhitespaceAround"> -->
-<!-- 			<property name="severity" value="error" /> -->
-<!-- 			<property name="tokens" -->
-<!-- 				value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,EQUAL,GE,GT,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,LITERAL_ASSERT,TYPE_EXTENSION_AND" /> -->
-<!-- 		</module> -->
+		<!-- <module name="WhitespaceAround"> -->
+		<!-- <property name="severity" value="error" /> -->
+		<!-- <property name="tokens" -->
+		<!-- value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,EQUAL,GE,GT,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,LITERAL_ASSERT,TYPE_EXTENSION_AND" 
+			/> -->
+		<!-- </module> -->
 		<module name="ModifierOrder">
 			<property name="severity" value="error" />
 		</module>
@@ -204,9 +205,9 @@
 			<property name="id" value="NPathComplexity_Error" />
 		</module>
 		<module name="FallThrough" />
-		<module name="DeclarationOrder">
-			<property name="severity" value="error" />
-		</module>
+		<!-- <module name="DeclarationOrder"> -->
+		<!-- <property name="severity" value="error" /> -->
+		<!-- </module> -->
 		<module name="IllegalThrows">
 			<property name="severity" value="error" />
 		</module>
@@ -233,12 +234,8 @@
 		<module name="UnnecessaryParentheses">
 			<property name="severity" value="error" />
 		</module>
-		<!-- 
-		<module name="Indentation">
-			<property name="severity" value="error" />
-			<property name="caseIndent" value="0" />
-		</module>
-		 -->
+		<!-- <module name="Indentation"> <property name="severity" value="error" 
+			/> <property name="caseIndent" value="0" /> </module> -->
 		<module name="ExplicitInitialization">
 			<property name="severity" value="error" />
 		</module>
@@ -313,11 +310,8 @@
 			<property name="max" value="15" />
 			<property name="id" value="ClassDataAbstractionCoupling_Error" />
 		</module>
-		<!-- 
-		<module name="InnerTypeLast">
-			<property name="severity" value="error" />
-		</module>
-		 -->
+		<!-- <module name="InnerTypeLast"> <property name="severity" value="error" 
+			/> </module> -->
 		<module name="NestedForDepth">
 			<property name="max" value="2" />
 			<property name="severity" value="error" />
@@ -350,7 +344,7 @@
 		</module>
 		<module name="AvoidStarImport" />
 		<module name="ImportOrder">
-			<property name="groups" value="java,javax,org,com" />
+			<property name="groups" value="it,java,javax,javafx,org,com" />
 			<property name="ordered" value="true" />
 			<property name="separated" value="true" />
 			<property name="option" value="top" />

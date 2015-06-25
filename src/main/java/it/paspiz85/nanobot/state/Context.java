@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 
 public final class Context {
 
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private State current;
 

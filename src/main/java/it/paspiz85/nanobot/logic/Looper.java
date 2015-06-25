@@ -18,7 +18,7 @@ public final class Looper {
         return instance;
     }
 
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private boolean waitingForDcChecker;
 

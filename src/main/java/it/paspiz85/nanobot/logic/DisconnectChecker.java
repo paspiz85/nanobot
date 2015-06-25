@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 public class DisconnectChecker implements Runnable {
 
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final Context context;
 

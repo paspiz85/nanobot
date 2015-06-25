@@ -92,8 +92,7 @@ public final class OS {
 
     private HWND handler;
 
-    // MY_CLIENT_61.638==MY_WINDOW.64.668
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private java.awt.Robot r;
 

@@ -38,7 +38,7 @@ public final class SettingsPersister implements Constants {
 
     private File configFile;
 
-    protected final Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private File getConfigFile() {
         if (configFile == null) {

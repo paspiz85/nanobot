@@ -16,17 +16,17 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
-    protected static Point BOTTOM_LEFT = new Point(300, 536);
+    protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
-    protected static Point BOTTOM_RIGHT = new Point(537, 538);
+    protected static final Point BOTTOM_RIGHT = new Point(537, 538);
 
-    protected static Point LEFT = new Point(19, 307);
+    protected static final Point LEFT = new Point(19, 307);
 
     protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
 
-    protected static Point RIGHT = new Point(836, 307);
+    protected static final Point RIGHT = new Point(836, 307);
 
-    protected static Point TOP = new Point(429, 18);
+    protected static final Point TOP = new Point(429, 18);
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
