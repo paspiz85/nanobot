@@ -44,8 +44,8 @@ public final class SettingsPersister implements Constants {
 
     private File getConfigFile() {
         if (configFile == null) {
-            String appdata = System.getenv("appdata");
-            File root = new File(appdata, ".");
+            final String appdata = System.getenv("appdata");
+            final File root = new File(appdata, ".");
             if (!root.isDirectory()) {
                 root.mkdir();
             }
@@ -53,7 +53,7 @@ public final class SettingsPersister implements Constants {
             if (!configFile.isFile()) {
                 try {
                     configFile.createNewFile();
-                } catch (IOException e) {
+                } catch (final IOException e) {
                     logger.log(Level.SEVERE, "Unable to create configuration file.", e);
                 }
             }
@@ -61,68 +61,68 @@ public final class SettingsPersister implements Constants {
         return configFile;
     }
 
-    public void reload(Settings settings) {
-        Properties configProperties = new Properties();
+    public void reload(final Settings settings) {
+        final Properties configProperties = new Properties();
         try (InputStream is = new FileInputStream(getConfigFile())) {
             configProperties.load(is);
-            String goldProperty = configProperties.getProperty(PROPERTY_GOLD);
+            final String goldProperty = configProperties.getProperty(PROPERTY_GOLD);
             if (goldProperty != null) {
                 settings.setGoldThreshold(Integer.parseInt(goldProperty));
             }
-            String elixirProperty = configProperties.getProperty(PROPERTY_ELIXIR);
+            final String elixirProperty = configProperties.getProperty(PROPERTY_ELIXIR);
             if (elixirProperty != null) {
                 settings.setElixirThreshold(Integer.parseInt(elixirProperty));
             }
-            String deProperty = configProperties.getProperty(PROPERTY_DE);
+            final String deProperty = configProperties.getProperty(PROPERTY_DE);
             if (deProperty != null) {
                 settings.setDarkElixirThreshold(Integer.parseInt(deProperty));
             }
-            String maxThProperty = configProperties.getProperty(PROPERTY_MAX_TH);
+            final String maxThProperty = configProperties.getProperty(PROPERTY_MAX_TH);
             if (maxThProperty != null) {
                 settings.setMaxThThreshold(Integer.parseInt(maxThProperty));
             }
-            String matchAllCondsProperty = configProperties.getProperty(PROPERTY_IS_MATCH_ALL_CONDS);
+            final String matchAllCondsProperty = configProperties.getProperty(PROPERTY_IS_MATCH_ALL_CONDS);
             if (matchAllCondsProperty != null) {
                 settings.setMatchAllConditions(Boolean.parseBoolean(matchAllCondsProperty));
             }
-            String detectEmptyCollectorsProperty = configProperties.getProperty(PROPERTY_DETECT_EMPTY_COLLECTORS);
+            final String detectEmptyCollectorsProperty = configProperties.getProperty(PROPERTY_DETECT_EMPTY_COLLECTORS);
             if (detectEmptyCollectorsProperty != null) {
                 settings.setDetectEmptyCollectors(Boolean.parseBoolean(detectEmptyCollectorsProperty));
             }
-            String playSoundProperty = configProperties.getProperty(PROPERTY_PLAY_SOUND);
+            final String playSoundProperty = configProperties.getProperty(PROPERTY_PLAY_SOUND);
             if (playSoundProperty != null) {
                 settings.setPlaySound(Boolean.parseBoolean(playSoundProperty));
             }
-            String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
+            final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
                 settings.setAttackStrategy(attackStratProperty);
             }
-            String raxInfoProperty = configProperties.getProperty(PROPERTY_RAX_INFO);
+            final String raxInfoProperty = configProperties.getProperty(PROPERTY_RAX_INFO);
             if (raxInfoProperty != null) {
                 settings.setRaxInfo(raxInfoProperty);
             }
-            String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
+            final String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
             if (barracksCoordsProperty != null) {
                 try (Scanner sc = new Scanner(barracksCoordsProperty)) {
-                    int x = sc.nextInt();
-                    int y = sc.nextInt();
+                    final int x = sc.nextInt();
+                    final int y = sc.nextInt();
                     settings.setFirstBarrackPosition(new Point(x, y));
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     settings.setFirstBarrackPosition(null);
                 }
             }
-            String logEnemyBase = configProperties.getProperty(PROPERTY_LOG_ENEMY_BASE);
+            final String logEnemyBase = configProperties.getProperty(PROPERTY_LOG_ENEMY_BASE);
             if (logEnemyBase != null) {
                 settings.setLogEnemyBase(Boolean.parseBoolean(logEnemyBase));
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to read configuration file.", e);
         }
     }
 
-    public void save(Settings settings) {
+    public void save(final Settings settings) {
         try (FileOutputStream fos = new FileOutputStream(getConfigFile())) {
-            Properties configProperties = new Properties();
+            final Properties configProperties = new Properties();
             configProperties.setProperty(PROPERTY_GOLD, String.valueOf(settings.getGoldThreshold()));
             configProperties.setProperty(PROPERTY_ELIXIR, String.valueOf(settings.getElixirThreshold()));
             configProperties.setProperty(PROPERTY_DE, String.valueOf(settings.getDarkElixirThreshold()));
@@ -133,15 +133,15 @@ public final class SettingsPersister implements Constants {
             configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(settings.isPlaySound()));
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
-            Point firstBarrackPosition = settings.getFirstBarrackPosition();
+            final Point firstBarrackPosition = settings.getFirstBarrackPosition();
             if (firstBarrackPosition != null) {
                 configProperties.setProperty(PROPERTY_BARRACKS_COORDS, (int) firstBarrackPosition.getX() + " "
                         + (int) firstBarrackPosition.getY());
             }
-            Clickable[] raxInfo = settings.getRaxInfo();
-            StringBuilder raxProp = new StringBuilder();
+            final Clickable[] raxInfo = settings.getRaxInfo();
+            final StringBuilder raxProp = new StringBuilder();
             for (int i = 0; i < raxInfo.length; i++) {
-                Clickable unit = raxInfo[i];
+                final Clickable unit = raxInfo[i];
                 if (i > 0) {
                     raxProp.append(", ");
                 }
@@ -151,7 +151,7 @@ public final class SettingsPersister implements Constants {
             configProperties.setProperty(PROPERTY_LOG_ENEMY_BASE, String.valueOf(settings.isLogEnemyBase()));
             configProperties.store(fos, null);
             logger.info("Settings are saved.");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to save configuration file.", e);
         }
     }

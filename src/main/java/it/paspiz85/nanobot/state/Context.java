@@ -26,16 +26,16 @@ public class Context {
         return waitDone;
     }
 
-    public void setDisconnected(boolean disconnected) {
+    public void setDisconnected(final boolean disconnected) {
         this.disconnected = disconnected;
     }
 
-    public void setState(State state) {
+    public void setState(final State state) {
         logger.finest("Setting next state to: " + state.getClass().getSimpleName());
         this.current = state;
     }
 
-    public void setWaitDone(boolean waitDone) {
+    public void setWaitDone(final boolean waitDone) {
         this.waitDone = waitDone;
     }
 }

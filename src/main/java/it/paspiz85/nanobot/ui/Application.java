@@ -12,7 +12,7 @@ import javafx.stage.Stage;
 
 public class Application extends javafx.application.Application implements Constants {
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         Logging.initialize();
         try {
             launch(Application.class, args);
@@ -22,12 +22,12 @@ public class Application extends javafx.application.Application implements Const
     }
 
     @Override
-    public void start(Stage primaryStage) throws IOException {
+    public void start(final Stage primaryStage) throws IOException {
         primaryStage.setTitle(NAME);
-        FXMLLoader loader = new FXMLLoader();
+        final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Application.class.getResource("MainView.fxml"));
-        Parent parent = loader.load();
-        Object controller = loader.getController();
+        final Parent parent = loader.load();
+        final Object controller = loader.getController();
         if (controller instanceof ApplicationAwareController) {
             ((ApplicationAwareController) controller).setApplication(this);
         }

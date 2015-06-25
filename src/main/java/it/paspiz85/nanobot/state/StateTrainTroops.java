@@ -16,12 +16,12 @@ public class StateTrainTroops extends State {
     }
 
     @Override
-    public void handle(Context context) throws InterruptedException {
+    public void handle(final Context context) throws InterruptedException {
         logger.info("Training Troops");
         // first barracks must be opened at this point
-        Clickable[] raxInfo = Settings.instance().getRaxInfo();
+        final Clickable[] raxInfo = Settings.instance().getRaxInfo();
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
-            Clickable troop = raxInfo[currRax];
+            final Clickable troop = raxInfo[currRax];
             if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
                 for (int i = 0; i < OS.random().nextInt(5) + 15; i++) {
                     OS.instance().leftClick(troop, 75);

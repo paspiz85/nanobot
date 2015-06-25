@@ -6,6 +6,12 @@ import it.paspiz85.nanobot.win32.OS;
 
 import java.util.logging.Logger;
 
+/**
+ * Base attack strategy.
+ *
+ * @author v-ppizzuti
+ *
+ */
 public abstract class Attack {
 
     protected static int BOTTOM_LEFT_X = 300;
@@ -30,25 +36,9 @@ public abstract class Attack {
 
     protected static int TOP_Y = 18;
 
-    protected static final int[][] pointsBetweenFromToInclusive(int fromX, int fromY, int toX, int toY, int count) {
-        if (count <= 0) {
-            return new int[0][0];
-        } else if (count == 1) {
-            return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
-        }
-        int[][] result = new int[count][2];
-        double deltaX = (toX - fromX) / (count - 1);
-        double deltaY = (toY - fromY) / (count - 1);
-        for (int i = 0; i < count; i++) {
-            result[i][0] = (int) (fromX + deltaX * i);
-            result[i][1] = (int) (fromY + deltaY * i);
-        }
-        return result;
-    }
-
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    public void attack(int[] loot, int[] attackGroup) throws InterruptedException {
+    public final void attack(final int[] loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
         OS.instance().zoomUp();
         doDropUnits(attackGroup);
@@ -58,17 +48,35 @@ public abstract class Attack {
 
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
-    protected void sleepUntilLootDoesNotChange(int[] loot) throws InterruptedException {
+    // TODO
+    protected final int[][] pointsBetweenFromToInclusive(final int fromX, final int fromY, final int toX,
+            final int toY, final int count) {
+        if (count <= 0) {
+            return new int[0][0];
+        } else if (count == 1) {
+            return new int[][] { { (toX + fromX) / 2, (toY + fromY) / 2 } };
+        }
+        final int[][] result = new int[count][2];
+        final double deltaX = (toX - fromX) / (count - 1);
+        final double deltaY = (toY - fromY) / (count - 1);
+        for (int i = 0; i < count; i++) {
+            result[i][0] = (int) (fromX + deltaX * i);
+            result[i][1] = (int) (fromY + deltaY * i);
+        }
+        return result;
+    }
+
+    private void sleepUntilLootDoesNotChange(final int[] loot) throws InterruptedException {
         Thread.sleep(10000);
         int[] prevLoot = loot;
         int diff = Integer.MAX_VALUE;
-        int delta = 500;
+        final int delta = 500;
         while (diff > delta) {
             Thread.sleep(15000);
             int[] currLoot;
             try {
                 currLoot = Parsers.getAttackScreen().parseLoot();
-            } catch (BotBadBaseException e) {
+            } catch (final BotBadBaseException e) {
                 Thread.sleep(2000);
                 // in case of 100% win/no troops left, attack screen will end
                 // prematurely.

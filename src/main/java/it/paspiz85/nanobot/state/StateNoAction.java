@@ -14,7 +14,7 @@ public class StateNoAction extends State {
     }
 
     @Override
-    public void handle(Context context) throws BotException, InterruptedException {
+    public void handle(final Context context) throws BotException, InterruptedException {
         logger.info("StateNoAction");
     }
 }

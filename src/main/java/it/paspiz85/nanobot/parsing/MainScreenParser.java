@@ -12,12 +12,12 @@ public final class MainScreenParser extends AbstractParser {
     }
 
     public Point findTrainButton() {
-        BufferedImage image = OS.instance().screenShot(Area.BARRACKS_BUTTONS);
-        Rectangle rectangle = findArea(image, getClass().getResource("train.png"));
+        final BufferedImage image = OS.instance().screenShot(Area.BARRACKS_BUTTONS);
+        final Rectangle rectangle = findArea(image, getClass().getResource("train.png"));
         if (rectangle == null) {
             return null;
         }
-        Point ret = rectangle.getLocation();
+        final Point ret = rectangle.getLocation();
         ret.x += Area.BARRACKS_BUTTONS.getX1();
         ret.y += Area.BARRACKS_BUTTONS.getY1();
         return ret;

@@ -27,16 +27,16 @@ public class LogHandler extends Handler {
         private final Date date = new Date();
 
         @Override
-        public String format(LogRecord record) {
+        public String format(final LogRecord record) {
             date.setTime(record.getMillis());
-            String message = formatMessage(record);
+            final String message = formatMessage(record);
             return String.format(FORMAT, date, null, record.getLoggerName(), record.getLevel().getLocalizedName(),
                     message, null);
         }
     }
 
-    static void initialize(TextArea textArea) {
-        for (Handler h : Logger.getLogger("").getHandlers()) {
+    static void initialize(final TextArea textArea) {
+        for (final Handler h : Logger.getLogger("").getHandlers()) {
             if (h instanceof LogHandler) {
                 ((LogHandler) h).setTextArea(textArea);
             }
@@ -57,7 +57,7 @@ public class LogHandler extends Handler {
     }
 
     @Override
-    public void publish(LogRecord record) {
+    public void publish(final LogRecord record) {
         if (record.getLevel().intValue() < Level.CONFIG.intValue()) {
             return;
         }
@@ -66,7 +66,7 @@ public class LogHandler extends Handler {
         }
     }
 
-    public void setTextArea(TextArea textArea) {
+    public void setTextArea(final TextArea textArea) {
         this.textArea = textArea;
     }
 }

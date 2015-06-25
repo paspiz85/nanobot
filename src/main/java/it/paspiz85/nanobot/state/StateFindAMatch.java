@@ -15,7 +15,7 @@ public class StateFindAMatch extends State {
     }
 
     @Override
-    public void handle(Context context) throws InterruptedException {
+    public void handle(final Context context) throws InterruptedException {
         logger.info("StateFindAMatch");
         if (Thread.interrupted()) {
             throw new InterruptedException("StateFindAMatch is interrupted.");

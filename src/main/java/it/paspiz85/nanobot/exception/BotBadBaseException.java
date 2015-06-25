@@ -4,11 +4,11 @@ public class BotBadBaseException extends BotException {
 
     private static final long serialVersionUID = 1L;
 
-    public BotBadBaseException(String msg) {
+    public BotBadBaseException(final String msg) {
         super(msg);
     }
 
-    public BotBadBaseException(String msg, Throwable t) {
+    public BotBadBaseException(final String msg, final Throwable t) {
         super(msg, t);
     }
 }

@@ -2,9 +2,21 @@ package it.paspiz85.nanobot;
 
 import it.paspiz85.nanobot.ui.Application;
 
+/**
+ * Start point of bot.
+ *
+ * @author paspiz85
+ *
+ */
 public final class Start {
 
-    public static void main(String[] args) {
+    /**
+     * Main method.
+     *
+     * @param args
+     *            command line arguments.
+     */
+    public static void main(final String[] args) {
         Application.main(args);
     }
 }

@@ -3,11 +3,14 @@ package it.paspiz85.nanobot.attack;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.win32.OS;
 
-public class Attack4SideParallelFull2Wave extends Attack {
+public final class Attack4SideParallelFull2Wave extends Attack {
 
-    private static final Attack4SideParallelFull2Wave instance = new Attack4SideParallelFull2Wave();
+    private static Attack4SideParallelFull2Wave instance;
 
     public static Attack4SideParallelFull2Wave instance() {
+        if (instance == null) {
+            instance = new Attack4SideParallelFull2Wave();
+        }
         return instance;
     }
 
@@ -15,7 +18,7 @@ public class Attack4SideParallelFull2Wave extends Attack {
     }
 
     @Override
-    protected void doDropUnits(int[] attackGroup) throws InterruptedException {
+    protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
         logger.info("Dropping units from 4 sides in parallel in 2 full waves.");
         for (int wave = 0; wave < 2; wave++) {
             for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
@@ -23,20 +26,21 @@ public class Attack4SideParallelFull2Wave extends Attack {
                 unitCount = unitCount / 2 + wave * (unitCount % 2);
                 // select unit
                 OS.instance().leftClick(Clickable.getButtonAttackUnit(unitIdx + 1), 100);
-                int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y, unitCount / 4
-                        + unitCount % 4);
-                int[][] topToLeftPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, LEFT_X, LEFT_Y, unitCount / 4);
-                int[][] rightToBottomPoints = pointsBetweenFromToInclusive(RIGHT_X, RIGHT_Y, BOTTOM_RIGHT_X,
-                        BOTTOM_RIGHT_Y, unitCount / 4);
-                int[][] leftToBottomPoints = pointsBetweenFromToInclusive(LEFT_X, LEFT_Y, BOTTOM_LEFT_X, BOTTOM_LEFT_Y,
+                final int[][] topToRightPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, RIGHT_X, RIGHT_Y, unitCount
+                        / 4 + unitCount % 4);
+                final int[][] topToLeftPoints = pointsBetweenFromToInclusive(TOP_X, TOP_Y, LEFT_X, LEFT_Y,
                         unitCount / 4);
+                final int[][] rightToBottomPoints = pointsBetweenFromToInclusive(RIGHT_X, RIGHT_Y, BOTTOM_RIGHT_X,
+                        BOTTOM_RIGHT_Y, unitCount / 4);
+                final int[][] leftToBottomPoints = pointsBetweenFromToInclusive(LEFT_X, LEFT_Y, BOTTOM_LEFT_X,
+                        BOTTOM_LEFT_Y, unitCount / 4);
                 // drop units
                 // top to mid from both sides in parallel
                 for (int i = 0; i < topToRightPoints.length; i++) {
-                    int[] topRightPoint = topToRightPoints[i];
+                    final int[] topRightPoint = topToRightPoints[i];
                     OS.instance().leftClick(topRightPoint[0], topRightPoint[1], PAUSE_BETWEEN_UNIT_DROP);
                     if (i < topToLeftPoints.length) {
-                        int[] topLeftPoint = topToLeftPoints[i];
+                        final int[] topLeftPoint = topToLeftPoints[i];
                         OS.instance().leftClick(topLeftPoint[0], topLeftPoint[1], PAUSE_BETWEEN_UNIT_DROP);
                     }
                 }
@@ -44,9 +48,9 @@ public class Attack4SideParallelFull2Wave extends Attack {
                 OS.instance().leftClick(Clickable.getButtonAttackUnit(unitIdx + 1), 100);
                 // mid to bottom from both sides in parallel
                 for (int i = 0; i < rightToBottomPoints.length; i++) {
-                    int[] rightToBottomPoint = rightToBottomPoints[i];
+                    final int[] rightToBottomPoint = rightToBottomPoints[i];
                     OS.instance().leftClick(rightToBottomPoint[0], rightToBottomPoint[1], PAUSE_BETWEEN_UNIT_DROP);
-                    int[] leftToBottomPoint = leftToBottomPoints[i];
+                    final int[] leftToBottomPoint = leftToBottomPoints[i];
                     OS.instance().leftClick(leftToBottomPoint[0], leftToBottomPoint[1], PAUSE_BETWEEN_UNIT_DROP);
                 }
             }

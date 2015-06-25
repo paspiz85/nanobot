@@ -11,25 +11,33 @@ import java.util.logging.Logger;
 
 public class Shell {
 
-    private static final Logger logger = Logger.getLogger(Shell.class.getName());
+    private static final int EXIT_CODE_1 = 1;
 
-    public static void main(String[] args) {
+    private static final int EXIT_CODE_2 = 2;
+
+    private static final int EXIT_CODE_3 = 3;
+
+    private static final Logger LOGGER = Logger.getLogger(Shell.class.getName());
+
+    public static void main(final String[] args) {
         Logging.initialize();
         try {
-            // run the bot
             Setup.instance().setup();
             Looper.instance().start();
-        } catch (InterruptedException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            System.exit(1);
-        } catch (BotConfigurationException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            System.exit(2);
-        } catch (BotException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            System.exit(3);
+        } catch (final InterruptedException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            System.exit(EXIT_CODE_1);
+        } catch (final BotConfigurationException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            System.exit(EXIT_CODE_2);
+        } catch (final BotException e) {
+            LOGGER.log(Level.SEVERE, e.getMessage(), e);
+            System.exit(EXIT_CODE_3);
         } finally {
             Logging.close();
         }
+    }
+
+    private Shell() {
     }
 }

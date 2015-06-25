@@ -7,11 +7,11 @@ public class BotConfigurationException extends BotException {
      */
     private static final long serialVersionUID = 1L;
 
-    public BotConfigurationException(String msg) {
+    public BotConfigurationException(final String msg) {
         super(msg);
     }
 
-    public BotConfigurationException(String msg, Throwable t) {
+    public BotConfigurationException(final String msg, final Throwable t) {
         super(msg, t);
     }
 }

@@ -17,7 +17,7 @@ public class StateIdle extends State {
     }
 
     @Override
-    public void handle(Context context) throws InterruptedException {
+    public void handle(final Context context) throws InterruptedException {
         State nextState = null;
         while (true) {
             logger.info("Idle");
@@ -52,7 +52,7 @@ public class StateIdle extends State {
         return reloading;
     }
 
-    public void setReloading(boolean reloading) {
+    public void setReloading(final boolean reloading) {
         this.reloading = reloading;
     }
 }

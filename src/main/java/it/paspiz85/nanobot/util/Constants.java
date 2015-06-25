@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package it.paspiz85.nanobot.util;
 
 /**
@@ -11,13 +6,13 @@ package it.paspiz85.nanobot.util;
  */
 public interface Constants {
 
-    public static final String NAME = "NanoBot";
+    String NAME = "NanoBot";
 
-    public static final String REPOSITORY_NAME = "paspiz85/nanobot";
+    String REPOSITORY_NAME = "paspiz85/nanobot";
 
-    public static final String REPOSITORY_URL = "https://github.com/" + REPOSITORY_NAME;
+    String REPOSITORY_URL = "https://github.com/" + REPOSITORY_NAME;
 
-    public static final int BS_RES_X = 860;
+    int BS_RES_X = 860;
 
-    public static final int BS_RES_Y = 720;
+    int BS_RES_Y = 720;
 }

@@ -1,10 +1,13 @@
 package it.paspiz85.nanobot.attack;
 
-public class ManualAttack extends Attack {
+public final class ManualAttack extends Attack {
 
-    private static final ManualAttack instance = new ManualAttack();
+    private static ManualAttack instance;
 
     public static ManualAttack instance() {
+        if (instance == null) {
+            instance = new ManualAttack();
+        }
         return instance;
     }
 
@@ -12,6 +15,6 @@ public class ManualAttack extends Attack {
     }
 
     @Override
-    protected void doDropUnits(int[] attackGroup) throws InterruptedException {
+    protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
     }
 }

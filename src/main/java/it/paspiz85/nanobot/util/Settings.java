@@ -146,13 +146,13 @@ public final class Settings {
         configPersister.save(this);
     }
 
-    private void setAttackStrategy(Attack attackStrategy) {
+    private void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
     }
 
-    public void setAttackStrategy(String attackStrategy) {
+    public void setAttackStrategy(final String attackStrategy) {
         boolean found = false;
-        for (Attack attack : availableAttackStrategies) {
+        for (final Attack attack : availableAttackStrategies) {
             if (attack.getClass().getSimpleName().equals(attackStrategy)) {
                 setAttackStrategy(attack);
                 found = true;
@@ -164,47 +164,47 @@ public final class Settings {
         }
     }
 
-    public void setDarkElixirThreshold(int darkElixirThreshold) {
+    public void setDarkElixirThreshold(final int darkElixirThreshold) {
         this.darkElixirThreshold = darkElixirThreshold;
     }
 
-    public void setDetectEmptyCollectors(boolean detectEmptyCollectors) {
+    public void setDetectEmptyCollectors(final boolean detectEmptyCollectors) {
         this.detectEmptyCollectors = detectEmptyCollectors;
     }
 
-    public void setElixirThreshold(int elixirThreshold) {
+    public void setElixirThreshold(final int elixirThreshold) {
         this.elixirThreshold = elixirThreshold;
     }
 
-    public void setFirstBarrackPosition(Point firstBarrackPosition) {
+    public void setFirstBarrackPosition(final Point firstBarrackPosition) {
         this.firstBarrackPosition = firstBarrackPosition;
     }
 
-    public void setGoldThreshold(int goldThreshold) {
+    public void setGoldThreshold(final int goldThreshold) {
         this.goldThreshold = goldThreshold;
     }
 
-    public void setLogEnemyBase(boolean logEnemyBase) {
+    public void setLogEnemyBase(final boolean logEnemyBase) {
         this.logEnemyBase = logEnemyBase;
     }
 
-    public void setMatchAllConditions(boolean matchAllConditions) {
+    public void setMatchAllConditions(final boolean matchAllConditions) {
         this.matchAllConditions = matchAllConditions;
     }
 
-    public void setMaxThThreshold(int maxThThreshold) {
+    public void setMaxThThreshold(final int maxThThreshold) {
         this.maxThThreshold = maxThThreshold;
     }
 
-    public void setPlaySound(boolean playSound) {
+    public void setPlaySound(final boolean playSound) {
         this.playSound = playSound;
     }
 
-    public void setRaxInfo(String raxInfoProperty) {
+    public void setRaxInfo(final String raxInfoProperty) {
         final int raxCount = raxInfo.length;
-        String[] splits = raxInfoProperty.split("\\s*,\\s*");
+        final String[] splits = raxInfoProperty.split("\\s*,\\s*");
         for (int i = 0; i < splits.length && i < raxCount; i++) {
-            String split = splits[i];
+            final String split = splits[i];
             raxInfo[i] = Clickable.fromDescription(split);
         }
     }

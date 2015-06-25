@@ -60,7 +60,7 @@ public class Setup implements Constants {
     private void setupBarracks() throws BotConfigurationException, InterruptedException {
         if (Settings.instance().getFirstBarrackPosition() == null) {
             OS.instance().zoomUp();
-            boolean confirmed = OS.instance().confirmationBox(
+            final boolean confirmed = OS.instance().confirmationBox(
                     "You must configure the location "
                             + "of first Barracks. First Barracks is the leftmost one when you \n"
                             + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
@@ -78,12 +78,12 @@ public class Setup implements Constants {
                 GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
 
                     @Override
-                    public void nativeMouseClicked(NativeMouseEvent e) {
+                    public void nativeMouseClicked(final NativeMouseEvent e) {
                         // not relative to window
-                        int x = e.getX();
-                        int y = e.getY();
+                        final int x = e.getX();
+                        final int y = e.getY();
                         logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-                        POINT screenPoint = new POINT(x, y);
+                        final POINT screenPoint = new POINT(x, y);
                         User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
                         Settings.instance().setFirstBarrackPosition(new Point(screenPoint.x, screenPoint.y));
                         synchronized (GlobalScreen.getInstance()) {
@@ -92,11 +92,11 @@ public class Setup implements Constants {
                     }
 
                     @Override
-                    public void nativeMousePressed(NativeMouseEvent e) {
+                    public void nativeMousePressed(final NativeMouseEvent e) {
                     }
 
                     @Override
-                    public void nativeMouseReleased(NativeMouseEvent e) {
+                    public void nativeMouseReleased(final NativeMouseEvent e) {
                     }
                 });
                 logger.info("Waiting for user to click on first barracks.");
@@ -108,7 +108,7 @@ public class Setup implements Constants {
                 logger.info(String.format("Set barracks location to <%d, %d>", (int) Settings.instance()
                         .getFirstBarrackPosition().getX(), (int) Settings.instance().getFirstBarrackPosition().getY()));
                 GlobalScreen.unregisterNativeHook();
-            } catch (NativeHookException e) {
+            } catch (final NativeHookException e) {
                 throw new BotConfigurationException("Unable to capture mouse movement.", e);
             }
         }
@@ -119,34 +119,34 @@ public class Setup implements Constants {
         if (bsHwnd == null) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
-        int[] rect = { 0, 0, 0, 0 };
-        int result = User32.INSTANCE.GetWindowRect(bsHwnd, rect);
+        final int[] rect = { 0, 0, 0, 0 };
+        final int result = User32.INSTANCE.GetWindowRect(bsHwnd, rect);
         if (result == 0) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
         logger.finest(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
                 Arrays.toString(rect)));
         // set bs always on top
-        int SWP_NOSIZE = 0x0001;
-        int SWP_NOMOVE = 0x0002;
-        int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+        final int SWP_NOSIZE = 0x0001;
+        final int SWP_NOMOVE = 0x0002;
+        final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
         User32.INSTANCE.SetWindowPos(bsHwnd, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
     }
 
     private void setupResolution() throws BotConfigurationException {
         // update registry
         try {
-            HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
+            final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
                     "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
-            int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
-            int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
-            int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
-            int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
-            HWND control = User32.INSTANCE.GetDlgItem(bsHwnd, 0);
-            int[] rect = new int[4];
+            final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
+            final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
+            final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
+            final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
+            final HWND control = User32.INSTANCE.GetDlgItem(bsHwnd, 0);
+            final int[] rect = new int[4];
             User32.INSTANCE.GetWindowRect(control, rect);
-            int bsX = rect[2] - rect[0];
-            int bsY = rect[3] - rect[1];
+            final int bsX = rect[2] - rect[0];
+            final int bsY = rect[3] - rect[1];
             if (bsX == BS_RES_X && bsY == BS_RES_Y) {
                 return;
             }
@@ -154,9 +154,9 @@ public class Setup implements Constants {
             if (w1 == BS_RES_X && h1 == BS_RES_Y && w2 == BS_RES_X && h2 == BS_RES_Y) {
                 return;
             }
-            String msg = String.format("%s must run in resolution %dx%d.\n"
+            final String msg = String.format("%s must run in resolution %dx%d.\n"
                     + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y);
-            boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
+            final boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
             if (!ret) {
                 throw new BotConfigurationException("Re-run when resolution is fixed.");
             }
@@ -166,9 +166,9 @@ public class Setup implements Constants {
             Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
             Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
             throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
-        } catch (BotConfigurationException e) {
+        } catch (final BotConfigurationException e) {
             throw e;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
         }
     }

@@ -132,22 +132,22 @@ public class MainController implements ApplicationAwareController, Constants {
      */
     boolean checkForUpdate() {
         try {
-            String current = getClass().getPackage().getImplementationVersion();
+            final String current = getClass().getPackage().getImplementationVersion();
             if (current == null) {
                 // IDE run
                 return false;
             }
-            DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
-            GitHub github = GitHub.connectAnonymously();
-            GHRepository repository = github.getRepository(REPOSITORY_NAME);
-            for (GHRelease r : repository.listReleases()) {
-                String release = r.getName().substring(1);
-                DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
+            final DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
+            final GitHub github = GitHub.connectAnonymously();
+            final GHRepository repository = github.getRepository(REPOSITORY_NAME);
+            for (final GHRelease r : repository.listReleases()) {
+                final String release = r.getName().substring(1);
+                final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
                 if (currentVersion.compareTo(releaseVersion) < 0) {
                     return true;
                 }
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.log(Level.WARNING, "Unable to get latest version", e);
         }
         return false;
@@ -230,18 +230,18 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     void initializeComboBox() {
-        Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
-        String[] attackStrategies = new String[availableAttackStrategies.length];
+        final Attack[] availableAttackStrategies = Settings.instance().getAvailableAttackStrategies();
+        final String[] attackStrategies = new String[availableAttackStrategies.length];
         for (int i = 0; i < availableAttackStrategies.length; i++) {
-            Attack a = availableAttackStrategies[i];
+            final Attack a = availableAttackStrategies[i];
             attackStrategies[i] = a.getClass().getSimpleName();
         }
         autoAttackComboBox.getItems().addAll(attackStrategies);
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-        Clickable[] availableTroops = Settings.instance().getAvailableTroops();
-        String[] troops = new String[availableTroops.length];
+        final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
+        final String[] troops = new String[availableTroops.length];
         for (int i = 0; i < availableTroops.length; i++) {
-            Clickable c = availableTroops[i];
+            final Clickable c = availableTroops[i];
             troops[i] = c.getDescription();
         }
         rax1ComboBox.getItems().addAll(troops);
@@ -251,7 +251,7 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     void initializeLabels() {
-        String version = getClass().getPackage().getImplementationVersion();
+        final String version = getClass().getPackage().getImplementationVersion();
         if (version != null) {
             versionLabel.setText(NAME + " v" + version);
         }
@@ -262,7 +262,7 @@ public class MainController implements ApplicationAwareController, Constants {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
         });
-        Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
+        final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
         donateLink.setGraphic(new ImageView(heartIcon));
         donateLink.setOnAction(event -> {
             application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
@@ -306,12 +306,12 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     void initializeTextFields() {
-        ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
+        final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
                 if (!newValue.isEmpty()) {
                     Integer.parseInt(newValue);
                 }
-            } catch (NumberFormatException e) {
+            } catch (final NumberFormatException e) {
                 ((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
             }
         };
@@ -322,17 +322,17 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     @Override
-    public void setApplication(Application application) {
+    public void setApplication(final Application application) {
         this.application = application;
         showSettings(false);
     }
 
-    void showSettings(boolean value) {
+    void showSettings(final boolean value) {
         setupPane.setVisible(value);
         controlPane.setVisible(!value);
     }
 
-    void updateButtons(boolean value) {
+    void updateButtons(final boolean value) {
         startButton.setDisable(value);
         stopButton.setDisable(!value);
     }

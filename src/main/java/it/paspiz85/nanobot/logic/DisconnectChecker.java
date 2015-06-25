@@ -16,7 +16,7 @@ public class DisconnectChecker implements Runnable {
 
     private final Thread mainThread;
 
-    public DisconnectChecker(Context context, Thread mainThread) {
+    public DisconnectChecker(final Context context, final Thread mainThread) {
         this.context = context;
         this.mainThread = mainThread;
     }
@@ -64,7 +64,7 @@ public class DisconnectChecker implements Runnable {
                 }
                 Thread.sleep(10000);
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.log(Level.SEVERE, "dc checker: " + e.getMessage(), e);
         }
     }

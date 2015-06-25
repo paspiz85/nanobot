@@ -11,7 +11,7 @@ import java.util.logging.Logger;
 public class Logging {
 
     public static void close() {
-        for (Handler h : Logger.getLogger("").getHandlers()) {
+        for (final Handler h : Logger.getLogger("").getHandlers()) {
             h.close();
         }
     }

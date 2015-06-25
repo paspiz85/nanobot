@@ -20,14 +20,14 @@ public class StateMainMenu extends State {
     }
 
     @Override
-    public void handle(Context context) throws BotConfigurationException, InterruptedException {
+    public void handle(final Context context) throws BotConfigurationException, InterruptedException {
         // logger.info("StateMainMenu");
         if (Thread.interrupted()) {
             throw new InterruptedException("StateMainMenu is interrupted.");
         }
         OS.instance().zoomUp();
         OS.instance().sleepRandom(350);
-        Point firstRax = Settings.instance().getFirstBarrackPosition();
+        final Point firstRax = Settings.instance().getFirstBarrackPosition();
         OS.instance().leftClick(firstRax.x, firstRax.y, 500);
         Point trainButton = Parsers.getMainscreen().findTrainButton();
         if (trainButton == null) {

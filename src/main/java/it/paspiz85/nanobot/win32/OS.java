@@ -73,12 +73,12 @@ public final class OS {
         return instance;
     }
 
-    private static int makeParam(int low, int high) {
+    private static int makeParam(final int low, final int high) {
         // to work for negative numbers
         return high << 16 | low << 16 >>> 16;
     }
 
-    private static void msgBox(String Text, String Title) {
+    private static void msgBox(final String Text, final String Title) {
         JOptionPane.showMessageDialog(null, Text, Title, JOptionPane.PLAIN_MESSAGE); // Show
         // message
         // box
@@ -98,22 +98,22 @@ public final class OS {
     private OS() {
         try {
             r = new java.awt.Robot();
-        } catch (AWTException e) {
+        } catch (final AWTException e) {
             e.printStackTrace();
         }
     }
 
-    public boolean clientToScreen(POINT clientPoint) {
+    public boolean clientToScreen(final POINT clientPoint) {
         return User32.INSTANCE.ClientToScreen(handler, clientPoint);
     }
 
-    public boolean compareColor(int c1, int c2, int var) {
-        int r1 = c1 >> 16 & 0xFF;
-        int r2 = c2 >> 16 & 0xFF;
-        int g1 = c1 >> 8 & 0xFF;
-        int g2 = c2 >> 8 & 0xFF;
-        int b1 = c1 >> 0 & 0xFF;
-        int b2 = c2 >> 0 & 0xFF;
+    public boolean compareColor(final int c1, final int c2, final int var) {
+        final int r1 = c1 >> 16 & 0xFF;
+        final int r2 = c2 >> 16 & 0xFF;
+        final int g1 = c1 >> 8 & 0xFF;
+        final int g2 = c2 >> 8 & 0xFF;
+        final int b1 = c1 >> 0 & 0xFF;
+        final int b2 = c2 >> 0 & 0xFF;
         if (Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var) {
             return false;
         } else {
@@ -121,8 +121,8 @@ public final class OS {
         }
     }
 
-    public boolean confirmationBox(String msg, String title) {
-        int result = JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION);
+    public boolean confirmationBox(final String msg, final String title) {
+        final int result = JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION);
         if (result == JOptionPane.YES_OPTION) {
             return true;
         } else {
@@ -130,12 +130,12 @@ public final class OS {
         }
     }
 
-    public boolean isClickableActive(Clickable clickable) {
+    public boolean isClickableActive(final Clickable clickable) {
         if (clickable.getColor() == null) {
             throw new IllegalArgumentException(clickable.name());
         }
-        int tarColor = clickable.getColor().getRGB();
-        int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
+        final int tarColor = clickable.getColor().getRGB();
+        final int actualColor = pixelGetColor(clickable.getX(), clickable.getY()).getRGB();
         return compareColor(tarColor, actualColor, 5);
     }
 
@@ -143,52 +143,53 @@ public final class OS {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
     }
 
-    public void leftClick(Clickable clickable, int sleepInMs) throws InterruptedException {
+    public void leftClick(final Clickable clickable, final int sleepInMs) throws InterruptedException {
         leftClickWin32(clickable.getX(), clickable.getY(), true);
         Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
     }
 
-    public void leftClick(int x, int y) {
+    public void leftClick(final int x, final int y) {
         leftClickWin32(x, y, false);
     }
 
-    public void leftClick(int x, int y, int sleepInMs) throws InterruptedException {
+    public void leftClick(final int x, final int y, final int sleepInMs) throws InterruptedException {
         leftClickWin32(x, y, false);
         Thread.sleep(sleepInMs + random.nextInt(sleepInMs));
     }
 
-    private void leftClickWin32(int x, int y, boolean randomize) {
+    private void leftClickWin32(int x, int y, final boolean randomize) {
         // randomize coordinates little bit
         if (randomize) {
             x += -1 + random.nextInt(3);
             y += -1 + random.nextInt(3);
         }
         logger.finest("clicking " + x + " " + y);
-        int lParam = makeParam(x, y);
+        final int lParam = makeParam(x, y);
         while (isCtrlKeyDown()) {
         }
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
     }
 
-    public void msgBox(String Text) {
+    public void msgBox(final String Text) {
         msgBox(Text, "");
     }
 
-    public Color pixelGetColor(int x, int y) {
-        POINT point = new POINT(x, y);
+    public Color pixelGetColor(final int x, final int y) {
+        final POINT point = new POINT(x, y);
         clientToScreen(point);
-        Color pixel = r.getPixelColor(point.x, point.y);
+        final Color pixel = r.getPixelColor(point.x, point.y);
         return pixel;
     }
 
-    public File saveImage(BufferedImage img, String filePathFirst, String... filePathRest) throws IOException {
-        Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
+    public File saveImage(final BufferedImage img, final String filePathFirst, final String... filePathRest)
+            throws IOException {
+        final Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
         String fileName = path.getFileName().toString();
         if (!path.getFileName().toString().toLowerCase().endsWith(".png")) {
             fileName = path.getFileName().toString() + ".png";
         }
-        File file = new File(path.getParent().toString(), fileName);
+        final File file = new File(path.getParent().toString(), fileName);
         if (!file.getParentFile().isDirectory()) {
             file.getParentFile().mkdirs();
         }
@@ -196,35 +197,36 @@ public final class OS {
         return file;
     }
 
-    public File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException {
+    public File saveScreenShot(final Area area, final String filePathFirst, final String... filePathRest)
+            throws IOException {
         return saveScreenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2(), filePathFirst, filePathRest);
     }
 
-    public File saveScreenShot(int x1, int y1, int x2, int y2, String filePathFirst, String... filePathRest)
-            throws IOException {
-        BufferedImage img = screenShot(x1, y1, x2, y2);
+    public File saveScreenShot(final int x1, final int y1, final int x2, final int y2, final String filePathFirst,
+            final String... filePathRest) throws IOException {
+        final BufferedImage img = screenShot(x1, y1, x2, y2);
         return saveImage(img, filePathFirst, filePathRest);
     }
 
-    public BufferedImage screenShot(Area area) {
+    public BufferedImage screenShot(final Area area) {
         return screenShot(area.getX1(), area.getY1(), area.getX2(), area.getY2());
     }
 
-    public BufferedImage screenShot(int x1, int y1, int x2, int y2) {
-        POINT point = new POINT(x1, y1);
+    public BufferedImage screenShot(final int x1, final int y1, final int x2, final int y2) {
+        final POINT point = new POINT(x1, y1);
         clientToScreen(point);
         return r.createScreenCapture(new Rectangle(point.x, point.y, x2 - x1, y2 - y1));
     }
 
-    public void setupWin32(HWND handler) {
+    public void setupWin32(final HWND handler) {
         this.handler = handler;
     }
 
-    public void sleepRandom(int i) throws InterruptedException {
+    public void sleepRandom(final int i) throws InterruptedException {
         Thread.sleep(i + random.nextInt(i));
     }
 
-    public void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException {
+    public void sleepTillClickableIsActive(final Clickable clickable) throws InterruptedException {
         while (true) {
             if (isClickableActive(clickable)) {
                 return;
@@ -237,12 +239,12 @@ public final class OS {
         zoomUp(14);
     }
 
-    public void zoomUp(int notch) throws InterruptedException {
+    public void zoomUp(final int notch) throws InterruptedException {
         logger.info("Zooming out...");
-        int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
-        WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
-        LPARAM lparamDown = new WinDef.LPARAM(lParam);
-        LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
+        final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
+        final WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
+        final LPARAM lparamDown = new WinDef.LPARAM(lParam);
+        final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
         for (int i = 0; i < notch; i++) {
             while (isCtrlKeyDown()) {
             }

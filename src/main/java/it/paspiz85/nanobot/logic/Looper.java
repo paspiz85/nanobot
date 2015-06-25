@@ -32,7 +32,7 @@ public final class Looper {
         return waitingForDcChecker;
     }
 
-    private void loop(Context context) throws InterruptedException, BotException {
+    private void loop(final Context context) throws InterruptedException, BotException {
         Exception botException; // throw in case of timeout
         try {
             while (true) {
@@ -41,7 +41,7 @@ public final class Looper {
                 }
                 context.handle();
             }
-        } catch (InterruptedException e) {
+        } catch (final InterruptedException e) {
             // either by dc checker
             if (context.isDisconnected()) {
                 logger.info("Interrupted by dc checker.");
@@ -53,7 +53,7 @@ public final class Looper {
                 logger.info("Interrupted by user.");
                 throw e;
             }
-        } catch (Exception e) {
+        } catch (final Exception e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             botException = e;
         }
@@ -61,7 +61,7 @@ public final class Looper {
         // wait for dc checker to wake me up
         synchronized (context) {
             while (!context.isWaitDone()) {
-                long tBefore = System.currentTimeMillis();
+                final long tBefore = System.currentTimeMillis();
                 logger.info("Waiting for dc checker to wake me up...");
                 this.waitingForDcChecker = true;
                 // if user interrupts here while it is waiting, make sure
@@ -79,10 +79,11 @@ public final class Looper {
 
     public void start() throws InterruptedException, BotException {
         // state pattern
-        Context context = new Context();
+        final Context context = new Context();
         // start daemon thread that checks if you are DC'ed etc
         logger.info("Starting disconnect detector...");
-        Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()), "DisconnectCheckerThread");
+        final Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()),
+                "DisconnectCheckerThread");
         dcThread.setDaemon(true);
         dcThread.start();
         try {
