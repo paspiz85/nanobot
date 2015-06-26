@@ -8,8 +8,6 @@ import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -168,9 +166,9 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     public void handleResetButtonAction() {
-        int ret = JOptionPane.showConfirmDialog(null, "Are you sure to reset settings", "Reset Settings", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        if (ret == JOptionPane.YES_OPTION) 
-        {
+        final int ret = JOptionPane.showConfirmDialog(null, "Are you sure to reset settings", "Reset Settings",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        if (ret == JOptionPane.YES_OPTION) {
             Settings.instance().reset();
             updateSettingsPane();
         }
@@ -295,6 +293,50 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
+    @Override
+    public void setApplication(final Application application) {
+        this.application = application;
+        showSettings(false);
+    }
+
+    Point setupBarracks() {
+        logger.info("Setting up Barracks...");
+        final Point[] result = new Point[1];
+        try {
+            OS.instance().zoomUp();
+            final boolean confirmed = JOptionPane.showConfirmDialog(null, "You must configure the location "
+                    + "of first Barracks. First Barracks is the leftmost one when you \n"
+                    + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
+                    + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
+                    + "3 'next' views should also be barracks.\n\n"
+                    + "Click Yes to start configuration and click on your first barracks. Do \n"
+                    + "NOT click anything else in between. Click Yes and click barracks. \n\n"
+                    + "Make sure you are max zoomed out.", "Barracks configuration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            if (confirmed) {
+                OS.instance().waitForClick((final Point p) -> result[0] = p);
+            }
+        } catch (final Exception e) {
+            logger.severe("Unable to setup barracks: (" + e.getClass().getName() + ") " + e.getMessage());
+        }
+        return result[0];
+    }
+
+    boolean setupResolution() {
+        return JOptionPane.showConfirmDialog(null, String.format("%s must run in resolution %dx%d.\n"
+                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y),
+                "Change resolution", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+    }
+
+    void showSettings(final boolean value) {
+        setupPane.setVisible(value);
+        controlPane.setVisible(!value);
+    }
+
+    void updateButtons(final boolean value) {
+        startButton.setDisable(value);
+        stopButton.setDisable(!value);
+    }
+
     void updateSettingsPane() {
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
@@ -333,55 +375,5 @@ public class MainController implements ApplicationAwareController, Constants {
         rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2]);
         rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3]);
         configGridPane.setVisible(true);
-    }
-
-    @Override
-    public void setApplication(final Application application) {
-        this.application = application;
-        showSettings(false);
-    }
-
-    Point setupBarracks() {
-        logger.info("Setting up Barracks...");
-        final Point[] result = new Point[1];
-        try {
-            OS.instance().zoomUp();
-            final boolean confirmed = JOptionPane.showConfirmDialog(null, "You must configure the location "
-                    + "of first Barracks. First Barracks is the leftmost one when you \n"
-                    + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
-                    + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
-                    + "3 'next' views should also be barracks.\n\n"
-                    + "Click Yes to start configuration and click on your first barracks. Do \n"
-                    + "NOT click anything else in between. Click Yes and click barracks. \n\n"
-                    + "Make sure you are max zoomed out.", "Barracks configuration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-            if (confirmed) {
-                OS.instance().waitForClick(new MouseAdapter() {
-
-                    @Override
-                    public void mouseClicked(final MouseEvent e) {
-                        result[0] = new Point(e.getX(), e.getY());
-                    }
-                });
-            }
-        } catch (final Exception e) {
-            logger.severe("Unable to setup barracks: (" + e.getClass().getName() + ") " + e.getMessage());
-        }
-        return result[0];
-    }
-
-    boolean setupResolution() {
-        return JOptionPane.showConfirmDialog(null, String.format("%s must run in resolution %dx%d.\n"
-                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y),
-                "Change resolution", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-    }
-
-    void showSettings(final boolean value) {
-        setupPane.setVisible(value);
-        controlPane.setVisible(!value);
-    }
-
-    void updateButtons(final boolean value) {
-        startButton.setDisable(value);
-        stopButton.setDisable(!value);
     }
 }

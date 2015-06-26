@@ -11,8 +11,6 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -21,6 +19,7 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -295,7 +294,8 @@ public final class Win32OS implements OS, Constants {
     }
 
     @Override
-    public void waitForClick(final MouseAdapter mouseAdapter) throws InterruptedException, BotConfigurationException {
+    public void waitForClick(final Consumer<Point> pointConsumer) throws InterruptedException,
+            BotConfigurationException {
         try {
             GlobalScreen.registerNativeHook();
             GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
@@ -308,8 +308,7 @@ public final class Win32OS implements OS, Constants {
                     logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
                     final POINT screenPoint = new POINT(x, y);
                     User32.INSTANCE.ScreenToClient(handler, screenPoint);
-                    mouseAdapter.mouseClicked(new MouseEvent(null, MouseEvent.MOUSE_CLICKED,
-                            System.currentTimeMillis(), 0, screenPoint.x, screenPoint.y, x, y, 1, false, 0));
+                    pointConsumer.accept(new Point(screenPoint.x, screenPoint.y));
                     synchronized (GlobalScreen.getInstance()) {
                         GlobalScreen.getInstance().notify();
                     }

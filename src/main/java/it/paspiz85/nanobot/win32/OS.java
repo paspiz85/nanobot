@@ -5,12 +5,12 @@ import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
 
-import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 /**
  * This wraps Operating System functionalities.
@@ -54,7 +54,7 @@ public interface OS {
 
     void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
 
-    void waitForClick(MouseAdapter mouseAdapter) throws InterruptedException, BotConfigurationException;
+    void waitForClick(Consumer<Point> pointConsumer) throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
 }
