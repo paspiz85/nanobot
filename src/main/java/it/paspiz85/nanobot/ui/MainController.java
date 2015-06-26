@@ -216,7 +216,6 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     public void handleStartButtonAction() {
         if (runnerService.getState() == State.READY) {
-            setupResolution();
             runnerService.start();
         }
     }
@@ -258,6 +257,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
                     @Override
                     protected Void call() throws Exception {
+                        setupResolution();
                         updateButtons(true);
                         Looper.instance().start(() -> setupResolution(), () -> setupBarracks());
                         return null;
