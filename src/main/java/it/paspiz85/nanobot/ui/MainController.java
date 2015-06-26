@@ -301,7 +301,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
     Point setupBarracks() {
         logger.info("Setting up Barracks...");
-        final Point[] result = new Point[1];
+        Point result = null;
         try {
             OS.instance().zoomUp();
             final boolean confirmed = JOptionPane.showConfirmDialog(null, "You must configure the location "
@@ -313,12 +313,12 @@ public class MainController implements ApplicationAwareController, Constants {
                     + "NOT click anything else in between. Click Yes and click barracks. \n\n"
                     + "Make sure you are max zoomed out.", "Barracks configuration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
             if (confirmed) {
-                OS.instance().waitForClick((final Point p) -> result[0] = p);
+                result = OS.instance().waitForClick();
             }
         } catch (final Exception e) {
             logger.severe("Unable to setup barracks: (" + e.getClass().getName() + ") " + e.getMessage());
         }
-        return result[0];
+        return result;
     }
 
     boolean setupResolution() {

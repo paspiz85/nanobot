@@ -294,9 +294,10 @@ public final class Win32OS implements OS, Constants {
     }
 
     @Override
-    public void waitForClick(final Consumer<Point> pointConsumer) throws InterruptedException,
+    public Point waitForClick() throws InterruptedException,
             BotConfigurationException {
         try {
+            final Point[] result = new Point[1];
             GlobalScreen.registerNativeHook();
             GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
 
@@ -308,7 +309,7 @@ public final class Win32OS implements OS, Constants {
                     logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
                     final POINT screenPoint = new POINT(x, y);
                     User32.INSTANCE.ScreenToClient(handler, screenPoint);
-                    pointConsumer.accept(new Point(screenPoint.x, screenPoint.y));
+                    result[0] = new Point(screenPoint.x, screenPoint.y);
                     synchronized (GlobalScreen.getInstance()) {
                         GlobalScreen.getInstance().notify();
                     }
@@ -324,13 +325,14 @@ public final class Win32OS implements OS, Constants {
             });
             logger.info("Waiting for user to click on first barracks.");
             synchronized (GlobalScreen.getInstance()) {
-                while (Settings.instance().getFirstBarrackPosition() == null) {
+                while (result[0] == null) {
                     GlobalScreen.getInstance().wait();
                 }
             }
             logger.info(String.format("Set barracks location to <%d, %d>", Settings.instance()
                     .getFirstBarrackPosition().x(), Settings.instance().getFirstBarrackPosition().y()));
             GlobalScreen.unregisterNativeHook();
+            return result[0];
         } catch (final NativeHookException e) {
             throw new BotConfigurationException("Unable to capture mouse movement.", e);
         }

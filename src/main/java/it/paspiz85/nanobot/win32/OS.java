@@ -54,7 +54,7 @@ public interface OS {
 
     void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
 
-    void waitForClick(Consumer<Point> pointConsumer) throws InterruptedException, BotConfigurationException;
-
     void zoomUp() throws InterruptedException;
+
+    Point waitForClick() throws InterruptedException, BotConfigurationException;
 }
