@@ -307,7 +307,7 @@ public class MainController implements ApplicationAwareController, Constants {
         maxThField.textProperty().addListener(intFieldListener);
         logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
-        autoAttackComboBox.getItems().addAll(Settings.instance().getAvailableAttackStrategies());
+        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
         final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
         rax1ComboBox.getItems().addAll(availableTroops);

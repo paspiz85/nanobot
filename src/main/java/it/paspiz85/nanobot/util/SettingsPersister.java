@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.util;
 
+import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.Clickable;
 
 import java.io.File;
@@ -101,7 +102,17 @@ public final class SettingsPersister implements Constants {
             }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
-                settings.setAttackStrategy(attackStratProperty);
+                boolean found = false;
+                for (final Attack attack : Attack.getAvailableStrategies()) {
+                    if (attack.getClass().getSimpleName().equals(attackStratProperty)) {
+                        settings.setAttackStrategy(attack);
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    throw new IllegalArgumentException(attackStratProperty);
+                }
             }
             final String raxInfoProperty = configProperties.getProperty(PROPERTY_RAX_INFO);
             if (raxInfoProperty != null) {

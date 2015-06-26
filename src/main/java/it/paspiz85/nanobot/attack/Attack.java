@@ -6,6 +6,8 @@ import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.win32.OS;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -15,6 +17,22 @@ import java.util.logging.Logger;
  *
  */
 public abstract class Attack {
+
+    private static final ManualAttack manualStrategy;
+    static {
+        final OS os = OS.instance();
+        final List<Attack> list = new ArrayList<>();
+        manualStrategy = new ManualAttack(os);
+        list.add(manualStrategy);
+        list.add(new Attack2Side(os));
+        list.add(new Attack4Side(os));
+        list.add(new Attack4SideParallel(os));
+        list.add(new Attack4SideParallelHalf2Wave(os));
+        list.add(new Attack4SideParallelFull2Wave(os));
+        availableStrategies = list.toArray(new Attack[0]);
+    }
+
+    private static final Attack[] availableStrategies;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
@@ -28,11 +46,25 @@ public abstract class Attack {
 
     protected static final Point TOP = new Point(429, 18);
 
+    public static Attack[] getAvailableStrategies() {
+        return availableStrategies;
+    }
+
+    public static Attack manualStrategy() {
+        return manualStrategy;
+    }
+
+    protected final OS os;
+
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    protected Attack(final OS os) {
+        this.os = os;
+    }
 
     public final void attack(final Loot loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
-        OS.instance().zoomUp();
+        os.zoomUp();
         doDropUnits(attackGroup);
         sleepUntilLootDoesNotChange(loot);
         logger.info("No more loot.");

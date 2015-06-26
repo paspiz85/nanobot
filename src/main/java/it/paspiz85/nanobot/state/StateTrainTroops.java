@@ -32,7 +32,7 @@ public final class StateTrainTroops extends State {
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
             final Clickable troop = raxInfo[currRax];
             if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
-                final int clicks = 10 + OS.random().nextInt(10);
+                final int clicks = 10 + OS.RANDOM.nextInt(10);
                 logger.fine("Try training " + clicks + " " + troop.getDescription());
                 for (int i = 0; i < clicks; i++) {
                     OS.instance().leftClick(troop, true);

@@ -1,7 +1,6 @@
 package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.attack.ManualAttack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.parsing.Area;
@@ -100,7 +99,7 @@ public final class StateAttack extends State {
                 // if (true) {
                 // attack or let user manually attack
                 final Attack attackStrategy = Settings.instance().getAttackStrategy();
-                if (attackStrategy != ManualAttack.instance()) {
+                if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
                     attackStrategy.attack(loot, attackGroup);
                     OS.instance().leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
@@ -149,7 +148,7 @@ public final class StateAttack extends State {
             return;
         }
         final String[] clips = new String[] { "../audio/fight.wav", "../audio/finishim.wav", "../audio/getoverhere.wav" };
-        final URL resource = this.getClass().getResource(clips[OS.random().nextInt(clips.length)]);
+        final URL resource = this.getClass().getResource(clips[OS.RANDOM.nextInt(clips.length)]);
         try (Clip clip = AudioSystem.getClip();
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
             clip.open(audioInputStream);

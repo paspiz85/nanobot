@@ -1,17 +1,11 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.win32.OS;
+
 public final class ManualAttack extends Attack {
 
-    private static ManualAttack instance;
-
-    public static ManualAttack instance() {
-        if (instance == null) {
-            instance = new ManualAttack();
-        }
-        return instance;
-    }
-
-    private ManualAttack() {
+    ManualAttack(final OS os) {
+        super(os);
     }
 
     @Override

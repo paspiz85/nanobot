@@ -1,12 +1,6 @@
 package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.attack.Attack2Side;
-import it.paspiz85.nanobot.attack.Attack4Side;
-import it.paspiz85.nanobot.attack.Attack4SideParallel;
-import it.paspiz85.nanobot.attack.Attack4SideParallelFull2Wave;
-import it.paspiz85.nanobot.attack.Attack4SideParallelHalf2Wave;
-import it.paspiz85.nanobot.attack.ManualAttack;
 import it.paspiz85.nanobot.parsing.Clickable;
 
 import java.util.logging.Level;
@@ -56,9 +50,7 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    private Attack attackStrategy = ManualAttack.instance();
-
-    private final Attack[] availableAttackStrategies;
+    private Attack attackStrategy = Attack.manualStrategy();
 
     private final Clickable[] availableTroops;
 
@@ -90,9 +82,6 @@ public final class Settings {
             Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, };
 
     private Settings() {
-        availableAttackStrategies = new Attack[] { ManualAttack.instance(), Attack2Side.instance(),
-                Attack4Side.instance(), Attack4SideParallel.instance(), Attack4SideParallelHalf2Wave.instance(),
-                Attack4SideParallelFull2Wave.instance(), };
         availableTroops = new Clickable[] { Clickable.BUTTON_RAX_NO_UNIT, Clickable.BUTTON_RAX_BARB,
                 Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_GIANT, Clickable.BUTTON_RAX_GOBLIN,
                 Clickable.BUTTON_RAX_WB, Clickable.BUTTON_RAX_BALLOON, Clickable.BUTTON_RAX_WIZARD,
@@ -101,10 +90,6 @@ public final class Settings {
 
     public Attack getAttackStrategy() {
         return this.attackStrategy;
-    }
-
-    public Attack[] getAvailableAttackStrategies() {
-        return availableAttackStrategies;
     }
 
     public Clickable[] getAvailableTroops() {
@@ -161,20 +146,6 @@ public final class Settings {
 
     public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
-    }
-
-    void setAttackStrategy(final String attackStrategy) {
-        boolean found = false;
-        for (final Attack attack : availableAttackStrategies) {
-            if (attack.getClass().getSimpleName().equals(attackStrategy)) {
-                setAttackStrategy(attack);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            throw new IllegalArgumentException(attackStrategy);
-        }
     }
 
     public void setDarkElixirThreshold(final int darkElixirThreshold) {
