@@ -138,6 +138,7 @@ public final class SettingsPersister implements Constants {
             }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to read configuration file.", e);
+            settings.reset();
         }
     }
 

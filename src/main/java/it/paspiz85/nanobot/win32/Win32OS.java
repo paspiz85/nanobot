@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Locale;
+import java.util.function.BooleanSupplier;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
@@ -82,8 +84,6 @@ public final class Win32OS implements OS, Constants {
 
     public static final String WORKING_DIR = System.getProperty("user.dir");
 
-    private static final String BS_WINDOW_NAME = "BlueStacks App Player";
-
     public static Win32OS instance() {
         if (instance == null) {
             instance = new Win32OS();
@@ -105,8 +105,6 @@ public final class Win32OS implements OS, Constants {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private java.awt.Robot robot;
-
-    private HWND bsHwnd;
 
     private Win32OS() {
         try {
@@ -140,11 +138,6 @@ public final class Win32OS implements OS, Constants {
         final int b1 = c1 >> 0 & 0xFF;
         final int b2 = c2 >> 0 & 0xFF;
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
-    }
-
-    @Override
-    public boolean confirmationBox(final String msg, final String title) {
-        return JOptionPane.showConfirmDialog(null, msg, title, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
     @Override
@@ -185,16 +178,7 @@ public final class Win32OS implements OS, Constants {
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
     }
 
-    public void msgBox(final String text) {
-        msgBox(text, "");
-    }
-
-    @Override
-    public String name() {
-        return SYSTEM_OS;
-    }
-
-    public File saveImage(final BufferedImage img, final String filePathFirst, final String... filePathRest)
+    private File saveImage(final BufferedImage img, final String filePathFirst, final String... filePathRest)
             throws IOException {
         final Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
         String fileName = path.getFileName().toString();
@@ -226,7 +210,7 @@ public final class Win32OS implements OS, Constants {
         return screenShot(area.getP1(), area.getP2());
     }
 
-    public BufferedImage screenShot(final Point p1, final Point p2) {
+    private BufferedImage screenShot(final Point p1, final Point p2) {
         final Point anchor = clientToScreen(p1);
         final int width = p2.x() - p1.x();
         final int height = p2.y() - p1.y();
@@ -235,23 +219,16 @@ public final class Win32OS implements OS, Constants {
 
     @Override
     public void setup() throws BotConfigurationException {
+        if (!SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
+            throw new BotConfigurationException("Bot is only available for Windows OS.");
+        }
         logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
-        setupBsRect();
-        // setup resolution
-        logger.info(String.format("Setting up %s resolution...", BS_WINDOW_NAME));
-        setupResolution();
-        // setup RobotUtils
-        logger.info("Setting up OS handler...");
-        setupWin32(bsHwnd);
-    }
-
-    private void setupBsRect() throws BotConfigurationException {
-        bsHwnd = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
-        if (bsHwnd == null) {
+        handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
+        if (handler == null) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
         final int[] rect = { 0, 0, 0, 0 };
-        final int result = User32.INSTANCE.GetWindowRect(bsHwnd, rect);
+        final int result = User32.INSTANCE.GetWindowRect(handler, rect);
         if (result == 0) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
@@ -261,11 +238,12 @@ public final class Win32OS implements OS, Constants {
         final int SWP_NOSIZE = 0x0001;
         final int SWP_NOMOVE = 0x0002;
         final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-        User32.INSTANCE.SetWindowPos(bsHwnd, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
+        User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
     }
 
-    private void setupResolution() throws BotConfigurationException {
-        // update registry
+    @Override
+    public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
+        logger.info(String.format("Setting up %s resolution...", BS_WINDOW_NAME));
         try {
             final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
                     "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
@@ -273,7 +251,7 @@ public final class Win32OS implements OS, Constants {
             final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
             final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
             final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
-            final HWND control = User32.INSTANCE.GetDlgItem(bsHwnd, 0);
+            final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
             final int[] rect = new int[4];
             User32.INSTANCE.GetWindowRect(control, rect);
             final int bsX = rect[2] - rect[0];
@@ -281,11 +259,7 @@ public final class Win32OS implements OS, Constants {
             if (bsX != BS_RES_X || bsY != BS_RES_Y) {
                 logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
                 if (w1 != BS_RES_X || h1 != BS_RES_Y || w2 != BS_RES_X || h2 != BS_RES_Y) {
-                    final String msg = String.format("%s must run in resolution %dx%d.\n"
-                            + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X,
-                            BS_RES_Y);
-                    final boolean ret = OS.instance().confirmationBox(msg, "Change resolution");
-                    if (!ret) {
+                    if (!setupResolution.getAsBoolean()) {
                         throw new BotConfigurationException("Re-run when resolution is fixed.");
                     }
                     Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
@@ -301,10 +275,6 @@ public final class Win32OS implements OS, Constants {
         } catch (final Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
         }
-    }
-
-    public void setupWin32(final HWND handler) {
-        this.handler = handler;
     }
 
     @Override
@@ -337,7 +307,7 @@ public final class Win32OS implements OS, Constants {
                     final int y = e.getY();
                     logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
                     final POINT screenPoint = new POINT(x, y);
-                    User32.INSTANCE.ScreenToClient(bsHwnd, screenPoint);
+                    User32.INSTANCE.ScreenToClient(handler, screenPoint);
                     mouseAdapter.mouseClicked(new MouseEvent(null, MouseEvent.MOUSE_CLICKED,
                             System.currentTimeMillis(), 0, screenPoint.x, screenPoint.y, x, y, 1, false, 0));
                     synchronized (GlobalScreen.getInstance()) {

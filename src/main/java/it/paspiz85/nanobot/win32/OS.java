@@ -10,6 +10,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
 
 /**
  * This wraps Operating System functionalities.
@@ -27,21 +28,19 @@ public interface OS {
 
     boolean compareColor(int c1, int c2, int var);
 
-    boolean confirmationBox(String msg, String title);
-
     boolean isClickableActive(Clickable clickable);
 
     void leftClick(Clickable clickable, boolean randomize) throws InterruptedException;
 
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
-    String name();
-
     File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException;
 
     BufferedImage screenShot(Area area);
 
     void setup() throws BotConfigurationException;
+
+    void setupResolution(BooleanSupplier setupResolution) throws BotConfigurationException;
 
     /**
      * Sleep random interval between sleepInMs and 2*sleepInMs.

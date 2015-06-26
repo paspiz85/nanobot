@@ -10,3 +10,6 @@ count trofei
 raccolta risorse
 reset barrack location
 i18n
+test cucumber
+
+test no barracks available cases

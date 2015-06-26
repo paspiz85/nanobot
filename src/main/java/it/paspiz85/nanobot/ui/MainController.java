@@ -2,11 +2,14 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
-import it.paspiz85.nanobot.logic.Setup;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.win32.OS;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -30,6 +33,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 
+import javax.swing.JOptionPane;
+
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
@@ -43,95 +48,90 @@ import org.kohsuke.github.GitHub;
  */
 public class MainController implements ApplicationAwareController, Constants {
 
-    Application application;
+    private Application application;
 
     @FXML
-    ComboBox<Attack> autoAttackComboBox;
+    private ComboBox<Attack> autoAttackComboBox;
 
     @FXML
-    Button cancelButton;
+    private GridPane configGridPane;
 
     @FXML
-    GridPane configGridPane;
+    private CheckBox saveEnemyCheckBox;
 
     @FXML
-    CheckBox saveEnemyCheckBox;
+    private AnchorPane controlPane;
 
     @FXML
-    AnchorPane controlPane;
+    private TextField deField;
 
     @FXML
-    TextField deField;
+    private CheckBox detectEmptyCollectorsCheckBox;
 
     @FXML
-    CheckBox detectEmptyCollectorsCheckBox;
+    private Label donateLabel;
 
     @FXML
-    Label donateLabel;
+    private Hyperlink donateLink;
 
     @FXML
-    Hyperlink donateLink;
+    private TextField elixirField;
 
     @FXML
-    TextField elixirField;
+    private Hyperlink githubLink;
 
     @FXML
-    Hyperlink githubLink;
+    private TextField goldField;
 
     @FXML
-    TextField goldField;
+    private ImageView heartImage;
 
     @FXML
-    ImageView heartImage;
-
-    @FXML
-    CheckBox isMatchAllConditionsCheckBox;
+    private CheckBox isMatchAllConditionsCheckBox;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     @FXML
-    TextField maxThField;
+    private TextField maxThField;
 
     @FXML
-    CheckBox playSoundCheckBox;
+    private CheckBox playSoundCheckBox;
 
     @FXML
-    ComboBox<Level> logLevelComboBox;
+    private ComboBox<Level> logLevelComboBox;
 
     @FXML
-    ComboBox<Clickable> rax1ComboBox;
+    private ComboBox<Clickable> rax1ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax2ComboBox;
+    private ComboBox<Clickable> rax2ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax3ComboBox;
+    private ComboBox<Clickable> rax3ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax4ComboBox;
+    private ComboBox<Clickable> rax4ComboBox;
 
     @FXML
-    Button settingsButton;
+    private Button settingsButton;
 
     @FXML
-    AnchorPane setupPane;
+    private AnchorPane setupPane;
 
     @FXML
-    Button startButton;
+    private Button startButton;
 
     @FXML
-    Button stopButton;
+    private Button stopButton;
 
     @FXML
-    TextArea textArea;
+    private TextArea textArea;
 
     @FXML
-    Label updateLabel;
+    private Label updateLabel;
 
     @FXML
-    Label versionLabel;
-
-    private boolean setupDone;
+    private Label versionLabel;
 
     private Service<Void> runnerService;
 
@@ -164,6 +164,16 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     public void handleCancelButtonAction() {
         showSettings(false);
+    }
+
+    @FXML
+    public void handleResetButtonAction() {
+        int ret = JOptionPane.showConfirmDialog(null, "Are you sure to reset settings", "Reset Settings", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
+        if (ret == JOptionPane.YES_OPTION) 
+        {
+            Settings.instance().reset();
+            updateSettingsPane();
+        }
     }
 
     @FXML
@@ -215,7 +225,7 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     @FXML
-    void initialize() {
+    private void initialize() {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
@@ -226,7 +236,7 @@ public class MainController implements ApplicationAwareController, Constants {
         logger.info("Make sure in-game language is English.");
         initLabels();
         initLinks();
-        initSettingsPane();
+        updateSettingsPane();
         initializeRunnerService();
         if (checkForUpdate()) {
             updateLabel.setVisible(true);
@@ -244,13 +254,7 @@ public class MainController implements ApplicationAwareController, Constants {
                     @Override
                     protected Void call() throws Exception {
                         updateButtons(true);
-                        if (!setupDone) {
-                            Setup.instance().setup();
-                            Settings.instance().save();
-                            setupDone = true;
-                        }
-                        logger.info("Setup is successful.");
-                        Looper.instance().start();
+                        Looper.instance().start(() -> setupResolution(), () -> setupBarracks());
                         return null;
                     }
                 };
@@ -291,7 +295,7 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
-    void initSettingsPane() {
+    void updateSettingsPane() {
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
                 if (!newValue.isEmpty()) {
@@ -335,6 +339,40 @@ public class MainController implements ApplicationAwareController, Constants {
     public void setApplication(final Application application) {
         this.application = application;
         showSettings(false);
+    }
+
+    Point setupBarracks() {
+        logger.info("Setting up Barracks...");
+        final Point[] result = new Point[1];
+        try {
+            OS.instance().zoomUp();
+            final boolean confirmed = JOptionPane.showConfirmDialog(null, "You must configure the location "
+                    + "of first Barracks. First Barracks is the leftmost one when you \n"
+                    + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
+                    + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
+                    + "3 'next' views should also be barracks.\n\n"
+                    + "Click Yes to start configuration and click on your first barracks. Do \n"
+                    + "NOT click anything else in between. Click Yes and click barracks. \n\n"
+                    + "Make sure you are max zoomed out.", "Barracks configuration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+            if (confirmed) {
+                OS.instance().waitForClick(new MouseAdapter() {
+
+                    @Override
+                    public void mouseClicked(final MouseEvent e) {
+                        result[0] = new Point(e.getX(), e.getY());
+                    }
+                });
+            }
+        } catch (final Exception e) {
+            logger.severe("Unable to setup barracks: (" + e.getClass().getName() + ") " + e.getMessage());
+        }
+        return result[0];
+    }
+
+    boolean setupResolution() {
+        return JOptionPane.showConfirmDialog(null, String.format("%s must run in resolution %dx%d.\n"
+                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y),
+                "Change resolution", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
     }
 
     void showSettings(final boolean value) {
