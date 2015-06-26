@@ -9,6 +9,7 @@ import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.win32.OS;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,7 +20,10 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -30,8 +34,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-
-import javax.swing.JOptionPane;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
 import org.kohsuke.github.GHRelease;
@@ -166,9 +168,12 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     public void handleResetButtonAction() {
-        final int ret = JOptionPane.showConfirmDialog(null, "Are you sure to reset settings", "Reset Settings",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null);
-        if (ret == JOptionPane.YES_OPTION) {
+        final Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Reset Settings");
+        alert.setHeaderText("This operation delete previous settings");
+        alert.setContentText("Are you sure?");
+        final Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
             Settings.instance().reset();
             updateSettingsPane();
         }
@@ -301,30 +306,37 @@ public class MainController implements ApplicationAwareController, Constants {
 
     Point setupBarracks() {
         logger.info("Setting up Barracks...");
-        Point result = null;
+        Point point = null;
         try {
             OS.instance().zoomUp();
-            final boolean confirmed = JOptionPane.showConfirmDialog(null, "You must configure the location "
-                    + "of first Barracks. First Barracks is the leftmost one when you \n"
+            final Alert alert = new Alert(AlertType.CONFIRMATION);
+            alert.setTitle("Barracks configuration");
+            alert.setHeaderText("You must configure the location " + "of first Barracks");
+            alert.setContentText("First Barracks is the leftmost one when you \n"
                     + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
                     + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
                     + "3 'next' views should also be barracks.\n\n"
                     + "Click Yes to start configuration and click on your first barracks. Do \n"
                     + "NOT click anything else in between. Click Yes and click barracks. \n\n"
-                    + "Make sure you are max zoomed out.", "Barracks configuration", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
-            if (confirmed) {
-                result = OS.instance().waitForClick();
+                    + "Make sure you are max zoomed out.");
+            final Optional<ButtonType> result = alert.showAndWait();
+            if (result.get() == ButtonType.OK) {
+                point = OS.instance().waitForClick();
             }
         } catch (final Exception e) {
-            logger.severe("Unable to setup barracks: (" + e.getClass().getName() + ") " + e.getMessage());
+            logger.log(Level.SEVERE, "Unable to setup barracks", e);
         }
-        return result;
+        return point;
     }
 
     boolean setupResolution() {
-        return JOptionPane.showConfirmDialog(null, String.format("%s must run in resolution %dx%d.\n"
-                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y),
-                "Change resolution", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+        final Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Resolution");
+        alert.setHeaderText("Confirm changing resolution");
+        alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
+                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y));
+        final Optional<ButtonType> result = alert.showAndWait();
+        return result.get() == ButtonType.OK;
     }
 
     void showSettings(final boolean value) {

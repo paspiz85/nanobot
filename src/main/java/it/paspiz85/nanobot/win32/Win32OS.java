@@ -19,11 +19,9 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -93,10 +91,6 @@ public final class Win32OS implements OS, Constants {
     private static int makeParam(final int low, final int high) {
         // to work for negative numbers
         return high << 16 | low << 16 >>> 16;
-    }
-
-    private static void msgBox(final String text, final String title) {
-        JOptionPane.showMessageDialog(null, text, title, JOptionPane.PLAIN_MESSAGE);
     }
 
     private HWND handler;
@@ -294,8 +288,7 @@ public final class Win32OS implements OS, Constants {
     }
 
     @Override
-    public Point waitForClick() throws InterruptedException,
-            BotConfigurationException {
+    public Point waitForClick() throws InterruptedException, BotConfigurationException {
         try {
             final Point[] result = new Point[1];
             GlobalScreen.registerNativeHook();

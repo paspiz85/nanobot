@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
-import java.util.function.Consumer;
 
 /**
  * This wraps Operating System functionalities.
@@ -54,7 +53,7 @@ public interface OS {
 
     void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
 
-    void zoomUp() throws InterruptedException;
-
     Point waitForClick() throws InterruptedException, BotConfigurationException;
+
+    void zoomUp() throws InterruptedException;
 }
