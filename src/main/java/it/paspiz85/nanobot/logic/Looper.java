@@ -102,6 +102,7 @@ public final class Looper {
         }
         OS.instance().setupResolution(setupResolution);
         if (Settings.instance().getFirstBarrackPosition() == null) {
+            logger.info("Setting up Barracks...");
             final Point point = setupBarracks.get();
             if (point == null) {
                 throw new BotConfigurationException("Cannot proceed without barracks");

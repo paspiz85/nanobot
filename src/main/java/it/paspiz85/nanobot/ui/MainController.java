@@ -14,6 +14,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Service;
@@ -26,7 +27,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -257,7 +257,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
                     @Override
                     protected Void call() throws Exception {
-                        setupResolution();
                         updateButtons(true);
                         Looper.instance().start(() -> setupResolution(), () -> setupBarracks());
                         return null;
@@ -300,6 +299,27 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
+    private void platformRunNow(final Runnable runnable) throws InterruptedException {
+        final boolean[] done = new boolean[1];
+        final Runnable sync = new Runnable() {
+
+            @Override
+            public void run() {
+                runnable.run();
+                done[0] = true;
+                synchronized (this) {
+                    this.notify();
+                }
+            }
+        };
+        Platform.runLater(sync);
+        synchronized (sync) {
+            while (!done[0]) {
+                sync.wait();
+            }
+        }
+    }
+
     @Override
     public void setApplication(final Application application) {
         this.application = application;
@@ -307,38 +327,52 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     Point setupBarracks() {
-        logger.info("Setting up Barracks...");
-        Point point = null;
+        final Point[] point = new Point[1];
         try {
-            OS.instance().zoomUp();
-            final Alert alert = new Alert(AlertType.CONFIRMATION);
-            alert.setTitle("Barracks configuration");
-            alert.setHeaderText("You must configure the location " + "of first Barracks");
-            alert.setContentText("First Barracks is the leftmost one when you \n"
-                    + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
-                    + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
-                    + "3 'next' views should also be barracks.\n\n"
-                    + "Click Yes to start configuration and click on your first barracks. Do \n"
-                    + "NOT click anything else in between. Click Yes and click barracks. \n\n"
-                    + "Make sure you are max zoomed out.");
-            final Optional<ButtonType> result = alert.showAndWait();
-            if (result.get() == ButtonType.OK) {
-                point = OS.instance().waitForClick();
-            }
+            platformRunNow(() -> {
+                try {
+                    OS.instance().zoomUp();
+                    final Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Barracks configuration");
+                    alert.setHeaderText("You must configure the location " + "of first Barracks");
+                    alert.setContentText("First Barracks is the leftmost one when you \n"
+                            + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
+                            + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
+                            + "3 'next' views should also be barracks.\n\n"
+                            + "Click Yes to start configuration and click on your first barracks. Do \n"
+                            + "NOT click anything else in between. Click Yes and click barracks. \n\n"
+                            + "Make sure you are max zoomed out.");
+                    final Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        point[0] = OS.instance().waitForClick();
+                    }
+                } catch (final Exception e) {
+                    logger.log(Level.SEVERE, "Unable to setup barracks", e);
+                }
+            });
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to setup barracks", e);
         }
-        return point;
+        return point[0];
     }
 
     boolean setupResolution() {
-        final Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.setTitle("Resolution");
-        alert.setHeaderText("Confirm changing resolution");
-        alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
-                + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X, BS_RES_Y));
-        final Optional<ButtonType> result = alert.showAndWait();
-        return result.get() == ButtonType.OK;
+        final boolean[] ret = new boolean[1];
+        try {
+            platformRunNow(() -> {
+                final Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Resolution");
+                alert.setHeaderText("Confirm changing resolution");
+                alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
+                        + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X,
+                        BS_RES_Y));
+                final Optional<ButtonType> result = alert.showAndWait();
+                ret[0] = result.get() == ButtonType.OK;
+            });
+        } catch (final Exception e) {
+            logger.log(Level.SEVERE, "Unable to setup resolution", e);
+        }
+        return ret[0];
     }
 
     void showSettings(final boolean value) {
