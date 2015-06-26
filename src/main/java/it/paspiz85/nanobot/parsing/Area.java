@@ -12,7 +12,7 @@ import it.paspiz85.nanobot.util.Point;
 public enum Area implements Constants {
     ATTACK_GROUP(new Point(24, 554), new Point(836, 653)), BARRACKS_BUTTONS(new Point(188, 581), new Point(679, 679)), ENEMY_BASE(
             new Point(31, 0), new Point(831, 510)), ENEMY_LOOT(new Point(17, 68), new Point(138, 240)), FULLSCREEN(
-            new Point(0, 0), new Point(BS_RES_X - 1, BS_RES_Y - 1));
+                    new Point(0, 0), new Point(BS_RES_X - 1, BS_RES_Y - 1));
 
     private final Point p1;
 

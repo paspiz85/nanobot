@@ -107,6 +107,7 @@ public final class Looper {
             if (point == null) {
                 throw new BotConfigurationException("Cannot proceed without barracks");
             }
+            logger.info(String.format("Set barracks location to <%d, %d>", point.x(), point.y()));
             Settings.instance().setFirstBarrackPosition(point);
             Settings.instance().save();
         }

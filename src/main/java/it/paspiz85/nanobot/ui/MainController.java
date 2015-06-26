@@ -348,6 +348,7 @@ public class MainController implements ApplicationAwareController, Constants {
                             + "Make sure you are max zoomed out.");
                     final Optional<ButtonType> result = alert.showAndWait();
                     if (result.get() == ButtonType.OK) {
+                        logger.info("Waiting for user to click on first barracks.");
                         point[0] = OS.instance().waitForClick();
                     }
                 } catch (final Exception e) {

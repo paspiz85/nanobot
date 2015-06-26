@@ -5,7 +5,6 @@ import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.util.Settings;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -316,14 +315,11 @@ public final class Win32OS implements OS, Constants {
                 public void nativeMouseReleased(final NativeMouseEvent e) {
                 }
             });
-            logger.info("Waiting for user to click on first barracks.");
             synchronized (GlobalScreen.getInstance()) {
                 while (result[0] == null) {
                     GlobalScreen.getInstance().wait();
                 }
             }
-            logger.info(String.format("Set barracks location to <%d, %d>", Settings.instance()
-                    .getFirstBarrackPosition().x(), Settings.instance().getFirstBarrackPosition().y()));
             GlobalScreen.unregisterNativeHook();
             return result[0];
         } catch (final NativeHookException e) {
