@@ -305,19 +305,23 @@ public class MainController implements ApplicationAwareController, Constants {
 
             @Override
             public void run() {
+                logger.fine("platformRunNow run start");
                 runnable.run();
                 done[0] = true;
+                logger.fine("platformRunNow run complete");
                 synchronized (this) {
                     this.notify();
                 }
             }
         };
         Platform.runLater(sync);
+        logger.fine("platformRunNow wait start");
         synchronized (sync) {
             while (!done[0]) {
                 sync.wait();
             }
         }
+        logger.fine("platformRunNow wait complete");
     }
 
     @Override
