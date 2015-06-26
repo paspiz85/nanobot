@@ -240,6 +240,7 @@ public class MainController implements ApplicationAwareController, Constants {
         logger.info("Make sure in-game language is English.");
         initLabels();
         initLinks();
+        initSettingsPane();
         updateSettingsPane();
         initializeRunnerService();
         if (checkForUpdate()) {
@@ -297,6 +298,31 @@ public class MainController implements ApplicationAwareController, Constants {
             application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
             donateLink.setVisited(false);
         });
+    }
+
+    private void initSettingsPane() {
+        final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
+            try {
+                if (!newValue.isEmpty()) {
+                    Integer.parseInt(newValue);
+                }
+            } catch (final NumberFormatException e) {
+                ((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
+            }
+        };
+        goldField.textProperty().addListener(intFieldListener);
+        elixirField.textProperty().addListener(intFieldListener);
+        deField.textProperty().addListener(intFieldListener);
+        maxThField.textProperty().addListener(intFieldListener);
+        logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
+        logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
+        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
+        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
+        final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
+        rax1ComboBox.getItems().addAll(availableTroops);
+        rax2ComboBox.getItems().addAll(availableTroops);
+        rax3ComboBox.getItems().addAll(availableTroops);
+        rax4ComboBox.getItems().addAll(availableTroops);
     }
 
     private void platformRunNow(final Runnable runnable) throws InterruptedException {
@@ -391,28 +417,6 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     void updateSettingsPane() {
-        final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
-            try {
-                if (!newValue.isEmpty()) {
-                    Integer.parseInt(newValue);
-                }
-            } catch (final NumberFormatException e) {
-                ((TextField) ((StringProperty) observable).getBean()).setText(oldValue);
-            }
-        };
-        goldField.textProperty().addListener(intFieldListener);
-        elixirField.textProperty().addListener(intFieldListener);
-        deField.textProperty().addListener(intFieldListener);
-        maxThField.textProperty().addListener(intFieldListener);
-        logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
-        logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
-        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
-        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-        final Clickable[] availableTroops = Settings.instance().getAvailableTroops();
-        rax1ComboBox.getItems().addAll(availableTroops);
-        rax2ComboBox.getItems().addAll(availableTroops);
-        rax3ComboBox.getItems().addAll(availableTroops);
-        rax4ComboBox.getItems().addAll(availableTroops);
         goldField.setText(Settings.instance().getGoldThreshold() + "");
         elixirField.setText(Settings.instance().getElixirThreshold() + "");
         deField.setText(Settings.instance().getDarkElixirThreshold() + "");
@@ -427,6 +431,5 @@ public class MainController implements ApplicationAwareController, Constants {
         rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1]);
         rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2]);
         rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3]);
-        configGridPane.setVisible(true);
     }
 }

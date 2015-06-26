@@ -18,21 +18,9 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
-    private static final ManualAttack manualStrategy;
-    static {
-        final OS os = OS.instance();
-        final List<Attack> list = new ArrayList<>();
-        manualStrategy = new ManualAttack(os);
-        list.add(manualStrategy);
-        list.add(new Attack2Side(os));
-        list.add(new Attack4Side(os));
-        list.add(new Attack4SideParallel(os));
-        list.add(new Attack4SideParallelHalf2Wave(os));
-        list.add(new Attack4SideParallelFull2Wave(os));
-        availableStrategies = list.toArray(new Attack[0]);
-    }
+    private static ManualAttack manualStrategy;
 
-    private static final Attack[] availableStrategies;
+    private static Attack[] availableStrategies;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
@@ -47,10 +35,24 @@ public abstract class Attack {
     protected static final Point TOP = new Point(429, 18);
 
     public static Attack[] getAvailableStrategies() {
+        if (availableStrategies == null) {
+            final OS os = OS.instance();
+            final List<Attack> list = new ArrayList<>();
+            list.add(manualStrategy());
+            list.add(new Attack2Side(os));
+            list.add(new Attack4Side(os));
+            list.add(new Attack4SideParallel(os));
+            list.add(new Attack4SideParallelHalf2Wave(os));
+            list.add(new Attack4SideParallelFull2Wave(os));
+            availableStrategies = list.toArray(new Attack[0]);
+        }
         return availableStrategies;
     }
 
     public static Attack manualStrategy() {
+        if (manualStrategy == null) {
+            manualStrategy = new ManualAttack(OS.instance());
+        }
         return manualStrategy;
     }
 
@@ -111,7 +113,7 @@ public abstract class Attack {
             diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
             diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
                     - currLoot.getDarkElixir() : 0;
-            prevLoot = currLoot;
+                    prevLoot = currLoot;
         }
     }
 
