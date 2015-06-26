@@ -1,6 +1,5 @@
 donation
 javadoc
-checkstyle
 remove v-ppizzuti
 
 code
