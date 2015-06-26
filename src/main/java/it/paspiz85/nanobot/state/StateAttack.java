@@ -3,12 +3,12 @@ package it.paspiz85.nanobot.state;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Settings;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.io.IOException;
 import java.net.URL;

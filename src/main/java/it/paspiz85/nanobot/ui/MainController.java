@@ -2,11 +2,11 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.util.Locale;
 import java.util.Optional;

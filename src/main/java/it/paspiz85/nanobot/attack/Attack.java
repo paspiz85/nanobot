@@ -1,10 +1,10 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.util.ArrayList;
 import java.util.List;

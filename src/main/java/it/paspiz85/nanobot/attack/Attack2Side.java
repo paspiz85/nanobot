@@ -1,8 +1,8 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
 /**
  * Attack from 2 side (top-right and top-left) using half units for each side.

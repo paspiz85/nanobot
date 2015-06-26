@@ -2,8 +2,8 @@ package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Color;
 import java.awt.Polygon;

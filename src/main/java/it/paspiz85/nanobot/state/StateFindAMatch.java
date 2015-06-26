@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.state;
 
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.win32.OS;
 
 /**
  * This state is when bot switch from training mode to attack mode.

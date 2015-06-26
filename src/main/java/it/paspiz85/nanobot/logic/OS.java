@@ -1,9 +1,10 @@
-package it.paspiz85.nanobot.win32;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.win32.Win32OS;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -19,7 +20,7 @@ import java.util.function.BooleanSupplier;
  */
 public interface OS {
 
-    static final Random RANDOM = new Random();
+    Random RANDOM = new Random();
 
     static OS instance() {
         return Win32OS.instance();

@@ -1,8 +1,8 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
 /**
  * {@link Attack4Side} variant that attack in parallel from top and from bottom.

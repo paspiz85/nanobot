@@ -6,7 +6,6 @@ import it.paspiz85.nanobot.state.Context;
 import it.paspiz85.nanobot.state.StateIdle;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;

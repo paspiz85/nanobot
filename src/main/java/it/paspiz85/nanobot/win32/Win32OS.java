@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.win32;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
+import it.paspiz85.nanobot.logic.OS;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
@@ -37,6 +38,12 @@ import com.sun.jna.platform.win32.WinNT;
 import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
+/**
+ * Implementation of {@link OS} for Windows.
+ *
+ * @author paspiz85
+ *
+ */
 public final class Win32OS implements OS, Constants {
 
     private static Win32OS instance;
@@ -80,6 +87,12 @@ public final class Win32OS implements OS, Constants {
 
     public static final String WORKING_DIR = System.getProperty("user.dir");
 
+    private static final int SWP_NOSIZE = 0x0001;
+
+    private static final int SWP_NOMOVE = 0x0002;
+
+    private static final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
+
     public static Win32OS instance() {
         if (instance == null) {
             instance = new Win32OS();
@@ -110,11 +123,6 @@ public final class Win32OS implements OS, Constants {
         final POINT point = new POINT(clientPoint.x(), clientPoint.y());
         User32.INSTANCE.ClientToScreen(handler, point);
         return new Point(point.x, point.y);
-    }
-
-    @Deprecated
-    private boolean clientToScreene(final POINT clientPoint) {
-        return User32.INSTANCE.ClientToScreen(handler, clientPoint);
     }
 
     private boolean compareColor(final Color c1, final Color c2, final int var) {
@@ -227,9 +235,6 @@ public final class Win32OS implements OS, Constants {
         logger.finest(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
                 Arrays.toString(rect)));
         // set bs always on top
-        final int SWP_NOSIZE = 0x0001;
-        final int SWP_NOMOVE = 0x0002;
-        final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
     }
 
