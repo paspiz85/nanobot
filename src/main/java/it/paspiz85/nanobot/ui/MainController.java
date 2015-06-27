@@ -114,6 +114,12 @@ public class MainController implements ApplicationAwareController, Constants {
     private ComboBox<Clickable> rax4ComboBox;
 
     @FXML
+    private ComboBox<Clickable> rax5ComboBox;
+
+    @FXML
+    private ComboBox<Clickable> rax6ComboBox;
+
+    @FXML
     private Button settingsButton;
 
     @FXML
@@ -204,6 +210,8 @@ public class MainController implements ApplicationAwareController, Constants {
         Settings.instance().getRaxInfo()[1] = rax2ComboBox.getValue();
         Settings.instance().getRaxInfo()[2] = rax3ComboBox.getValue();
         Settings.instance().getRaxInfo()[3] = rax4ComboBox.getValue();
+        Settings.instance().getRaxInfo()[4] = rax5ComboBox.getValue();
+        Settings.instance().getRaxInfo()[5] = rax6ComboBox.getValue();
         Settings.instance().save();
         showSettings(false);
     }
@@ -323,6 +331,8 @@ public class MainController implements ApplicationAwareController, Constants {
         rax2ComboBox.getItems().addAll(availableTroops);
         rax3ComboBox.getItems().addAll(availableTroops);
         rax4ComboBox.getItems().addAll(availableTroops);
+        rax5ComboBox.getItems().addAll(availableTroops);
+        rax6ComboBox.getItems().addAll(availableTroops);
     }
 
     private void platformRunNow(final Runnable runnable) throws InterruptedException {
@@ -431,5 +441,7 @@ public class MainController implements ApplicationAwareController, Constants {
         rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1]);
         rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2]);
         rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3]);
+        rax5ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[4]);
+        rax6ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[5]);
     }
 }

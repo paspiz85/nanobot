@@ -10,4 +10,3 @@ i18n
 statistics
 mail notify
 todo annotation
-test esterni
