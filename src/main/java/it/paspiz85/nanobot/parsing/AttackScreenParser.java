@@ -36,7 +36,7 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  * @author paspiz85
  *
  */
-public final class AttackScreenParser extends AbstractParser {
+public final class AttackScreenParser extends Parser {
 
     private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);
 

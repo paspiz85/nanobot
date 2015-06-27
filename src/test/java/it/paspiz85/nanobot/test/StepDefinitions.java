@@ -2,8 +2,9 @@ package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.parsing.Area;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.Parser;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -45,6 +46,6 @@ public class StepDefinitions {
         final int x2 = Area.ENEMY_LOOT.getP2().x();
         final int y2 = Area.ENEMY_LOOT.getP2().y();
         final BufferedImage lootScreenshot = screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
-        loot = Parsers.getAttackScreen().parseLoot(lootScreenshot);
+        loot = Parser.getInstance(AttackScreenParser.class).parseLoot(lootScreenshot);
     }
 }

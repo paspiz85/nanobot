@@ -1,9 +1,10 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.MainScreenParser;
+import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -13,7 +14,7 @@ import it.paspiz85.nanobot.util.Settings;
  * @author paspiz85
  *
  */
-public final class StateMainMenu extends State {
+public final class StateMainMenu extends State<MainScreenParser> {
 
     private static StateMainMenu instance;
 
@@ -25,6 +26,7 @@ public final class StateMainMenu extends State {
     }
 
     private StateMainMenu() {
+        super(Parser.getInstance(MainScreenParser.class));
     }
 
     @Override
@@ -40,13 +42,13 @@ public final class StateMainMenu extends State {
         logger.fine("Try open barracks");
         OS.instance().leftClick(firstRax, false);
         OS.instance().sleepRandom(500);
-        Point trainButton = Parsers.getMainscreen().findTrainButton();
+        Point trainButton = getParser().findTrainButton();
         if (trainButton == null) {
             // maybe rax was already open and we closed it back
             logger.fine("Try open barracks again");
             OS.instance().leftClick(firstRax, false);
             OS.instance().sleepRandom(500);
-            trainButton = Parsers.getMainscreen().findTrainButton();
+            trainButton = getParser().findTrainButton();
         }
         if (trainButton == null) {
             throw new BotConfigurationException("Barracks location is not correct.");

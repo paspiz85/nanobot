@@ -1,13 +1,14 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Area;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.io.IOException;
@@ -24,7 +25,7 @@ import javax.sound.sampled.Clip;
  * @author paspiz85
  *
  */
-public final class StateAttack extends State {
+public final class StateAttack extends State<AttackScreenParser> {
 
     private static StateAttack instance;
 
@@ -38,6 +39,7 @@ public final class StateAttack extends State {
     private Loot prevLoot;
 
     private StateAttack() {
+        super(Parser.getInstance(AttackScreenParser.class));
     }
 
     public boolean doConditionsMatch(final Loot loot) {
@@ -81,10 +83,9 @@ public final class StateAttack extends State {
             Loot loot;
             boolean doAttack = false;
             try {
-                loot = Parsers.getAttackScreen().parseLoot();
+                loot = getParser().parseLoot();
                 doAttack = doConditionsMatch(loot)
-                        && (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
-                                .isCollectorFullBase());
+                        && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
             } catch (final BotBadBaseException e) {
                 try {
                     OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
@@ -93,7 +94,7 @@ public final class StateAttack extends State {
                 }
                 throw e;
             }
-            final int[] attackGroup = Parsers.getAttackScreen().parseTroopCount();
+            final int[] attackGroup = getParser().parseTroopCount();
             if (doAttack) {
                 // // debug
                 // if (true) {
@@ -128,7 +129,6 @@ public final class StateAttack extends State {
                      */
                     Thread.sleep(5000);
                 }
-                context.setState(StateIdle.instance());
                 break;
             } else {
                 // next
@@ -141,6 +141,7 @@ public final class StateAttack extends State {
                 OS.instance().sleepRandom(1000);
             }
         }
+        context.setState(StateIdle.instance());
     }
 
     void playAttackReady() {

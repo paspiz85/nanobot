@@ -7,3 +7,6 @@ count trofei
 check english lang
 i18n
 
+statistics
+mail notify
+todo

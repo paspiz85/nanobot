@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
  * @author paspiz85
  *
  */
-public final class MainScreenParser extends AbstractParser {
+public final class MainScreenParser extends Parser {
 
     MainScreenParser() {
     }

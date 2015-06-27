@@ -50,7 +50,7 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    private Attack attackStrategy = Attack.manualStrategy();
+    private Attack attackStrategy = Attack.noStrategy();
 
     private final Clickable[] availableTroops;
 

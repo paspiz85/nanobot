@@ -2,8 +2,9 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.os.OS;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public abstract class Attack {
 
     private static Attack[] availableStrategies;
 
+    private static NoAttack noStrategy;
+
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
     protected static final Point BOTTOM_RIGHT = new Point(537, 538);
@@ -38,6 +41,7 @@ public abstract class Attack {
         if (availableStrategies == null) {
             final OS os = OS.instance();
             final List<Attack> list = new ArrayList<>();
+            list.add(noStrategy());
             list.add(manualStrategy());
             list.add(new Attack2Side(os));
             list.add(new Attack4Side(os));
@@ -56,11 +60,18 @@ public abstract class Attack {
         return manualStrategy;
     }
 
+    public static Attack noStrategy() {
+        if (noStrategy == null) {
+            noStrategy = new NoAttack(OS.instance());
+        }
+        return noStrategy;
+    }
+
     protected final OS os;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected Attack(final OS os) {
+    Attack(final OS os) {
         this.os = os;
     }
 
@@ -101,7 +112,7 @@ public abstract class Attack {
             Thread.sleep(15000);
             Loot currLoot;
             try {
-                currLoot = Parsers.getAttackScreen().parseLoot();
+                currLoot = Parser.getInstance(AttackScreenParser.class).parseLoot();
             } catch (final BotBadBaseException e) {
                 Thread.sleep(2000);
                 // in case of 100% win/no troops left, attack screen will end

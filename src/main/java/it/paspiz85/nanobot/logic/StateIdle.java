@@ -1,7 +1,8 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.Parser;
 
 /**
  * This state is when bot sleeps.
@@ -9,7 +10,7 @@ import it.paspiz85.nanobot.parsing.Clickable;
  * @author paspiz85
  *
  */
-public final class StateIdle extends State {
+public final class StateIdle extends State<Parser> {
 
     private static StateIdle instance;
 
@@ -23,11 +24,12 @@ public final class StateIdle extends State {
     private boolean reloading;
 
     private StateIdle() {
+        super(Parser.getInstance(null));
     }
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        State nextState = null;
+        State<?> nextState = null;
         while (true) {
             logger.info("Idle");
             if (Thread.interrupted()) {
