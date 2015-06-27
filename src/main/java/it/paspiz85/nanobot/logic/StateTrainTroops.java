@@ -37,21 +37,21 @@ public final class StateTrainTroops extends State<MainScreenParser> {
                 final int clicks = 10 + OS.RANDOM.nextInt(10);
                 logger.fine("Try training " + clicks + " " + troop.getDescription());
                 for (int i = 0; i < clicks; i++) {
-                    OS.instance().leftClick(troop, true);
-                    OS.instance().sleepRandom(75);
+                    os.leftClick(troop, true);
+                    os.sleepRandom(75);
                 }
             }
             if (currRax < raxInfo.length - 1) {
                 logger.fine("Goto next barrack");
-                OS.instance().leftClick(Clickable.BUTTON_RAX_NEXT, true);
-                OS.instance().sleepRandom(350);
+                os.leftClick(Clickable.BUTTON_RAX_NEXT, true);
+                os.sleepRandom(350);
             }
         }
         logger.fine("Close Training Troops");
-        OS.instance().leftClick(Clickable.BUTTON_RAX_CLOSE, true);
-        OS.instance().sleepRandom(250);
+        os.leftClick(Clickable.BUTTON_RAX_CLOSE, true);
+        os.sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time
-        OS.instance().sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
+        os.sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
     }
 }

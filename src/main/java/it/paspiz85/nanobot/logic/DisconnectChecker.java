@@ -20,6 +20,8 @@ public class DisconnectChecker implements Runnable {
 
     private final Thread mainThread;
 
+    private final OS os = OS.instance();
+
     public DisconnectChecker(final Context context, final Thread mainThread) {
         this.context = context;
         this.mainThread = mainThread;
@@ -33,7 +35,7 @@ public class DisconnectChecker implements Runnable {
                 if (Thread.interrupted()) {
                     throw new InterruptedException("Disconnect detector is interrupted.");
                 }
-                if (OS.instance().isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
+                if (os.isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
                     logger.info("Detected disconnect.");
                     synchronized (context) {
                         // case 1: launcher was running and it will be
@@ -60,8 +62,8 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    OS.instance().leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
-                    OS.instance().sleepRandom(5000);
+                    os.leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
+                    os.sleepRandom(5000);
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);
                 }

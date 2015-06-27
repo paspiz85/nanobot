@@ -75,7 +75,7 @@ public final class StateAttack extends State<AttackScreenParser> {
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
                 try {
-                    OS.instance().saveScreenShot(Area.FULLSCREEN, "shots", "base_" + id);
+                    os.saveScreenShot(Area.FULLSCREEN, "shots", "base_" + id);
                 } catch (final IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
@@ -88,7 +88,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                         && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
             } catch (final BotBadBaseException e) {
                 try {
-                    OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
+                    os.saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
                 } catch (final IOException e1) {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
@@ -103,12 +103,12 @@ public final class StateAttack extends State<AttackScreenParser> {
                 if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
                     attackStrategy.attack(loot, attackGroup);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
+                    os.sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
+                    os.sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
+                    os.sleepRandom(1200);
                 } else {
                     if (loot.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
@@ -134,11 +134,11 @@ public final class StateAttack extends State<AttackScreenParser> {
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                OS.instance().leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
-                OS.instance().sleepRandom(666);
-                OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                os.leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
+                os.sleepRandom(666);
+                os.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
                 // to avoid server/client sync from nexting too fast
-                OS.instance().sleepRandom(1000);
+                os.sleepRandom(1000);
             }
         }
         context.setState(StateIdle.instance());

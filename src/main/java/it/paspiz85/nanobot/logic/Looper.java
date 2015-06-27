@@ -28,6 +28,8 @@ public final class Looper {
         return instance;
     }
 
+    private final OS os = OS.instance();
+
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private boolean waitingForDcChecker;
@@ -95,10 +97,10 @@ public final class Looper {
     public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks)
             throws InterruptedException, BotException {
         if (!setupDone) {
-            OS.instance().setup();
+            os.setup();
             setupDone = true;
         }
-        OS.instance().setupResolution(setupResolution);
+        os.setupResolution(setupResolution);
         if (Settings.instance().getFirstBarrackPosition() == null) {
             logger.info("Setting up Barracks...");
             final Point point = setupBarracks.get();

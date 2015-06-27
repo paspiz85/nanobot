@@ -1,7 +1,6 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
@@ -35,12 +34,12 @@ public final class StateFindAMatch extends State<Parser> {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
         if (Settings.instance().getAttackStrategy() != Attack.noStrategy()
-                && OS.instance().isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
-            OS.instance().leftClick(Clickable.BUTTON_FIND_A_MATCH, true);
-            OS.instance().sleepRandom(300);
-            OS.instance().leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
-            OS.instance().sleepRandom(100);
-            OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                && os.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
+            os.leftClick(Clickable.BUTTON_FIND_A_MATCH, true);
+            os.sleepRandom(300);
+            os.leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
+            os.sleepRandom(100);
+            os.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
             context.setState(StateAttack.instance());
         } else {
             context.setState(StateIdle.instance());
