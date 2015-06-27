@@ -7,7 +7,10 @@ import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parser;
 
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 import javax.imageio.ImageIO;
 
@@ -29,7 +32,19 @@ public class StepDefinitions {
 
     @Given("^enemy screenshot saved as (.*?)$")
     public void givenEnemyScreenshot(final String imagefile) throws IOException {
-        screenshot = ImageIO.read(getClass().getResourceAsStream("/screenshot/" + imagefile));
+        final URI uri = URI.create(imagefile);
+        switch (uri.getScheme()) {
+        case "classpath":
+            try (InputStream inStream = getClass().getResourceAsStream(uri.getPath())) {
+                screenshot = ImageIO.read(inStream);
+            }
+            break;
+        default:
+            try (InputStream inStream = new FileInputStream(uri.getPath())) {
+                screenshot = ImageIO.read(inStream);
+            }
+            break;
+        }
     }
 
     @When("^loot found is (.*?), (.*?), (.*?)$")

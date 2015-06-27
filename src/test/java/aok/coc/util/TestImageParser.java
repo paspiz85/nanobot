@@ -1,6 +1,5 @@
 package aok.coc.util;
 
-
 public class TestImageParser {
     /*
      * static { try (InputStream inputStream =
