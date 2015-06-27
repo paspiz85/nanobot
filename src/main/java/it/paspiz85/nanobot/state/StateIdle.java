@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.state;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.win32.OS;
 
 /**
  * This state is when bot sleeps.

@@ -1,12 +1,9 @@
 donation
-javadoc
-checkstyle
 remove v-ppizzuti
 
 code
-check english lang
-unittests
-count trofei
 raccolta risorse
-reset barrack location
+count trofei
+check english lang
 i18n
+

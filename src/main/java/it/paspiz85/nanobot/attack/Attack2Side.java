@@ -1,9 +1,15 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
+/**
+ * Attack from 2 side (top-right and top-left) using half units for each side.
+ *
+ * @author paspiz85
+ *
+ */
 public final class Attack2Side extends Attack {
 
     Attack2Side(final OS os) {

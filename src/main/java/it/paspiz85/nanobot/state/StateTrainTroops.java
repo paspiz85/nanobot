@@ -1,8 +1,8 @@
 package it.paspiz85.nanobot.state;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Settings;
-import it.paspiz85.nanobot.win32.OS;
 
 /**
  * Training state is when bot train troops.

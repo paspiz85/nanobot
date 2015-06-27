@@ -1,9 +1,15 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
+/**
+ * Attack from all 4 side using a quarter of units for each side.
+ *
+ * @author paspiz85
+ *
+ */
 public final class Attack4Side extends Attack {
 
     Attack4Side(final OS os) {

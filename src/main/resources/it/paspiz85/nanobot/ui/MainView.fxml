@@ -69,8 +69,9 @@
                   </GridPane>
                   <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
-                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#handleSaveButtonAction" prefHeight="29.0" prefWidth="58.0" text="Save" />
-                        <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
+                        <Button mnemonicParsing="false" onAction="#handleSaveButtonAction" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
+                        <Button mnemonicParsing="false" onAction="#handleResetButtonAction" text="Reset" />
                      </children>
                   </HBox>
                </children>

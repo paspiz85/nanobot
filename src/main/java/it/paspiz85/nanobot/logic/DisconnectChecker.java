@@ -1,9 +1,9 @@
 package it.paspiz85.nanobot.logic;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.state.Context;
 import it.paspiz85.nanobot.state.StateIdle;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

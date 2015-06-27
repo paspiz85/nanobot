@@ -2,23 +2,29 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
-import it.paspiz85.nanobot.logic.Setup;
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Locale;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
@@ -43,95 +49,90 @@ import org.kohsuke.github.GitHub;
  */
 public class MainController implements ApplicationAwareController, Constants {
 
-    Application application;
+    private Application application;
 
     @FXML
-    ComboBox<Attack> autoAttackComboBox;
+    private ComboBox<Attack> autoAttackComboBox;
 
     @FXML
-    Button cancelButton;
+    private GridPane configGridPane;
 
     @FXML
-    GridPane configGridPane;
+    private CheckBox saveEnemyCheckBox;
 
     @FXML
-    CheckBox saveEnemyCheckBox;
+    private AnchorPane controlPane;
 
     @FXML
-    AnchorPane controlPane;
+    private TextField deField;
 
     @FXML
-    TextField deField;
+    private CheckBox detectEmptyCollectorsCheckBox;
 
     @FXML
-    CheckBox detectEmptyCollectorsCheckBox;
+    private Label donateLabel;
 
     @FXML
-    Label donateLabel;
+    private Hyperlink donateLink;
 
     @FXML
-    Hyperlink donateLink;
+    private TextField elixirField;
 
     @FXML
-    TextField elixirField;
+    private Hyperlink githubLink;
 
     @FXML
-    Hyperlink githubLink;
+    private TextField goldField;
 
     @FXML
-    TextField goldField;
+    private ImageView heartImage;
 
     @FXML
-    ImageView heartImage;
-
-    @FXML
-    CheckBox isMatchAllConditionsCheckBox;
+    private CheckBox isMatchAllConditionsCheckBox;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     @FXML
-    TextField maxThField;
+    private TextField maxThField;
 
     @FXML
-    CheckBox playSoundCheckBox;
+    private CheckBox playSoundCheckBox;
 
     @FXML
-    ComboBox<Level> logLevelComboBox;
+    private ComboBox<Level> logLevelComboBox;
 
     @FXML
-    ComboBox<Clickable> rax1ComboBox;
+    private ComboBox<Clickable> rax1ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax2ComboBox;
+    private ComboBox<Clickable> rax2ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax3ComboBox;
+    private ComboBox<Clickable> rax3ComboBox;
 
     @FXML
-    ComboBox<Clickable> rax4ComboBox;
+    private ComboBox<Clickable> rax4ComboBox;
 
     @FXML
-    Button settingsButton;
+    private Button settingsButton;
 
     @FXML
-    AnchorPane setupPane;
+    private AnchorPane setupPane;
 
     @FXML
-    Button startButton;
+    private Button startButton;
 
     @FXML
-    Button stopButton;
+    private Button stopButton;
 
     @FXML
-    TextArea textArea;
+    private TextArea textArea;
 
     @FXML
-    Label updateLabel;
+    private Label updateLabel;
 
     @FXML
-    Label versionLabel;
-
-    private boolean setupDone;
+    private Label versionLabel;
 
     private Service<Void> runnerService;
 
@@ -164,6 +165,19 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     public void handleCancelButtonAction() {
         showSettings(false);
+    }
+
+    @FXML
+    public void handleResetButtonAction() {
+        final Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.setTitle("Reset Settings");
+        alert.setHeaderText("This operation delete previous settings");
+        alert.setContentText("Are you sure?");
+        final Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == ButtonType.OK) {
+            Settings.instance().reset();
+            updateSettingsPane();
+        }
     }
 
     @FXML
@@ -215,7 +229,7 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     @FXML
-    void initialize() {
+    private void initialize() {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
@@ -227,6 +241,7 @@ public class MainController implements ApplicationAwareController, Constants {
         initLabels();
         initLinks();
         initSettingsPane();
+        updateSettingsPane();
         initializeRunnerService();
         if (checkForUpdate()) {
             updateLabel.setVisible(true);
@@ -244,13 +259,7 @@ public class MainController implements ApplicationAwareController, Constants {
                     @Override
                     protected Void call() throws Exception {
                         updateButtons(true);
-                        if (!setupDone) {
-                            Setup.instance().setup();
-                            Settings.instance().save();
-                            setupDone = true;
-                        }
-                        logger.info("Setup is successful.");
-                        Looper.instance().start();
+                        Looper.instance().start(() -> setupResolution(), () -> setupBarracks());
                         return null;
                     }
                 };
@@ -291,7 +300,7 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
-    void initSettingsPane() {
+    private void initSettingsPane() {
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
                 if (!newValue.isEmpty()) {
@@ -314,6 +323,100 @@ public class MainController implements ApplicationAwareController, Constants {
         rax2ComboBox.getItems().addAll(availableTroops);
         rax3ComboBox.getItems().addAll(availableTroops);
         rax4ComboBox.getItems().addAll(availableTroops);
+    }
+
+    private void platformRunNow(final Runnable runnable) throws InterruptedException {
+        final boolean[] done = new boolean[1];
+        final Runnable sync = new Runnable() {
+
+            @Override
+            public void run() {
+                logger.fine("platformRunNow run start");
+                runnable.run();
+                done[0] = true;
+                logger.fine("platformRunNow run complete");
+                synchronized (this) {
+                    this.notify();
+                }
+            }
+        };
+        Platform.runLater(sync);
+        logger.fine("platformRunNow wait start");
+        synchronized (sync) {
+            while (!done[0]) {
+                sync.wait();
+            }
+        }
+        logger.fine("platformRunNow wait complete");
+    }
+
+    @Override
+    public void setApplication(final Application application) {
+        this.application = application;
+        showSettings(false);
+    }
+
+    Point setupBarracks() {
+        final Point[] point = new Point[1];
+        try {
+            platformRunNow(() -> {
+                try {
+                    OS.instance().zoomUp();
+                    final Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.setTitle("Barracks configuration");
+                    alert.setHeaderText("You must configure the location " + "of first Barracks");
+                    alert.setContentText("First Barracks is the leftmost one when you \n"
+                            + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
+                            + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
+                            + "3 'next' views should also be barracks.\n\n"
+                            + "Click Yes to start configuration and click on your first barracks. Do \n"
+                            + "NOT click anything else in between. Click Yes and click barracks. \n\n"
+                            + "Make sure you are max zoomed out.");
+                    final Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK) {
+                        logger.info("Waiting for user to click on first barracks.");
+                        point[0] = OS.instance().waitForClick();
+                    }
+                } catch (final Exception e) {
+                    logger.log(Level.SEVERE, "Unable to setup barracks", e);
+                }
+            });
+        } catch (final Exception e) {
+            logger.log(Level.SEVERE, "Unable to setup barracks", e);
+        }
+        return point[0];
+    }
+
+    boolean setupResolution() {
+        final boolean[] ret = new boolean[1];
+        try {
+            platformRunNow(() -> {
+                final Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.setTitle("Resolution");
+                alert.setHeaderText("Confirm changing resolution");
+                alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
+                        + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X,
+                        BS_RES_Y));
+                final Optional<ButtonType> result = alert.showAndWait();
+                ret[0] = result.get() == ButtonType.OK;
+            });
+        } catch (final Exception e) {
+            logger.log(Level.SEVERE, "Unable to setup resolution", e);
+        }
+        return ret[0];
+    }
+
+    void showSettings(final boolean value) {
+        setupPane.setVisible(value);
+        controlPane.setVisible(!value);
+    }
+
+    void updateButtons(final boolean value) {
+        startButton.setDisable(value);
+        stopButton.setDisable(!value);
+    }
+
+    void updateSettingsPane() {
         goldField.setText(Settings.instance().getGoldThreshold() + "");
         elixirField.setText(Settings.instance().getElixirThreshold() + "");
         deField.setText(Settings.instance().getDarkElixirThreshold() + "");
@@ -328,22 +431,5 @@ public class MainController implements ApplicationAwareController, Constants {
         rax2ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[1]);
         rax3ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[2]);
         rax4ComboBox.getSelectionModel().select(Settings.instance().getRaxInfo()[3]);
-        configGridPane.setVisible(true);
-    }
-
-    @Override
-    public void setApplication(final Application application) {
-        this.application = application;
-        showSettings(false);
-    }
-
-    void showSettings(final boolean value) {
-        setupPane.setVisible(value);
-        controlPane.setVisible(!value);
-    }
-
-    void updateButtons(final boolean value) {
-        startButton.setDisable(value);
-        stopButton.setDisable(!value);
     }
 }

@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.parsing;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;

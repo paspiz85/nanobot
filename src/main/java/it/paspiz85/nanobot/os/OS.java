@@ -1,15 +1,16 @@
-package it.paspiz85.nanobot.win32;
+package it.paspiz85.nanobot.os;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
+import it.paspiz85.nanobot.os.win32.Win32OS;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
 
-import java.awt.event.MouseAdapter;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.function.BooleanSupplier;
 
 /**
  * This wraps Operating System functionalities.
@@ -19,7 +20,7 @@ import java.util.Random;
  */
 public interface OS {
 
-    static final Random RANDOM = new Random();
+    Random RANDOM = new Random();
 
     static OS instance() {
         return Win32OS.instance();
@@ -27,21 +28,19 @@ public interface OS {
 
     boolean compareColor(int c1, int c2, int var);
 
-    boolean confirmationBox(String msg, String title);
-
     boolean isClickableActive(Clickable clickable);
 
     void leftClick(Clickable clickable, boolean randomize) throws InterruptedException;
 
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
-    String name();
-
     File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException;
 
     BufferedImage screenShot(Area area);
 
     void setup() throws BotConfigurationException;
+
+    void setupResolution(BooleanSupplier setupResolution) throws BotConfigurationException;
 
     /**
      * Sleep random interval between sleepInMs and 2*sleepInMs.
@@ -55,7 +54,7 @@ public interface OS {
 
     void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
 
-    void waitForClick(MouseAdapter mouseAdapter) throws InterruptedException, BotConfigurationException;
+    Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
 }

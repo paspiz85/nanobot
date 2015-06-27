@@ -1,9 +1,15 @@
 package it.paspiz85.nanobot.logic;
 
+import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.state.Context;
 import it.paspiz85.nanobot.state.StateIdle;
+import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Settings;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,6 +35,8 @@ public final class Looper {
     private boolean waitingForDcChecker;
 
     private boolean running;
+
+    private boolean setupDone;
 
     private Looper() {
     }
@@ -86,10 +94,25 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start() throws InterruptedException, BotException {
-        // state pattern
+    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks)
+            throws InterruptedException, BotException {
+        if (!setupDone) {
+            OS.instance().setup();
+            setupDone = true;
+        }
+        OS.instance().setupResolution(setupResolution);
+        if (Settings.instance().getFirstBarrackPosition() == null) {
+            logger.info("Setting up Barracks...");
+            final Point point = setupBarracks.get();
+            if (point == null) {
+                throw new BotConfigurationException("Cannot proceed without barracks");
+            }
+            logger.info(String.format("Set barracks location to <%d, %d>", point.x(), point.y()));
+            Settings.instance().setFirstBarrackPosition(point);
+            Settings.instance().save();
+        }
+        logger.info("Setup is successful.");
         final Context context = new Context();
-        // start daemon thread that checks if you are DC'ed etc
         logger.info("Starting disconnect detector...");
         final Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()),
                 "DisconnectCheckerThread");

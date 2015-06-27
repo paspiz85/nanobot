@@ -17,6 +17,8 @@ public interface Constants {
 
     String REPOSITORY_URL = "https://github.com/" + REPOSITORY_NAME;
 
+    String BS_WINDOW_NAME = "BlueStacks App Player";
+
     int BS_RES_X = 860;
 
     int BS_RES_Y = 720;

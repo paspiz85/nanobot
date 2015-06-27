@@ -140,6 +140,17 @@ public final class Settings {
         return playSound;
     }
 
+    public void reset() {
+        setFirstBarrackPosition(null);
+        setGoldThreshold(150000);
+        setElixirThreshold(150000);
+        setDarkElixirThreshold(0);
+        setDetectEmptyCollectors(true);
+        setMatchAllConditions(false);
+        setLogLevel(Level.INFO);
+        setLogEnemyBase(false);
+    }
+
     public void save() {
         configPersister.save(this);
     }

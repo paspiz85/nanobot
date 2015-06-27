@@ -1,9 +1,15 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.OS;
 
+/**
+ * Attack from 4 side parallel (top and bottom) in 2 wave of units.
+ *
+ * @author paspiz85
+ *
+ */
 public final class Attack4SideParallelFull2Wave extends Attack {
 
     Attack4SideParallelFull2Wave(final OS os) {
