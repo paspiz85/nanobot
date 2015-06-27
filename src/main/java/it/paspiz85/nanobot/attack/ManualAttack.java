@@ -1,6 +1,6 @@
 package it.paspiz85.nanobot.attack;
 
-import it.paspiz85.nanobot.logic.OS;
+import it.paspiz85.nanobot.os.OS;
 
 /**
  * Manual attack, no bot actions.

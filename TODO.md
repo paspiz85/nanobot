@@ -1,11 +1,9 @@
 donation
-javadoc
 remove v-ppizzuti
 
 code
-check english lang
-unittests
-count trofei
 raccolta risorse
+count trofei
+check english lang
 i18n
-test cucumber
+

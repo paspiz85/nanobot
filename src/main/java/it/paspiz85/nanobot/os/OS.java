@@ -1,10 +1,10 @@
-package it.paspiz85.nanobot.logic;
+package it.paspiz85.nanobot.os;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
+import it.paspiz85.nanobot.os.win32.Win32OS;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.win32.Win32OS;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

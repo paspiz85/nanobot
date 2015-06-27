@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
-import it.paspiz85.nanobot.logic.OS;
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Loot;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Point;
@@ -113,7 +113,7 @@ public abstract class Attack {
             diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
             diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
                     - currLoot.getDarkElixir() : 0;
-                    prevLoot = currLoot;
+            prevLoot = currLoot;
         }
     }
 

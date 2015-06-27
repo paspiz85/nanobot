@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.state;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.logic.OS;
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parsers;
 import it.paspiz85.nanobot.util.Point;
