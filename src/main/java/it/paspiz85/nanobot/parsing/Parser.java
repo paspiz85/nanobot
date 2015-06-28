@@ -161,7 +161,7 @@ public abstract class Parser {
         return result;
     }
 
-    protected final int parseNumber(final BufferedImage image, final int type, final Point start,
+    protected final Integer parseNumber(final BufferedImage image, final int type, final Point start,
             final int maxSearchWidth) {
         String no = "";
         int curr = start.x();
@@ -174,6 +174,6 @@ public abstract class Parser {
                 curr++;
             }
         }
-        return no.isEmpty() ? 0 : Integer.parseInt(no);
+        return no.isEmpty() ? null : Integer.parseInt(no);
     }
 }
