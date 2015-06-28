@@ -78,7 +78,7 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#handleSaveButtonAction" text="Save" />
                         <Button mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
-                        <Button mnemonicParsing="false" onAction="#handleResetButtonAction" text="Reset" />
+                        <Button mnemonicParsing="false" onAction="#handleResetBarracksButtonAction" text="Reset Barracks" />
                      </children>
                   </HBox>
                </children>

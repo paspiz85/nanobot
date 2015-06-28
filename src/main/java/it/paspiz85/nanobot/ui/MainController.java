@@ -173,15 +173,15 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     @FXML
-    public void handleResetButtonAction() {
+    public void handleResetBarracksButtonAction() {
         final Alert alert = new Alert(AlertType.CONFIRMATION);
         alert.initOwner(application.getPrimaryStage());
         alert.setTitle("Reset Settings");
-        alert.setHeaderText("This operation delete previous settings");
+        alert.setHeaderText("This operation delete previous barracks settings");
         alert.setContentText("Are you sure?");
         final Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
-            Settings.instance().reset();
+            Settings.instance().setFirstBarrackPosition(null);
             updateSettingsPane();
         }
     }
