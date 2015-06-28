@@ -13,7 +13,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -176,6 +175,7 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     public void handleResetButtonAction() {
         final Alert alert = new Alert(AlertType.CONFIRMATION);
+        alert.initOwner(application.getPrimaryStage());
         alert.setTitle("Reset Settings");
         alert.setHeaderText("This operation delete previous settings");
         alert.setContentText("Are you sure?");
@@ -256,7 +256,7 @@ public class MainController implements ApplicationAwareController, Constants {
         }
     }
 
-    void initializeRunnerService() {
+    private void initializeRunnerService() {
         updateButtons(false);
         runnerService = new Service<Void>() {
 
@@ -267,7 +267,7 @@ public class MainController implements ApplicationAwareController, Constants {
                     @Override
                     protected Void call() throws Exception {
                         updateButtons(true);
-                        Looper.instance().start(() -> setupResolution(), () -> setupBarracks());
+                        Looper.instance().start(() -> setupResolution(), () -> setupBarracksStep1());
                         return null;
                     }
                 };
@@ -286,14 +286,14 @@ public class MainController implements ApplicationAwareController, Constants {
         });
     }
 
-    void initLabels() {
+    private void initLabels() {
         final String version = getClass().getPackage().getImplementationVersion();
         if (version != null) {
             versionLabel.setText(NAME + " v" + version);
         }
     }
 
-    void initLinks() {
+    private void initLinks() {
         githubLink.setOnAction(t -> {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
@@ -366,19 +366,17 @@ public class MainController implements ApplicationAwareController, Constants {
         showSettings(false);
     }
 
-    Point setupBarracks() {
-        final Point[] point = new Point[1];
+    private Point setupBarracksStep1() {
+        Point point = null;
         try {
             final boolean[] configure = new boolean[1];
             platformRunNow(() -> {
                 try {
                     final Alert alert = new Alert(AlertType.CONFIRMATION);
+                    alert.initOwner(application.getPrimaryStage());
                     alert.setTitle("Barracks configuration");
                     alert.setHeaderText("You must configure the location " + "of first Barracks");
-                    alert.setContentText("First Barracks is the leftmost one when you \n"
-                            + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
-                            + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
-                            + "3 'next' views should also be barracks.\n\n" + "Click Yes to start configuration.");
+                    alert.setContentText("Click Yes to start configuration.");
                     final Optional<ButtonType> result = alert.showAndWait();
                     configure[0] = result.get() == ButtonType.OK;
                 } catch (final Exception e) {
@@ -386,36 +384,48 @@ public class MainController implements ApplicationAwareController, Constants {
                 }
             });
             if (configure[0]) {
-                OS.instance().zoomUp();
-                platformRunNow(() -> {
-                    try {
-                        final Alert alert = new Alert(AlertType.CONFIRMATION);
-                        alert.setTitle("Barracks configuration");
-                        alert.setHeaderText("You must configure the location " + "of first Barracks");
-                        alert.setContentText("Make sure you are max zoomed out.\n\n"
-                                + "Click Yes and click on your first barracks. Do \n"
-                                + "NOT click anything else in between. Click Yes and click barracks. \n\n" + "");
-                        final Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == ButtonType.OK) {
-                            logger.info("Waiting for user to click on first barracks.");
-                            point[0] = OS.instance().waitForClick();
-                        }
-                    } catch (final Exception e) {
-                        logger.log(Level.SEVERE, "Unable to setup barracks", e);
-                    }
-                });
+                point = setupBarracksStep2();
             }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to setup barracks", e);
         }
+        return point;
+    }
+
+    private Point setupBarracksStep2() throws InterruptedException {
+        final Point[] point = new Point[1];
+        OS.instance().zoomUp();
+        platformRunNow(() -> {
+            try {
+                final Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.initOwner(application.getPrimaryStage());
+                alert.setTitle("Barracks configuration");
+                alert.setHeaderText("You must configure the location " + "of first Barracks");
+                alert.setContentText("Make sure you are max zoomed out.\n\n"
+                        + "First Barracks is the leftmost one when you "
+                        + "scroll through your barracks via orange next arrow on the right. For example, if you "
+                        + "have 4 barracks, when you select the first one and click 'Train Troops', all "
+                        + "3 'next' views should also be barracks.\n\n"
+                        + "Click Yes and click on your first barracks. Do "
+                        + "NOT click anything else in between, click Yes and click barracks." + "");
+                final Optional<ButtonType> result = alert.showAndWait();
+                if (result.get() == ButtonType.OK) {
+                    logger.info("Waiting for user to click on first barracks.");
+                    point[0] = OS.instance().waitForClick();
+                }
+            } catch (final Exception e) {
+                logger.log(Level.SEVERE, "Unable to setup barracks", e);
+            }
+        });
         return point[0];
     }
 
-    boolean setupResolution() {
+    private boolean setupResolution() {
         final boolean[] ret = new boolean[1];
         try {
             platformRunNow(() -> {
                 final Alert alert = new Alert(AlertType.CONFIRMATION);
+                alert.initOwner(application.getPrimaryStage());
                 alert.setTitle("Resolution");
                 alert.setHeaderText("Confirm changing resolution");
                 alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
@@ -430,17 +440,17 @@ public class MainController implements ApplicationAwareController, Constants {
         return ret[0];
     }
 
-    void showSettings(final boolean value) {
+    private void showSettings(final boolean value) {
         setupPane.setVisible(value);
         controlPane.setVisible(!value);
     }
 
-    void updateButtons(final boolean value) {
+    private void updateButtons(final boolean value) {
         startButton.setDisable(value);
         stopButton.setDisable(!value);
     }
 
-    void updateSettingsPane() {
+    private void updateSettingsPane() {
         goldField.setText(Settings.instance().getGoldThreshold() + "");
         elixirField.setText(Settings.instance().getElixirThreshold() + "");
         deField.setText(Settings.instance().getDarkElixirThreshold() + "");

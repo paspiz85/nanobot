@@ -27,8 +27,15 @@ public class Application extends javafx.application.Application implements Const
         }
     }
 
+    private Stage primaryStage;
+
+    Stage getPrimaryStage() {
+        return primaryStage;
+    }
+
     @Override
     public void start(final Stage primaryStage) throws IOException {
+        this.primaryStage = primaryStage;
         primaryStage.setTitle(NAME);
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Application.class.getResource("MainView.fxml"));
