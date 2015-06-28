@@ -35,8 +35,8 @@ public final class StateIdle extends State<Parser> {
                 throw new InterruptedException("StateIdle is interrupted.");
             }
             if (reloading) {
-                os.zoomUp();
                 logger.info("reloading...");
+                os.zoomUp();
                 Thread.sleep(2000);
                 continue;
             }

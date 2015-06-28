@@ -7,6 +7,8 @@ count trofei
 raccolta risorse
 
 code
+model
+controlli remoti
 i18n
 
 statistics

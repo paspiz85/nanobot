@@ -67,7 +67,7 @@ public class DisconnectChecker implements Runnable {
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);
                 }
-                Thread.sleep(10000);
+                Thread.sleep(30000);
             }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "dc checker: " + e.getMessage(), e);
