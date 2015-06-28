@@ -7,7 +7,7 @@ import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.parsing.Loot;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -36,13 +36,13 @@ public final class StateAttack extends State<AttackScreenParser> {
         return instance;
     }
 
-    private Loot prevLoot;
+    private EnemyInfo prevLoot;
 
     private StateAttack() {
         super(Parser.getInstance(AttackScreenParser.class));
     }
 
-    public boolean doConditionsMatch(final Loot loot) {
+    public boolean doConditionsMatch(final EnemyInfo loot) {
         int gold = loot.getGold();
         int elixir = loot.getElixir();
         int de = loot.getDarkElixir();
@@ -80,10 +80,10 @@ public final class StateAttack extends State<AttackScreenParser> {
                     logger.log(Level.SEVERE, e1.getMessage(), e1);
                 }
             }
-            Loot loot;
+            EnemyInfo loot;
             boolean doAttack = false;
             try {
-                loot = getParser().parseLoot();
+                loot = getParser().parseEnemyInfo();
                 doAttack = doConditionsMatch(loot)
                         && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
             } catch (final BotBadBaseException e) {

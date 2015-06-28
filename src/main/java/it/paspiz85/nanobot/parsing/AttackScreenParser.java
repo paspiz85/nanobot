@@ -170,7 +170,7 @@ public final class AttackScreenParser extends Parser {
         return result;
     }
 
-    public int parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
+    private Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
         int result = 0;
         if (hasDE(image)) {
             result = parseNumber(image, 2, new Point(33, 57), image.getWidth() - 43);
@@ -178,30 +178,29 @@ public final class AttackScreenParser extends Parser {
         return result;
     }
 
-    public int parseElixir(final BufferedImage image) throws BotBadBaseException {
+    private Integer parseElixir(final BufferedImage image) throws BotBadBaseException {
         return parseNumber(image, 1, new Point(33, 29 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
     }
 
-    public int parseGold(final BufferedImage image) throws BotBadBaseException {
-        return parseNumber(image, 0, new Point(33, 0 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
-    }
-
-    public Loot parseLoot() throws BotBadBaseException {
+    public EnemyInfo parseEnemyInfo() throws BotBadBaseException {
         final BufferedImage image = OS.instance().screenShot(Area.ENEMY_LOOT);
-        return parseLoot(image);
+        return parseEnemyInfo(image);
     }
 
-    public Loot parseLoot(final BufferedImage image) throws BotBadBaseException {
-        final int gold = parseGold(image);
-        final int elixir = parseElixir(image);
-        final int darkElixir = parseDarkElixir(image);
-        final Loot loot = new Loot();
-        loot.setGold(gold);
-        loot.setElixir(elixir);
-        loot.setDarkElixir(darkElixir);
+    public EnemyInfo parseEnemyInfo(final BufferedImage image) throws BotBadBaseException {
+        final EnemyInfo info = new EnemyInfo();
+        info.setGold(parseGold(image));
+        info.setElixir(parseElixir(image));
+        info.setDarkElixir(parseDarkElixir(image));
+        info.setTrophyWin(parseTrophyWin(image));
+        info.setTrophyDefeat(parseTrophyDefeat(image));
         // TODO fix this log
-        logger.info(String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, darkElixir));
-        return loot;
+        logger.info(info.toString());
+        return info;
+    }
+
+    private Integer parseGold(final BufferedImage image) throws BotBadBaseException {
+        return parseNumber(image, 0, new Point(33, 0 + (hasDE(image) ? 0 : 1)), image.getWidth() - 43);
     }
 
     public int[] parseTroopCount() {
@@ -251,7 +250,12 @@ public final class AttackScreenParser extends Parser {
         return Arrays.copyOf(tmp, curr);
     }
 
-    public int parseTrophy(final BufferedImage image) throws BotBadBaseException {
+    public Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
+        // TODO
+        return null;
+    }
+
+    public Integer parseTrophyWin(final BufferedImage image) throws BotBadBaseException {
         int result;
         if (!hasDE(image)) {
             result = parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);

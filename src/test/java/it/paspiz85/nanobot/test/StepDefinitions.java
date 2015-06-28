@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.test;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.Loot;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 
 import java.awt.image.BufferedImage;
@@ -28,7 +28,7 @@ public class StepDefinitions {
 
     private BufferedImage screenshot;
 
-    private Loot loot;
+    private EnemyInfo enemyInfo;
 
     @Given("^enemy screenshot saved as (.*?)$")
     public void givenEnemyScreenshot(final String imagefile) throws IOException {
@@ -47,20 +47,23 @@ public class StepDefinitions {
         }
     }
 
-    @When("^loot found is (.*?), (.*?), (.*?)$")
-    public void thenLootFound(final Integer gold, final Integer elixir, final Integer darkelixir) {
-        Assert.assertEquals(gold, loot.getGold());
-        Assert.assertEquals(elixir, loot.getElixir());
-        Assert.assertEquals(darkelixir, loot.getDarkElixir());
+    @When("^enemy info found is (.*?), (.*?), (.*?), (.*?), (.*?)$")
+    public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
+            final Integer trophyWin, final Integer thophyDefeat) {
+        Assert.assertEquals(gold, enemyInfo.getGold());
+        Assert.assertEquals(elixir, enemyInfo.getElixir());
+        Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
+        Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
+        // TODOAssert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
     }
 
-    @When("^parsing loot$")
-    public void whenParsingLoot() throws BotBadBaseException {
+    @When("^parsing enemy info$")
+    public void whenParsingEnemyInfo() throws BotBadBaseException {
         final int x1 = Area.ENEMY_LOOT.getP1().x();
         final int y1 = Area.ENEMY_LOOT.getP1().y();
         final int x2 = Area.ENEMY_LOOT.getP2().x();
         final int y2 = Area.ENEMY_LOOT.getP2().y();
         final BufferedImage lootScreenshot = screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
-        loot = Parser.getInstance(AttackScreenParser.class).parseLoot(lootScreenshot);
+        enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo(lootScreenshot);
     }
 }

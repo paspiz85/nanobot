@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.Loot;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
@@ -75,7 +75,7 @@ public abstract class Attack {
         this.os = os;
     }
 
-    public final void attack(final Loot loot, final int[] attackGroup) throws InterruptedException {
+    public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
         os.zoomUp();
         doDropUnits(attackGroup);
@@ -103,16 +103,16 @@ public abstract class Attack {
         return result;
     }
 
-    private void sleepUntilLootDoesNotChange(final Loot loot) throws InterruptedException {
+    private void sleepUntilLootDoesNotChange(final EnemyInfo loot) throws InterruptedException {
         Thread.sleep(10000);
-        Loot prevLoot = loot;
+        EnemyInfo prevLoot = loot;
         int diff = Integer.MAX_VALUE;
         final int delta = 500;
         while (diff > delta) {
             Thread.sleep(15000);
-            Loot currLoot;
+            EnemyInfo currLoot;
             try {
-                currLoot = Parser.getInstance(AttackScreenParser.class).parseLoot();
+                currLoot = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
             } catch (final BotBadBaseException e) {
                 Thread.sleep(2000);
                 // in case of 100% win/no troops left, attack screen will end
@@ -124,7 +124,7 @@ public abstract class Attack {
             diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
             diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
                     - currLoot.getDarkElixir() : 0;
-                    prevLoot = currLoot;
+            prevLoot = currLoot;
         }
     }
 
