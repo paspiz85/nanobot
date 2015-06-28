@@ -369,28 +369,42 @@ public class MainController implements ApplicationAwareController, Constants {
     Point setupBarracks() {
         final Point[] point = new Point[1];
         try {
+            final boolean[] configure = new boolean[1];
             platformRunNow(() -> {
                 try {
-                    OS.instance().zoomUp();
                     final Alert alert = new Alert(AlertType.CONFIRMATION);
                     alert.setTitle("Barracks configuration");
                     alert.setHeaderText("You must configure the location " + "of first Barracks");
                     alert.setContentText("First Barracks is the leftmost one when you \n"
                             + "scroll through your barracks via orange next arrow on the right. For example, if you \n"
                             + "have 4 barracks, when you select the first one and click 'Train Troops', all \n"
-                            + "3 'next' views should also be barracks.\n\n"
-                            + "Click Yes to start configuration and click on your first barracks. Do \n"
-                            + "NOT click anything else in between. Click Yes and click barracks. \n\n"
-                            + "Make sure you are max zoomed out.");
+                            + "3 'next' views should also be barracks.\n\n" + "Click Yes to start configuration.");
                     final Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == ButtonType.OK) {
-                        logger.info("Waiting for user to click on first barracks.");
-                        point[0] = OS.instance().waitForClick();
-                    }
+                    configure[0] = result.get() == ButtonType.OK;
                 } catch (final Exception e) {
                     logger.log(Level.SEVERE, "Unable to setup barracks", e);
                 }
             });
+            if (configure[0]) {
+                OS.instance().zoomUp();
+                platformRunNow(() -> {
+                    try {
+                        final Alert alert = new Alert(AlertType.CONFIRMATION);
+                        alert.setTitle("Barracks configuration");
+                        alert.setHeaderText("You must configure the location " + "of first Barracks");
+                        alert.setContentText("Make sure you are max zoomed out.\n\n"
+                                + "Click Yes and click on your first barracks. Do \n"
+                                + "NOT click anything else in between. Click Yes and click barracks. \n\n" + "");
+                        final Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK) {
+                            logger.info("Waiting for user to click on first barracks.");
+                            point[0] = OS.instance().waitForClick();
+                        }
+                    } catch (final Exception e) {
+                        logger.log(Level.SEVERE, "Unable to setup barracks", e);
+                    }
+                });
+            }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to setup barracks", e);
         }

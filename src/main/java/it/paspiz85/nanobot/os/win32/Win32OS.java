@@ -154,7 +154,7 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
 
     @Override
     public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
-        logger.info(String.format("Setting up %s resolution...", BS_WINDOW_NAME));
+        logger.info(String.format("Checking %s resolution...", BS_WINDOW_NAME));
         try {
             final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
                     "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
