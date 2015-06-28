@@ -256,7 +256,7 @@ public final class AttackScreenParser extends Parser {
     }
 
     private Integer parseTrophyWin(final BufferedImage image) throws BotBadBaseException {
-        int result;
+        Integer result;
         if (!hasDE(image)) {
             result = parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);
         } else {
