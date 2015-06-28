@@ -22,7 +22,10 @@ public class DisconnectChecker implements Runnable {
 
     private final OS os = OS.instance();
 
-    public DisconnectChecker(final Context context, final Thread mainThread) {
+    private Looper looper;
+
+    public DisconnectChecker(Looper looper, final Context context, final Thread mainThread) {
+        this.looper = looper;
         this.context = context;
         this.mainThread = mainThread;
     }
@@ -41,7 +44,7 @@ public class DisconnectChecker implements Runnable {
                         // case 1: launcher was running and it will be
                         // interrupted. It will go back to StateIdle start
                         // running immediately.
-                        if (!Looper.instance().isWaitingForDcChecker()) {
+                        if (!looper.isWaitingForDcChecker()) {
                             context.setDisconnected(true);
                             // to fix a potential race condition.
                             // if bot launcher throws an exception and this

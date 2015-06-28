@@ -214,11 +214,11 @@ public final class AttackScreenParser extends Parser {
         final int[] tmp = new int[11]; // max group size
         int xStart = 20;
         final int yStart = 11;
-        int no;
+        Integer no;
         int curr = 0;
         while (true) {
             no = parseNumber(image, 3, new Point(xStart, yStart), ATTACK_GROUP_UNIT_DIFF - 10);
-            if (no == 0) {
+            if (no == null || no == 0) {
                 break;
             }
             if (no >= 5) {
@@ -250,12 +250,12 @@ public final class AttackScreenParser extends Parser {
         return Arrays.copyOf(tmp, curr);
     }
 
-    public Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
+    private Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
         // TODO
         return null;
     }
 
-    public Integer parseTrophyWin(final BufferedImage image) throws BotBadBaseException {
+    private Integer parseTrophyWin(final BufferedImage image) throws BotBadBaseException {
         int result;
         if (!hasDE(image)) {
             result = parseNumber(image, 3, new Point(33, 62), image.getWidth() - 43);

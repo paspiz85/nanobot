@@ -45,7 +45,7 @@ public final class Looper {
         return running;
     }
 
-    public boolean isWaitingForDcChecker() {
+    boolean isWaitingForDcChecker() {
         return waitingForDcChecker;
     }
 
@@ -114,7 +114,7 @@ public final class Looper {
         logger.info("Setup is successful.");
         final Context context = new Context();
         logger.info("Starting disconnect detector...");
-        final Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()),
+        final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),
                 "DisconnectCheckerThread");
         dcThread.setDaemon(true);
         dcThread.start();

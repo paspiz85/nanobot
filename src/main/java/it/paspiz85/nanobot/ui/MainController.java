@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.logic.Looper;
+import it.paspiz85.nanobot.logic.Model;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
@@ -50,6 +51,8 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private Application application;
 
+    private Model model = Model.instance();
+    
     @FXML
     private ComboBox<Attack> autoAttackComboBox;
 
@@ -267,7 +270,7 @@ public class MainController implements ApplicationAwareController, Constants {
                     @Override
                     protected Void call() throws Exception {
                         updateButtons(true);
-                        Looper.instance().start(() -> setupResolution(), () -> setupBarracksStep1());
+                        model.start(() -> setupResolution(), () -> setupBarracksStep1());
                         return null;
                     }
                 };
