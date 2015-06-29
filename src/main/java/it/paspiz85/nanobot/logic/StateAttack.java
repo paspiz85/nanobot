@@ -74,7 +74,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             }
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
-                os.saveScreenshot(Area.FULLSCREEN, "base" + id);
+                os.saveScreenshot(Area.FULLSCREEN, "base_" + id);
             }
             EnemyInfo loot;
             boolean doAttack = false;
