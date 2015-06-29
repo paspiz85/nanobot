@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
+import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
 
 /**
@@ -23,7 +24,7 @@ public final class StateTrainTroops extends State<MainScreenParser> {
     }
 
     private StateTrainTroops() {
-        super(MainScreenParser.getInstance(MainScreenParser.class));
+        super(Parser.getInstance(MainScreenParser.class));
     }
 
     @Override
