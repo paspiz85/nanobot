@@ -206,6 +206,7 @@ public class MainController implements ApplicationAwareController, Constants {
         initLabels();
         initLinks();
         initSettingsPane();
+        updateButtons();
         if (model.checkForUpdate()) {
             updateLabel.setVisible(true);
         }
