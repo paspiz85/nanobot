@@ -8,5 +8,5 @@ Feature: parsing main screen
 
     Examples:
       | imagefile                                      | found |
-      | classpath:/features/img/main_1435574736654.png | true  |
       | classpath:/features/img/main_1435575631326.png | false |
+      | classpath:/features/img/main_1435601238653.png | true  |
