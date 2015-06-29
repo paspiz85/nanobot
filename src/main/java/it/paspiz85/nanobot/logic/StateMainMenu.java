@@ -36,6 +36,8 @@ public final class StateMainMenu extends State<MainScreenParser> implements Cons
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
+        os.zoomUp();
+        os.sleepRandom(350);
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
             if (getParser().searchAttackButton() == null) {
@@ -43,15 +45,13 @@ public final class StateMainMenu extends State<MainScreenParser> implements Cons
             }
             context.setLanguageChecked(true);
         }
-        os.zoomUp();
-        os.sleepRandom(350);
         if (context.getTrainCount() % 10 == 0) {
             logger.info("Searching full collectors...");
             for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
                 final Point p = getParser().searchFullDarkElixirDrill();
                 if (p != null) {
                     os.leftClick(p, false);
-                    os.sleepRandom(100);
+                    os.sleepRandom(200);
                 }
             }
         }

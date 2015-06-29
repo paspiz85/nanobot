@@ -149,7 +149,23 @@ public abstract class Parser {
         return result;
     }
 
-    protected final Point findCenterImage(final BufferedImage image, final String resource) {
+    protected final Point relativePoint(Point point, Point root) {
+        if (point == null) return null;
+        return new Point(point.x() + root.x(),point.y() + root.y());
+    }
+
+    protected final Point searchImage(final BufferedImage image, final String resource) {
+        Point result = null;
+        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        if (rectangle != null) {
+            final int x = rectangle.getLocation().x;
+            final int y = rectangle.getLocation().y;
+            result = new Point(x, y);
+        }
+        return result;
+    }
+
+    protected final Point searchImageCenter(final BufferedImage image, final String resource) {
         Point result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource(resource));
         if (rectangle != null) {

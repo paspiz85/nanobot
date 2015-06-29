@@ -19,14 +19,14 @@ public final class MainScreenParser extends Parser {
 
     public Point searchAttackButton() {
         final BufferedImage image = screenShot(Area.ATTACK_BUTTON);
-        return findCenterImage(image, "attack.png");
+        return relativePoint(searchImageCenter(image, "attack.png"),Area.ATTACK_BUTTON.getP1());
     }
 
     public Point searchFullDarkElixirDrill() {
         final BufferedImage image = screenShot(Area.FULLSCREEN);
         Point point = null;
         for (final String resource : COLLECT_DARK_ELIXIR) {
-            point = findCenterImage(image, resource);
+            point = searchImageCenter(image, resource);
             if (point != null) {
                 break;
             }
@@ -36,6 +36,6 @@ public final class MainScreenParser extends Parser {
 
     public Point searchTrainButton() {
         final BufferedImage image = screenShot(Area.BARRACKS_BUTTONS);
-        return findCenterImage(image, "train.png");
+        return relativePoint(searchImage(image, "train.png"),Area.BARRACKS_BUTTONS.getP1());
     }
 }
