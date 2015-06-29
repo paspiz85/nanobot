@@ -7,6 +7,8 @@ package it.paspiz85.nanobot.util;
  */
 public interface Constants {
 
+    int DARK_ELIXIR_DRILL_MAX_NUMBER = 4;
+
     String IMG_FOLDER = "img";
 
     int TRAIN_BARB_MS = 20000;

@@ -61,6 +61,8 @@ public interface OS {
 
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
+    File saveImage(BufferedImage img, String... filePathRest);
+
     File saveScreenshot(Area area, String... filePathRest);
 
     BufferedImage screenshot(Area area);
@@ -84,6 +86,4 @@ public interface OS {
     Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
-
-    File saveImage(BufferedImage img, String... filePathRest);
 }

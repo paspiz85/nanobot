@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -13,7 +14,7 @@ import it.paspiz85.nanobot.util.Settings;
  * @author paspiz85
  *
  */
-public final class StateMainMenu extends State<MainScreenParser> {
+public final class StateMainMenu extends State<MainScreenParser> implements Constants {
 
     private static StateMainMenu instance;
 
@@ -37,24 +38,34 @@ public final class StateMainMenu extends State<MainScreenParser> {
         }
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
-            if (getParser().findAttackButton() == null) {
+            if (getParser().searchAttackButton() == null) {
                 throw new BotConfigurationException("Make sure in-game language is English");
             }
             context.setLanguageChecked(true);
         }
         os.zoomUp();
         os.sleepRandom(350);
+        if (context.getTrainCount() % 10 == 0) {
+            logger.info("Searching full collectors...");
+            for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
+                final Point p = getParser().searchFullDarkElixirDrill();
+                if (p != null) {
+                    os.leftClick(p, false);
+                    os.sleepRandom(100);
+                }
+            }
+        }
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
         logger.fine("Try open barracks");
         os.leftClick(firstRax, false);
         os.sleepRandom(500);
-        Point trainButton = getParser().findTrainButton();
+        Point trainButton = getParser().searchTrainButton();
         if (trainButton == null) {
             // maybe rax was already open and we closed it back
             logger.fine("Try open barracks again");
             os.leftClick(firstRax, false);
             os.sleepRandom(500);
-            trainButton = getParser().findTrainButton();
+            trainButton = getParser().searchTrainButton();
         }
         if (trainButton == null) {
             throw new BotConfigurationException("Barracks location is not correct.");

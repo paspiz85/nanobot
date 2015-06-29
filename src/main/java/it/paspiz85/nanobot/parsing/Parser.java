@@ -149,6 +149,17 @@ public abstract class Parser {
         return result;
     }
 
+    protected final Point findCenterImage(final BufferedImage image, final String resource) {
+        Point result = null;
+        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        if (rectangle != null) {
+            final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
+            final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);
+            result = new Point(x, y);
+        }
+        return result;
+    }
+
     private Integer parseDigit(final BufferedImage image, final Point start, final int type) {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
