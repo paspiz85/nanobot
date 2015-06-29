@@ -38,7 +38,7 @@ public final class StateMainMenu extends State<MainScreenParser> {
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
             if (getParser().findTrainButton() == null) {
-                throw new IllegalStateException("Make sure in-game language is English");
+                throw new BotConfigurationException("Make sure in-game language is English");
             }
             context.setLanguageChecked(true);
         }

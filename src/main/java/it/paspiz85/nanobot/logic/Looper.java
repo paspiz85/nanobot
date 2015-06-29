@@ -79,6 +79,9 @@ public final class Looper {
         } catch (final Exception e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             botException = e;
+            if (e instanceof BotConfigurationException) {
+                throw e;
+            }
         }
         final long timeout = 10 * 60 * 1000;
         // wait for dc checker to wake me up
