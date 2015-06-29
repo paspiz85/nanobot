@@ -98,11 +98,13 @@ public final class Looper {
 
     public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
             final Runnable updateUI) throws InterruptedException, BotException {
+        logger.info("Starting...");
         if (!setupDone) {
             os.setup();
             setupDone = true;
         }
         os.setupResolution(setupResolution);
+        logger.info("Checking barracks...");
         if (Settings.instance().getFirstBarrackPosition() == null) {
             logger.info("Setting up Barracks...");
             final Point point = setupBarracks.get();
@@ -115,7 +117,7 @@ public final class Looper {
         }
         logger.info("Setup is successful.");
         final Context context = new Context();
-        logger.info("Starting disconnect detector...");
+        logger.fine("Starting disconnect detector...");
         final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),
                 "DisconnectCheckerThread");
         dcThread.setDaemon(true);

@@ -34,7 +34,7 @@ public class DisconnectChecker implements Runnable {
 
     @Override
     public void run() {
-        logger.info("Running disconnect detector...");
+        logger.fine("Running disconnect detector...");
         try {
             while (true) {
                 if (Thread.interrupted()) {
