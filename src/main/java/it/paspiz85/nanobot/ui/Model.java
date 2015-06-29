@@ -103,15 +103,15 @@ public final class Model implements Constants {
             }
         };
         runnerService.setOnCancelled(event -> {
-            updateUI.run();
-            logger.warning("runner is cancelled.");
             runnerService.reset();
+            logger.warning("runner is cancelled.");
+            updateUI.run();
         });
         runnerService.setOnFailed(event -> {
-            updateUI.run();
+            runnerService.reset();
             logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
                     runnerService.getException());
-            runnerService.reset();
+            updateUI.run();
         });
     }
 
