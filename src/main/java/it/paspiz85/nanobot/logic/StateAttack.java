@@ -9,9 +9,9 @@ import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
@@ -25,7 +25,7 @@ import javax.sound.sampled.Clip;
  * @author paspiz85
  *
  */
-public final class StateAttack extends State<AttackScreenParser> {
+public final class StateAttack extends State<AttackScreenParser> implements Constants {
 
     private static StateAttack instance;
 
@@ -74,11 +74,7 @@ public final class StateAttack extends State<AttackScreenParser> {
             }
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
-                try {
-                    os.saveScreenShot(Area.FULLSCREEN, "shots", "base_" + id);
-                } catch (final IOException e1) {
-                    logger.log(Level.SEVERE, e1.getMessage(), e1);
-                }
+                os.saveScreenshot(Area.FULLSCREEN, "base" + id);
             }
             EnemyInfo loot;
             boolean doAttack = false;
@@ -87,11 +83,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                 doAttack = doConditionsMatch(loot)
                         && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
             } catch (final BotBadBaseException e) {
-                try {
-                    os.saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
-                } catch (final IOException e1) {
-                    logger.log(Level.SEVERE, e1.getMessage(), e1);
-                }
+                os.saveScreenshot(Area.ENEMY_LOOT, "bad_base_" + id);
                 throw e;
             }
             final int[] attackGroup = getParser().parseTroopCount();

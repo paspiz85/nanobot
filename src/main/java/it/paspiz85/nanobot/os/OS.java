@@ -8,7 +8,6 @@ import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
@@ -62,9 +61,9 @@ public interface OS {
 
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
-    File saveScreenShot(Area area, String filePathFirst, String... filePathRest) throws IOException;
+    File saveScreenshot(Area area, String... filePathRest);
 
-    BufferedImage screenShot(Area area);
+    BufferedImage screenshot(Area area);
 
     void setup() throws BotConfigurationException;
 

@@ -58,6 +58,10 @@
                         <ComboBox fx:id="logLevelComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
                         <Label text="Save enemy screenshot?" GridPane.rowIndex="8" />
                         <CheckBox fx:id="saveEnemyCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+      					<Hyperlink fx:id="screenshotLink" layoutX="802.0" layoutY="516.0" text="Screenshot now!" GridPane.columnIndex="1" GridPane.rowIndex="8">
+                           <GridPane.margin>
+                              <Insets left="25.0" />
+                           </GridPane.margin></Hyperlink>
                         <Label text="Auto attack?" GridPane.rowIndex="9" />
                         <ComboBox fx:id="autoAttackComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
                         <Label text="Rax 1" GridPane.rowIndex="10" />

@@ -42,7 +42,7 @@ public class StepDefinitions {
         private BufferedImage screenshot;
 
         @Override
-        protected BufferedImage screenShot(final Point p1, final Point p2) {
+        protected BufferedImage screenshot(final Point p1, final Point p2) {
             final int x1 = p1.x();
             final int y1 = p1.y();
             final int x2 = p2.x();

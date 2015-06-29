@@ -21,7 +21,7 @@ public abstract class AbstractOSMock extends AbstractOS {
     }
 
     @Override
-    protected BufferedImage screenShot(final Point p1, final Point p2) {
+    protected BufferedImage screenshot(final Point p1, final Point p2) {
         throw new IllegalStateException("not implemented");
     }
 

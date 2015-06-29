@@ -124,7 +124,7 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
     }
 
     @Override
-    protected BufferedImage screenShot(final Point p1, final Point p2) {
+    protected BufferedImage screenshot(final Point p1, final Point p2) {
         final Point anchor = clientToScreen(p1);
         final int width = p2.x() - p1.x();
         final int height = p2.y() - p1.y();

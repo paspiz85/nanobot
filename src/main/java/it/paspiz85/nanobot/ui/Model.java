@@ -1,6 +1,8 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.logic.Looper;
+import it.paspiz85.nanobot.os.OS;
+import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
@@ -32,6 +34,8 @@ public final class Model implements Constants {
 
     private static Model instance;
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     public static Model instance() {
         if (instance == null) {
             instance = new Model();
@@ -40,6 +44,8 @@ public final class Model implements Constants {
     }
 
     private final Looper looper = Looper.instance();
+
+    private final OS os = DEFAULT_OS;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -122,6 +128,10 @@ public final class Model implements Constants {
 
     public void resetBarracks() {
         Settings.instance().setFirstBarrackPosition(null);
+    }
+
+    public void saveScreenshot() {
+        os.saveScreenshot(Area.FULLSCREEN, "screen_" + System.currentTimeMillis());
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

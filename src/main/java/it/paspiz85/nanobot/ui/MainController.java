@@ -75,6 +75,9 @@ public class MainController implements ApplicationAwareController, Constants {
     private Hyperlink githubLink;
 
     @FXML
+    private Hyperlink screenshotLink;
+
+    @FXML
     private TextField goldField;
 
     @FXML
@@ -220,7 +223,7 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     private void initLinks() {
-        githubLink.setOnAction(t -> {
+        githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
         });
@@ -231,6 +234,9 @@ public class MainController implements ApplicationAwareController, Constants {
         donateLink.setOnAction(event -> {
             application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
             donateLink.setVisited(false);
+        });
+        screenshotLink.setOnAction(event -> {
+            model.saveScreenshot();
         });
     }
 
