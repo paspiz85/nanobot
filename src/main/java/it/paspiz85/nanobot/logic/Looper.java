@@ -122,6 +122,7 @@ public final class Looper {
         dcThread.start();
         try {
             running = true;
+            logger.fine("looper running");
             updateUI.run();
             while (true) {
                 context.setState(StateIdle.instance());
@@ -129,6 +130,7 @@ public final class Looper {
             }
         } finally {
             running = false;
+            logger.fine("looper stopped");
             dcThread.interrupt();
             this.waitingForDcChecker = false;
             context.setWaitDone(false);
