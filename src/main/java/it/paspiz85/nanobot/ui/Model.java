@@ -92,7 +92,6 @@ public final class Model implements Constants {
         // setup configUtils
         Settings.initialize();
         logger.info("Settings loaded...");
-        logger.info("Make sure in-game language is English.");
         runningService = new Service<Void>() {
 
             @Override

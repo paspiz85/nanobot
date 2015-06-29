@@ -5,6 +5,7 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
+import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
@@ -19,6 +20,7 @@ import javax.imageio.ImageIO;
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /**
@@ -71,8 +73,10 @@ public class StepDefinitions {
 
     private int[] troopsCount;
 
-    @Given("^enemy screenshot saved as (.*)$")
-    public void givenEnemyScreenshot(final String imagefile) throws IOException {
+    private Point attackButtonPoint;
+
+    @Given("^screenshot saved as (.*)$")
+    public void givenScreenshot(final String imagefile) throws IOException {
         final URI uri = URI.create(imagefile);
         switch (uri.getScheme()) {
         case "classpath":
@@ -88,12 +92,17 @@ public class StepDefinitions {
         }
     }
 
-    @When("^collectors is (.*)$")
+    @Then("^attack button is (.*)$")
+    public void thenAttackButtonIs(final Boolean found) {
+        Assert.assertEquals(found, attackButtonPoint != null);
+    }
+
+    @Then("^collectors is (.*)$")
     public void thenCollectorIs(final Boolean full) {
         Assert.assertEquals(full, isCollectorsFull);
     }
 
-    @When("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
+    @Then("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
     public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
             final Integer trophyWin, final Integer thophyDefeat) {
         Assert.assertEquals(gold, enemyInfo.getGold());
@@ -101,10 +110,10 @@ public class StepDefinitions {
         Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
         Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
         // TODO implement
-        //Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+        // Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
     }
 
-    @When("^troops count is (.*)$")
+    @Then("^troops count is (.*)$")
     public void thenTroopsCountIs(final String troopsCount) {
         final String[] split = troopsCount.substring(1, troopsCount.length() - 1).split(",");
         final int[] expected = new int[split.length];
@@ -118,6 +127,12 @@ public class StepDefinitions {
     public void whenCheckingCollectors() throws BotException {
         OSMock.instance.setScreenshot(screenshot);
         isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
+    }
+
+    @When("^parsing attack button$")
+    public void whenParsingAttackButton() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        attackButtonPoint = Parser.getInstance(MainScreenParser.class).findAttackButton();
     }
 
     @When("^parsing enemy info$")

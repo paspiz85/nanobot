@@ -2,7 +2,7 @@
 Feature: parsing attack screen
 
   Scenario Outline: parse enemy info
-    Given enemy screenshot saved as <imagefile>
+    Given screenshot saved as <imagefile>
     When parsing enemy info
     Then enemy info found is <gold>, <elixir>, <dark_elixir>, <thophy_win>, <thophy_defeat>
 
@@ -21,7 +21,7 @@ Feature: parsing attack screen
       | classpath:/features/img/base_1435358355546.png | 315272 | 283364 | 640         | 22         | 15            |
 
   Scenario Outline: check collectors
-    Given enemy screenshot saved as <imagefile>
+    Given screenshot saved as <imagefile>
     When checking collectors
     Then collectors is <full>
 
@@ -40,7 +40,7 @@ Feature: parsing attack screen
       | classpath:/features/img/base_1435358355546.png | true  |
 
   Scenario Outline: parse troops
-    Given enemy screenshot saved as <imagefile>
+    Given screenshot saved as <imagefile>
     When parsing troops
     Then troops count is <troops_count>
 

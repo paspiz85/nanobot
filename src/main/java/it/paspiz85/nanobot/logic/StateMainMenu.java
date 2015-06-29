@@ -35,6 +35,13 @@ public final class StateMainMenu extends State<MainScreenParser> {
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
+        if (!context.isLanguageChecked()) {
+            logger.info("Checking language...");
+            if (getParser().findTrainButton() == null) {
+                throw new BotConfigurationException("Make sure in-game language is English");
+            }
+            context.setLanguageChecked(true);
+        }
         os.zoomUp();
         os.sleepRandom(350);
         final Point firstRax = Settings.instance().getFirstBarrackPosition();

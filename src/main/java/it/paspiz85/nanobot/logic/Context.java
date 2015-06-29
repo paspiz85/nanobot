@@ -22,6 +22,8 @@ public final class Context {
 
     private int trainCount;
 
+    private boolean languageChecked;
+
     public int getTrainCount() {
         return trainCount;
     }
@@ -38,12 +40,20 @@ public final class Context {
         return disconnected;
     }
 
+    public boolean isLanguageChecked() {
+        return languageChecked;
+    }
+
     public boolean isWaitDone() {
         return waitDone;
     }
 
     public void setDisconnected(final boolean disconnected) {
         this.disconnected = disconnected;
+    }
+
+    public void setLanguageChecked(final boolean languageChecked) {
+        this.languageChecked = languageChecked;
     }
 
     public void setState(final State<?> state) {
