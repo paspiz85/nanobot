@@ -47,6 +47,10 @@ public final class Looper {
         return running;
     }
 
+    public boolean isSetupDone() {
+        return setupDone;
+    }
+
     boolean isWaitingForDcChecker() {
         return waitingForDcChecker;
     }

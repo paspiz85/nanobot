@@ -205,11 +205,11 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     private void initialize() {
         LogHandler.initialize(textArea);
-        model.initialize(() -> setupResolution(), () -> setupBarracksStep1(), () -> updateButtons());
+        model.initialize(() -> setupResolution(), () -> setupBarracksStep1(), () -> updateUI());
         initLabels();
         initLinks();
         initSettingsPane();
-        updateButtons();
+        updateUI();
         if (model.checkForUpdate()) {
             updateLabel.setVisible(true);
         }
@@ -265,7 +265,7 @@ public class MainController implements ApplicationAwareController, Constants {
         rax4ComboBox.getItems().addAll(availableTroops);
         rax5ComboBox.getItems().addAll(availableTroops);
         rax6ComboBox.getItems().addAll(availableTroops);
-        updateSettingsPane(model.loadSettings());
+        updateUI();
     }
 
     private void platformRunNow(final Runnable runnable) throws InterruptedException {
@@ -378,13 +378,15 @@ public class MainController implements ApplicationAwareController, Constants {
         controlPane.setVisible(!value);
     }
 
-    private void updateButtons() {
-        final boolean value = model.isRunning();
-        startButton.setDisable(value);
-        stopButton.setDisable(!value);
-    }
-
-    private void updateSettingsPane(final Settings settings) {
+    private void updateUI() {
+        final boolean running = model.isRunning();
+        startButton.setDisable(running);
+        stopButton.setDisable(!running);
+        final boolean setupDone = model.isSetupDone();
+        if (setupDone) {
+            screenshotLink.setVisible(true);
+        }
+        final Settings settings = model.loadSettings();
         goldField.setText(settings.getGoldThreshold() + "");
         elixirField.setText(settings.getElixirThreshold() + "");
         deField.setText(settings.getDarkElixirThreshold() + "");
