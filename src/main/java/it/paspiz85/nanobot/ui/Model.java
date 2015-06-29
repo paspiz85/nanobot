@@ -87,7 +87,6 @@ public final class Model implements Constants {
         Settings.initialize();
         logger.info("Settings loaded...");
         logger.info("Make sure in-game language is English.");
-        updateUI.run();
         runnerService = new Service<Void>() {
 
             @Override
@@ -97,7 +96,7 @@ public final class Model implements Constants {
                     @Override
                     protected Void call() throws Exception {
                         updateUI.run();
-                        looper.start(setupResolution, setupBarracks);
+                        looper.start(setupResolution, setupBarracks,updateUI);
                         return null;
                     }
                 };

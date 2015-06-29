@@ -96,7 +96,7 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks)
+    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks, final Runnable updateUI)
             throws InterruptedException, BotException {
         if (!setupDone) {
             os.setup();
@@ -122,6 +122,7 @@ public final class Looper {
         dcThread.start();
         try {
             running = true;
+            updateUI.run();
             while (true) {
                 context.setState(StateIdle.instance());
                 loop(context);
