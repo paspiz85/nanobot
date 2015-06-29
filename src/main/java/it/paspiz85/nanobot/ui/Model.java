@@ -43,7 +43,7 @@ public final class Model implements Constants {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Service<Void> runnerService;
+    private Service<Void> runningService;
 
     private Model() {
     }
@@ -87,7 +87,7 @@ public final class Model implements Constants {
         Settings.initialize();
         logger.info("Settings loaded...");
         logger.info("Make sure in-game language is English.");
-        runnerService = new Service<Void>() {
+        runningService = new Service<Void>() {
 
             @Override
             protected Task<Void> createTask() {
@@ -95,23 +95,20 @@ public final class Model implements Constants {
 
                     @Override
                     protected Void call() throws Exception {
-                        updateUI.run();
-                        looper.start(setupResolution, setupBarracks,updateUI);
+                        looper.start(setupResolution, setupBarracks, updateUI);
                         return null;
                     }
                 };
             }
         };
-        runnerService.setOnCancelled(event -> {
-            runnerService.reset();
-            logger.warning("runner is cancelled.");
-            updateUI.run();
+        runningService.setOnCancelled(event -> {
+            runningService.reset();
+            logger.warning("Running is cancelled.");
         });
-        runnerService.setOnFailed(event -> {
-            runnerService.reset();
-            logger.log(Level.SEVERE, "runner is failed: " + runnerService.getException().getMessage(),
-                    runnerService.getException());
-            updateUI.run();
+        runningService.setOnFailed(event -> {
+            runningService.reset();
+            logger.log(Level.SEVERE, "Running is failed: " + runningService.getException().getMessage(),
+                    runningService.getException());
         });
     }
 
@@ -134,15 +131,15 @@ public final class Model implements Constants {
     }
 
     public void start() {
-        if (runnerService.getState() == State.READY) {
-            runnerService.start();
+        if (runningService.getState() == State.READY) {
+            runningService.start();
         }
     }
 
     public void stop() {
-        if (runnerService.isRunning()) {
-            runnerService.cancel();
-            runnerService.reset();
+        if (runningService.isRunning()) {
+            runningService.cancel();
+            runningService.reset();
         }
     }
 }

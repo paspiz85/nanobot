@@ -96,8 +96,8 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks, final Runnable updateUI)
-            throws InterruptedException, BotException {
+    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
+            final Runnable updateUI) throws InterruptedException, BotException {
         if (!setupDone) {
             os.setup();
             setupDone = true;
@@ -131,6 +131,7 @@ public final class Looper {
         } finally {
             running = false;
             logger.fine("looper stopped");
+            updateUI.run();
             dcThread.interrupt();
             this.waitingForDcChecker = false;
             context.setWaitDone(false);
