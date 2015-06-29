@@ -19,6 +19,8 @@ public final class MainScreenParser extends Parser {
     public Point findAttackButton() {
         Point result = null;
         final BufferedImage image = screenShot(Area.FULLSCREEN);
+        //TODO remove
+        saveImage(image, "attack_"+System.currentTimeMillis());
         final Rectangle rectangle = findArea(image, getClass().getResource("attack.png"));
         if (rectangle != null) {
             result = new Point(rectangle.getLocation().x, rectangle.getLocation().y);

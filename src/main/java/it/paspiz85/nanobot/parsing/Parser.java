@@ -5,6 +5,7 @@ import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -187,5 +188,10 @@ public abstract class Parser {
 
     protected final BufferedImage screenShot(final Area area) {
         return os.screenshot(area);
+    }
+
+    //TODO remove
+    protected final File saveImage(BufferedImage img, String... filePathRest) {
+        return os.saveImage(img, filePathRest);
     }
 }

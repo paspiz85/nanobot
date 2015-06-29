@@ -84,4 +84,6 @@ public interface OS {
     Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
+
+    File saveImage(BufferedImage img, String[] filePathRest);
 }

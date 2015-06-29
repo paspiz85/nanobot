@@ -46,8 +46,19 @@ public abstract class AbstractOS implements OS, Constants {
         leftClick(clickable.getPoint(), randomize);
     }
 
-    private File saveImage(final BufferedImage img, final String filePathFirst, final String... filePathRest)
-            throws IOException {
+    @Override public File saveImage(final BufferedImage img, final String... filePathRest) {
+        File result = null;
+        try {
+            result = saveImageInternal(img, IMG_FOLDER, filePathRest);
+        } catch (final IOException e1) {
+            logger.log(Level.SEVERE, e1.getMessage(), e1);
+        }
+        return result;
+        
+    }
+
+    private File saveImageInternal(final BufferedImage img, final String filePathFirst, final String... filePathRest)
+                throws IOException {
         final Path path = Paths.get(filePathFirst, filePathRest).toAbsolutePath();
         String fileName = path.getFileName().toString();
         if (!path.getFileName().toString().toLowerCase().endsWith(".png")) {
@@ -63,14 +74,8 @@ public abstract class AbstractOS implements OS, Constants {
 
     @Override
     public final File saveScreenshot(final Area area, final String... filePathRest) {
-        File result = null;
-        try {
-            final BufferedImage img = screenshot(area);
-            result = saveImage(img, IMG_FOLDER, filePathRest);
-        } catch (final IOException e1) {
-            logger.log(Level.SEVERE, e1.getMessage(), e1);
-        }
-        return result;
+        final BufferedImage img = screenshot(area);
+        return saveImage(img, filePathRest);
     }
 
     @Override
