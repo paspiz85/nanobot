@@ -21,6 +21,8 @@ public final class Looper {
 
     private static Looper instance;
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     public static Looper instance() {
         if (instance == null) {
             instance = new Looper();
@@ -28,7 +30,7 @@ public final class Looper {
         return instance;
     }
 
-    private final OS os = OS.instance();
+    private final OS os = DEFAULT_OS;
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 

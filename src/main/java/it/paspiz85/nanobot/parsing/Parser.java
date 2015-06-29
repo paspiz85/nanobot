@@ -26,6 +26,8 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public abstract class Parser {
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     private static final int[][] COLOR_EIGHT = new int[][] { { 0x27261F, 0x302F26, 0x26261F },
         { 0x282427, 0x302C30, 0x262326 }, { 0x252525, 0x2D2D2D, 0x242424 }, { 0x282828, 0x303030, 0x262626 } };
 
@@ -97,6 +99,8 @@ public abstract class Parser {
         return parser;
     }
 
+    private final OS os = DEFAULT_OS;
+
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private final int[] widths = new int[] { 13, 6, 10, 10, 12, 10, 11, 10, 11, 11 };
@@ -128,6 +132,10 @@ public abstract class Parser {
         colors[9] = COLOR_NINE;
     }
 
+    protected final boolean compareColor(final int c1, final int c2, final int var) {
+        return os.compareColor(c1, c2, var);
+    }
+
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
         Rectangle result = null;
         try {
@@ -148,7 +156,7 @@ public abstract class Parser {
             for (int j = 0; j < offsets[i].length; j++) {
                 final int actual = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
                 final int expected = colors[i][type][j];
-                if (!OS.instance().compareColor(actual, expected, VAR)) {
+                if (!os.compareColor(actual, expected, VAR)) {
                     found = false;
                     break;
                 }
@@ -175,5 +183,9 @@ public abstract class Parser {
             }
         }
         return no.isEmpty() ? null : Integer.parseInt(no);
+    }
+
+    protected final BufferedImage screenShot(final Area area) {
+        return os.screenShot(area);
     }
 }

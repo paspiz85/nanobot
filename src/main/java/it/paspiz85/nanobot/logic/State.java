@@ -17,11 +17,13 @@ import java.util.logging.Logger;
  */
 public abstract class State<P extends Parser> implements Constants {
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private final P parser;
 
-    protected final OS os = OS.instance();
+    protected final OS os = DEFAULT_OS;
 
     State(final P parser) {
         this.parser = parser;

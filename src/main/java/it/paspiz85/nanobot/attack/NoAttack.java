@@ -1,7 +1,5 @@
 package it.paspiz85.nanobot.attack;
 
-import it.paspiz85.nanobot.os.OS;
-
 /**
  * No attack, no bot actions.
  *
@@ -10,8 +8,7 @@ import it.paspiz85.nanobot.os.OS;
  */
 public final class NoAttack extends Attack {
 
-    NoAttack(final OS os) {
-        super(os);
+    NoAttack() {
     }
 
     @Override

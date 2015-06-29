@@ -14,17 +14,19 @@ import java.util.logging.Logger;
  */
 public class DisconnectChecker implements Runnable {
 
+    private static final OS DEFAAULT_OS = OS.instance();
+
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final Context context;
 
     private final Thread mainThread;
 
-    private final OS os = OS.instance();
+    private final OS os = DEFAAULT_OS;
 
-    private Looper looper;
+    private final Looper looper;
 
-    public DisconnectChecker(Looper looper, final Context context, final Thread mainThread) {
+    public DisconnectChecker(final Looper looper, final Context context, final Thread mainThread) {
         this.looper = looper;
         this.context = context;
         this.mainThread = mainThread;

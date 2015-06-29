@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.attack;
 
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
 
@@ -12,8 +11,7 @@ import it.paspiz85.nanobot.util.Point;
  */
 public final class Attack2Side extends Attack {
 
-    Attack2Side(final OS os) {
-        super(os);
+    Attack2Side() {
     }
 
     @Override

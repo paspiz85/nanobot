@@ -1,10 +1,11 @@
 package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
-import it.paspiz85.nanobot.parsing.Area;
+import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
@@ -25,6 +26,41 @@ import cucumber.api.java.en.When;
  * @author paspiz85
  */
 public class StepDefinitions {
+
+    public static class OSMock extends AbstractOSMock {
+
+        private static OSMock instance;
+
+        public static OSMock instance() {
+            if (instance == null) {
+                instance = new OSMock();
+            }
+            return instance;
+        }
+
+        private BufferedImage screenshot;
+
+        @Override
+        protected BufferedImage screenShot(final Point p1, final Point p2) {
+            final int x1 = p1.x();
+            final int y1 = p1.y();
+            final int x2 = p2.x();
+            final int y2 = p2.y();
+            return screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
+        }
+
+        public void setScreenshot(final BufferedImage screenshot) {
+            this.screenshot = screenshot;
+        }
+    }
+
+    private static final OS DEFAULT_OS;
+    static {
+        System.setProperty(OS.CLASS_PROPERTY, OSMock.class.getName());
+        DEFAULT_OS = OS.instance();
+    }
+
+    protected final OS os = DEFAULT_OS;
 
     private BufferedImage screenshot;
 
@@ -59,11 +95,7 @@ public class StepDefinitions {
 
     @When("^parsing enemy info$")
     public void whenParsingEnemyInfo() throws BotBadBaseException {
-        final int x1 = Area.ENEMY_LOOT.getP1().x();
-        final int y1 = Area.ENEMY_LOOT.getP1().y();
-        final int x2 = Area.ENEMY_LOOT.getP2().x();
-        final int y2 = Area.ENEMY_LOOT.getP2().y();
-        final BufferedImage lootScreenshot = screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
-        enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo(lootScreenshot);
+        OSMock.instance.setScreenshot(screenshot);
+        enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
     }
 }

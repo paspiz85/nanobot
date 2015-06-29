@@ -6,11 +6,13 @@ import it.paspiz85.nanobot.util.Point;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
-
-public class Model {
-    
-    //TODO remove singleton def and usage
-    private Looper looper = Looper.instance();
+/**
+ * Bot model.
+ *
+ * @author paspiz85
+ *
+ */
+public final class Model {
 
     private static Model instance;
 
@@ -20,17 +22,19 @@ public class Model {
         }
         return instance;
     }
-    
+
+    // TODO remove singleton def and usage
+    private final Looper looper = Looper.instance();
+
     private Model() {
-        
     }
 
     public boolean isRunning() {
         return looper.isRunning();
     }
 
-    public void start(BooleanSupplier setupResolution, Supplier<Point> setupBarracks) throws InterruptedException,
-            BotException {
+    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks)
+            throws InterruptedException, BotException {
         looper.start(setupResolution, setupBarracks);
     }
 }

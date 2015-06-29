@@ -2,7 +2,6 @@ package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -88,13 +87,13 @@ public final class AttackScreenParser extends Parser {
         return attackableElixirs;
     }
 
-    public boolean hasDE(final BufferedImage image) throws BotBadBaseException {
+    private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
         final int deCheck = image.getRGB(20, 0);
         // 0x80752B
         boolean result;
-        if (OS.instance().compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
+        if (compareColor(deCheck, new Color(128, 117, 43).getRGB(), 7)) {
             result = true;
-        } else if (OS.instance().compareColor(deCheck, 0xffb1a841, 7)) {
+        } else if (compareColor(deCheck, 0xffb1a841, 7)) {
             result = false;
         } else {
             throw new BotBadBaseException("de: " + Integer.toHexString(deCheck));
@@ -103,10 +102,7 @@ public final class AttackScreenParser extends Parser {
     }
 
     public boolean isCollectorFullBase() throws BotException {
-        return isCollectorFullBase(OS.instance().screenShot(Area.ENEMY_BASE));
-    }
-
-    public boolean isCollectorFullBase(final BufferedImage image) throws BotException {
+        final BufferedImage image = screenShot(Area.ENEMY_BASE);
         FileSystem fileSystem = null;
         Stream<Path> walk = null;
         try {
@@ -152,7 +148,7 @@ public final class AttackScreenParser extends Parser {
         }
     }
 
-    public Integer parseArcherQueenSlot(final BufferedImage image) {
+    private Integer parseArcherQueenSlot(final BufferedImage image) {
         Integer result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
         if (rectangle != null) {
@@ -161,7 +157,7 @@ public final class AttackScreenParser extends Parser {
         return result;
     }
 
-    public Integer parseBarbKingSlot(final BufferedImage image) {
+    private Integer parseBarbKingSlot(final BufferedImage image) {
         Integer result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource("bk.png"));
         if (rectangle != null) {
@@ -183,11 +179,7 @@ public final class AttackScreenParser extends Parser {
     }
 
     public EnemyInfo parseEnemyInfo() throws BotBadBaseException {
-        final BufferedImage image = OS.instance().screenShot(Area.ENEMY_LOOT);
-        return parseEnemyInfo(image);
-    }
-
-    public EnemyInfo parseEnemyInfo(final BufferedImage image) throws BotBadBaseException {
+        final BufferedImage image = screenShot(Area.ENEMY_LOOT);
         final EnemyInfo info = new EnemyInfo();
         info.setGold(parseGold(image));
         info.setElixir(parseElixir(image));
@@ -204,13 +196,7 @@ public final class AttackScreenParser extends Parser {
     }
 
     public int[] parseTroopCount() {
-        final BufferedImage image = OS.instance().screenShot(Area.ATTACK_GROUP);
-        final int[] troopCount = parseTroopCount(image);
-        logger.info("[Troop count: " + Arrays.toString(troopCount) + "]");
-        return troopCount;
-    }
-
-    public int[] parseTroopCount(final BufferedImage image) {
+        final BufferedImage image = screenShot(Area.ATTACK_GROUP);
         final int[] tmp = new int[11]; // max group size
         int xStart = 20;
         final int yStart = 11;

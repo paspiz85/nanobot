@@ -9,8 +9,10 @@ import it.paspiz85.nanobot.util.Point;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 import java.util.function.BooleanSupplier;
+import java.util.function.Supplier;
 
 /**
  * This wraps Operating System functionalities.
@@ -20,10 +22,36 @@ import java.util.function.BooleanSupplier;
  */
 public interface OS {
 
+    String CLASS_PROPERTY = OS.class.getName();
+
     Random RANDOM = new Random();
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    Supplier<Class<?>> CLASS_FINDER = new Supplier() {
+
+        private Class<?> cache;
+
+        @Override
+        public Class<?> get() {
+            if (cache == null) {
+                try {
+                    final String className = System.getProperty(CLASS_PROPERTY, Win32OS.class.getName());
+                    cache = Class.forName(className);
+                } catch (final ClassNotFoundException e) {
+                    throw new IllegalStateException("unable to initialize OS class", e);
+                }
+            }
+            return cache;
+        }
+    };
+
     static OS instance() {
-        return Win32OS.instance();
+        try {
+            return (OS) CLASS_FINDER.get().getMethod("instance").invoke(null);
+        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+                | SecurityException e) {
+            throw new IllegalStateException("unable to initialize OS", e);
+        }
     }
 
     boolean compareColor(int c1, int c2, int var);

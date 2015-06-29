@@ -2,7 +2,6 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.logic.Model;
 import it.paspiz85.nanobot.util.Logging;
 

@@ -37,17 +37,18 @@ public abstract class Attack {
 
     protected static final Point TOP = new Point(429, 18);
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     public static Attack[] getAvailableStrategies() {
         if (availableStrategies == null) {
-            final OS os = OS.instance();
             final List<Attack> list = new ArrayList<>();
             list.add(noStrategy());
             list.add(manualStrategy());
-            list.add(new Attack2Side(os));
-            list.add(new Attack4Side(os));
-            list.add(new Attack4SideParallel(os));
-            list.add(new Attack4SideParallelHalf2Wave(os));
-            list.add(new Attack4SideParallelFull2Wave(os));
+            list.add(new Attack2Side());
+            list.add(new Attack4Side());
+            list.add(new Attack4SideParallel());
+            list.add(new Attack4SideParallelHalf2Wave());
+            list.add(new Attack4SideParallelFull2Wave());
             availableStrategies = list.toArray(new Attack[0]);
         }
         return availableStrategies;
@@ -55,24 +56,23 @@ public abstract class Attack {
 
     public static Attack manualStrategy() {
         if (manualStrategy == null) {
-            manualStrategy = new ManualAttack(OS.instance());
+            manualStrategy = new ManualAttack();
         }
         return manualStrategy;
     }
 
     public static Attack noStrategy() {
         if (noStrategy == null) {
-            noStrategy = new NoAttack(OS.instance());
+            noStrategy = new NoAttack();
         }
         return noStrategy;
     }
 
-    protected final OS os;
+    protected final OS os = DEFAULT_OS;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    Attack(final OS os) {
-        this.os = os;
+    Attack() {
     }
 
     public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {

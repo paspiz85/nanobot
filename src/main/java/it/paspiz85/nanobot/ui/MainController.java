@@ -1,7 +1,6 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.logic.Model;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
@@ -49,10 +48,12 @@ import org.kohsuke.github.GitHub;
  */
 public class MainController implements ApplicationAwareController, Constants {
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     private Application application;
 
-    private Model model = Model.instance();
-    
+    private final Model model = Model.instance();
+
     @FXML
     private ComboBox<Attack> autoAttackComboBox;
 
@@ -143,6 +144,8 @@ public class MainController implements ApplicationAwareController, Constants {
     private Label versionLabel;
 
     private Service<Void> runnerService;
+
+    private final OS os = DEFAULT_OS;
 
     /**
      * GitHub dependency is only used here and unused parts are excluded. Make
@@ -397,7 +400,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private Point setupBarracksStep2() throws InterruptedException {
         final Point[] point = new Point[1];
-        OS.instance().zoomUp();
+        os.zoomUp();
         platformRunNow(() -> {
             try {
                 final Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -414,7 +417,7 @@ public class MainController implements ApplicationAwareController, Constants {
                 final Optional<ButtonType> result = alert.showAndWait();
                 if (result.get() == ButtonType.OK) {
                     logger.info("Waiting for user to click on first barracks.");
-                    point[0] = OS.instance().waitForClick();
+                    point[0] = os.waitForClick();
                 }
             } catch (final Exception e) {
                 logger.log(Level.SEVERE, "Unable to setup barracks", e);
