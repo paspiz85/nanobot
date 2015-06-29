@@ -122,6 +122,10 @@ public final class Model implements Constants {
         return looper.isRunning();
     }
 
+    public boolean isSetupDone() {
+        return looper.isSetupDone();
+    }
+
     public Settings loadSettings() {
         return Settings.instance();
     }
