@@ -46,7 +46,8 @@ public abstract class AbstractOS implements OS, Constants {
         leftClick(clickable.getPoint(), randomize);
     }
 
-    @Override public File saveImage(final BufferedImage img, final String... filePathRest) {
+    @Override 
+    public File saveImage(final BufferedImage img, final String... filePathRest) {
         File result = null;
         try {
             result = saveImageInternal(img, IMG_FOLDER, filePathRest);

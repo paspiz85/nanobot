@@ -85,5 +85,5 @@ public interface OS {
 
     void zoomUp() throws InterruptedException;
 
-    File saveImage(BufferedImage img, String[] filePathRest);
+    File saveImage(BufferedImage img, String... filePathRest);
 }
