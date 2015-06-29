@@ -30,7 +30,7 @@ public final class StateMainMenu extends State<MainScreenParser> {
 
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
-        // TODO fix log level and message
+        // TODO change message
         logger.fine("StateMainMenu");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");

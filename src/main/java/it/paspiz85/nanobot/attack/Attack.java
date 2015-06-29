@@ -85,7 +85,6 @@ public abstract class Attack {
 
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
-    // TODO
     protected final Point[] pointsBetweenFromToInclusive(final Point from, final Point to, final int count) {
         Point[] result;
         if (count <= 0) {

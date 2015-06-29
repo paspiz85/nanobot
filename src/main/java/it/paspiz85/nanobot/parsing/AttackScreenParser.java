@@ -129,7 +129,7 @@ public final class AttackScreenParser extends Parser {
             }
             final boolean result = attackableElixirs >= 0;
             if (!result) {
-                // TODO
+                // TODO move this log
                 logger.info("empty collectors");
             }
             return result;
@@ -238,7 +238,7 @@ public final class AttackScreenParser extends Parser {
     }
 
     private Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
-        // TODO
+        // TODO implement
         return null;
     }
 

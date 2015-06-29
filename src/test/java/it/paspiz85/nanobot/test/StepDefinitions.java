@@ -100,7 +100,8 @@ public class StepDefinitions {
         Assert.assertEquals(elixir, enemyInfo.getElixir());
         Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
         Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
-        // TODO Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+        // TODO implement
+        //Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
     }
 
     @When("^troops count is (.*)$")

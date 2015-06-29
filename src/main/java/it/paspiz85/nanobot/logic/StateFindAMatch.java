@@ -28,7 +28,7 @@ public final class StateFindAMatch extends State<Parser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        // TODO change
+        // TODO change log message
         logger.fine("StateFindAMatch");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
