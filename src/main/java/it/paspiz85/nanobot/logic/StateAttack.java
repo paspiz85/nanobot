@@ -1,16 +1,17 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Area;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
+import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
 
@@ -24,7 +25,7 @@ import javax.sound.sampled.Clip;
  * @author paspiz85
  *
  */
-public final class StateAttack extends State {
+public final class StateAttack extends State<AttackScreenParser> implements Constants {
 
     private static StateAttack instance;
 
@@ -35,12 +36,13 @@ public final class StateAttack extends State {
         return instance;
     }
 
-    private Loot prevLoot;
+    private EnemyInfo prevLoot;
 
     private StateAttack() {
+        super(Parser.getInstance(AttackScreenParser.class));
     }
 
-    public boolean doConditionsMatch(final Loot loot) {
+    public boolean doConditionsMatch(final EnemyInfo loot) {
         int gold = loot.getGold();
         int elixir = loot.getElixir();
         int de = loot.getDarkElixir();
@@ -72,28 +74,19 @@ public final class StateAttack extends State {
             }
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
-                try {
-                    OS.instance().saveScreenShot(Area.FULLSCREEN, "shots", "base_" + id);
-                } catch (final IOException e1) {
-                    logger.log(Level.SEVERE, e1.getMessage(), e1);
-                }
+                os.saveScreenshot(Area.FULLSCREEN, "base" + id);
             }
-            Loot loot;
+            EnemyInfo loot;
             boolean doAttack = false;
             try {
-                loot = Parsers.getAttackScreen().parseLoot();
+                loot = getParser().parseEnemyInfo();
                 doAttack = doConditionsMatch(loot)
-                        && (!Settings.instance().isDetectEmptyCollectors() || Parsers.getAttackScreen()
-                                .isCollectorFullBase());
+                        && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
             } catch (final BotBadBaseException e) {
-                try {
-                    OS.instance().saveScreenShot(Area.ENEMY_LOOT, "bug", "bad_base_" + id);
-                } catch (final IOException e1) {
-                    logger.log(Level.SEVERE, e1.getMessage(), e1);
-                }
+                os.saveScreenshot(Area.ENEMY_LOOT, "bad_base_" + id);
                 throw e;
             }
-            final int[] attackGroup = Parsers.getAttackScreen().parseTroopCount();
+            final int[] attackGroup = getParser().parseTroopCount();
             if (doAttack) {
                 // // debug
                 // if (true) {
@@ -102,12 +95,12 @@ public final class StateAttack extends State {
                 if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
                     attackStrategy.attack(loot, attackGroup);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
-                    OS.instance().leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
-                    OS.instance().sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
+                    os.sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
+                    os.sleepRandom(1200);
+                    os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
+                    os.sleepRandom(1200);
                 } else {
                     if (loot.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
@@ -128,19 +121,19 @@ public final class StateAttack extends State {
                      */
                     Thread.sleep(5000);
                 }
-                context.setState(StateIdle.instance());
                 break;
             } else {
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                OS.instance().leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
-                OS.instance().sleepRandom(666);
-                OS.instance().sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                os.leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
+                os.sleepRandom(666);
+                os.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
                 // to avoid server/client sync from nexting too fast
-                OS.instance().sleepRandom(1000);
+                os.sleepRandom(1000);
             }
         }
+        context.setState(StateIdle.instance());
     }
 
     void playAttackReady() {

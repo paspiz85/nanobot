@@ -2,8 +2,9 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
+import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
 import java.util.ArrayList;
@@ -22,6 +23,8 @@ public abstract class Attack {
 
     private static Attack[] availableStrategies;
 
+    private static NoAttack noStrategy;
+
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
     protected static final Point BOTTOM_RIGHT = new Point(537, 538);
@@ -34,16 +37,18 @@ public abstract class Attack {
 
     protected static final Point TOP = new Point(429, 18);
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     public static Attack[] getAvailableStrategies() {
         if (availableStrategies == null) {
-            final OS os = OS.instance();
             final List<Attack> list = new ArrayList<>();
+            list.add(noStrategy());
             list.add(manualStrategy());
-            list.add(new Attack2Side(os));
-            list.add(new Attack4Side(os));
-            list.add(new Attack4SideParallel(os));
-            list.add(new Attack4SideParallelHalf2Wave(os));
-            list.add(new Attack4SideParallelFull2Wave(os));
+            list.add(new Attack2Side());
+            list.add(new Attack4Side());
+            list.add(new Attack4SideParallel());
+            list.add(new Attack4SideParallelHalf2Wave());
+            list.add(new Attack4SideParallelFull2Wave());
             availableStrategies = list.toArray(new Attack[0]);
         }
         return availableStrategies;
@@ -51,20 +56,26 @@ public abstract class Attack {
 
     public static Attack manualStrategy() {
         if (manualStrategy == null) {
-            manualStrategy = new ManualAttack(OS.instance());
+            manualStrategy = new ManualAttack();
         }
         return manualStrategy;
     }
 
-    protected final OS os;
+    public static Attack noStrategy() {
+        if (noStrategy == null) {
+            noStrategy = new NoAttack();
+        }
+        return noStrategy;
+    }
+
+    protected final OS os = DEFAULT_OS;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected Attack(final OS os) {
-        this.os = os;
+    Attack() {
     }
 
-    public final void attack(final Loot loot, final int[] attackGroup) throws InterruptedException {
+    public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
         os.zoomUp();
         doDropUnits(attackGroup);
@@ -74,7 +85,6 @@ public abstract class Attack {
 
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
-    // TODO
     protected final Point[] pointsBetweenFromToInclusive(final Point from, final Point to, final int count) {
         Point[] result;
         if (count <= 0) {
@@ -92,16 +102,16 @@ public abstract class Attack {
         return result;
     }
 
-    private void sleepUntilLootDoesNotChange(final Loot loot) throws InterruptedException {
+    private void sleepUntilLootDoesNotChange(final EnemyInfo loot) throws InterruptedException {
         Thread.sleep(10000);
-        Loot prevLoot = loot;
+        EnemyInfo prevLoot = loot;
         int diff = Integer.MAX_VALUE;
         final int delta = 500;
         while (diff > delta) {
             Thread.sleep(15000);
-            Loot currLoot;
+            EnemyInfo currLoot;
             try {
-                currLoot = Parsers.getAttackScreen().parseLoot();
+                currLoot = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
             } catch (final BotBadBaseException e) {
                 Thread.sleep(2000);
                 // in case of 100% win/no troops left, attack screen will end

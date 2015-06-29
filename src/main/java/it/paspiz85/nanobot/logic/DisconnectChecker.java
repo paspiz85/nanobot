@@ -2,8 +2,6 @@ package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
-import it.paspiz85.nanobot.state.Context;
-import it.paspiz85.nanobot.state.StateIdle;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,32 +14,39 @@ import java.util.logging.Logger;
  */
 public class DisconnectChecker implements Runnable {
 
+    private static final OS DEFAAULT_OS = OS.instance();
+
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final Context context;
 
     private final Thread mainThread;
 
-    public DisconnectChecker(final Context context, final Thread mainThread) {
+    private final OS os = DEFAAULT_OS;
+
+    private final Looper looper;
+
+    public DisconnectChecker(final Looper looper, final Context context, final Thread mainThread) {
+        this.looper = looper;
         this.context = context;
         this.mainThread = mainThread;
     }
 
     @Override
     public void run() {
-        logger.info("Running disconnect detector...");
+        logger.fine("Running disconnect detector...");
         try {
             while (true) {
                 if (Thread.interrupted()) {
                     throw new InterruptedException("Disconnect detector is interrupted.");
                 }
-                if (OS.instance().isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
+                if (os.isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
                     logger.info("Detected disconnect.");
                     synchronized (context) {
                         // case 1: launcher was running and it will be
                         // interrupted. It will go back to StateIdle start
                         // running immediately.
-                        if (!Looper.instance().isWaitingForDcChecker()) {
+                        if (!looper.isWaitingForDcChecker()) {
                             context.setDisconnected(true);
                             // to fix a potential race condition.
                             // if bot launcher throws an exception and this
@@ -62,12 +67,12 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    OS.instance().leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
-                    OS.instance().sleepRandom(5000);
+                    os.leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
+                    os.sleepRandom(5000);
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);
                 }
-                Thread.sleep(10000);
+                Thread.sleep(30000);
             }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "dc checker: " + e.getMessage(), e);

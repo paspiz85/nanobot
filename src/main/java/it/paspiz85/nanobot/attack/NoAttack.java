@@ -1,14 +1,14 @@
 package it.paspiz85.nanobot.attack;
 
 /**
- * Manual attack, no bot actions.
+ * No attack, no bot actions.
  *
  * @author paspiz85
  *
  */
-public final class ManualAttack extends Attack {
+public final class NoAttack extends Attack {
 
-    ManualAttack() {
+    NoAttack() {
     }
 
     @Override

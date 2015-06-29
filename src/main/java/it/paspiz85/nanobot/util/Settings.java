@@ -50,7 +50,7 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    private Attack attackStrategy = Attack.manualStrategy();
+    private Attack attackStrategy = Attack.noStrategy();
 
     private final Clickable[] availableTroops;
 
@@ -79,13 +79,15 @@ public final class Settings {
     private boolean playSound;
 
     private final Clickable[] raxInfo = new Clickable[] { Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_BARB,
-            Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, };
+            Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_NO_UNIT,
+            Clickable.BUTTON_RAX_NO_UNIT };
 
     private Settings() {
         availableTroops = new Clickable[] { Clickable.BUTTON_RAX_NO_UNIT, Clickable.BUTTON_RAX_BARB,
                 Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_GIANT, Clickable.BUTTON_RAX_GOBLIN,
                 Clickable.BUTTON_RAX_WB, Clickable.BUTTON_RAX_BALLOON, Clickable.BUTTON_RAX_WIZARD,
-                Clickable.BUTTON_RAX_HEALER, Clickable.BUTTON_RAX_DRAGON, Clickable.BUTTON_RAX_PEKKA };
+                Clickable.BUTTON_RAX_HEALER, Clickable.BUTTON_RAX_DRAGON, Clickable.BUTTON_RAX_PEKKA,
+                Clickable.BUTTON_RAX_MINION, Clickable.BUTTON_RAX_HOGRIDER };
     }
 
     public Attack getAttackStrategy() {
@@ -138,17 +140,6 @@ public final class Settings {
 
     public boolean isPlaySound() {
         return playSound;
-    }
-
-    public void reset() {
-        setFirstBarrackPosition(null);
-        setGoldThreshold(150000);
-        setElixirThreshold(150000);
-        setDarkElixirThreshold(0);
-        setDetectEmptyCollectors(true);
-        setMatchAllConditions(false);
-        setLogLevel(Level.INFO);
-        setLogEnemyBase(false);
     }
 
     public void save() {

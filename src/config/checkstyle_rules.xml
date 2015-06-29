@@ -176,6 +176,7 @@
 		</module>
 		<module name="VisibilityModifier">
 			<property name="severity" value="error" />
+			<property name="protectedAllowed" value="true"/>
 		</module>
 		<module name="ArrayTypeStyle">
 			<property name="severity" value="error" />

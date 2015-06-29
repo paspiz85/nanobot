@@ -1,7 +1,7 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.Parser;
 
 /**
  * This state is when bot sleeps.
@@ -9,7 +9,7 @@ import it.paspiz85.nanobot.parsing.Clickable;
  * @author paspiz85
  *
  */
-public final class StateIdle extends State {
+public final class StateIdle extends State<Parser> {
 
     private static StateIdle instance;
 
@@ -23,11 +23,12 @@ public final class StateIdle extends State {
     private boolean reloading;
 
     private StateIdle() {
+        super(Parser.getInstance(null));
     }
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        State nextState = null;
+        State<?> nextState = null;
         while (true) {
             logger.info("Idle");
             if (Thread.interrupted()) {
@@ -35,21 +36,22 @@ public final class StateIdle extends State {
             }
             if (reloading) {
                 logger.info("reloading...");
+                os.zoomUp();
                 Thread.sleep(2000);
                 continue;
             }
-            if (OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE)
-                    || OS.instance().isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
+            if (os.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_HEADLINE)
+                    || os.isClickableActive(Clickable.BUTTON_WAS_ATTACKED_OKAY)) {
                 logger.info("Was attacked.");
-                OS.instance().leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY.getPoint(), true);
-                OS.instance().sleepRandom(250);
-            } else if (OS.instance().isClickableActive(Clickable.BUTTON_ATTACK)) {
+                os.leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY.getPoint(), true);
+                os.sleepRandom(250);
+            } else if (os.isClickableActive(Clickable.BUTTON_ATTACK)) {
                 nextState = StateMainMenu.instance();
                 break;
-            } else if (OS.instance().isClickableActive(Clickable.BUTTON_NEXT)) {
+            } else if (os.isClickableActive(Clickable.BUTTON_NEXT)) {
                 nextState = StateAttack.instance();
                 break;
-            } else if (OS.instance().isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
+            } else if (os.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {
                 nextState = StateFindAMatch.instance();
                 break;
             }

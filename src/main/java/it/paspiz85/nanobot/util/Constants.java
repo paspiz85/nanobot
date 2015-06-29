@@ -7,6 +7,8 @@ package it.paspiz85.nanobot.util;
  */
 public interface Constants {
 
+    String IMG_FOLDER = "img";
+
     int TRAIN_BARB_MS = 20000;
 
     int[] BARRACK_SIZE_BY_LEVEL = { 20, 25, 30, 35, 40, 45, 50, 55, 60, 75 };

@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.state;
+package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotException;
 
@@ -14,13 +14,15 @@ public final class Context {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private State current;
+    private State<?> current;
 
     private boolean disconnected;
 
     private boolean waitDone;
 
     private int trainCount;
+
+    private boolean languageChecked;
 
     public int getTrainCount() {
         return trainCount;
@@ -38,6 +40,10 @@ public final class Context {
         return disconnected;
     }
 
+    public boolean isLanguageChecked() {
+        return languageChecked;
+    }
+
     public boolean isWaitDone() {
         return waitDone;
     }
@@ -46,7 +52,11 @@ public final class Context {
         this.disconnected = disconnected;
     }
 
-    public void setState(final State state) {
+    public void setLanguageChecked(final boolean languageChecked) {
+        this.languageChecked = languageChecked;
+    }
+
+    public void setState(final State<?> state) {
         logger.fine("Setting next state to: " + state.getClass().getSimpleName());
         this.current = state;
         if (state instanceof StateIdle) {

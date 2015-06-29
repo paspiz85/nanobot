@@ -2,8 +2,8 @@
 .classpath
 .project
 .settings
+img
 lib/jnativehook-2.0.0-RC5
 nanobot.log*
 nanobot.properties
-shots
 target

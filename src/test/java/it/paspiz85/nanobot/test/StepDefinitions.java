@@ -1,18 +1,26 @@
 package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
-import it.paspiz85.nanobot.parsing.Area;
-import it.paspiz85.nanobot.parsing.Loot;
-import it.paspiz85.nanobot.parsing.Parsers;
+import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.os.OS;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
+import it.paspiz85.nanobot.parsing.EnemyInfo;
+import it.paspiz85.nanobot.parsing.MainScreenParser;
+import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 
 import javax.imageio.ImageIO;
 
 import org.junit.Assert;
 
 import cucumber.api.java.en.Given;
+import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
 /**
@@ -22,29 +30,120 @@ import cucumber.api.java.en.When;
  */
 public class StepDefinitions {
 
+    public static class OSMock extends AbstractOSMock {
+
+        private static OSMock instance;
+
+        public static OSMock instance() {
+            if (instance == null) {
+                instance = new OSMock();
+            }
+            return instance;
+        }
+
+        private BufferedImage screenshot;
+
+        @Override
+        protected BufferedImage screenshot(final Point p1, final Point p2) {
+            final int x1 = p1.x();
+            final int y1 = p1.y();
+            final int x2 = p2.x();
+            final int y2 = p2.y();
+            return screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
+        }
+
+        public void setScreenshot(final BufferedImage screenshot) {
+            this.screenshot = screenshot;
+        }
+    }
+
+    private static final OS DEFAULT_OS;
+    static {
+        System.setProperty(OS.CLASS_PROPERTY, OSMock.class.getName());
+        DEFAULT_OS = OS.instance();
+    }
+
+    protected final OS os = DEFAULT_OS;
+
     private BufferedImage screenshot;
 
-    private Loot loot;
+    private EnemyInfo enemyInfo;
 
-    @Given("^enemy screenshot saved as (.*?)$")
-    public void givenEnemyScreenshot(final String imagefile) throws IOException {
-        screenshot = ImageIO.read(getClass().getResourceAsStream("/screenshot/" + imagefile));
+    private Boolean isCollectorsFull;
+
+    private int[] troopsCount;
+
+    private Point attackButtonPoint;
+
+    @Given("^screenshot saved as (.*)$")
+    public void givenScreenshot(final String imagefile) throws IOException {
+        final URI uri = URI.create(imagefile);
+        switch (uri.getScheme()) {
+        case "classpath":
+            try (InputStream inStream = getClass().getResourceAsStream(uri.getPath())) {
+                screenshot = ImageIO.read(inStream);
+            }
+            break;
+        default:
+            try (InputStream inStream = new FileInputStream(uri.getPath())) {
+                screenshot = ImageIO.read(inStream);
+            }
+            break;
+        }
     }
 
-    @When("^loot found is (.*?), (.*?), (.*?)$")
-    public void thenLootFound(final Integer gold, final Integer elixir, final Integer darkelixir) {
-        Assert.assertEquals(gold, loot.getGold());
-        Assert.assertEquals(elixir, loot.getElixir());
-        Assert.assertEquals(darkelixir, loot.getDarkElixir());
+    @Then("^attack button is (.*)$")
+    public void thenAttackButtonIs(final Boolean found) {
+        Assert.assertEquals(found, attackButtonPoint != null);
     }
 
-    @When("^parsing loot$")
-    public void whenParsingLoot() throws BotBadBaseException {
-        final int x1 = Area.ENEMY_LOOT.getP1().x();
-        final int y1 = Area.ENEMY_LOOT.getP1().y();
-        final int x2 = Area.ENEMY_LOOT.getP2().x();
-        final int y2 = Area.ENEMY_LOOT.getP2().y();
-        final BufferedImage lootScreenshot = screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
-        loot = Parsers.getAttackScreen().parseLoot(lootScreenshot);
+    @Then("^collectors is (.*)$")
+    public void thenCollectorIs(final Boolean full) {
+        Assert.assertEquals(full, isCollectorsFull);
+    }
+
+    @Then("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
+    public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
+            final Integer trophyWin, final Integer thophyDefeat) {
+        Assert.assertEquals(gold, enemyInfo.getGold());
+        Assert.assertEquals(elixir, enemyInfo.getElixir());
+        Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
+        Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
+        // TODO implement
+        // Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+    }
+
+    @Then("^troops count is (.*)$")
+    public void thenTroopsCountIs(final String troopsCount) {
+        final String[] split = troopsCount.substring(1, troopsCount.length() - 1).split(",");
+        final int[] expected = new int[split.length];
+        for (int i = 0; i < split.length; i++) {
+            expected[i] = Integer.parseInt(split[i].trim());
+        }
+        Assert.assertArrayEquals(expected, this.troopsCount);
+    }
+
+    @When("^checking collectors$")
+    public void whenCheckingCollectors() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
+    }
+
+    @When("^parsing attack button$")
+    public void whenParsingAttackButton() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        attackButtonPoint = Parser.getInstance(MainScreenParser.class).findAttackButton();
+    }
+
+    @When("^parsing enemy info$")
+    public void whenParsingEnemyInfo() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
+    }
+
+    @When("^parsing troops$")
+    public void whenParsingTroops() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 }

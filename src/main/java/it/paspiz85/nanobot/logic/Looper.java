@@ -3,8 +3,6 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.state.Context;
-import it.paspiz85.nanobot.state.StateIdle;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -23,12 +21,16 @@ public final class Looper {
 
     private static Looper instance;
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     public static Looper instance() {
         if (instance == null) {
             instance = new Looper();
         }
         return instance;
     }
+
+    private final OS os = DEFAULT_OS;
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -45,7 +47,11 @@ public final class Looper {
         return running;
     }
 
-    public boolean isWaitingForDcChecker() {
+    public boolean isSetupDone() {
+        return setupDone;
+    }
+
+    boolean isWaitingForDcChecker() {
         return waitingForDcChecker;
     }
 
@@ -73,6 +79,9 @@ public final class Looper {
         } catch (final Exception e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             botException = e;
+            if (e instanceof BotConfigurationException) {
+                throw e;
+            }
         }
         final long timeout = 10 * 60 * 1000;
         // wait for dc checker to wake me up
@@ -94,13 +103,15 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks)
-            throws InterruptedException, BotException {
+    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
+            final Runnable updateUI) throws InterruptedException, BotException {
+        logger.info("Starting...");
         if (!setupDone) {
-            OS.instance().setup();
+            os.setup();
             setupDone = true;
         }
-        OS.instance().setupResolution(setupResolution);
+        os.setupResolution(setupResolution);
+        logger.info("Checking barracks...");
         if (Settings.instance().getFirstBarrackPosition() == null) {
             logger.info("Setting up Barracks...");
             final Point point = setupBarracks.get();
@@ -113,19 +124,23 @@ public final class Looper {
         }
         logger.info("Setup is successful.");
         final Context context = new Context();
-        logger.info("Starting disconnect detector...");
-        final Thread dcThread = new Thread(new DisconnectChecker(context, Thread.currentThread()),
+        logger.fine("Starting disconnect detector...");
+        final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),
                 "DisconnectCheckerThread");
         dcThread.setDaemon(true);
         dcThread.start();
         try {
             running = true;
+            logger.fine("looper running");
+            updateUI.run();
             while (true) {
                 context.setState(StateIdle.instance());
                 loop(context);
             }
         } finally {
             running = false;
+            logger.fine("looper stopped");
+            updateUI.run();
             dcThread.interrupt();
             this.waitingForDcChecker = false;
             context.setWaitDone(false);
