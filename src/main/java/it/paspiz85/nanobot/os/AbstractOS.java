@@ -69,6 +69,7 @@ public abstract class AbstractOS implements OS, Constants {
         if (!file.getParentFile().isDirectory()) {
             file.getParentFile().mkdirs();
         }
+        logger.fine("Saving image at " + file.getAbsolutePath());
         ImageIO.write(img, "png", file);
         return file;
     }
