@@ -17,11 +17,17 @@ public final class MainScreenParser extends Parser {
     }
 
     public Point findAttackButton() {
+        return findCenterArea(Area.ATTACK_BUTTON, "attack.png");
+    }
+
+    private Point findCenterArea(final Area area, final String resource) {
+        final BufferedImage image = screenShot(area);
         Point result = null;
-        final BufferedImage image = screenShot(Area.ATTACK_BUTTON);
-        final Rectangle rectangle = findArea(image, getClass().getResource("attack.png"));
+        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
         if (rectangle != null) {
-            result = new Point(rectangle.getLocation().x, rectangle.getLocation().y);
+            int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
+            int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);
+            result = new Point(x, y);
         }
         return result;
     }
