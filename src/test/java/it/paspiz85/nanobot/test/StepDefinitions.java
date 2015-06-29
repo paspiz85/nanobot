@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
+import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
@@ -66,7 +67,11 @@ public class StepDefinitions {
 
     private EnemyInfo enemyInfo;
 
-    @Given("^enemy screenshot saved as (.*?)$")
+    private Boolean isCollectorsFull;
+
+    private int[] troopsCount;
+
+    @Given("^enemy screenshot saved as (.*)$")
     public void givenEnemyScreenshot(final String imagefile) throws IOException {
         final URI uri = URI.create(imagefile);
         switch (uri.getScheme()) {
@@ -83,19 +88,46 @@ public class StepDefinitions {
         }
     }
 
-    @When("^enemy info found is (.*?), (.*?), (.*?), (.*?), (.*?)$")
+    @When("^collectors is (.*)$")
+    public void thenCollectorIs(final Boolean full) {
+        Assert.assertEquals(full, isCollectorsFull);
+    }
+
+    @When("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
     public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
             final Integer trophyWin, final Integer thophyDefeat) {
         Assert.assertEquals(gold, enemyInfo.getGold());
         Assert.assertEquals(elixir, enemyInfo.getElixir());
         Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
         Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
-        // TODOAssert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+        // TODO Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+    }
+
+    @When("^troops count is (.*)$")
+    public void thenTroopsCountIs(final String troopsCount) {
+        final String[] split = troopsCount.substring(1, troopsCount.length() - 1).split(",");
+        final int[] expected = new int[split.length];
+        for (int i = 0; i < split.length; i++) {
+            expected[i] = Integer.parseInt(split[i].trim());
+        }
+        Assert.assertArrayEquals(expected, this.troopsCount);
+    }
+
+    @When("^checking collectors$")
+    public void whenCheckingCollectors() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
     }
 
     @When("^parsing enemy info$")
     public void whenParsingEnemyInfo() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
         enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
+    }
+
+    @When("^parsing troops$")
+    public void whenParsingTroops() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 }

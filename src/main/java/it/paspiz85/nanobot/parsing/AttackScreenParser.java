@@ -101,7 +101,7 @@ public final class AttackScreenParser extends Parser {
         return result;
     }
 
-    public boolean isCollectorFullBase() throws BotException {
+    public Boolean isCollectorFullBase() throws BotException {
         final BufferedImage image = screenShot(Area.ENEMY_BASE);
         FileSystem fileSystem = null;
         Stream<Path> walk = null;
@@ -129,6 +129,7 @@ public final class AttackScreenParser extends Parser {
             }
             final boolean result = attackableElixirs >= 0;
             if (!result) {
+                // TODO
                 logger.info("empty collectors");
             }
             return result;
