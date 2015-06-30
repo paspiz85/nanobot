@@ -24,6 +24,7 @@ Feature: parsing main screen
       | classpath:/features/img/main_1435698446657.png | [261,225] |
       | classpath:/features/img/main_1435699320137.png | [618,281] |
       | classpath:/features/img/main_1435700312519.png | [440,162] |
+      | classpath:/features/img/main_1435701087138.png | [308,401] |
 
 
   Scenario Outline: search full elixir collector
