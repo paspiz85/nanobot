@@ -1,5 +1,5 @@
 #!/bin/bash
-FOLDER="nanobot"
+FOLDER="/tmp/nanobot"
 GIT_URL="https://github.com/paspiz85/nanobot.git"
 GIT_BRANCH="feature/collecting"
 
@@ -9,6 +9,7 @@ pushd $FOLDER
 {
 	git checkout $GIT_BRANCH
 	mvn clean install
+	echo $?
 } || {
 	popd
 	rm -rf $FOLDER

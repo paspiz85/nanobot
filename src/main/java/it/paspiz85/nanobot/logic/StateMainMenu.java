@@ -41,19 +41,23 @@ public final class StateMainMenu extends State<MainScreenParser> implements Cons
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
             if (getParser().searchAttackButton() == null) {
-                throw new BotConfigurationException("Make sure in-game language is English");
+                throw new BotConfigurationException("Make sure in-game language is English!");
             }
+            logger.info("Checking language OK.");
             context.setLanguageChecked(true);
         }
         if (context.getTrainCount() % 10 == 0) {
             logger.info("Searching full collectors...");
+            int count = 0;
             for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
                 final Point p = getParser().searchFullDarkElixirDrill();
                 if (p != null) {
                     os.leftClick(p, false);
                     os.sleepRandom(200);
+                    count++;
                 }
             }
+            logger.info(String.format("Found %d full collectors.", count));
         }
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
         logger.fine("Try open barracks");

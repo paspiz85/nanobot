@@ -91,7 +91,7 @@ public final class Model implements Constants {
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
         Settings.initialize();
-        logger.info("Settings loaded");
+        logger.info("Settings loaded.");
         runningService = new Service<Void>() {
 
             @Override
