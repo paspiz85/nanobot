@@ -20,6 +20,7 @@ Feature: parsing main screen
     Examples:
       | imagefile                                      | coords    |
       | classpath:/features/img/main_1435696574573.png | [449,436] |
+      | classpath:/features/img/main_1435698446657.png | [261,225] |
 
   Scenario Outline: search full elixir collector
     Given screenshot saved as <imagefile>
