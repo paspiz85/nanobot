@@ -77,6 +77,10 @@ public class StepDefinitions {
 
     private Point fullDarkElixirDrillPoint;
 
+    private Point fullElixirCollectorPoint;
+
+    private Point fullGoldMinePoint;
+
     @Given("^screenshot saved as (.*)$")
     public void givenScreenshot(final String imagefile) throws IOException {
         final URI uri = URI.create(imagefile);
@@ -127,9 +131,21 @@ public class StepDefinitions {
     }
 
     @Then("^full dark elixir drill found at (.*)$")
-    public void thenFullDarkElixirFoundAt(final String coords) {
+    public void thenFullDarkElixirDrillFoundAt(final String coords) {
         final Point point = parsePoint(coords);
         Assert.assertEquals(point, fullDarkElixirDrillPoint);
+    }
+
+    @Then("^full elixir collector found at (.*)$")
+    public void thenFullElixirCollectorFoundAt(final String coords) {
+        final Point point = parsePoint(coords);
+        Assert.assertEquals(point, fullElixirCollectorPoint);
+    }
+
+    @Then("^full gold mine found at (.*)$")
+    public void thenFullGoldMineFoundAt(final String coords) {
+        final Point point = parsePoint(coords);
+        Assert.assertEquals(point, fullGoldMinePoint);
     }
 
     @Then("^troops count is (.*)$")
@@ -170,5 +186,17 @@ public class StepDefinitions {
     public void whenSearchingFullDarkElixirDrill() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
         fullDarkElixirDrillPoint = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+    }
+
+    @When("^searching full elixir collector$")
+    public void whenSearchingFullElixirCollector() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        fullElixirCollectorPoint = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+    }
+
+    @When("^searching full gold mine$")
+    public void whenSearchingFullGoldMine() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        fullGoldMinePoint = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
     }
 }

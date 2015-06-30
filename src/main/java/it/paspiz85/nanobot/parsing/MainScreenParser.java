@@ -12,6 +12,10 @@ import java.awt.image.BufferedImage;
  */
 public final class MainScreenParser extends Parser {
 
+    private static final String[] COLLECT_GOLD = { "collect/gold_1.png" };
+
+    private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png" };
+
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
     MainScreenParser() {
@@ -26,6 +30,30 @@ public final class MainScreenParser extends Parser {
         final BufferedImage image = screenShot(Area.FULLSCREEN);
         Point point = null;
         for (final String resource : COLLECT_DARK_ELIXIR) {
+            point = searchImageCenter(image, resource);
+            if (point != null) {
+                break;
+            }
+        }
+        return point;
+    }
+
+    public Point searchFullElixirCollector() {
+        final BufferedImage image = screenShot(Area.FULLSCREEN);
+        Point point = null;
+        for (final String resource : COLLECT_ELIXIR) {
+            point = searchImageCenter(image, resource);
+            if (point != null) {
+                break;
+            }
+        }
+        return point;
+    }
+
+    public Point searchFullGoldMine() {
+        final BufferedImage image = screenShot(Area.FULLSCREEN);
+        Point point = null;
+        for (final String resource : COLLECT_GOLD) {
             point = searchImageCenter(image, resource);
             if (point != null) {
                 break;

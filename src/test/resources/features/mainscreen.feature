@@ -12,6 +12,24 @@ Feature: parsing main screen
       | classpath:/features/img/main_1435601238653.png | [62,643] |
       | classpath:/features/img/main_1435603470723.png | [62,643] |
 
+  Scenario Outline: search full gold mine
+    Given screenshot saved as <imagefile>
+    When searching full gold mine
+    Then full gold mine found at <coords>
+
+    Examples:
+      | imagefile                                      | coords    |
+      | classpath:/features/img/main_1435696574573.png | [449,436] |
+
+  Scenario Outline: search full elixir collector
+    Given screenshot saved as <imagefile>
+    When searching full elixir collector
+    Then full elixir collector found at <coords>
+
+    Examples:
+      | imagefile                                      | coords    |
+      | classpath:/features/img/main_1435603470723.png | [458,193] |
+
   Scenario Outline: search full dark elixir drill
     Given screenshot saved as <imagefile>
     When searching full dark elixir drill
