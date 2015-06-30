@@ -76,12 +76,18 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             if (Settings.instance().isLogEnemyBase()) {
                 os.saveScreenshot(Area.FULLSCREEN, "base_" + id);
             }
-            EnemyInfo loot;
+            EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
-                loot = getParser().parseEnemyInfo();
-                doAttack = doConditionsMatch(loot)
-                        && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
+                enemyInfo = getParser().parseEnemyInfo();
+                logger.info(String.format("Opponent %d has %s.", id, enemyInfo.toString()));
+                doAttack = doConditionsMatch(enemyInfo);
+                if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
+                    doAttack = getParser().isCollectorFullBase();
+                    if (!doAttack) {
+                        logger.info(String.format("Opponent %d has empty collectors.", id));
+                    }
+                }
             } catch (final BotBadBaseException e) {
                 os.saveScreenshot(Area.ENEMY_LOOT, "bad_base_" + id);
                 throw e;
@@ -94,7 +100,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 final Attack attackStrategy = Settings.instance().getAttackStrategy();
                 if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
-                    attackStrategy.attack(loot, attackGroup);
+                    attackStrategy.attack(enemyInfo, attackGroup);
                     os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
                     os.sleepRandom(1200);
                     os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
@@ -102,12 +108,12 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
                     os.sleepRandom(1200);
                 } else {
-                    if (loot.equals(prevLoot)) {
+                    if (enemyInfo.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
                     } else {
                         playAttackReady();
                     }
-                    prevLoot = loot;
+                    prevLoot = enemyInfo;
                     /**
                      * NOTE: minor race condition 1. Matching base found. 2.
                      * sound is played. 3. prevLoot is set to full available

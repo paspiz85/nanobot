@@ -63,8 +63,7 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
 
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
-        // TODO change message
-        logger.fine("StateMainMenu");
+        logger.fine("Returned in main menu");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
@@ -98,11 +97,11 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.leftClick(trainButton, false);
         os.sleepRandom(500);
         if (os.isClickableActive(Clickable.BUTTON_RAX_FULL)) {
-            logger.info("Camp is full");
+            logger.info("Camp is full.");
             logger.fine("Close barracks");
             os.leftClick(Clickable.BUTTON_RAX_CLOSE, true);
             os.sleepRandom(200);
-            logger.fine("Press Attack");
+            logger.fine("Press Attack.");
             os.leftClick(Clickable.BUTTON_ATTACK, true);
             os.sleepRandom(1000);
             context.setState(StateFindAMatch.instance());

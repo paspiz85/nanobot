@@ -127,12 +127,7 @@ public final class AttackScreenParser extends Parser {
                         tar, 7, 0.8);
                 attackableElixirs += countAttackableElixirs(doFindAll, matchedElixirs, next);
             }
-            final boolean result = attackableElixirs >= 0;
-            if (!result) {
-                // TODO move this log
-                logger.info("empty collectors");
-            }
-            return result;
+            return attackableElixirs >= 0;
         } catch (final Exception e) {
             throw new BotException(e.getMessage(), e);
         } finally {
@@ -187,8 +182,6 @@ public final class AttackScreenParser extends Parser {
         info.setDarkElixir(parseDarkElixir(image));
         info.setTrophyWin(parseTrophyWin(image));
         info.setTrophyDefeat(parseTrophyDefeat(image));
-        // TODO fix this log
-        logger.info(info.toString());
         return info;
     }
 
