@@ -35,6 +35,7 @@ Feature: parsing main screen
       | imagefile                                      | coords    |
       | classpath:/features/img/main_1435603470723.png | [458,193] |
       | classpath:/features/img/main_1435699887290.png | [289,195] |
+      | classpath:/features/img/main_1435700716498.png | [279,370] |
 
 
   Scenario Outline: search full dark elixir drill
