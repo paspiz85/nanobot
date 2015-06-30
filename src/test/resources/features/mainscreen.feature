@@ -31,6 +31,7 @@ Feature: parsing main screen
     Examples:
       | imagefile                                      | coords    |
       | classpath:/features/img/main_1435603470723.png | [458,193] |
+      | classpath:/features/img/main_1435699887290.png | [289,195] |
 
   Scenario Outline: search full dark elixir drill
     Given screenshot saved as <imagefile>

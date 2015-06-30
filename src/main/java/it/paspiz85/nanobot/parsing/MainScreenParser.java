@@ -14,7 +14,7 @@ public final class MainScreenParser extends Parser {
 
     private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png" };
 
-    private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png" };
+    private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png" };
 
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
