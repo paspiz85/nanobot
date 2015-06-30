@@ -7,10 +7,10 @@ Feature: parsing main screen
     Then attack button found at <coords>
 
     Examples:
-      | imagefile                                      | coords |
-      | classpath:/features/img/main_1435575631326.png | null   |
-      | classpath:/features/img/main_1435601238653.png | [37,9] |
-      | classpath:/features/img/main_1435603470723.png | [37,9] |
+      | imagefile                                      | coords   |
+      | classpath:/features/img/main_1435575631326.png | null     |
+      | classpath:/features/img/main_1435601238653.png | [62,643] |
+      | classpath:/features/img/main_1435603470723.png | [62,643] |
 
   Scenario Outline: search full dark elixir drill
     Given screenshot saved as <imagefile>
@@ -21,4 +21,3 @@ Feature: parsing main screen
       | imagefile                                      | coords    |
       | classpath:/features/img/main_1435601238653.png | [326,325] |
       | classpath:/features/img/main_1435603470723.png | null      |
-      

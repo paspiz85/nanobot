@@ -1,10 +1,15 @@
 #!/bin/bash
-rm -rf nanobot
-git clone https://github.com/paspiz85/nanobot.git
-cd nanobot
+FOLDER="nanobot"
+GIT_URL="https://github.com/paspiz85/nanobot.git"
+GIT_BRANCH="feature/collecting"
+
+rm -rf $FOLDER
+git clone $GIT_URL $FOLDER
+pushd $FOLDER
 {
+	git checkout $GIT_BRANCH
 	mvn clean install
 } || {
-	cd ..
-	rm -rf nanobot
+	popd
+	rm -rf $FOLDER
 }
