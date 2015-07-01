@@ -96,10 +96,10 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         logger.fine("Press Train");
         os.leftClick(trainButton, false);
         os.sleepRandom(500);
-        if (os.isClickableActive(Clickable.BUTTON_RAX_FULL)) {
+        if (getParser().areCampsFull()) {
             logger.info("Camp is full.");
             logger.fine("Close barracks");
-            os.leftClick(Clickable.BUTTON_RAX_CLOSE, true);
+            os.leftClick(getParser().searchRaxClose(), true);
             os.sleepRandom(200);
             logger.fine("Press Attack.");
             os.leftClick(Clickable.BUTTON_ATTACK, true);

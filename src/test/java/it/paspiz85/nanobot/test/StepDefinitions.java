@@ -81,6 +81,8 @@ public class StepDefinitions {
 
     private Point fullGoldMinePoint;
 
+    private Boolean check;
+
     @Given("^screenshot saved as (.*)$")
     public void givenScreenshot(final String imagefile) throws IOException {
         final URI uri = URI.create(imagefile);
@@ -112,6 +114,11 @@ public class StepDefinitions {
     public void thenAttackButtonIs(final String coords) {
         final Point point = parsePoint(coords);
         Assert.assertEquals(point, attackButtonPoint);
+    }
+
+    @Then("^check is (.*)$")
+    public void thenCheckIs(final Boolean check) {
+        Assert.assertEquals(check, this.check);
     }
 
     @Then("^collectors is (.*)$")
@@ -162,6 +169,12 @@ public class StepDefinitions {
     public void whenCheckingCollectors() throws BotException {
         OSMock.instance.setScreenshot(screenshot);
         isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
+    }
+
+    @When("^checking if camps are full$")
+    public void whenCheckingIfCampsAreFull() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        check = Parser.getInstance(MainScreenParser.class).areCampsFull();
     }
 
     @When("^parsing enemy info$")

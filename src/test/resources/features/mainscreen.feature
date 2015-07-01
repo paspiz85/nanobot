@@ -49,3 +49,14 @@ Feature: parsing main screen
       | imagefile                                      | coords    |
       | classpath:/features/img/main_1435601238653.png | [326,325] |
       | classpath:/features/img/main_1435603470723.png | null      |
+
+
+  Scenario Outline: check if rax is full
+    Given screenshot saved as <imagefile>
+    When checking if camps are full
+    Then check is <check>
+
+    Examples:
+      | imagefile                                       | check |
+      | classpath:/features/img/train_1435769837116.png | false |
+      | classpath:/features/img/train_1435772811358.png | true  |

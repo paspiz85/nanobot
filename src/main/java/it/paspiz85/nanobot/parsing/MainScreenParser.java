@@ -20,7 +20,16 @@ public final class MainScreenParser extends Parser {
 
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
+    private static final Point BUTTON_RAX_CLOSE = new Point(729, 113);
+
+    private static final Point BUTTON_RAX_NEXT = new Point(767, 361);
+
     MainScreenParser() {
+    }
+
+    public Boolean areCampsFull() {
+        final BufferedImage image = screenShot(Area.CAMPS_FULL);
+        return searchImage(image, "camps_full.png") != null;
     }
 
     public Point searchAttackButton() {
@@ -62,6 +71,14 @@ public final class MainScreenParser extends Parser {
             }
         }
         return point;
+    }
+
+    public Point searchRaxClose() {
+        return BUTTON_RAX_CLOSE;
+    }
+
+    public Point searchRaxNext() {
+        return BUTTON_RAX_NEXT;
     }
 
     public Point searchTrainButton() {

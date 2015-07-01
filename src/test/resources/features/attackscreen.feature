@@ -1,4 +1,5 @@
 @unit-test
+@wip
 Feature: parsing attack screen
 
   Scenario Outline: parse enemy info
