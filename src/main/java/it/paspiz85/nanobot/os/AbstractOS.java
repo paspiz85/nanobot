@@ -89,17 +89,7 @@ public abstract class AbstractOS implements OS, Constants {
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
         final int time = sleepInMs + RANDOM.nextInt(sleepInMs);
-        logger.fine("Sleeping for " + time + " ms");
+        logger.fine("Sleeping for " + time + " ms.");
         Thread.sleep(time);
-    }
-
-    @Override
-    public final void sleepTillClickableIsActive(final Clickable clickable) throws InterruptedException {
-        while (true) {
-            if (isClickableActive(clickable)) {
-                return;
-            }
-            Thread.sleep(RANDOM.nextInt(250) + 750);
-        }
     }
 }

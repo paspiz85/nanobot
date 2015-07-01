@@ -81,8 +81,6 @@ public interface OS {
      */
     void sleepRandom(int sleepInMs) throws InterruptedException;
 
-    void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
-
     Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;

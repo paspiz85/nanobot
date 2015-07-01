@@ -38,7 +38,7 @@ public final class StateFindAMatch extends State<Parser> {
             os.sleepRandom(300);
             os.leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
             os.sleepRandom(100);
-            os.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+            sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
             context.setState(StateAttack.instance());
         } else {
             context.setState(StateIdle.instance());
