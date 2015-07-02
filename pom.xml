@@ -247,5 +247,32 @@
 				</plugins>
 			</build>
 		</profile>
+
+		<profile>
+			<id>debugMode</id>
+			<activation>
+				<property>
+					<name>debug</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<configuration>
+							<executable>java</executable>
+							<arguments>
+								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000</argument>
+								<argument>-classpath</argument>
+								<classpath />
+								<argument>${mainClass}</argument>
+							</arguments>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 </project>
