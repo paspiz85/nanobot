@@ -4,6 +4,7 @@ controlli remoti
 mail notify
 i18n
 statistics
+remove clickable and area
 
 continuos code
 todo annotation

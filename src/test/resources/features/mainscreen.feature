@@ -3,8 +3,8 @@ Feature: parsing main screen
 
   Scenario Outline: search attack button
     Given screenshot saved as <imagefile>
-    When searching attack button
-    Then attack button found at <coords>
+    When searching attack button point
+    Then point found at <coords>
 
     Examples:
       | imagefile                                      | coords   |
@@ -15,8 +15,8 @@ Feature: parsing main screen
 
   Scenario Outline: search full gold mine
     Given screenshot saved as <imagefile>
-    When searching full gold mine
-    Then full gold mine found at <coords>
+    When searching full gold mine point
+    Then point found at <coords>
 
     Examples:
       | imagefile                                      | coords    |
@@ -29,8 +29,8 @@ Feature: parsing main screen
 
   Scenario Outline: search full elixir collector
     Given screenshot saved as <imagefile>
-    When searching full elixir collector
-    Then full elixir collector found at <coords>
+    When searching full elixir collector point
+    Then point found at <coords>
 
     Examples:
       | imagefile                                      | coords    |
@@ -42,8 +42,8 @@ Feature: parsing main screen
 
   Scenario Outline: search full dark elixir drill
     Given screenshot saved as <imagefile>
-    When searching full dark elixir drill
-    Then full dark elixir drill found at <coords>
+    When searching full dark elixir drill point
+    Then point found at <coords>
 
     Examples:
       | imagefile                                      | coords    |

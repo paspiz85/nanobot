@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.logic;
 
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parser;
 
@@ -22,8 +23,11 @@ public final class StateIdle extends State<Parser> {
 
     private boolean reloading;
 
+    private final AttackScreenParser attackScreenParser;
+
     private StateIdle() {
         super(Parser.getInstance(null));
+        attackScreenParser = Parser.getInstance(AttackScreenParser.class);
     }
 
     @Override
@@ -48,7 +52,7 @@ public final class StateIdle extends State<Parser> {
             } else if (os.isClickableActive(Clickable.BUTTON_ATTACK)) {
                 nextState = StateMainMenu.instance();
                 break;
-            } else if (os.isClickableActive(Clickable.BUTTON_NEXT)) {
+            } else if (attackScreenParser.searchNextButton() != null) {
                 nextState = StateAttack.instance();
                 break;
             } else if (os.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {

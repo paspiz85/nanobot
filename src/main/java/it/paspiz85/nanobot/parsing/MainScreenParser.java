@@ -13,10 +13,10 @@ import java.awt.image.BufferedImage;
 public final class MainScreenParser extends Parser {
 
     private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png",
-            "collect/gold_4.png", "collect/gold_5.png" };
+        "collect/gold_4.png", "collect/gold_5.png" };
 
     private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png",
-            "collect/elixir_3.png", "collect/elixir_4.png" };
+        "collect/elixir_3.png", "collect/elixir_4.png" };
 
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
@@ -34,7 +34,7 @@ public final class MainScreenParser extends Parser {
 
     public Point searchAttackButton() {
         final BufferedImage image = screenShot(Area.ATTACK_BUTTON);
-        return relativePoint(searchImageCenter(image, "attack.png"), Area.ATTACK_BUTTON.getP1());
+        return relativePoint(searchImageCenter(image, "button_attack.png"), Area.ATTACK_BUTTON.getP1());
     }
 
     public Point searchFullDarkElixirDrill() {

@@ -114,7 +114,7 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
             x += -1 + RANDOM.nextInt(3);
             y += -1 + RANDOM.nextInt(3);
         }
-        logger.fine("clicking " + x + " " + y);
+        logger.fine("Clicking [" + x + " " + y + "].");
         final int lParam = y << 16 | x << 16 >>> 16;
         while (isCtrlKeyDown()) {
             Thread.sleep(100);

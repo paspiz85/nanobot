@@ -73,13 +73,7 @@ public class StepDefinitions {
 
     private int[] troopsCount;
 
-    private Point attackButtonPoint;
-
-    private Point fullDarkElixirDrillPoint;
-
-    private Point fullElixirCollectorPoint;
-
-    private Point fullGoldMinePoint;
+    private Point point;
 
     private Boolean check;
 
@@ -110,12 +104,6 @@ public class StepDefinitions {
         return point;
     }
 
-    @Then("^attack button found at (.*)$")
-    public void thenAttackButtonIs(final String coords) {
-        final Point point = parsePoint(coords);
-        Assert.assertEquals(point, attackButtonPoint);
-    }
-
     @Then("^check is (.*)$")
     public void thenCheckIs(final Boolean check) {
         Assert.assertEquals(check, this.check);
@@ -137,22 +125,10 @@ public class StepDefinitions {
         // Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
     }
 
-    @Then("^full dark elixir drill found at (.*)$")
-    public void thenFullDarkElixirDrillFoundAt(final String coords) {
+    @Then("^point found at (.*)$")
+    public void thenPointFoundAt(final String coords) {
         final Point point = parsePoint(coords);
-        Assert.assertEquals(point, fullDarkElixirDrillPoint);
-    }
-
-    @Then("^full elixir collector found at (.*)$")
-    public void thenFullElixirCollectorFoundAt(final String coords) {
-        final Point point = parsePoint(coords);
-        Assert.assertEquals(point, fullElixirCollectorPoint);
-    }
-
-    @Then("^full gold mine found at (.*)$")
-    public void thenFullGoldMineFoundAt(final String coords) {
-        final Point point = parsePoint(coords);
-        Assert.assertEquals(point, fullGoldMinePoint);
+        Assert.assertEquals(point, this.point);
     }
 
     @Then("^troops count is (.*)$")
@@ -189,27 +165,33 @@ public class StepDefinitions {
         troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 
-    @When("^searching attack button$")
-    public void whenSearchingAttackButton() throws BotBadBaseException {
+    @When("^searching attack button point$")
+    public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        attackButtonPoint = Parser.getInstance(MainScreenParser.class).searchAttackButton();
+        point = Parser.getInstance(MainScreenParser.class).searchAttackButton();
     }
 
-    @When("^searching full dark elixir drill$")
-    public void whenSearchingFullDarkElixirDrill() throws BotBadBaseException {
+    @When("^searching full dark elixir drill point$")
+    public void whenSearchingFullDarkElixirDrillPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        fullDarkElixirDrillPoint = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+        point = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
     }
 
-    @When("^searching full elixir collector$")
-    public void whenSearchingFullElixirCollector() throws BotBadBaseException {
+    @When("^searching full elixir collector point$")
+    public void whenSearchingFullElixirCollectorPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        fullElixirCollectorPoint = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+        point = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
     }
 
-    @When("^searching full gold mine$")
-    public void whenSearchingFullGoldMine() throws BotBadBaseException {
+    @When("^searching full gold mine point$")
+    public void whenSearchingFullGoldMinePoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        fullGoldMinePoint = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+        point = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+    }
+
+    @When("^searching next button point$")
+    public void whenSearchingNexButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(AttackScreenParser.class).searchNextButton();
     }
 }

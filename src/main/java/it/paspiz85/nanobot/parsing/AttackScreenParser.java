@@ -39,7 +39,6 @@ public final class AttackScreenParser extends Parser {
 
     private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);
 
-    // boundaries of base according to Area.ENEMY_BASE
     private static final Point ENEMY_BASE_LEFT = new Point(13, 313);
 
     private static final Polygon ENEMY_BASE_POLY = new Polygon();
@@ -243,5 +242,10 @@ public final class AttackScreenParser extends Parser {
             result = parseNumber(image, 3, new Point(33, 90), image.getWidth() - 43);
         }
         return result;
+    }
+
+    public Point searchNextButton() {
+        final BufferedImage image = screenShot(Area.NEXT_BUTTON);
+        return relativePoint(searchImageCenter(image, "button_next.png"), Area.NEXT_BUTTON.getP1());
     }
 }

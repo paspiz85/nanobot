@@ -10,18 +10,17 @@ import it.paspiz85.nanobot.util.Point;
  *
  */
 public enum Area implements Constants {
-    ATTACK_GROUP(new Point(24, 554), new Point(836, 653)), BARRACKS_BUTTONS(new Point(188, 581), new Point(679, 679)), ENEMY_BASE(
-            new Point(31, 0), new Point(831, 510)), ENEMY_LOOT(new Point(17, 68), new Point(138, 240)), FULLSCREEN(
-                    new Point(0, 0), new Point(BS_RES_X - 1, BS_RES_Y - 1)), ATTACK_BUTTON(new Point(25, 634), new Point(100,
-                            652)), CAMPS_FULL(new Point(405, 150), new Point(499, 167));
+    ATTACK_GROUP(24, 554, 836, 653), BARRACKS_BUTTONS(188, 581, 679, 679), ENEMY_BASE(31, 0, 831, 510), ENEMY_LOOT(17,
+            68, 138, 240), FULLSCREEN(0, 0, BS_RES_X - 1, BS_RES_Y - 1), ATTACK_BUTTON(25, 634, 100, 652), CAMPS_FULL(
+                    405, 150, 499, 167), NEXT_BUTTON(692, 488, 739, 547);
 
     private final Point p1;
 
     private final Point p2;
 
-    private Area(final Point p1, final Point p2) {
-        this.p1 = p1;
-        this.p2 = p2;
+    private Area(final int x1, final int y1, final int x2, final int y2) {
+        this.p1 = new Point(x1, y1);
+        this.p2 = new Point(x2, y2);
     }
 
     public Point getP1() {

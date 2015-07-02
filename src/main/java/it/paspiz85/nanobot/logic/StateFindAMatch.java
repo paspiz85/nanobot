@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.attack.Attack;
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
@@ -11,7 +12,7 @@ import it.paspiz85.nanobot.util.Settings;
  * @author paspiz85
  *
  */
-public final class StateFindAMatch extends State<Parser> {
+public final class StateFindAMatch extends State<AttackScreenParser> {
 
     private static StateFindAMatch instance;
 
@@ -23,7 +24,7 @@ public final class StateFindAMatch extends State<Parser> {
     }
 
     private StateFindAMatch() {
-        super(Parser.getInstance(null));
+        super(Parser.getInstance(AttackScreenParser.class));
     }
 
     @Override
@@ -38,7 +39,7 @@ public final class StateFindAMatch extends State<Parser> {
             os.sleepRandom(300);
             os.leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
             os.sleepRandom(100);
-            sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+            sleepUntilPointFound(() -> getParser().searchNextButton());
             context.setState(StateAttack.instance());
         } else {
             context.setState(StateIdle.instance());

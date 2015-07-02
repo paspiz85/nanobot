@@ -132,9 +132,9 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                os.leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
+                os.leftClick(getParser().searchNextButton(), true);
                 os.sleepRandom(666);
-                sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                sleepUntilPointFound(() -> getParser().searchNextButton());
                 // to avoid server/client sync from nexting too fast
                 os.sleepRandom(1000);
             }
