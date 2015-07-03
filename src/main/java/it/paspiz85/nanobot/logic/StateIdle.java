@@ -21,9 +21,9 @@ public final class StateIdle extends State<Parser> {
         return instance;
     }
 
-    private boolean reloading;
-
     private final AttackScreenParser attackScreenParser;
+
+    private boolean reloading;
 
     private StateIdle() {
         super(Parser.getInstance(null));

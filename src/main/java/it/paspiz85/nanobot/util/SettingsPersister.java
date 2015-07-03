@@ -35,9 +35,9 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_IS_MATCH_ALL_CONDS = "match_all";
 
-    private static final String PROPERTY_LOG_LEVEL = "log_level";
-
     private static final String PROPERTY_LOG_ENEMY_BASE = "log_enemy_base";
+
+    private static final String PROPERTY_LOG_LEVEL = "log_level";
 
     private static final String PROPERTY_MAX_TH = "max_th";
 

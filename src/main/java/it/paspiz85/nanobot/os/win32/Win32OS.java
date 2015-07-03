@@ -43,7 +43,13 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
 
     private static Win32OS instance;
 
+    private static final int SWP_NOMOVE = 0x0002;
+
+    private static final int SWP_NOSIZE = 0x0001;
+
     private static final String SYSTEM_OS = System.getProperty("os.name");
+
+    private static final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
 
     private static final int VK_CONTROL = 0x11;
 
@@ -57,12 +63,6 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
 
     private static final int WM_LBUTTONUP = 0x202;
 
-    private static final int SWP_NOSIZE = 0x0001;
-
-    private static final int SWP_NOMOVE = 0x0002;
-
-    private static final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
-
     public static Win32OS instance() {
         if (instance == null) {
             instance = new Win32OS();
@@ -70,9 +70,9 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
         return instance;
     }
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
-
     private HWND handler;
+
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private Robot robot;
 

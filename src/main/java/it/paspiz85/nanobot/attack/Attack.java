@@ -19,25 +19,25 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
-    private static ManualAttack manualStrategy;
-
     private static Attack[] availableStrategies;
-
-    private static NoAttack noStrategy;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
     protected static final Point BOTTOM_RIGHT = new Point(537, 538);
 
+    private static final OS DEFAULT_OS = OS.instance();
+
     protected static final Point LEFT = new Point(19, 307);
+
+    private static ManualAttack manualStrategy;
+
+    private static NoAttack noStrategy;
 
     protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
 
     protected static final Point RIGHT = new Point(836, 307);
 
     protected static final Point TOP = new Point(429, 18);
-
-    private static final OS DEFAULT_OS = OS.instance();
 
     public static Attack[] getAvailableStrategies() {
         if (availableStrategies == null) {
@@ -68,9 +68,9 @@ public abstract class Attack {
         return noStrategy;
     }
 
-    protected final OS os = DEFAULT_OS;
-
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    protected final OS os = DEFAULT_OS;
 
     Attack() {
     }

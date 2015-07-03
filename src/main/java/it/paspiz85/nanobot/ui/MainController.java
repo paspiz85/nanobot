@@ -42,16 +42,11 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private Application application;
 
-    private final Model model = Model.instance();
-
     @FXML
     private ComboBox<Attack> autoAttackComboBox;
 
     @FXML
     private GridPane configGridPane;
-
-    @FXML
-    private CheckBox saveEnemyCheckBox;
 
     @FXML
     private AnchorPane controlPane;
@@ -75,9 +70,6 @@ public class MainController implements ApplicationAwareController, Constants {
     private Hyperlink githubLink;
 
     @FXML
-    private Hyperlink screenshotLink;
-
-    @FXML
     private TextField goldField;
 
     @FXML
@@ -89,13 +81,17 @@ public class MainController implements ApplicationAwareController, Constants {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     @FXML
+    private ComboBox<Level> logLevelComboBox;
+
+    @FXML
     private TextField maxThField;
+
+    private final Model model = Model.instance();
+
+    private final OS os = DEFAULT_OS;
 
     @FXML
     private CheckBox playSoundCheckBox;
-
-    @FXML
-    private ComboBox<Level> logLevelComboBox;
 
     @FXML
     private ComboBox<Clickable> rax1ComboBox;
@@ -114,6 +110,12 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private ComboBox<Clickable> rax6ComboBox;
+
+    @FXML
+    private CheckBox saveEnemyCheckBox;
+
+    @FXML
+    private Hyperlink screenshotLink;
 
     @FXML
     private Button settingsButton;
@@ -135,8 +137,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private Label versionLabel;
-
-    private final OS os = DEFAULT_OS;
 
     @FXML
     public void handleCancelButtonAction() {

@@ -8,15 +8,15 @@ package it.paspiz85.nanobot.parsing;
  */
 public final class EnemyInfo {
 
-    private Integer gold;
+    private Integer darkElixir;
 
     private Integer elixir;
 
-    private Integer darkElixir;
-
-    private Integer trophyWin;
+    private Integer gold;
 
     private Integer trophyDefeat;
+
+    private Integer trophyWin;
 
     @Override
     public boolean equals(final Object obj) {

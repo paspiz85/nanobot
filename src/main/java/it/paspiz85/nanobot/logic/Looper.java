@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  */
 public final class Looper {
 
-    private static Looper instance;
-
     private static final OS DEFAULT_OS = OS.instance();
+
+    private static Looper instance;
 
     public static Looper instance() {
         if (instance == null) {
@@ -30,15 +30,15 @@ public final class Looper {
         return instance;
     }
 
-    private final OS os = DEFAULT_OS;
-
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private boolean waitingForDcChecker;
+    private final OS os = DEFAULT_OS;
 
     private boolean running;
 
     private boolean setupDone;
+
+    private boolean waitingForDcChecker;
 
     private Looper() {
     }

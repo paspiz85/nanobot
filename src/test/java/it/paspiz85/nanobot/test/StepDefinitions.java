@@ -45,11 +45,7 @@ public class StepDefinitions {
 
         @Override
         protected BufferedImage screenshot(final Point p1, final Point p2) {
-            final int x1 = p1.x();
-            final int y1 = p1.y();
-            final int x2 = p2.x();
-            final int y2 = p2.y();
-            return screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
+            return getSubimage(screenshot, p1, p2);
         }
 
         public void setScreenshot(final BufferedImage screenshot) {
@@ -63,19 +59,19 @@ public class StepDefinitions {
         DEFAULT_OS = OS.instance();
     }
 
-    protected final OS os = DEFAULT_OS;
-
-    private BufferedImage screenshot;
+    private Boolean check;
 
     private EnemyInfo enemyInfo;
 
     private Boolean isCollectorsFull;
 
-    private int[] troopsCount;
+    protected final OS os = DEFAULT_OS;
 
     private Point point;
 
-    private Boolean check;
+    private BufferedImage screenshot;
+
+    private int[] troopsCount;
 
     @Given("^screenshot saved as (.*)$")
     public void givenScreenshot(final String imagefile) throws IOException {
@@ -115,14 +111,26 @@ public class StepDefinitions {
     }
 
     @Then("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
-    public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
-            final Integer trophyWin, final Integer thophyDefeat) {
-        Assert.assertEquals(gold, enemyInfo.getGold());
-        Assert.assertEquals(elixir, enemyInfo.getElixir());
-        Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
-        Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
-        // TODO implement
-        // Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+    public void thenEnemyInfoFound(final String gold, final String elixir, final String darkelixir,
+            final String trophyWin, final String thophyDefeat) throws BotBadBaseException {
+        final EnemyInfo expected = new EnemyInfo();
+        if (!"null".equals(gold)) {
+            expected.setGold(new Integer(gold));
+        }
+        if (!"null".equals(elixir)) {
+            expected.setElixir(new Integer(elixir));
+        }
+        if (!"null".equals(darkelixir)) {
+            expected.setDarkElixir(new Integer(darkelixir));
+        }
+        if (!"null".equals(trophyWin)) {
+            expected.setTrophyWin(new Integer(trophyWin));
+        }
+        if (!"null".equals(thophyDefeat)) {
+            expected.setTrophyDefeat(new Integer(thophyDefeat));
+        }
+        Assert.assertEquals(expected, enemyInfo);
+        //Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
     }
 
     @Then("^point found at (.*)$")

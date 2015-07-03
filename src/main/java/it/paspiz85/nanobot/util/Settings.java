@@ -63,13 +63,13 @@ public final class Settings {
 
     private Point firstBarrackPosition;
 
-    private Level logLevel = Level.INFO;
-
     private int goldThreshold;
 
     private boolean isInitialized;
 
     private boolean logEnemyBase;
+
+    private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
 

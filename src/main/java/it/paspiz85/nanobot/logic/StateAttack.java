@@ -4,7 +4,6 @@ import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
@@ -74,7 +73,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             }
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
-                os.saveScreenshot(Area.FULLSCREEN, "base_" + id);
+                os.saveScreenshot("base_" + id);
             }
             EnemyInfo enemyInfo;
             boolean doAttack = false;
@@ -89,7 +88,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     }
                 }
             } catch (final BotBadBaseException e) {
-                os.saveScreenshot(Area.ENEMY_LOOT, "bad_base_" + id);
+                os.saveScreenshot("bad_base_" + id);
                 throw e;
             }
             final int[] attackGroup = getParser().parseTroopCount();

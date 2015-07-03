@@ -12,17 +12,17 @@ import java.util.logging.Logger;
  */
 public final class Context {
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
-
     private State<?> current;
 
     private boolean disconnected;
 
-    private boolean waitDone;
+    private boolean languageChecked;
+
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private int trainCount;
 
-    private boolean languageChecked;
+    private boolean waitDone;
 
     public int getTrainCount() {
         return trainCount;

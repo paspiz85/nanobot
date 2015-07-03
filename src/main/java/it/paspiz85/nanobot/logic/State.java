@@ -24,9 +24,9 @@ public abstract class State<P extends Parser> implements Constants {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final P parser;
-
     protected final OS os = DEFAULT_OS;
+
+    private final P parser;
 
     State(final P parser) {
         this.parser = parser;
