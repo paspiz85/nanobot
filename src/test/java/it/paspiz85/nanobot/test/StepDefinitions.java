@@ -131,6 +131,7 @@ public class StepDefinitions {
         }
         // TODO collecting delete
         expected.setGold(null);
+        expected.setElixir(null);
         Assert.assertEquals(expected, enemyInfo);
         // Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
     }
