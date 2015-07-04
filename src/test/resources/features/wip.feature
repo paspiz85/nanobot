@@ -18,9 +18,9 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906013388.png | 94741 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906031260.png | 89284 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906058962.png | 48298 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906077198.png | 106328 | null | null         | null         | null            |
       
-      | classpath:/features/img/base_1435906077198.png | 10632 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906098470.png | 952 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906098470.png | 9525 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906115317.png | 427 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906126585.png | 11528 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906144152.png | 38 | null | null         | null         | null            |
@@ -28,7 +28,7 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906182442.png | 3544 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906189462.png | 1998 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906195366.png | 6398 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906203032.png | 299 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906203032.png | 2998 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906210498.png | 4524 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906215238.png | 133895 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906220597.png | 18471 | null | null         | null         | null            |
