@@ -44,7 +44,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Color COLOR_HAS_DARK = getColor("color.hasdark");
 
-    private static final Color COLOR_HASNT_DARK = new Color(0xb1, 0xa8, 0x41);
+    private static final Color COLOR_HASNT_DARK = getColor("color.hasntdark");
 
     private static final Area ENEMY_BASE = new Area(31, 0, 831, 510);
 
@@ -116,14 +116,15 @@ public class AttackScreenParser extends Parser {
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
-        final Color deCheck = new Color(image.getRGB(POINT_HAS_DARK.x(), POINT_HAS_DARK.y()));
+        final int rgb = image.getRGB(POINT_HAS_DARK.x(), POINT_HAS_DARK.y());
+        final Color deCheck = new Color(rgb);
         boolean result;
         if (os.compareColor(deCheck, COLOR_HAS_DARK, 7)) {
             result = true;
         } else if (os.compareColor(deCheck, COLOR_HASNT_DARK, 7)) {
             result = false;
         } else {
-            throw new BotBadBaseException("de: " + deCheck);
+            throw new BotBadBaseException("de: " + Integer.toHexString(deCheck.getRGB()));
         }
         return result;
     }
@@ -259,13 +260,17 @@ public class AttackScreenParser extends Parser {
     }
 
     protected final Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
-        // TODO implement
+        // TODO implement trophyDefeat
         return null;
     }
 
     protected final Integer parseTrophyWin(final BufferedImage image) throws BotBadBaseException {
-        return parseNumber(image, 3, hasDE(image) ? POINT_TROPHY_WIN_HAS_DARK : POINT_TROPHY_WIN_HASNT_DARK,
-                image.getWidth() - 43);
+        // TODO implement trophyWin
+        return null;
+        /*
+         * return parseNumber(image, 3, hasDE(image) ? POINT_TROPHY_WIN_HAS_DARK
+         * : POINT_TROPHY_WIN_HASNT_DARK, image.getWidth() - 43);
+         */
     }
 
     public Point searchNextButton() {

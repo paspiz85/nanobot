@@ -22,7 +22,7 @@ public class AttackScreenParserLearner extends AttackScreenParser {
                     if (expectedResult != null && expectedResult == i) {
                         org.junit.Assert.fail(String.format("Wrong colors[%d][%d][%d] : expected = %s , actual = %s",
                                 i, type, j, Integer.toHexString(expected).toUpperCase(), Integer.toHexString(actual)
-                                        .toUpperCase()));
+                                .toUpperCase()));
                     }
                     found = false;
                     break;

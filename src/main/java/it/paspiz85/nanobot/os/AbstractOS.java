@@ -102,7 +102,7 @@ public abstract class AbstractOS implements OS, Constants {
     }
 
     @Override
-    public final BufferedImage screenshot(Area area) {
+    public final BufferedImage screenshot(final Area area) {
         BufferedImage result;
         if (area == null) {
             result = screenshot(FULLSCREEN.getP1(), FULLSCREEN.getP2());

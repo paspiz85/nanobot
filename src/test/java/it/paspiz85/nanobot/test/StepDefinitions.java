@@ -130,7 +130,7 @@ public class StepDefinitions {
             expected.setTrophyDefeat(new Integer(thophyDefeat));
         }
         Assert.assertEquals(expected, enemyInfo);
-        //Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
+        // Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
     }
 
     @Then("^point found at (.*)$")

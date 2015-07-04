@@ -113,15 +113,19 @@ public final class EnemyInfo {
     }
 
     public void setTrophyDefeat(final Integer trophyDefeat) {
-        this.trophyDefeat = trophyDefeat;
+        // TODO implements trophyDefeat
+        // this.trophyDefeat = trophyDefeat;
     }
 
     public void setTrophyWin(final Integer trophyWin) {
-        this.trophyWin = trophyWin;
+        // TODO implements trophyWin
+        // this.trophyWin = trophyWin;
     }
 
     @Override
     public String toString() {
+        // TODO implements trophyDefeat
+        // TODO implements trophyWin
         return String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, darkElixir);
     }
 }
