@@ -17,10 +17,9 @@ other
 donation
 
 2 8 0
-OK 9 1 3 4 7
+OK 9 1 3 4 7 8
 
 6
 
-5
 
-NOK 8
+NOK 5 3
