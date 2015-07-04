@@ -173,7 +173,7 @@ public abstract class Parser {
             thresholds[i] = getThreshold("digit." + i);
         }
         // TODO
-        widths = new int[] { 13, 6, 10, 10, 12, 10, 11, 10, 11, 11 };
+        widths = new int[] { 13, 6, 10, 10, 12, 10, 10, 10, 11, 11 };
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
