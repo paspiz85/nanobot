@@ -8,6 +8,8 @@ public interface FeatureTags {
 
     String NO_WIP = "~@wip";
 
+    String TDD = "@tdd";
+
     String TEST = "@unit-test";
 
     String WIP = "@wip";
