@@ -15,7 +15,8 @@ Feature: single feature to test
       | classpath:/features/img/base_1435905910030.png | 36438  | 100098 | null         | null         | null            |
       | classpath:/features/img/base_1435905943068.png | 31037  | 2136 | null         | null         | null            |
       | classpath:/features/img/base_1435905992009.png | 28447  | 16079 | null         | null         | null            |
-      | classpath:/features/img/base_1435906013388.png | 94741  | 16108 | null         | null         | null            |
+      | classpath:/features/img/base_1435906013388.png | 94741  | 161080 | null         | null         | null            |
+      
       | classpath:/features/img/base_1435906031260.png | 89284  | 96048 | null         | null         | null            |
       | classpath:/features/img/base_1435906058962.png | 48298  | 108699 | null         | null         | null            |
       | classpath:/features/img/base_1435906077198.png | 106328 | 67762 | null         | null         | null            |
