@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotException;
+import it.paspiz85.nanobot.parsing.TroopsInfo;
 
 import java.util.logging.Logger;
 
@@ -12,20 +13,26 @@ import java.util.logging.Logger;
  */
 public final class Context {
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
-
     private State<?> current;
 
     private boolean disconnected;
 
-    private boolean waitDone;
+    private boolean languageChecked;
+
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private int trainCount;
 
-    private boolean languageChecked;
+    private boolean waitDone;
+
+    private TroopsInfo troopsInfo;
 
     public int getTrainCount() {
         return trainCount;
+    }
+
+    public TroopsInfo getTroopsInfo() {
+        return troopsInfo;
     }
 
     public void handle() throws BotException, InterruptedException {
@@ -66,6 +73,10 @@ public final class Context {
             trainCount++;
             logger.fine("Train count is " + trainCount);
         }
+    }
+
+    public void setTroopsInfo(final TroopsInfo troopsInfo) {
+        this.troopsInfo = troopsInfo;
     }
 
     public void setWaitDone(final boolean waitDone) {

@@ -2,16 +2,13 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
-import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -32,9 +29,9 @@ import org.kohsuke.github.GitHub;
  */
 public final class Model implements Constants {
 
-    private static Model instance;
-
     private static final OS DEFAULT_OS = OS.instance();
+
+    private static Model instance;
 
     public static Model instance() {
         if (instance == null) {
@@ -43,11 +40,11 @@ public final class Model implements Constants {
         return instance;
     }
 
+    protected final Logger logger = Logger.getLogger(getClass().getName());
+
     private final Looper looper = Looper.instance();
 
     private final OS os = DEFAULT_OS;
-
-    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Service<Void> runningService;
 
@@ -84,14 +81,13 @@ public final class Model implements Constants {
         return Settings.instance().getAvailableTroops();
     }
 
-    public void initialize(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
-            final Runnable updateUI) {
+    public void initialize(final BooleanSupplier setupResolution, final Runnable updateUI) {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
         Settings.initialize();
-        logger.info("Settings loaded");
+        logger.info("Settings loaded.");
         runningService = new Service<Void>() {
 
             @Override
@@ -100,7 +96,7 @@ public final class Model implements Constants {
 
                     @Override
                     protected Void call() throws Exception {
-                        looper.start(setupResolution, setupBarracks, updateUI);
+                        looper.start(setupResolution, updateUI);
                         return null;
                     }
                 };
@@ -129,12 +125,8 @@ public final class Model implements Constants {
         return Settings.instance();
     }
 
-    public void resetBarracks() {
-        Settings.instance().setFirstBarrackPosition(null);
-    }
-
     public void saveScreenshot() {
-        os.saveScreenshot(Area.FULLSCREEN, "screen_" + System.currentTimeMillis());
+        os.saveScreenshot("screen_" + System.currentTimeMillis());
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

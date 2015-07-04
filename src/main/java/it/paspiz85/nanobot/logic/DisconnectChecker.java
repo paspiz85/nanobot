@@ -16,15 +16,15 @@ public class DisconnectChecker implements Runnable {
 
     private static final OS DEFAAULT_OS = OS.instance();
 
+    private final Context context;
+
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final Context context;
+    private final Looper looper;
 
     private final Thread mainThread;
 
     private final OS os = DEFAAULT_OS;
-
-    private final Looper looper;
 
     public DisconnectChecker(final Looper looper, final Context context, final Thread mainThread) {
         this.looper = looper;

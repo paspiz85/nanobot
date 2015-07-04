@@ -1,16 +1,17 @@
-donation
+code
+remove clickable and area
+###!important### count trofei
+controlli remoti
+mail notify
+i18n
+statistics
+
+continuos code
+todo annotation
 remove v-ppizzuti
 
-code !important
-count trofei
-raccolta risorse
-
-code
+management
 free ci
-model
-controlli remoti
-i18n
 
-statistics
-mail notify
-todo annotation
+other
+donation

@@ -4,7 +4,6 @@ import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
-import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Optional;
@@ -42,16 +41,11 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private Application application;
 
-    private final Model model = Model.instance();
-
     @FXML
     private ComboBox<Attack> autoAttackComboBox;
 
     @FXML
     private GridPane configGridPane;
-
-    @FXML
-    private CheckBox saveEnemyCheckBox;
 
     @FXML
     private AnchorPane controlPane;
@@ -75,9 +69,6 @@ public class MainController implements ApplicationAwareController, Constants {
     private Hyperlink githubLink;
 
     @FXML
-    private Hyperlink screenshotLink;
-
-    @FXML
     private TextField goldField;
 
     @FXML
@@ -89,13 +80,17 @@ public class MainController implements ApplicationAwareController, Constants {
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     @FXML
+    private ComboBox<Level> logLevelComboBox;
+
+    @FXML
     private TextField maxThField;
+
+    private final Model model = Model.instance();
+
+    private final OS os = DEFAULT_OS;
 
     @FXML
     private CheckBox playSoundCheckBox;
-
-    @FXML
-    private ComboBox<Level> logLevelComboBox;
 
     @FXML
     private ComboBox<Clickable> rax1ComboBox;
@@ -114,6 +109,12 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private ComboBox<Clickable> rax6ComboBox;
+
+    @FXML
+    private CheckBox saveEnemyCheckBox;
+
+    @FXML
+    private Hyperlink screenshotLink;
 
     @FXML
     private Button settingsButton;
@@ -136,24 +137,9 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     private Label versionLabel;
 
-    private final OS os = DEFAULT_OS;
-
     @FXML
     public void handleCancelButtonAction() {
         showSettings(false);
-    }
-
-    @FXML
-    public void handleResetBarracksButtonAction() {
-        final Alert alert = new Alert(AlertType.CONFIRMATION);
-        alert.initOwner(application.getPrimaryStage());
-        alert.setTitle("Reset Settings");
-        alert.setHeaderText("This operation delete previous barracks settings");
-        alert.setContentText("Are you sure?");
-        final Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK) {
-            model.resetBarracks();
-        }
     }
 
     @FXML
@@ -205,7 +191,7 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     private void initialize() {
         LogHandler.initialize(textArea);
-        model.initialize(() -> setupResolution(), () -> setupBarracksStep1(), () -> updateUI());
+        model.initialize(() -> setupResolution(), () -> updateUI());
         initLabels();
         initLinks();
         initSettingsPane();
@@ -297,60 +283,6 @@ public class MainController implements ApplicationAwareController, Constants {
     public void setApplication(final Application application) {
         this.application = application;
         showSettings(false);
-    }
-
-    private Point setupBarracksStep1() {
-        Point point = null;
-        try {
-            final boolean[] configure = new boolean[1];
-            platformRunNow(() -> {
-                try {
-                    final Alert alert = new Alert(AlertType.CONFIRMATION);
-                    alert.initOwner(application.getPrimaryStage());
-                    alert.setTitle("Barracks configuration");
-                    alert.setHeaderText("You must configure the location " + "of first Barracks");
-                    alert.setContentText("Click Yes to start configuration.");
-                    final Optional<ButtonType> result = alert.showAndWait();
-                    configure[0] = result.get() == ButtonType.OK;
-                } catch (final Exception e) {
-                    logger.log(Level.SEVERE, "Unable to setup barracks", e);
-                }
-            });
-            if (configure[0]) {
-                point = setupBarracksStep2();
-            }
-        } catch (final Exception e) {
-            logger.log(Level.SEVERE, "Unable to setup barracks", e);
-        }
-        return point;
-    }
-
-    private Point setupBarracksStep2() throws InterruptedException {
-        final Point[] point = new Point[1];
-        os.zoomUp();
-        platformRunNow(() -> {
-            try {
-                final Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.initOwner(application.getPrimaryStage());
-                alert.setTitle("Barracks configuration");
-                alert.setHeaderText("You must configure the location " + "of first Barracks");
-                alert.setContentText("Make sure you are max zoomed out.\n\n"
-                        + "First Barracks is the leftmost one when you "
-                        + "scroll through your barracks via orange next arrow on the right. For example, if you "
-                        + "have 4 barracks, when you select the first one and click 'Train Troops', all "
-                        + "3 'next' views should also be barracks.\n\n"
-                        + "Click Yes and click on your first barracks. Do "
-                        + "NOT click anything else in between, click Yes and click barracks." + "");
-                final Optional<ButtonType> result = alert.showAndWait();
-                if (result.get() == ButtonType.OK) {
-                    logger.info("Waiting for user to click on first barracks.");
-                    point[0] = os.waitForClick();
-                }
-            } catch (final Exception e) {
-                logger.log(Level.SEVERE, "Unable to setup barracks", e);
-            }
-        });
-        return point[0];
     }
 
     private boolean setupResolution() {

@@ -360,12 +360,12 @@
 		<property name="max" value="300" />
 		<property name="id" value="FileLength_Error" />
 	</module>
-	<module name="RegexpHeader">
-		<property name="severity" value="error" />
-		<property name="header" value="package" />
-		<metadata name="com.atlassw.tools.eclipse.checkstyle.comment"
-			value="No header" />
-	</module>
+<!-- 	<module name="RegexpHeader"> -->
+<!-- 		<property name="severity" value="error" /> -->
+<!-- 		<property name="header" value="package" /> -->
+<!-- 		<metadata name="com.atlassw.tools.eclipse.checkstyle.comment" -->
+<!-- 			value="No header" /> -->
+<!-- 	</module> -->
 	<module name="NewlineAtEndOfFile">
 		<property name="severity" value="error" />
 		<property name="lineSeparator" value="lf" />

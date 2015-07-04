@@ -4,11 +4,11 @@ import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -74,19 +74,24 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             }
             final long id = System.currentTimeMillis();
             if (Settings.instance().isLogEnemyBase()) {
-                os.saveScreenshot(Area.FULLSCREEN, "base" + id);
+                os.saveScreenshot("base_" + id);
             }
-            EnemyInfo loot;
+            EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
-                loot = getParser().parseEnemyInfo();
-                doAttack = doConditionsMatch(loot)
-                        && (!Settings.instance().isDetectEmptyCollectors() || getParser().isCollectorFullBase());
+                enemyInfo = getParser().parseEnemyInfo();
+                logger.info(String.format("Opponent %d has %s.", id, enemyInfo.toString()));
+                doAttack = doConditionsMatch(enemyInfo);
+                if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
+                    doAttack = getParser().isCollectorFullBase();
+                    if (!doAttack) {
+                        logger.info(String.format("Opponent %d has empty collectors.", id));
+                    }
+                }
             } catch (final BotBadBaseException e) {
-                os.saveScreenshot(Area.ENEMY_LOOT, "bad_base_" + id);
+                os.saveScreenshot("bad_base_" + id);
                 throw e;
             }
-            final int[] attackGroup = getParser().parseTroopCount();
             if (doAttack) {
                 // // debug
                 // if (true) {
@@ -94,7 +99,10 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 final Attack attackStrategy = Settings.instance().getAttackStrategy();
                 if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
-                    attackStrategy.attack(loot, attackGroup);
+                    final TroopsInfo troopsInfo = context.getTroopsInfo();
+                    if (troopsInfo != null) {
+                        attackStrategy.attack(enemyInfo, troopsInfo.getTroopsCount());
+                    }
                     os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
                     os.sleepRandom(1200);
                     os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
@@ -102,12 +110,12 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
                     os.sleepRandom(1200);
                 } else {
-                    if (loot.equals(prevLoot)) {
+                    if (enemyInfo.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
                     } else {
                         playAttackReady();
                     }
-                    prevLoot = loot;
+                    prevLoot = enemyInfo;
                     /**
                      * NOTE: minor race condition 1. Matching base found. 2.
                      * sound is played. 3. prevLoot is set to full available
@@ -126,9 +134,9 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                os.leftClick(Clickable.BUTTON_NEXT.getPoint(), true);
+                os.leftClick(getParser().getButtonNext(), true);
                 os.sleepRandom(666);
-                os.sleepTillClickableIsActive(Clickable.BUTTON_NEXT);
+                sleepUntilPointFound(() -> getParser().searchButtonNext());
                 // to avoid server/client sync from nexting too fast
                 os.sleepRandom(1000);
             }

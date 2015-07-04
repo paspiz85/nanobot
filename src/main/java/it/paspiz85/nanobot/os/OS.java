@@ -2,10 +2,11 @@ package it.paspiz85.nanobot.os;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.win32.Win32OS;
-import it.paspiz85.nanobot.parsing.Area;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -20,10 +21,6 @@ import java.util.function.Supplier;
  *
  */
 public interface OS {
-
-    String CLASS_PROPERTY = OS.class.getName();
-
-    Random RANDOM = new Random();
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     Supplier<Class<?>> CLASS_FINDER = new Supplier() {
@@ -44,6 +41,10 @@ public interface OS {
         }
     };
 
+    String CLASS_PROPERTY = OS.class.getName();
+
+    Random RANDOM = new Random();
+
     static OS instance() {
         try {
             return (OS) CLASS_FINDER.get().getMethod("instance").invoke(null);
@@ -53,7 +54,9 @@ public interface OS {
         }
     }
 
-    boolean compareColor(int c1, int c2, int var);
+    boolean compareColor(Color c1, Color c2, int var);
+
+    BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
 
     boolean isClickableActive(Clickable clickable);
 
@@ -61,7 +64,13 @@ public interface OS {
 
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
+    File saveImage(BufferedImage img, String... filePathRest);
+
     File saveScreenshot(Area area, String... filePathRest);
+
+    File saveScreenshot(String... filePathRest);
+
+    BufferedImage screenshot();
 
     BufferedImage screenshot(Area area);
 
@@ -79,11 +88,7 @@ public interface OS {
      */
     void sleepRandom(int sleepInMs) throws InterruptedException;
 
-    void sleepTillClickableIsActive(Clickable clickable) throws InterruptedException;
-
     Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
-
-    File saveImage(BufferedImage img, String... filePathRest);
 }

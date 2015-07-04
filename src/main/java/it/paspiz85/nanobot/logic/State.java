@@ -4,7 +4,9 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.util.Point;
 
+import java.util.function.Supplier;
 import java.util.logging.Logger;
 
 /**
@@ -21,9 +23,9 @@ public abstract class State<P extends Parser> implements Constants {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final P parser;
-
     protected final OS os = DEFAULT_OS;
+
+    private final P parser;
 
     State(final P parser) {
         this.parser = parser;
@@ -34,4 +36,15 @@ public abstract class State<P extends Parser> implements Constants {
     }
 
     public abstract void handle(Context context) throws BotException, InterruptedException;
+
+    protected final Point sleepUntilPointFound(final Supplier<Point> supplier) throws InterruptedException {
+        while (true) {
+            final Point point = supplier.get();
+            if (point != null) {
+                return point;
+            }
+            logger.fine("Point not found.");
+            os.sleepRandom(500);
+        }
+    }
 }

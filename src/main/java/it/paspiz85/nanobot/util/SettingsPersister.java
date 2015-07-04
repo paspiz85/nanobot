@@ -9,7 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,8 +22,6 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_ATTACK_STRAT = "attack_strat";
 
-    private static final String PROPERTY_BARRACKS_COORDS = "barracks_coords";
-
     private static final String PROPERTY_DE = "de";
 
     private static final String PROPERTY_DETECT_EMPTY_COLLECTORS = "detect_empty_collectors";
@@ -35,9 +32,9 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_IS_MATCH_ALL_CONDS = "match_all";
 
-    private static final String PROPERTY_LOG_LEVEL = "log_level";
-
     private static final String PROPERTY_LOG_ENEMY_BASE = "log_enemy_base";
+
+    private static final String PROPERTY_LOG_LEVEL = "log_level";
 
     private static final String PROPERTY_MAX_TH = "max_th";
 
@@ -118,16 +115,6 @@ public final class SettingsPersister implements Constants {
             if (raxInfoProperty != null) {
                 settings.setRaxInfo(raxInfoProperty);
             }
-            final String barracksCoordsProperty = configProperties.getProperty(PROPERTY_BARRACKS_COORDS);
-            if (barracksCoordsProperty != null) {
-                try (Scanner sc = new Scanner(barracksCoordsProperty)) {
-                    final int x = sc.nextInt();
-                    final int y = sc.nextInt();
-                    settings.setFirstBarrackPosition(new Point(x, y));
-                } catch (final Exception e) {
-                    settings.setFirstBarrackPosition(null);
-                }
-            }
             final String logEnemyBase = configProperties.getProperty(PROPERTY_LOG_ENEMY_BASE);
             if (logEnemyBase != null) {
                 settings.setLogEnemyBase(Boolean.parseBoolean(logEnemyBase));
@@ -154,11 +141,6 @@ public final class SettingsPersister implements Constants {
             configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(settings.isPlaySound()));
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
-            final Point firstBarrackPosition = settings.getFirstBarrackPosition();
-            if (firstBarrackPosition != null) {
-                configProperties.setProperty(PROPERTY_BARRACKS_COORDS, firstBarrackPosition.x() + " "
-                        + firstBarrackPosition.y());
-            }
             final Clickable[] raxInfo = settings.getRaxInfo();
             final StringBuilder raxProp = new StringBuilder();
             for (int i = 0; i < raxInfo.length; i++) {

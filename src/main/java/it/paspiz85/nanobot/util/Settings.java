@@ -34,7 +34,6 @@ public final class Settings {
     /**
      * Singleton accessor method.
      */
-    // TODO refactore singleton
     public static Settings instance() {
         if (!INSTANCE.isInitialized) {
             synchronized (Settings.class) {
@@ -62,15 +61,13 @@ public final class Settings {
 
     private int elixirThreshold;
 
-    private Point firstBarrackPosition;
-
-    private Level logLevel = Level.INFO;
-
     private int goldThreshold;
 
     private boolean isInitialized;
 
     private boolean logEnemyBase;
+
+    private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
 
@@ -104,10 +101,6 @@ public final class Settings {
 
     public int getElixirThreshold() {
         return elixirThreshold;
-    }
-
-    public Point getFirstBarrackPosition() {
-        return firstBarrackPosition;
     }
 
     public int getGoldThreshold() {
@@ -160,10 +153,6 @@ public final class Settings {
 
     public void setElixirThreshold(final int elixirThreshold) {
         this.elixirThreshold = elixirThreshold;
-    }
-
-    public void setFirstBarrackPosition(final Point firstBarrackPosition) {
-        this.firstBarrackPosition = firstBarrackPosition;
     }
 
     public void setGoldThreshold(final int goldThreshold) {

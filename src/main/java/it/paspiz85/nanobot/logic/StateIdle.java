@@ -1,6 +1,8 @@
 package it.paspiz85.nanobot.logic;
 
+import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 
 /**
@@ -20,10 +22,16 @@ public final class StateIdle extends State<Parser> {
         return instance;
     }
 
+    private final AttackScreenParser attackScreenParser;
+
     private boolean reloading;
+
+    private final MainScreenParser mainScreenParser;
 
     private StateIdle() {
         super(Parser.getInstance(null));
+        mainScreenParser = Parser.getInstance(MainScreenParser.class);
+        attackScreenParser = Parser.getInstance(AttackScreenParser.class);
     }
 
     @Override
@@ -45,10 +53,15 @@ public final class StateIdle extends State<Parser> {
                 logger.info("Was attacked.");
                 os.leftClick(Clickable.BUTTON_WAS_ATTACKED_OKAY.getPoint(), true);
                 os.sleepRandom(250);
-            } else if (os.isClickableActive(Clickable.BUTTON_ATTACK)) {
+            } else if (mainScreenParser.searchButtonTrainClose() != null) {
+                os.leftClick(mainScreenParser.getButtonTrainClose(), true);
+                os.sleepRandom(250);
                 nextState = StateMainMenu.instance();
                 break;
-            } else if (os.isClickableActive(Clickable.BUTTON_NEXT)) {
+            } else if (mainScreenParser.searchButtonAttack() != null) {
+                nextState = StateMainMenu.instance();
+                break;
+            } else if (attackScreenParser.searchButtonNext() != null) {
                 nextState = StateAttack.instance();
                 break;
             } else if (os.isClickableActive(Clickable.BUTTON_FIND_A_MATCH)) {

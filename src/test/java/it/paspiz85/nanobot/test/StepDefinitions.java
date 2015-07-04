@@ -45,11 +45,7 @@ public class StepDefinitions {
 
         @Override
         protected BufferedImage screenshot(final Point p1, final Point p2) {
-            final int x1 = p1.x();
-            final int y1 = p1.y();
-            final int x2 = p2.x();
-            final int y2 = p2.y();
-            return screenshot.getSubimage(x1, y1, x2 - x1, y2 - y1);
+            return getSubimage(screenshot, p1, p2);
         }
 
         public void setScreenshot(final BufferedImage screenshot) {
@@ -63,17 +59,19 @@ public class StepDefinitions {
         DEFAULT_OS = OS.instance();
     }
 
-    protected final OS os = DEFAULT_OS;
-
-    private BufferedImage screenshot;
+    private Boolean check;
 
     private EnemyInfo enemyInfo;
 
     private Boolean isCollectorsFull;
 
-    private int[] troopsCount;
+    protected final OS os = DEFAULT_OS;
 
-    private Point attackButtonPoint;
+    private Point point;
+
+    private BufferedImage screenshot;
+
+    private int[] troopsCount;
 
     @Given("^screenshot saved as (.*)$")
     public void givenScreenshot(final String imagefile) throws IOException {
@@ -92,9 +90,19 @@ public class StepDefinitions {
         }
     }
 
-    @Then("^attack button is (.*)$")
-    public void thenAttackButtonIs(final Boolean found) {
-        Assert.assertEquals(found, attackButtonPoint != null);
+    private Point parsePoint(final String coords) {
+        Point point = null;
+        if (!"null".equals(coords)) {
+            final String[] split = coords.substring(1, coords.length() - 1).split(",");
+            Assert.assertEquals(2, split.length);
+            point = new Point(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()));
+        }
+        return point;
+    }
+
+    @Then("^check is (.*)$")
+    public void thenCheckIs(final Boolean check) {
+        Assert.assertEquals(check, this.check);
     }
 
     @Then("^collectors is (.*)$")
@@ -103,14 +111,32 @@ public class StepDefinitions {
     }
 
     @Then("^enemy info found is (.*), (.*), (.*), (.*), (.*)$")
-    public void thenEnemyInfoFound(final Integer gold, final Integer elixir, final Integer darkelixir,
-            final Integer trophyWin, final Integer thophyDefeat) {
-        Assert.assertEquals(gold, enemyInfo.getGold());
-        Assert.assertEquals(elixir, enemyInfo.getElixir());
-        Assert.assertEquals(darkelixir, enemyInfo.getDarkElixir());
-        Assert.assertEquals(trophyWin, enemyInfo.getTrophyWin());
-        // TODO implement
-        // Assert.assertEquals(thophyDefeat, enemyInfo.getTrophyDefeat());
+    public void thenEnemyInfoFound(final String gold, final String elixir, final String darkelixir,
+            final String trophyWin, final String thophyDefeat) throws BotBadBaseException {
+        final EnemyInfo expected = new EnemyInfo();
+        if (!"null".equals(gold)) {
+            expected.setGold(new Integer(gold));
+        }
+        if (!"null".equals(elixir)) {
+            expected.setElixir(new Integer(elixir));
+        }
+        if (!"null".equals(darkelixir)) {
+            expected.setDarkElixir(new Integer(darkelixir));
+        }
+        if (!"null".equals(trophyWin)) {
+            expected.setTrophyWin(new Integer(trophyWin));
+        }
+        if (!"null".equals(thophyDefeat)) {
+            expected.setTrophyDefeat(new Integer(thophyDefeat));
+        }
+        Assert.assertEquals(expected, enemyInfo);
+        // Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
+    }
+
+    @Then("^point found at (.*)$")
+    public void thenPointFoundAt(final String coords) {
+        final Point point = parsePoint(coords);
+        Assert.assertEquals(point, this.point);
     }
 
     @Then("^troops count is (.*)$")
@@ -129,10 +155,10 @@ public class StepDefinitions {
         isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
     }
 
-    @When("^parsing attack button$")
-    public void whenParsingAttackButton() throws BotBadBaseException {
+    @When("^checking if camps are full$")
+    public void whenCheckingIfCampsAreFull() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        attackButtonPoint = Parser.getInstance(MainScreenParser.class).findAttackButton();
+        check = Parser.getInstance(MainScreenParser.class).areCampsFull();
     }
 
     @When("^parsing enemy info$")
@@ -145,5 +171,47 @@ public class StepDefinitions {
     public void whenParsingTroops() throws BotException {
         OSMock.instance.setScreenshot(screenshot);
         troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
+    }
+
+    @When("^searching attack button point$")
+    public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchButtonAttack();
+    }
+
+    @When("^searching close troops button point$")
+    public void whenSearchingCloseTroopsButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchButtonTrainClose();
+    }
+
+    @When("^searching full dark elixir drill point$")
+    public void whenSearchingFullDarkElixirDrillPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+    }
+
+    @When("^searching full elixir collector point$")
+    public void whenSearchingFullElixirCollectorPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+    }
+
+    @When("^searching full gold mine point$")
+    public void whenSearchingFullGoldMinePoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+    }
+
+    @When("^searching next button point$")
+    public void whenSearchingNexButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(AttackScreenParser.class).searchButtonNext();
+    }
+
+    @When("^searching troops button point$")
+    public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchButtonTroops();
     }
 }

@@ -30,7 +30,7 @@ public final class StateTrainTroops extends State<MainScreenParser> {
     @Override
     public void handle(final Context context) throws InterruptedException {
         // first barracks must be opened at this point
-        logger.info("Training Troops");
+        logger.info("Training Troops.");
         final Clickable[] raxInfo = Settings.instance().getRaxInfo();
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
             final Clickable troop = raxInfo[currRax];
@@ -44,12 +44,12 @@ public final class StateTrainTroops extends State<MainScreenParser> {
             }
             if (currRax < raxInfo.length - 1) {
                 logger.fine("Goto next barrack");
-                os.leftClick(Clickable.BUTTON_RAX_NEXT, true);
+                os.leftClick(getParser().getButtonTrainNext(), true);
                 os.sleepRandom(350);
             }
         }
-        logger.fine("Close Training Troops");
-        os.leftClick(Clickable.BUTTON_RAX_CLOSE, true);
+        logger.fine("Close Training Troops.");
+        os.leftClick(getParser().getButtonTrainClose(), true);
         os.sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time

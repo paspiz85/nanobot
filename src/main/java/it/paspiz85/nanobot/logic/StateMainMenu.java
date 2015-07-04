@@ -1,11 +1,11 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.game.GameConstants;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.util.Settings;
 
 /**
  * This state is when bot is in main menu.
@@ -13,7 +13,7 @@ import it.paspiz85.nanobot.util.Settings;
  * @author paspiz85
  *
  */
-public final class StateMainMenu extends State<MainScreenParser> {
+public final class StateMainMenu extends State<MainScreenParser> implements GameConstants {
 
     private static StateMainMenu instance;
 
@@ -28,52 +28,92 @@ public final class StateMainMenu extends State<MainScreenParser> {
         super(Parser.getInstance(MainScreenParser.class));
     }
 
+    private void collecting(final Context context) throws InterruptedException {
+        if (context.getTrainCount() % 20 == 0) {
+            logger.info("Searching full collectors...");
+            int count = 0;
+            for (int i = 0; i < GOLD_MINE_MAX_NUMBER; i++) {
+                final Point p = getParser().searchFullGoldMine();
+                if (p != null) {
+                    os.leftClick(p, false);
+                    os.sleepRandom(200);
+                    count++;
+                }
+            }
+            for (int i = 0; i < ELIXIR_COLLECTOR_MAX_NUMBER; i++) {
+                final Point p = getParser().searchFullElixirCollector();
+                if (p != null) {
+                    os.leftClick(p, false);
+                    os.sleepRandom(200);
+                    count++;
+                }
+            }
+            for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
+                final Point p = getParser().searchFullDarkElixirDrill();
+                if (p != null) {
+                    os.leftClick(p, false);
+                    os.sleepRandom(200);
+                    count++;
+                }
+            }
+            logger.info(String.format("Found %d full collectors.", count));
+        }
+    }
+
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
-        // TODO change message
-        logger.fine("StateMainMenu");
+        logger.fine("Returned in main menu");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
-        if (!context.isLanguageChecked()) {
-            logger.info("Checking language...");
-            if (getParser().findAttackButton() == null) {
-                throw new BotConfigurationException("Make sure in-game language is English");
-            }
-            context.setLanguageChecked(true);
-        }
         os.zoomUp();
         os.sleepRandom(350);
-        final Point firstRax = Settings.instance().getFirstBarrackPosition();
-        logger.fine("Try open barracks");
-        os.leftClick(firstRax, false);
-        os.sleepRandom(500);
-        Point trainButton = getParser().findTrainButton();
-        if (trainButton == null) {
-            // maybe rax was already open and we closed it back
-            logger.fine("Try open barracks again");
-            os.leftClick(firstRax, false);
-            os.sleepRandom(500);
-            trainButton = getParser().findTrainButton();
+        if (!context.isLanguageChecked()) {
+            logger.info("Checking language...");
+            if (getParser().searchButtonAttack() == null) {
+                throw new BotConfigurationException("Make sure in-game language is English!");
+            }
+            logger.info("Checking language OK.");
+            context.setLanguageChecked(true);
         }
-        if (trainButton == null) {
-            throw new BotConfigurationException("Barracks location is not correct.");
-        }
-        logger.fine("Press Train");
-        os.leftClick(trainButton, false);
-        os.sleepRandom(500);
-        if (os.isClickableActive(Clickable.BUTTON_RAX_FULL)) {
-            logger.info("Camp is full");
+        collecting(context);
+        training(context);
+        context.setTroopsInfo(null);
+        if (getParser().areCampsFull()) {
+            logger.info("Camp is full.");
             logger.fine("Close barracks");
-            os.leftClick(Clickable.BUTTON_RAX_CLOSE, true);
+            os.leftClick(getParser().getButtonTrainClose(), true);
             os.sleepRandom(200);
-            logger.fine("Press Attack");
-            os.leftClick(Clickable.BUTTON_ATTACK, true);
+            reviewTroops(context);
+            logger.fine("Press Attack.");
+            os.leftClick(getParser().getButtonAttack(), true);
             os.sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             context.setState(StateTrainTroops.instance());
         }
+        os.sleepRandom(500);
+    }
+
+    private void reviewTroops(final Context context) throws InterruptedException {
+        os.leftClick(getParser().getButtonTroops(), true);
+        os.sleepRandom(300);
+        final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
+        context.setTroopsInfo(troopsInfo);
+        os.leftClick(getParser().getButtonTrainClose(), true);
+        os.sleepRandom(200);
+    }
+
+    private void training(final Context context) throws InterruptedException, BotConfigurationException {
+        final Point buttonTrainClose = getParser().searchButtonTrainClose();
+        if (buttonTrainClose != null) {
+            logger.fine("Close previous train");
+            os.leftClick(buttonTrainClose, true);
+            os.sleepRandom(500);
+        }
+        os.leftClick(getParser().getButtonTroops(), true);
+        os.sleepRandom(500);
+        os.leftClick(getParser().getButtonTrainNext(), true);
         os.sleepRandom(500);
     }
 }

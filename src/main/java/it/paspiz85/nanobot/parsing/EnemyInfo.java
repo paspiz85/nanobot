@@ -8,15 +8,15 @@ package it.paspiz85.nanobot.parsing;
  */
 public final class EnemyInfo {
 
-    private Integer gold;
+    private Integer darkElixir;
 
     private Integer elixir;
 
-    private Integer darkElixir;
-
-    private Integer trophyWin;
+    private Integer gold;
 
     private Integer trophyDefeat;
+
+    private Integer trophyWin;
 
     @Override
     public boolean equals(final Object obj) {
@@ -113,15 +113,19 @@ public final class EnemyInfo {
     }
 
     public void setTrophyDefeat(final Integer trophyDefeat) {
-        this.trophyDefeat = trophyDefeat;
+        // TODO implements trophyDefeat
+        // this.trophyDefeat = trophyDefeat;
     }
 
     public void setTrophyWin(final Integer trophyWin) {
-        this.trophyWin = trophyWin;
+        // TODO implements trophyWin
+        // this.trophyWin = trophyWin;
     }
 
     @Override
     public String toString() {
+        // TODO implements trophyDefeat
+        // TODO implements trophyWin
         return String.format("[gold: %d, elixir: %d, de: %d]", gold, elixir, darkElixir);
     }
 }

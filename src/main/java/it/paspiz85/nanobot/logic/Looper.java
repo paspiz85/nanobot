@@ -3,11 +3,8 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.util.Settings;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,9 +16,9 @@ import java.util.logging.Logger;
  */
 public final class Looper {
 
-    private static Looper instance;
-
     private static final OS DEFAULT_OS = OS.instance();
+
+    private static Looper instance;
 
     public static Looper instance() {
         if (instance == null) {
@@ -30,15 +27,15 @@ public final class Looper {
         return instance;
     }
 
-    private final OS os = DEFAULT_OS;
-
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private boolean waitingForDcChecker;
+    private final OS os = DEFAULT_OS;
 
     private boolean running;
 
     private boolean setupDone;
+
+    private boolean waitingForDcChecker;
 
     private Looper() {
     }
@@ -103,25 +100,14 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
-            final Runnable updateUI) throws InterruptedException, BotException {
+    public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws InterruptedException,
+    BotException {
         logger.info("Starting...");
         if (!setupDone) {
             os.setup();
             setupDone = true;
         }
         os.setupResolution(setupResolution);
-        logger.info("Checking barracks...");
-        if (Settings.instance().getFirstBarrackPosition() == null) {
-            logger.info("Setting up Barracks...");
-            final Point point = setupBarracks.get();
-            if (point == null) {
-                throw new BotConfigurationException("Cannot proceed without barracks");
-            }
-            logger.info(String.format("Set barracks location to <%d, %d>", point.x(), point.y()));
-            Settings.instance().setFirstBarrackPosition(point);
-            Settings.instance().save();
-        }
         logger.info("Setup is successful.");
         final Context context = new Context();
         logger.fine("Starting disconnect detector...");
