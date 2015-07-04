@@ -16,7 +16,4 @@ free ci
 other
 donation
 
-0 1 4 6 8 9 2 7
-
-5
-
+1 
