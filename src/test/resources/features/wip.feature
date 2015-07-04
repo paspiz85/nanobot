@@ -19,10 +19,10 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906031260.png | 89284  | 96048 | null         | null         | null            |
       | classpath:/features/img/base_1435906058962.png | 48298  | 108699 | null         | null         | null            |
       | classpath:/features/img/base_1435906077198.png | 106328 | 67762 | null         | null         | null            |
-      | classpath:/features/img/base_1435906098470.png | 95253  | 79 | null         | null         | null            |
+      | classpath:/features/img/base_1435906098470.png | 95253  | 7595 | null         | null         | null            |
       | classpath:/features/img/base_1435906115317.png | 42075  | 2611 | null         | null         | null            |
       | classpath:/features/img/base_1435906126585.png | 115280 | 69890 | null         | null         | null            |
-      | classpath:/features/img/base_1435906144152.png | 63806  | 108 | null         | null         | null            |
+      | classpath:/features/img/base_1435906144152.png | 63806  | 1508 | null         | null         | null            |
       | classpath:/features/img/base_1435906163980.png | 75103  | 8602 | null         | null         | null            |
       | classpath:/features/img/base_1435906182442.png | 35443  | 06229 | null         | null         | null            |
       | classpath:/features/img/base_1435906189462.png | 19980  | 112606 | null         | null         | null            |
