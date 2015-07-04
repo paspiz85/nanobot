@@ -8,6 +8,7 @@ import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -91,7 +92,6 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 os.saveScreenshot("bad_base_" + id);
                 throw e;
             }
-            final int[] attackGroup = getParser().parseTroopCount();
             if (doAttack) {
                 // // debug
                 // if (true) {
@@ -99,7 +99,10 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 final Attack attackStrategy = Settings.instance().getAttackStrategy();
                 if (attackStrategy != Attack.manualStrategy()) {
                     playAttackReady();
-                    attackStrategy.attack(enemyInfo, attackGroup);
+                    final TroopsInfo troopsInfo = context.getTroopsInfo();
+                    if (troopsInfo != null) {
+                        attackStrategy.attack(enemyInfo, troopsInfo.getTroopsCount());
+                    }
                     os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
                     os.sleepRandom(1200);
                     os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);

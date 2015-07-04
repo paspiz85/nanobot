@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.game.GameConstants;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
 
 /**
@@ -77,11 +78,13 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         }
         collecting(context);
         training(context);
+        context.setTroopsInfo(null);
         if (getParser().areCampsFull()) {
             logger.info("Camp is full.");
             logger.fine("Close barracks");
             os.leftClick(getParser().getButtonTrainClose(), true);
             os.sleepRandom(200);
+            reviewTroops(context);
             logger.fine("Press Attack.");
             os.leftClick(getParser().getButtonAttack(), true);
             os.sleepRandom(1000);
@@ -90,6 +93,15 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
             context.setState(StateTrainTroops.instance());
         }
         os.sleepRandom(500);
+    }
+
+    private void reviewTroops(final Context context) throws InterruptedException {
+        os.leftClick(getParser().getButtonTroops(), true);
+        os.sleepRandom(300);
+        final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
+        context.setTroopsInfo(troopsInfo);
+        os.leftClick(getParser().getButtonTrainClose(), true);
+        os.sleepRandom(200);
     }
 
     private void training(final Context context) throws InterruptedException, BotConfigurationException {

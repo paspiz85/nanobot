@@ -20,3 +20,13 @@ Feature: parsing attack screen
       | classpath:/features/img/base_1435358344374.png | 164806 | 253370 | 862         | 32         | 15            |
       | classpath:/features/img/base_1435358350820.png | 27046  | 129054 | 449         | 28         | 15            |
       | classpath:/features/img/base_1435358355546.png | 315272 | 283364 | 640         | 22         | 15            |
+
+      
+  Scenario Outline: parse troops
+    Given screenshot saved as <imagefile>
+    When parsing troops
+    Then troops count is <troops_count>
+
+    Examples:
+      | imagefile                                      | troops_count |
+      | classpath:/features/img/base_1435356695457.png | [81,65,54,0] |

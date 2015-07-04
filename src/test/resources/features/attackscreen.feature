@@ -55,16 +55,6 @@ Feature: parsing attack screen
       | classpath:/features/img/base_1435358355546.png | true  |
 
 
-  Scenario Outline: parse troops
-    Given screenshot saved as <imagefile>
-    When parsing troops
-    Then troops count is <troops_count>
-
-    Examples:
-      | imagefile                                      | troops_count |
-      | classpath:/features/img/base_1435356695457.png | [81,65,54,0] |
-
-
   Scenario Outline: search next button
     Given screenshot saved as <imagefile>
     When searching next button point

@@ -42,9 +42,9 @@ public class AttackScreenParser extends Parser {
 
     private static final int ATTACK_GROUP_UNIT_DIFF = 72;
 
-    private static final Color COLOR_HAS_DARK = getColor("color.hasdark");
+    private static final Color DARKCHECK_COLOR_YES = getColor("darkcheck.color.yes");
 
-    private static final Color COLOR_HASNT_DARK = getColor("color.hasntdark");
+    private static final Color DARKCHECK_COLOR_NO = getColor("darkcheck.color.no");
 
     private static final Area ENEMY_BASE = new Area(31, 0, 831, 510);
 
@@ -68,7 +68,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Point POINT_ELIXIR_HASNT_DARK = new Point(33, 30);
 
-    private static final Point POINT_HAS_DARK = getPoint("point.hasdark");
+    private static final Point DARKCHECK_POINT = getPoint("darkcheck.point");
 
     private static final Point POINT_GOLD_HAS_DARK = getPoint("point.gold.hasdark");
 
@@ -125,12 +125,12 @@ public class AttackScreenParser extends Parser {
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
-        final int rgb = image.getRGB(POINT_HAS_DARK.x(), POINT_HAS_DARK.y());
+        final int rgb = image.getRGB(DARKCHECK_POINT.x(), DARKCHECK_POINT.y());
         final Color deCheck = new Color(rgb);
         boolean result;
-        if (os.compareColor(deCheck, COLOR_HAS_DARK, 7)) {
+        if (os.compareColor(deCheck, DARKCHECK_COLOR_YES, 7)) {
             result = true;
-        } else if (os.compareColor(deCheck, COLOR_HASNT_DARK, 7)) {
+        } else if (os.compareColor(deCheck, DARKCHECK_COLOR_NO, 7)) {
             result = false;
         } else {
             throw new BotBadBaseException("de: " + Integer.toHexString(deCheck.getRGB()));

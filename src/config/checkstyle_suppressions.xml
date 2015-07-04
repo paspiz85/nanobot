@@ -6,6 +6,7 @@
   <suppress files="MainController.java" checks="VisibilityModifier|FileLengthCheck|ClassFanOutComplexity" />
   <suppress files="Constants.java" checks="InterfaceIsType" />
   <suppress files="SettingsPersister.java" checks="CyclomaticComplexity|MethodLength|NPathComplexity" />
+  <suppress files="Parser.java" checks="NPathComplexity" />
   <suppress files="EnemyInfo.java" checks="CyclomaticComplexity|MethodLength|NPathComplexity" />
   <suppress files="Clickable.java" checks="LineLength" />
   <suppress files="StateAttack.java" checks="MethodLength|CyclomaticComplexity" />
