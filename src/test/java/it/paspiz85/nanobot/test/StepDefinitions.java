@@ -130,7 +130,7 @@ public class StepDefinitions {
             expected.setTrophyDefeat(new Integer(thophyDefeat));
         }
         // TODO collecting delete
-        //expected.setGold(null);
+        expected.setGold(null);
         Assert.assertEquals(expected, enemyInfo);
         // Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
     }
