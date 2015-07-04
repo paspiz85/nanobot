@@ -14,12 +14,11 @@ Feature: single feature to test
 #      | classpath:/features/img/base_1435819920420.png | 2 | null | null         | null         | null            |
       | classpath:/features/img/base_1435905910030.png | 36438 | null | null         | null         | null            |
       | classpath:/features/img/base_1435905943068.png | 31037 | null | null         | null         | null            |
-      
       | classpath:/features/img/base_1435905992009.png | 28447 | null | null         | null         | null            |
-      
-      | classpath:/features/img/base_1435906013388.png | 9474 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906013388.png | 94741 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906031260.png | 89284 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906058962.png | 4829 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906058962.png | 48298 | null | null         | null         | null            |
+      
       | classpath:/features/img/base_1435906077198.png | 10632 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906098470.png | 952 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906115317.png | 427 | null | null         | null         | null            |
@@ -32,10 +31,10 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906203032.png | 299 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906210498.png | 4524 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906215238.png | 133895 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906220597.png | 1847 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906220597.png | 18471 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906224691.png | 13319 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906228582.png | 504 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906228582.png | 5041 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906232991.png | 226 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906237740.png | 174 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906237740.png | 1741 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906242449.png | 6283 | null | null         | null         | null            |
      
