@@ -10,5 +10,5 @@ Feature: single feature to test
 
     Examples:
       | imagefile                                      | gold   | elixir | dark_elixir | thophy_win | thophy_defeat |
-      | classpath:/features/img/base_1435905943068.png | 31037  | 2136   | 439         | null         | null            |
+      | classpath:/features/img/base_1435906031260.png | 89284  | 96048  | 205         | null         | null            |
       
