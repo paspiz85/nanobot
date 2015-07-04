@@ -161,8 +161,10 @@ public abstract class Parser {
 
     private final int[] thresholds;
 
-    // TODO comment
-    private final Integer debug = null;
+    /*
+     * Set this var for debugging image screen parsing
+     */
+    private final Integer learnMode = null;
 
     Parser() {
         offsets = new int[10][][];
@@ -202,16 +204,16 @@ public abstract class Parser {
             int count = 0;
             for (int j = 0; j < actual.length; j++) {
                 final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
-                if (debug != null) {
+                if (learnMode != null) {
                     image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF : 0xFF0000);
                 }
                 if (!compare) {
                     found = false;
-                    if (debug == null) break;
+                    if (learnMode == null) break;
                 } else
                 count++;
             }
-            if (debug != null && debug == i) {
+            if (learnMode != null && learnMode == i) {
                 String s = "";
                 for (final int element : actual) {
                     s += "#" + Integer.toHexString(element & 0xFFFFFF).toUpperCase() + ",";
@@ -225,7 +227,7 @@ public abstract class Parser {
                     System.out.println(f.getAbsolutePath());
                 }
             }
-            if (debug != null) {
+            if (learnMode != null) {
                 for (int j = 0; j < actual.length; j++) {
                     image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], actual[j]);
                 }
