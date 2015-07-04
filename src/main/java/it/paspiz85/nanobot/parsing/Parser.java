@@ -173,7 +173,7 @@ public abstract class Parser {
             colors[i] = getRGBseries("digit." + i);
             thresholds[i] = getThreshold("digit." + i);
         }
-        // TODO
+        // TODO configure
         widths = new int[] { 12, 6, 10, 8, 12, 10, 10, 9, 11, 11 };
     }
 

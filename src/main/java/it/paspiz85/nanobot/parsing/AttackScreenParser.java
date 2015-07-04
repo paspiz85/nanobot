@@ -206,7 +206,8 @@ public class AttackScreenParser extends Parser {
     public EnemyInfo parseEnemyInfo() throws BotBadBaseException {
         final BufferedImage image = os.screenshot(ENEMY_LOOT);
         final EnemyInfo info = new EnemyInfo();
-        // TODO restore info.setGold(parseGold(image));
+        // TODO collecting restore 
+        info.setGold(parseGold(image));
         info.setElixir(parseElixir(image));
         info.setDarkElixir(parseDarkElixir(image));
         info.setTrophyWin(parseTrophyWin(image));
