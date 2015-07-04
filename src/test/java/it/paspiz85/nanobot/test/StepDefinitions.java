@@ -129,9 +129,6 @@ public class StepDefinitions {
         if (!"null".equals(thophyDefeat)) {
             expected.setTrophyDefeat(new Integer(thophyDefeat));
         }
-        // TODO collecting delete
-        expected.setGold(null);
-        expected.setElixir(null);
         Assert.assertEquals(expected, enemyInfo);
         // Parser.getInstance(AttackScreenParserLearner.class).parseAndCheckEnemyInfo(expected);
     }
