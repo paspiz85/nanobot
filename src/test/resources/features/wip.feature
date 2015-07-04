@@ -2,12 +2,24 @@
 @wip
 Feature: test work-in-progress
 
-    Scenario Outline: parse troops
+
+  Scenario Outline: search troops button
     Given screenshot saved as <imagefile>
-    When parsing troops
-    Then troops count is <troops_count>
+    When searching troops button point
+    Then point found at <coords>
 
     Examples:
-      | imagefile                                      | troops_count   |
-      | classpath:/features/img/base_1435906242449.png | [64,74,36,1,0] |
- 
+      | imagefile                                       | coords    |
+      | classpath:/features/img/main_1436034229185.png  | [63,1160] |
+
+
+  Scenario Outline: search close troops button
+    Given screenshot saved as <imagefile>
+    When searching close troops button point
+    Then point found at <coords>
+
+    Examples:
+      | imagefile                                       | coords    |
+      | classpath:/features/img/main_1436034229185.png  | null      |
+      | classpath:/features/img/train_1435772811358.png | [756,749] |
+      

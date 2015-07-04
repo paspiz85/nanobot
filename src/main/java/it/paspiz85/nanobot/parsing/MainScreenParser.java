@@ -13,6 +13,10 @@ import java.awt.image.BufferedImage;
  */
 public final class MainScreenParser extends Parser {
 
+    private static final Area AREA_BUTTON_TROOPS = getArea("area.button.troops");
+
+    private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
+
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
     private static final Area AREA_BUTTONS_BARRACK = getArea("area.buttons.barrack");
@@ -39,9 +43,46 @@ public final class MainScreenParser extends Parser {
         return searchImage(image, "camps_full.png") != null;
     }
 
-    public Point searchAttackButton() {
+    public Point searchButtonTroops() {
+        final BufferedImage image = os.screenshot(AREA_BUTTON_TROOPS);
+        return relativePoint(searchImageCenter(image, "button_troops.png"), AREA_BUTTON_TROOPS.getP1());
+    }
+
+    public Point searchButtonTrainClose() {
+        final BufferedImage image = os.screenshot(AREA_BUTTON_TRAIN_CLOSE);
+        return relativePoint(searchImageCenter(image, "button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE.getP1());
+    }
+
+    public Point searchButtonAttack() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, "button_attack.png"), AREA_BUTTON_ATTACK.getP1());
+    }
+    
+    private Point buttonTroops;
+
+    public Point getButtonTroops() {
+        if (buttonTroops == null) {
+            buttonTroops = searchButtonTroops();
+        }
+        return buttonTroops;
+    }
+    
+    private Point buttonTrainClose;
+
+    public Point getButtonTrainClose() {
+        if (buttonTrainClose == null) {
+            buttonTrainClose = searchButtonTrainClose();
+        }
+        return buttonTrainClose;
+    }
+    
+    private Point buttonAttack;
+
+    public Point getButtonAttack() {
+        if (buttonAttack == null) {
+            buttonAttack = searchButtonAttack();
+        }
+        return buttonAttack;
     }
 
     public Point searchFullDarkElixirDrill() {
@@ -80,11 +121,7 @@ public final class MainScreenParser extends Parser {
         return point;
     }
 
-    public Point searchRaxClose() {
-        return BUTTON_TRAIN_CLOSE;
-    }
-
-    public Point searchRaxNext() {
+    public Point getButtonTrainNext() {
         return BUTTON_TRAIN_NEXT;
     }
 

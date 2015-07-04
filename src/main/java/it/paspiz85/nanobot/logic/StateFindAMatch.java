@@ -39,7 +39,7 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
             os.sleepRandom(300);
             os.leftClick(Clickable.BUTTON_SHIELD_DISABLE, true);
             os.sleepRandom(100);
-            sleepUntilPointFound(() -> getParser().searchNextButton());
+            sleepUntilPointFound(() -> getParser().searchButtonNext());
             context.setState(StateAttack.instance());
         } else {
             context.setState(StateIdle.instance());

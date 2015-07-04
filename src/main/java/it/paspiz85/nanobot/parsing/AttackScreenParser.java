@@ -60,7 +60,7 @@ public class AttackScreenParser extends Parser {
 
     protected static final Area ENEMY_LOOT = new Area(17, 68, 138, 240);
 
-    private static final Area NEXT_BUTTON = new Area(692, 488, 739, 547);
+    private static final Area AREA_NEXT_BUTTON = new Area(692, 488, 739, 547);
 
     private static final Point POINT_DARK_ELIXIR = new Point(33, 57+2);
 
@@ -273,8 +273,17 @@ public class AttackScreenParser extends Parser {
          */
     }
 
-    public Point searchNextButton() {
-        final BufferedImage image = os.screenshot(NEXT_BUTTON);
-        return relativePoint(searchImageCenter(image, "button_next.png"), NEXT_BUTTON.getP1());
+    public Point searchButtonNext() {
+        final BufferedImage image = os.screenshot(AREA_NEXT_BUTTON);
+        return relativePoint(searchImageCenter(image, "button_next.png"), AREA_NEXT_BUTTON.getP1());
+    }
+    
+    private Point buttonNext;
+
+    public Point getButtonNext() {
+        if (buttonNext == null) {
+            buttonNext = searchButtonNext();
+        }
+        return buttonNext;
     }
 }

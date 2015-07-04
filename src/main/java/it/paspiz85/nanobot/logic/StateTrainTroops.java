@@ -44,12 +44,12 @@ public final class StateTrainTroops extends State<MainScreenParser> {
             }
             if (currRax < raxInfo.length - 1) {
                 logger.fine("Goto next barrack");
-                os.leftClick(getParser().searchRaxNext(), true);
+                os.leftClick(getParser().getButtonTrainNext(), true);
                 os.sleepRandom(350);
             }
         }
         logger.fine("Close Training Troops.");
-        os.leftClick(getParser().searchRaxClose(), true);
+        os.leftClick(getParser().getButtonTrainClose(), true);
         os.sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time

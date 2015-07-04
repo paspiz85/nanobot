@@ -71,13 +71,30 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.sleepRandom(350);
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
-            if (getParser().searchAttackButton() == null) {
+            if (getParser().searchButtonAttack() == null) {
                 throw new BotConfigurationException("Make sure in-game language is English!");
             }
             logger.info("Checking language OK.");
             context.setLanguageChecked(true);
         }
         collecting(context);
+        training(context);
+        if (getParser().areCampsFull()) {
+            logger.info("Camp is full.");
+            logger.fine("Close barracks");
+            os.leftClick(getParser().getButtonTrainClose(), true);
+            os.sleepRandom(200);
+            logger.fine("Press Attack.");
+            os.leftClick(getParser().getButtonAttack(), true);
+            os.sleepRandom(1000);
+            context.setState(StateFindAMatch.instance());
+        } else {
+            context.setState(StateTrainTroops.instance());
+        }
+        os.sleepRandom(500);
+    }
+
+    void trainingOld(Context context) throws InterruptedException, BotConfigurationException {
         final Point firstRax = Settings.instance().getFirstBarrackPosition();
         logger.fine("Try open barracks");
         os.leftClick(firstRax, false);
@@ -96,18 +113,18 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         logger.fine("Press Train");
         os.leftClick(trainButton, false);
         os.sleepRandom(500);
-        if (getParser().areCampsFull()) {
-            logger.info("Camp is full.");
-            logger.fine("Close barracks");
-            os.leftClick(getParser().searchRaxClose(), true);
-            os.sleepRandom(200);
-            logger.fine("Press Attack.");
-            os.leftClick(Clickable.BUTTON_ATTACK, true);
-            os.sleepRandom(1000);
-            context.setState(StateFindAMatch.instance());
-        } else {
-            context.setState(StateTrainTroops.instance());
+    }
+
+    void training(Context context) throws InterruptedException, BotConfigurationException {
+        Point buttonTrainClose = getParser().searchButtonTrainClose();
+        if (buttonTrainClose != null) {
+            logger.fine("Close previous train");
+            os.leftClick(buttonTrainClose, true);
+            os.sleepRandom(500);
         }
+        os.leftClick(getParser().getButtonTroops(), true);
+        os.sleepRandom(500);
+        os.leftClick(getParser().getButtonTrainNext(), true);
         os.sleepRandom(500);
     }
 }

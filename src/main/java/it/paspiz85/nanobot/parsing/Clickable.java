@@ -10,7 +10,6 @@ import java.awt.Color;
  * @author paspiz85
  */
 public enum Clickable {
-    BUTTON_ATTACK(63, 599, new Color(0xF0E8D8)), // make sure to pick a solid
     BUTTON_ATTACK_UNIT_1(72, 600, null), BUTTON_ATTACK_UNIT_2(145, 600, null), BUTTON_ATTACK_UNIT_3(217, 600, null), BUTTON_ATTACK_UNIT_4(
             288, 600, null), BUTTON_ATTACK_UNIT_5(361, 600, null), BUTTON_ATTACK_UNIT_6(435, 600, null), BUTTON_ATTACK_UNIT_7(
             505, 600, null), BUTTON_END_BATTLE(59, 517, null), BUTTON_END_BATTLE_QUESTION_OKAY(509, 394, null), BUTTON_END_BATTLE_RETURN_HOME(

@@ -1,6 +1,28 @@
 @unit-test
 Feature: parsing main screen
 
+
+  Scenario Outline: search troops button
+    Given screenshot saved as <imagefile>
+    When searching troops button point
+    Then point found at <coords>
+
+    Examples:
+      | imagefile                                       | coords    |
+      | classpath:/features/img/main_1436034229185.png  | [38,526] |
+
+
+  Scenario Outline: search close troops button
+    Given screenshot saved as <imagefile>
+    When searching close troops button point
+    Then point found at <coords>
+
+    Examples:
+      | imagefile                                       | coords    |
+      | classpath:/features/img/main_1436034229185.png  | null      |
+      | classpath:/features/img/train_1435772811358.png | [731,115] |
+
+
   Scenario Outline: search attack button
     Given screenshot saved as <imagefile>
     When searching attack button point
