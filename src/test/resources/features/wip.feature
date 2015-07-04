@@ -23,11 +23,11 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906115317.png | 42075 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906126585.png | 115280 | null | null         | null         | null            |
       
-      | classpath:/features/img/base_1435906144152.png | 380 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906144152.png | 63806 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906163980.png | 75103 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906182442.png | 35443 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906189462.png | 19980 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906195366.png | 6398 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906195366.png | 63986 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906203032.png | 29985 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906210498.png | 45245 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906215238.png | 133895 | null | null         | null         | null            |
