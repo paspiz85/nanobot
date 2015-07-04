@@ -173,7 +173,7 @@ public abstract class Parser {
             thresholds[i] = getThreshold("digit." + i);
         }
         // TODO
-        widths = new int[] { 13, 6, 10, 10, 12, 10, 10, 10, 11, 11 };
+        widths = new int[] { 12, 6, 10, 10, 12, 10, 10, 9, 11, 11 };
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
@@ -198,15 +198,17 @@ public abstract class Parser {
                 actual[j] = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
             }
             boolean found = true;
+            int count = 0;
             for (int j = 0; j < actual.length; j++) {
-                final boolean compare = !os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
+                final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
                 if (debug != null) {
-                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF0000 : 0xFF);
+                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF : 0xFF0000);
                 }
-                if (compare) {
+                if (!compare) {
                     found = false;
                     break;
                 }
+                count++;
             }
             if (debug != null && debug == i) {
                 String s = "";
@@ -218,7 +220,7 @@ public abstract class Parser {
                     File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
                     System.out.println(f.getAbsolutePath());
                 } else {
-                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound");
+                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
                     System.out.println(f.getAbsolutePath());
                 }
             }
