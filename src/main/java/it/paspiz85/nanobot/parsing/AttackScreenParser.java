@@ -64,7 +64,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Point POINT_DARK_ELIXIR = new Point(33, 57);
 
-    private static final Point POINT_ELIXIR_HAS_DARK = new Point(33, 29);
+    private static final Point POINT_ELIXIR_HAS_DARK = new Point(33, 29+2);
 
     private static final Point POINT_ELIXIR_HASNT_DARK = new Point(33, 30);
 
@@ -206,7 +206,7 @@ public class AttackScreenParser extends Parser {
     public EnemyInfo parseEnemyInfo() throws BotBadBaseException {
         final BufferedImage image = os.screenshot(ENEMY_LOOT);
         final EnemyInfo info = new EnemyInfo();
-        info.setGold(parseGold(image));
+        // TODO restore info.setGold(parseGold(image));
         info.setElixir(parseElixir(image));
         info.setDarkElixir(parseDarkElixir(image));
         info.setTrophyWin(parseTrophyWin(image));

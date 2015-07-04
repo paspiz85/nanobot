@@ -161,6 +161,7 @@ public abstract class Parser {
 
     private final int[] thresholds;
 
+    // TODO comment
     private final Integer debug = null;
 
     Parser() {
@@ -206,8 +207,8 @@ public abstract class Parser {
                 }
                 if (!compare) {
                     found = false;
-                    break;
-                }
+                    if (debug == null) break;
+                } else
                 count++;
             }
             if (debug != null && debug == i) {
