@@ -7,6 +7,7 @@ import it.paspiz85.nanobot.util.Point;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
@@ -214,9 +215,11 @@ public abstract class Parser {
                 }
                 System.out.println(s);
                 if (found) {
-                    os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
+                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
+                    System.out.println(f.getAbsolutePath());
                 } else {
-                    os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound");
+                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound");
+                    System.out.println(f.getAbsolutePath());
                 }
             }
             if (debug != null) {
