@@ -62,9 +62,9 @@ public class AttackScreenParser extends Parser {
 
     private static final Area AREA_NEXT_BUTTON = new Area(692, 488, 739, 547);
 
-    private static final Point POINT_DARK_ELIXIR = new Point(33, 57+2);
+    private static final Point POINT_DARK_ELIXIR = new Point(33, 57 + 2);
 
-    private static final Point POINT_ELIXIR_HAS_DARK = new Point(33, 29+2);
+    private static final Point POINT_ELIXIR_HAS_DARK = new Point(33, 29 + 2);
 
     private static final Point POINT_ELIXIR_HASNT_DARK = new Point(33, 30);
 
@@ -77,6 +77,8 @@ public class AttackScreenParser extends Parser {
     private static final Point POINT_TROPHY_WIN_HAS_DARK = new Point(33, 90);
 
     private static final Point POINT_TROPHY_WIN_HASNT_DARK = new Point(33, 62);
+
+    private Point buttonNext;
 
     AttackScreenParser() {
         ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x(), ENEMY_BASE_LEFT.y());
@@ -113,6 +115,13 @@ public class AttackScreenParser extends Parser {
             logger.finest(String.format("\tfound %d elixirs matching %s\n", c, next.getFileName().toString()));
         }
         return attackableElixirs;
+    }
+
+    public Point getButtonNext() {
+        if (buttonNext == null) {
+            buttonNext = searchButtonNext();
+        }
+        return buttonNext;
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
@@ -276,14 +285,5 @@ public class AttackScreenParser extends Parser {
     public Point searchButtonNext() {
         final BufferedImage image = os.screenshot(AREA_NEXT_BUTTON);
         return relativePoint(searchImageCenter(image, "button_next.png"), AREA_NEXT_BUTTON.getP1());
-    }
-    
-    private Point buttonNext;
-
-    public Point getButtonNext() {
-        if (buttonNext == null) {
-            buttonNext = searchButtonNext();
-        }
-        return buttonNext;
     }
 }

@@ -176,22 +176,16 @@ public class StepDefinitions {
         troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 
-    @When("^searching troops button point$")
-    public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
+    @When("^searching attack button point$")
+    public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchButtonTroops();
+        point = Parser.getInstance(MainScreenParser.class).searchButtonAttack();
     }
 
     @When("^searching close troops button point$")
     public void whenSearchingCloseTroopsButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
         point = Parser.getInstance(MainScreenParser.class).searchButtonTrainClose();
-    }
-
-    @When("^searching attack button point$")
-    public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
-        OSMock.instance.setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchButtonAttack();
     }
 
     @When("^searching full dark elixir drill point$")
@@ -216,5 +210,11 @@ public class StepDefinitions {
     public void whenSearchingNexButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
         point = Parser.getInstance(AttackScreenParser.class).searchButtonNext();
+    }
+
+    @When("^searching troops button point$")
+    public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchButtonTroops();
     }
 }

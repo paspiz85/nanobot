@@ -4,13 +4,11 @@ import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
-import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -83,8 +81,7 @@ public final class Model implements Constants {
         return Settings.instance().getAvailableTroops();
     }
 
-    public void initialize(final BooleanSupplier setupResolution, final Supplier<Point> setupBarracks,
-            final Runnable updateUI) {
+    public void initialize(final BooleanSupplier setupResolution, final Runnable updateUI) {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
@@ -99,7 +96,7 @@ public final class Model implements Constants {
 
                     @Override
                     protected Void call() throws Exception {
-                        looper.start(setupResolution, setupBarracks, updateUI);
+                        looper.start(setupResolution, updateUI);
                         return null;
                     }
                 };
@@ -126,10 +123,6 @@ public final class Model implements Constants {
 
     public Settings loadSettings() {
         return Settings.instance();
-    }
-
-    public void resetBarracks() {
-        Settings.instance().setFirstBarrackPosition(null);
     }
 
     public void saveScreenshot() {

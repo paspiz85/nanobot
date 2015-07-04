@@ -19,7 +19,7 @@ public final class Shell {
         Logging.initialize();
         try {
             final Model model = Model.instance();
-            model.initialize(() -> false, () -> null, () -> {
+            model.initialize(() -> false, () -> {
             });
             model.start();
         } catch (final Exception e) {

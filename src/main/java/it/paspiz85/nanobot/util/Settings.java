@@ -61,8 +61,6 @@ public final class Settings {
 
     private int elixirThreshold;
 
-    private Point firstBarrackPosition;
-
     private int goldThreshold;
 
     private boolean isInitialized;
@@ -103,10 +101,6 @@ public final class Settings {
 
     public int getElixirThreshold() {
         return elixirThreshold;
-    }
-
-    public Point getFirstBarrackPosition() {
-        return firstBarrackPosition;
     }
 
     public int getGoldThreshold() {
@@ -159,10 +153,6 @@ public final class Settings {
 
     public void setElixirThreshold(final int elixirThreshold) {
         this.elixirThreshold = elixirThreshold;
-    }
-
-    public void setFirstBarrackPosition(final Point firstBarrackPosition) {
-        this.firstBarrackPosition = firstBarrackPosition;
     }
 
     public void setGoldThreshold(final int goldThreshold) {

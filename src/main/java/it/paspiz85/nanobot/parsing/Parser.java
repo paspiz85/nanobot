@@ -209,9 +209,12 @@ public abstract class Parser {
                 }
                 if (!compare) {
                     found = false;
-                    if (learnMode == null) break;
-                } else
-                count++;
+                    if (learnMode == null) {
+                        break;
+                    }
+                } else {
+                    count++;
+                }
             }
             if (learnMode != null && learnMode == i) {
                 String s = "";
@@ -220,10 +223,10 @@ public abstract class Parser {
                 }
                 System.out.println(s);
                 if (found) {
-                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
+                    final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
                     System.out.println(f.getAbsolutePath());
                 } else {
-                    File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
+                    final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
                     System.out.println(f.getAbsolutePath());
                 }
             }

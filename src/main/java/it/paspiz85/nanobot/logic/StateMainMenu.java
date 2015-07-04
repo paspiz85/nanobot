@@ -2,11 +2,9 @@ package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.game.GameConstants;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
-import it.paspiz85.nanobot.util.Settings;
 
 /**
  * This state is when bot is in main menu.
@@ -94,29 +92,8 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.sleepRandom(500);
     }
 
-    void trainingOld(Context context) throws InterruptedException, BotConfigurationException {
-        final Point firstRax = Settings.instance().getFirstBarrackPosition();
-        logger.fine("Try open barracks");
-        os.leftClick(firstRax, false);
-        os.sleepRandom(500);
-        Point trainButton = getParser().searchTrainButton();
-        if (trainButton == null) {
-            // maybe rax was already open and we closed it back
-            logger.fine("Try open barracks again");
-            os.leftClick(firstRax, false);
-            os.sleepRandom(500);
-            trainButton = getParser().searchTrainButton();
-        }
-        if (trainButton == null) {
-            throw new BotConfigurationException("Barracks location is not correct.");
-        }
-        logger.fine("Press Train");
-        os.leftClick(trainButton, false);
-        os.sleepRandom(500);
-    }
-
-    void training(Context context) throws InterruptedException, BotConfigurationException {
-        Point buttonTrainClose = getParser().searchButtonTrainClose();
+    private void training(final Context context) throws InterruptedException, BotConfigurationException {
+        final Point buttonTrainClose = getParser().searchButtonTrainClose();
         if (buttonTrainClose != null) {
             logger.fine("Close previous train");
             os.leftClick(buttonTrainClose, true);
