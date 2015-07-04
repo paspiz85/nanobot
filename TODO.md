@@ -16,11 +16,11 @@ free ci
 other
 donation
 
-2 8 4 0
-OK 9 1 3
+2 8 0
+OK 9 1 3 4
 
 6
 
 5 7
 
-NOK 4  8 9
+NOK 8 9
