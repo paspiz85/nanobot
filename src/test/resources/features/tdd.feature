@@ -29,11 +29,11 @@ Feature: single feature to test
       | classpath:/features/img/base_1435906195366.png | null | null | null         | null         | null            |
       | classpath:/features/img/base_1435906203032.png | 2 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906210498.png | 52 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906215238.png | 1 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906215238.png | 15 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906220597.png | 17 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906224691.png | 11 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906228582.png | 5 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906232991.png | 2 | null | null         | null         | null            |
       | classpath:/features/img/base_1435906237740.png | 17 | null | null         | null         | null            |
-      | classpath:/features/img/base_1435906242449.png | 5 | null | null         | null         | null            |
+      | classpath:/features/img/base_1435906242449.png | 2 | null | null         | null         | null            |
      
