@@ -29,53 +29,13 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public abstract class Parser {
 
-    private static final int[][] COLOR_EIGHT = getRGBseries("colors.eight");
-
-    private static final int[][] COLOR_FIVE = getRGBseries("colors.five");
-
-    private static final int[][] COLOR_FOUR = getRGBseries("colors.four");
-
-    private static final int[][] COLOR_NINE = getRGBseries("colors.nine");
-
-    private static final int[][] COLOR_ONE = getRGBseries("colors.one");
-
-    private static final int[][] COLOR_SEVEN = getRGBseries("colors.seven");
-
-    private static final int[][] COLOR_SIX = getRGBseries("colors.six");
-
-    private static final int[][] COLOR_THREE = getRGBseries("colors.three");
-
-    private static final int[][] COLOR_TWO = getRGBseries("colors.two");
-
-    private static final int[][] COLOR_ZERO = getRGBseries("colors.zero");
-
     private static Properties config;
 
     private static final OS DEFAULT_OS = OS.instance();
 
     private static final Map<String, Parser> INSTANCES = new HashMap<>();
 
-    private static final int[][] OFFSET_EIGHT = new int[][] { { 5, 3 }, { 5, 10 }, { 1, 6 } };
-
-    private static final int[][] OFFSET_FIVE = new int[][] { { 5, 4 }, { 4, 9 }, { 6, 12 } };
-
-    private static final int[][] OFFSET_FOUR = new int[][] { { 2, 3 }, { 3, 1 }, { 1, 5 } };
-
-    private static final int[][] OFFSET_NINE = new int[][] { { 5, 5 }, { 5, 9 }, { 8, 12 } };
-
-    private static final int[][] OFFSET_ONE = new int[][] { { 1, 1 }, { 1, 12 }, { 4, 12 } };
-
-    private static final int[][] OFFSET_SEVEN = new int[][] { { 5, 11 }, { 4, 3 }, { 7, 7 } };
-
-    private static final int[][] OFFSET_SIX = new int[][] { { 5, 4 }, { 5, 9 }, { 8, 5 } };
-
-    private static final int[][] OFFSET_THREE = new int[][] { { 2, 3 }, { 4, 8 }, { 5, 13 } };
-
-    private static final int[][] OFFSET_TWO = new int[][] { { 1, 7 }, { 3, 6 }, { 7, 7 } };
-
-    private static final int[][] OFFSET_ZERO = new int[][] { { 6, 4 }, { 7, 7 }, { 10, 13 } };
-
-    protected static final int VAR = 5;
+    private static final int THRESHOLD_DEFAULT = 5;
 
     protected static final Area getArea(final String name) {
         Area area = null;
@@ -97,7 +57,7 @@ public abstract class Parser {
         return color;
     }
 
-    protected static final Properties getConfig() {
+    private static Properties getConfig() {
         if (config == null) {
             try {
                 config = new Properties();
@@ -126,6 +86,23 @@ public abstract class Parser {
         return parser;
     }
 
+    private static int[][] getOffset(final String name) {
+        int[][] result = null;
+        final String value = getConfig().getProperty(name + ".offset");
+        if (value != null) {
+            final String[] points = value.split(";");
+            result = new int[points.length][];
+            for (int i = 0; i < points.length; i++) {
+                final String[] point = points[i].split(",");
+                result[i] = new int[point.length];
+                for (int j = 0; j < point.length; j++) {
+                    result[i][j] = Integer.parseInt(point[j].trim());
+                }
+            }
+        }
+        return result;
+    }
+
     protected static final Point getPoint(final String name) {
         Point point = null;
         final String value = config.getProperty(name);
@@ -136,7 +113,7 @@ public abstract class Parser {
         return point;
     }
 
-    protected static final Integer getRGB(final String name) {
+    private static Integer getRGB(final String name) {
         Integer color = null;
         final String value = getConfig().getProperty(name);
         if (value != null) {
@@ -159,40 +136,43 @@ public abstract class Parser {
     }
 
     private static int[][] getRGBseries(final String name) {
-        return new int[][] { getRGBs(name + ".0"), getRGBs(name + ".1"), getRGBs(name + ".2"), getRGBs(name + ".3") };
+        return new int[][] { getRGBs(name + ".a"), getRGBs(name + ".b"), getRGBs(name + ".c"), getRGBs(name + ".d") };
     }
 
-    protected final int[][][] colors = new int[10][][];
+    private static int getThreshold(final String name) {
+        int result = THRESHOLD_DEFAULT;
+        final String value = getConfig().getProperty(name + ".threshold");
+        if (value != null) {
+            result = Integer.parseInt(value.trim());
+        }
+        return result;
+    }
+
+    private final int[][][] colors;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected final int[][][] offsets = new int[10][][];
+    private final int[][][] offsets;
 
     protected final OS os = DEFAULT_OS;
 
-    protected final int[] widths = new int[] { 13, 6, 10, 10, 12, 10, 11, 10, 11, 11 };
+    private final int[] widths;
+
+    private final int[] thresholds;
+
+    private final Integer debug = null;
 
     Parser() {
-        offsets[0] = OFFSET_ZERO;
-        offsets[1] = OFFSET_ONE;
-        offsets[2] = OFFSET_TWO;
-        offsets[3] = OFFSET_THREE;
-        offsets[4] = OFFSET_FOUR;
-        offsets[5] = OFFSET_FIVE;
-        offsets[6] = OFFSET_SIX;
-        offsets[7] = OFFSET_SEVEN;
-        offsets[8] = OFFSET_EIGHT;
-        offsets[9] = OFFSET_NINE;
-        colors[0] = COLOR_ZERO;
-        colors[1] = COLOR_ONE;
-        colors[2] = COLOR_TWO;
-        colors[3] = COLOR_THREE;
-        colors[4] = COLOR_FOUR;
-        colors[5] = COLOR_FIVE;
-        colors[6] = COLOR_SIX;
-        colors[7] = COLOR_SEVEN;
-        colors[8] = COLOR_EIGHT;
-        colors[9] = COLOR_NINE;
+        offsets = new int[10][][];
+        colors = new int[10][][];
+        thresholds = new int[10];
+        for (int i = 0; i < 10; i++) {
+            offsets[i] = getOffset("digit." + i);
+            colors[i] = getRGBseries("digit." + i);
+            thresholds[i] = getThreshold("digit." + i);
+        }
+        // TODO
+        widths = new int[] { 13, 6, 10, 10, 12, 10, 11, 10, 11, 11 };
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
@@ -211,13 +191,37 @@ public abstract class Parser {
     private Integer parseDigit(final BufferedImage image, final Point start, final int type) {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
+            final int[] expected = colors[i][type];
+            final int[] actual = new int[offsets[i].length];
+            for (int j = 0; j < actual.length; j++) {
+                actual[j] = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
+            }
             boolean found = true;
-            for (int j = 0; j < offsets[i].length; j++) {
-                final int actual = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
-                final int expected = colors[i][type][j];
-                if (!os.compareColor(new Color(actual), new Color(expected), VAR)) {
+            for (int j = 0; j < actual.length; j++) {
+                final boolean compare = !os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
+                if (debug != null) {
+                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF0000 : 0xFF);
+                }
+                if (compare) {
                     found = false;
                     break;
+                }
+            }
+            if (debug != null && debug == i) {
+                String s = "";
+                for (final int element : actual) {
+                    s += "#" + Integer.toHexString(element & 0xFFFFFF).toUpperCase() + ",";
+                }
+                System.out.println(s);
+                if (found) {
+                    os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
+                } else {
+                    os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound");
+                }
+            }
+            if (debug != null) {
+                for (int j = 0; j < actual.length; j++) {
+                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], actual[j]);
                 }
             }
             if (found) {
