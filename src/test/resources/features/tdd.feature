@@ -13,9 +13,9 @@ Feature: scenarios for Test-Driven-Development
 #      | classpath:/features/img/screen_1436082310841.png  | [80,70,50] |
 #      | classpath:/features/img/screen_1436082391016.png  | [78,69,47] |
 #      | classpath:/features/img/screen_1436082595467.png  | [76,66,45] |
-      | classpath:/features/img/screen_1436082626803.png  | [74,62,43] |
+#      | classpath:/features/img/screen_1436082626803.png  | [74,62,43] |
       
-      | classpath:/features/img/screen_1436082733324.png  | [65,58,4] |
+      | classpath:/features/img/screen_1436082733324.png  | [65,58,41] |
       | classpath:/features/img/screen_1436082766771.png  | [65,58,38] |
       | classpath:/features/img/screen_1436082785562.png  | [65,58,37] |
       | classpath:/features/img/screen_1436082801864.png  | [65,58,35] |
