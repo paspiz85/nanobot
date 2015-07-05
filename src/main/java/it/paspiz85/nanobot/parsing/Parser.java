@@ -87,9 +87,17 @@ public abstract class Parser {
         return parser;
     }
 
+    private static int[][] getOffset(final String name,final String fallback) {
+        int[][] result = getOffset(name);
+        if (result == null) {
+            result = getOffset(fallback);
+        }
+        return result;
+    }
+
     private static int[][] getOffset(final String name) {
         int[][] result = null;
-        final String value = getConfig().getProperty(name + ".offset");
+        final String value = getConfig().getProperty(name);
         if (value != null) {
             final String[] points = value.split(";");
             result = new int[points.length][];
@@ -136,6 +144,11 @@ public abstract class Parser {
         return colors;
     }
 
+    private static int[][][] getOffsets(final String name) {
+        return new int[][][] { getOffset(name + ".a",name), getOffset(name + ".b",name), 
+                getOffset(name + ".c",name), getOffset(name + ".d",name) };
+    }
+
     private static int[][] getRGBseries(final String name) {
         return new int[][] { getRGBs(name + ".a"), getRGBs(name + ".b"), getRGBs(name + ".c"), getRGBs(name + ".d") };
     }
@@ -153,7 +166,7 @@ public abstract class Parser {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final int[][][] offsets;
+    private final int[][][][] offsets;
 
     protected final OS os = DEFAULT_OS;
 
@@ -167,11 +180,11 @@ public abstract class Parser {
     private final Integer learnMode = null;
 
     Parser() {
-        offsets = new int[10][][];
+        offsets = new int[10][][][];
         colors = new int[10][][];
         thresholds = new int[10];
         for (int i = 0; i < 10; i++) {
-            offsets[i] = getOffset("digit." + i);
+            offsets[i] = getOffsets("digit." + i + ".offset");
             colors[i] = getRGBseries("digit." + i + ".color");
             thresholds[i] = getThreshold("digit." + i);
         }
@@ -196,16 +209,16 @@ public abstract class Parser {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
             final int[] expected = colors[i][type];
-            final int[] actual = new int[offsets[i].length];
+            final int[] actual = new int[offsets[i][type].length];
             for (int j = 0; j < actual.length; j++) {
-                actual[j] = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
+                actual[j] = image.getRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1]);
             }
             boolean found = true;
             int count = 0;
             for (int j = 0; j < actual.length; j++) {
                 final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
                 if (learnMode != null) {
-                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF : 0xFF0000);
+                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], compare ? 0xFF : 0xFF0000);
                 }
                 if (!compare) {
                     found = false;
@@ -232,7 +245,7 @@ public abstract class Parser {
             }
             if (learnMode != null) {
                 for (int j = 0; j < actual.length; j++) {
-                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], actual[j]);
+                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], actual[j]);
                 }
             }
             if (found) {
