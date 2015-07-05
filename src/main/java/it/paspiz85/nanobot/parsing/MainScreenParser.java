@@ -80,7 +80,7 @@ public final class MainScreenParser extends Parser {
         //File f = os.saveImage(image, "test_"+System.currentTimeMillis());
         //System.out.println(f.getAbsolutePath());
         // 62
-        Point start = new Point(30,4);
+        Point start = new Point(28,4);
         parseNumber(image, 3, start , 46);
         // TODO Auto-generated method stub
         return null;

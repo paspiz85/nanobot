@@ -95,6 +95,19 @@ public abstract class Parser {
         return result;
     }
 
+    private static int[] getWidths(final String name) {
+        int[] result = null;
+        final String value = getConfig().getProperty(name);
+        if (value != null) {
+            final String[] split = value.split(",");
+            result = new int[split.length];
+            for (int i = 0; i < split.length; i++) {
+                result[i] = Integer.parseInt(split[i].trim());
+            }
+        }
+        return result;
+    }
+
     private static int[][] getOffset(final String name) {
         int[][] result = null;
         final String value = getConfig().getProperty(name);
@@ -189,7 +202,8 @@ public abstract class Parser {
             thresholds[i] = getThreshold("digit." + i);
         }
         // TODO configure
-        widths = new int[] { 12, 6, 10, 8, 12, 10, 10, 9, 11, 11 };
+        //widths = new int[] { 12, 6, 10, 8, 12, 10, 10, 9, 11, 11 };
+        widths = getWidths("digit.widths");
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
@@ -238,9 +252,11 @@ public abstract class Parser {
                 if (found) {
                     final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
                     System.out.println(f.getAbsolutePath());
+                    System.out.println();
                 } else {
                     final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
                     System.out.println(f.getAbsolutePath());
+                    System.out.println();
                 }
             }
             if (learnMode != null) {
