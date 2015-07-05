@@ -173,6 +173,12 @@ public class StepDefinitions {
         troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 
+    @When("^counting troops$")
+    public void whenCountingTroops() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        troopsCount = Parser.getInstance(MainScreenParser.class).parseTroopsInfo().getTroopsCount();
+    }
+
     @When("^searching attack button point$")
     public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);

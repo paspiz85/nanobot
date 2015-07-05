@@ -8,5 +8,5 @@ import cucumber.api.junit.Cucumber;
 @RunWith(Cucumber.class)
 @CucumberOptions(features = { "classpath:features" }, glue = { "it.paspiz85.nanobot.test" }, strict = true, plugin = { "pretty" }, tags = {
         FeatureTags.TEST, FeatureTags.WIP, FeatureTags.NO_DEPRECATED })
-public class WorkInProgressTest {
+public class WipTest {
 }

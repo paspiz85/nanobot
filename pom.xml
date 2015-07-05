@@ -217,8 +217,8 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<excludes>
-								<exclude>**/WorkInProgress*Test.java</exclude>
-								<exclude>**/WorkInProgress*IT.java</exclude>
+								<exclude>**/Wip*Test.java</exclude>
+								<exclude>**/Wip*IT.java</exclude>
 								<exclude>**/Extra*Test.java</exclude>
 								<exclude>**/Extra*IT.java</exclude>
 							</excludes>
@@ -243,8 +243,8 @@
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<excludes>
-								<exclude>**/WorkInProgress*Test.java</exclude>
-								<exclude>**/WorkInProgress*IT.java</exclude>
+								<exclude>**/Wip*Test.java</exclude>
+								<exclude>**/Wip*IT.java</exclude>
 							</excludes>
 						</configuration>
 					</plugin>

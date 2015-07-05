@@ -7,9 +7,14 @@ package it.paspiz85.nanobot.parsing;
  *
  */
 public final class TroopsInfo {
+    
+    private int[] troopsCount;
+
+    public TroopsInfo(int[] troopsCount) {
+        this.troopsCount = troopsCount;
+    }
 
     public int[] getTroopsCount() {
-        // TODO Auto-generated method stub
-        return new int[0];
+        return troopsCount;
     }
 }

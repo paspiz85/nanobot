@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 
 /**
  * Parser for main mode screen.
@@ -17,11 +18,11 @@ public final class MainScreenParser extends Parser {
 
     private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
 
+    private static final Area AREA_TROOPS = getArea("area.troops");
+
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
     private static final Area AREA_BUTTONS_BARRACK = getArea("area.buttons.barrack");
-
-    private static final Point BUTTON_TRAIN_CLOSE = getPoint("point.button.train.close");
 
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
 
@@ -75,6 +76,12 @@ public final class MainScreenParser extends Parser {
     }
 
     public TroopsInfo parseTroopsInfo() {
+        BufferedImage image = os.screenshot(AREA_TROOPS);
+        //File f = os.saveImage(image, "test_"+System.currentTimeMillis());
+        //System.out.println(f.getAbsolutePath());
+        // 62
+        Point start = new Point(30,4);
+        parseNumber(image, 3, start , 46);
         // TODO Auto-generated method stub
         return null;
     }
