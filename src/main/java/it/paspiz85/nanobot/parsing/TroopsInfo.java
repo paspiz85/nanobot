@@ -7,10 +7,10 @@ package it.paspiz85.nanobot.parsing;
  *
  */
 public final class TroopsInfo {
-    
-    private int[] troopsCount;
 
-    public TroopsInfo(int[] troopsCount) {
+    private final int[] troopsCount;
+
+    public TroopsInfo(final int[] troopsCount) {
         this.troopsCount = troopsCount;
     }
 

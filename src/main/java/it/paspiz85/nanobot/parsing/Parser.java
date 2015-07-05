@@ -87,35 +87,6 @@ public abstract class Parser {
         return parser;
     }
 
-    private static int[][] getOffset(final String name,final String fallback) {
-        int[][] result = getOffset(name);
-        if (result == null) {
-            result = getOffset(fallback);
-        }
-        return result;
-    }
-
-    private static int[] getWidth(final String name,final String fallback) {
-        int[] result = getWidth(name);
-        if (result == null) {
-            result = getWidth(fallback);
-        }
-        return result;
-    }
-
-    private static int[] getWidth(final String name) {
-        int[] result = null;
-        final String value = getConfig().getProperty(name);
-        if (value != null) {
-            final String[] split = value.split(",");
-            result = new int[split.length];
-            for (int i = 0; i < split.length; i++) {
-                result[i] = Integer.parseInt(split[i].trim());
-            }
-        }
-        return result;
-    }
-
     private static int[][] getOffset(final String name) {
         int[][] result = null;
         final String value = getConfig().getProperty(name);
@@ -131,6 +102,19 @@ public abstract class Parser {
             }
         }
         return result;
+    }
+
+    private static int[][] getOffset(final String name, final String fallback) {
+        int[][] result = getOffset(name);
+        if (result == null) {
+            result = getOffset(fallback);
+        }
+        return result;
+    }
+
+    private static int[][][] getOffsets(final String name) {
+        return new int[][][] { getOffset(name + ".a", name), getOffset(name + ".b", name),
+                getOffset(name + ".c", name), getOffset(name + ".d", name) };
     }
 
     protected static final Point getPoint(final String name) {
@@ -165,16 +149,6 @@ public abstract class Parser {
         return colors;
     }
 
-    private static int[][][] getOffsets(final String name) {
-        return new int[][][] { getOffset(name + ".a",name), getOffset(name + ".b",name), 
-                getOffset(name + ".c",name), getOffset(name + ".d",name) };
-    }
-
-    private static int[][] getWidths(final String name) {
-        return new int[][] { getWidth(name + ".a",name), getWidth(name + ".b",name), 
-                getWidth(name + ".c",name), getWidth(name + ".d",name) };
-    }
-
     private static int[][] getRGBseries(final String name) {
         return new int[][] { getRGBs(name + ".a"), getRGBs(name + ".b"), getRGBs(name + ".c"), getRGBs(name + ".d") };
     }
@@ -186,6 +160,32 @@ public abstract class Parser {
             result = Integer.parseInt(value.trim());
         }
         return result;
+    }
+
+    private static int[] getWidth(final String name) {
+        int[] result = null;
+        final String value = getConfig().getProperty(name);
+        if (value != null) {
+            final String[] split = value.split(",");
+            result = new int[split.length];
+            for (int i = 0; i < split.length; i++) {
+                result[i] = Integer.parseInt(split[i].trim());
+            }
+        }
+        return result;
+    }
+
+    private static int[] getWidth(final String name, final String fallback) {
+        int[] result = getWidth(name);
+        if (result == null) {
+            result = getWidth(fallback);
+        }
+        return result;
+    }
+
+    private static int[][] getWidths(final String name) {
+        return new int[][] { getWidth(name + ".a", name), getWidth(name + ".b", name), getWidth(name + ".c", name),
+                getWidth(name + ".d", name) };
     }
 
     private final int[][][] colors;
@@ -243,7 +243,8 @@ public abstract class Parser {
             for (int j = 0; j < actual.length; j++) {
                 final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
                 if (learnMode != null) {
-                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], compare ? 0xFF : 0xFF0000);
+                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], compare ? 0xFF
+                            : 0xFF0000);
                 }
                 if (!compare) {
                     found = false;

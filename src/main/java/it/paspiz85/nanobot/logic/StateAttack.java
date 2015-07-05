@@ -102,8 +102,8 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     playAttackReady();
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
-                        int[] troopsCount = troopsInfo.getTroopsCount();
-                        logger.info("Troops count: " +Arrays.toString(troopsCount));
+                        final int[] troopsCount = troopsInfo.getTroopsCount();
+                        logger.info("Troops count: " + Arrays.toString(troopsCount));
                         attackStrategy.attack(enemyInfo, troopsCount);
                     }
                     os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);

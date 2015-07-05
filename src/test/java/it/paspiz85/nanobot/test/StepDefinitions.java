@@ -144,7 +144,7 @@ public class StepDefinitions {
 
     @Then("^troops count is (.*)$")
     public void thenTroopsCountIs(final String troopsCount) {
-        String arr = troopsCount.substring(1, troopsCount.length() - 1).trim();
+        final String arr = troopsCount.substring(1, troopsCount.length() - 1).trim();
         final int[] expected;
         if (arr.length() == 0) {
             expected = new int[0];
@@ -157,9 +157,9 @@ public class StepDefinitions {
         }
         try {
             Assert.assertArrayEquals(expected, this.troopsCount);
-        } catch(AssertionError e) {
-            throw new AssertionFailedError(String.format("expected <%s> but was <%s>",
-                    Arrays.toString(expected), Arrays.toString(this.troopsCount)));
+        } catch (final AssertionError e) {
+            throw new AssertionFailedError(String.format("expected <%s> but was <%s>", Arrays.toString(expected),
+                    Arrays.toString(this.troopsCount)));
         }
     }
 
@@ -175,6 +175,12 @@ public class StepDefinitions {
         check = Parser.getInstance(MainScreenParser.class).areCampsFull();
     }
 
+    @When("^counting troops$")
+    public void whenCountingTroops() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        troopsCount = Parser.getInstance(MainScreenParser.class).parseTroopsInfo().getTroopsCount();
+    }
+
     @When("^parsing enemy info$")
     public void whenParsingEnemyInfo() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
@@ -185,12 +191,6 @@ public class StepDefinitions {
     public void whenParsingTroops() throws BotException {
         OSMock.instance.setScreenshot(screenshot);
         troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
-    }
-
-    @When("^counting troops$")
-    public void whenCountingTroops() throws BotException {
-        OSMock.instance.setScreenshot(screenshot);
-        troopsCount = Parser.getInstance(MainScreenParser.class).parseTroopsInfo().getTroopsCount();
     }
 
     @When("^searching attack button point$")

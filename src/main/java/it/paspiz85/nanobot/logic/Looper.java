@@ -101,7 +101,7 @@ public final class Looper {
     }
 
     public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws InterruptedException,
-    BotException {
+            BotException {
         logger.info("Starting...");
         if (!setupDone) {
             os.setup();

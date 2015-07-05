@@ -4,8 +4,6 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
@@ -33,10 +31,10 @@ public final class MainScreenParser extends Parser {
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
     private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png",
-            "collect/elixir_3.png", "collect/elixir_4.png" };
+        "collect/elixir_3.png", "collect/elixir_4.png" };
 
     private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png",
-            "collect/gold_4.png", "collect/gold_5.png" };
+        "collect/gold_4.png", "collect/gold_5.png" };
 
     private Point buttonTroops;
 
@@ -78,15 +76,15 @@ public final class MainScreenParser extends Parser {
     }
 
     public TroopsInfo parseTroopsInfo() {
-        BufferedImage image = os.screenshot(AREA_TROOPS);
+        final BufferedImage image = os.screenshot(AREA_TROOPS);
         Point start = new Point(9, 4);
-        //start = new Point(28, 4);
-        //start = new Point(28+63, 4);
-        //start = new Point(28+63+62, 4);
-        int[] result = new int[9];
+        // start = new Point(28, 4);
+        // start = new Point(28+63, 4);
+        // start = new Point(28+63+62, 4);
+        final int[] result = new int[9];
         int len = 0;
         for (int i = 0; i < result.length; i++) {
-            Integer n = parseNumber(image, 3, start, 46);
+            final Integer n = parseNumber(image, 3, start, 46);
             if (n == null) {
                 break;
             }
