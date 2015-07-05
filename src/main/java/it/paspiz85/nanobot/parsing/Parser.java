@@ -95,7 +95,15 @@ public abstract class Parser {
         return result;
     }
 
-    private static int[] getWidths(final String name) {
+    private static int[] getWidth(final String name,final String fallback) {
+        int[] result = getWidth(name);
+        if (result == null) {
+            result = getWidth(fallback);
+        }
+        return result;
+    }
+
+    private static int[] getWidth(final String name) {
         int[] result = null;
         final String value = getConfig().getProperty(name);
         if (value != null) {
@@ -162,6 +170,11 @@ public abstract class Parser {
                 getOffset(name + ".c",name), getOffset(name + ".d",name) };
     }
 
+    private static int[][] getWidths(final String name) {
+        return new int[][] { getWidth(name + ".a",name), getWidth(name + ".b",name), 
+                getWidth(name + ".c",name), getWidth(name + ".d",name) };
+    }
+
     private static int[][] getRGBseries(final String name) {
         return new int[][] { getRGBs(name + ".a"), getRGBs(name + ".b"), getRGBs(name + ".c"), getRGBs(name + ".d") };
     }
@@ -183,7 +196,7 @@ public abstract class Parser {
 
     protected final OS os = DEFAULT_OS;
 
-    private final int[] widths;
+    private final int[][] widths;
 
     private final int[] thresholds;
 
@@ -201,8 +214,6 @@ public abstract class Parser {
             colors[i] = getRGBseries("digit." + i + ".color");
             thresholds[i] = getThreshold("digit." + i);
         }
-        // TODO configure
-        //widths = new int[] { 12, 6, 10, 8, 12, 10, 10, 9, 11, 11 };
         widths = getWidths("digit.widths");
     }
 
@@ -279,7 +290,7 @@ public abstract class Parser {
             final Integer i = parseDigit(image, new Point(curr, start.y()), type);
             if (i != null) {
                 no += i;
-                curr += widths[i] - 1;
+                curr += widths[type][i] - 1;
             } else {
                 curr++;
             }
