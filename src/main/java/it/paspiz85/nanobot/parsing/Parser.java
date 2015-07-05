@@ -172,7 +172,7 @@ public abstract class Parser {
         thresholds = new int[10];
         for (int i = 0; i < 10; i++) {
             offsets[i] = getOffset("digit." + i);
-            colors[i] = getRGBseries("digit." + i);
+            colors[i] = getRGBseries("digit." + i + ".color");
             thresholds[i] = getThreshold("digit." + i);
         }
         // TODO configure
