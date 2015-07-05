@@ -13,6 +13,7 @@ import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import javax.sound.sampled.AudioInputStream;
@@ -101,7 +102,9 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     playAttackReady();
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
-                        attackStrategy.attack(enemyInfo, troopsInfo.getTroopsCount());
+                        int[] troopsCount = troopsInfo.getTroopsCount();
+                        logger.info("Troops count: " +Arrays.toString(troopsCount));
+                        attackStrategy.attack(enemyInfo, troopsCount);
                     }
                     os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
                     os.sleepRandom(1200);

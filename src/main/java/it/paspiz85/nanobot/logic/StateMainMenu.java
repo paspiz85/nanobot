@@ -1,5 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
+import java.util.Arrays;
+
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.game.GameConstants;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
@@ -99,6 +101,8 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.leftClick(getParser().getButtonTroops(), true);
         os.sleepRandom(300);
         final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
+        int[] troopsCount = troopsInfo.getTroopsCount();
+        logger.info("Troops count: " +Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
         os.leftClick(getParser().getButtonTrainClose(), true);
         os.sleepRandom(200);

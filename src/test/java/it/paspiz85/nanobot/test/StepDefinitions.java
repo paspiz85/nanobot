@@ -14,8 +14,11 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
+import junit.framework.AssertionFailedError;
 
 import org.junit.Assert;
 
@@ -141,12 +144,23 @@ public class StepDefinitions {
 
     @Then("^troops count is (.*)$")
     public void thenTroopsCountIs(final String troopsCount) {
-        final String[] split = troopsCount.substring(1, troopsCount.length() - 1).split(",");
-        final int[] expected = new int[split.length];
-        for (int i = 0; i < split.length; i++) {
-            expected[i] = Integer.parseInt(split[i].trim());
+        String arr = troopsCount.substring(1, troopsCount.length() - 1).trim();
+        final int[] expected;
+        if (arr.length() == 0) {
+            expected = new int[0];
+        } else {
+            final String[] split = arr.split(",");
+            expected = new int[split.length];
+            for (int i = 0; i < split.length; i++) {
+                expected[i] = Integer.parseInt(split[i].trim());
+            }
         }
-        Assert.assertArrayEquals(expected, this.troopsCount);
+        try {
+            Assert.assertArrayEquals(expected, this.troopsCount);
+        } catch(AssertionError e) {
+            throw new AssertionFailedError(String.format("expected <%s> but was <%s>",
+                    Arrays.toString(expected), Arrays.toString(this.troopsCount)));
+        }
     }
 
     @When("^checking collectors$")
