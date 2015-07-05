@@ -44,9 +44,9 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
     }
 
     public boolean doConditionsMatch(final EnemyInfo loot) {
-        int gold = loot.getGold();
-        int elixir = loot.getElixir();
-        int de = loot.getDarkElixir();
+        int gold = loot.getGold() == null ? 0 : loot.getGold();
+        int elixir = loot.getElixir() == null ? 0 : loot.getElixir();
+        int de = loot.getDarkElixir() == null ? 0 : loot.getDarkElixir();
         // if threshold is 0 or not set, do not match based on them
         final int goldThreshold = Settings.instance().getGoldThreshold();
         final int elixirThreshold = Settings.instance().getElixirThreshold();
