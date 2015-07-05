@@ -16,16 +16,16 @@ Feature: scenarios for Test-Driven-Development
       | classpath:/features/img/screen_1436082626803.png  | [74,62,43] |
       
       | classpath:/features/img/screen_1436082733324.png  | [65,58,4] |
-      | classpath:/features/img/screen_1436082766771.png  | [65,58,8] |
-      | classpath:/features/img/screen_1436082785562.png  | [65,58,7] |
-      | classpath:/features/img/screen_1436082801864.png  | [65,58,5] |
-      | classpath:/features/img/screen_1436082812673.png  | [65,58] |
+      | classpath:/features/img/screen_1436082766771.png  | [65,58,38] |
+      | classpath:/features/img/screen_1436082785562.png  | [65,58,37] |
+      | classpath:/features/img/screen_1436082801864.png  | [65,58,35] |
+      | classpath:/features/img/screen_1436082812673.png  | [65,58,3] |
       | classpath:/features/img/screen_1436082826907.png  | [65,58,29] |
       | classpath:/features/img/screen_1436082850104.png  | [65,58,27] |
       | classpath:/features/img/screen_1436082866289.png  | [65,58,24] |
       | classpath:/features/img/screen_1436082879614.png  | [65,58,8] |
       | classpath:/features/img/screen_1436082893899.png  | [65,58,6] |
-      | classpath:/features/img/screen_1436082903676.png  | [65,58] |
+      | classpath:/features/img/screen_1436082903676.png  | [65,58,3] |
       | classpath:/features/img/screen_1436082920276.png  | [65,58] |
       | classpath:/features/img/screen_1436082929588.png  | [65,58,9] |
       | classpath:/features/img/screen_1436082938601.png  | [65,58,8] |
