@@ -80,7 +80,6 @@ public final class MainScreenParser extends Parser {
     public TroopsInfo parseTroopsInfo() {
         BufferedImage image = os.screenshot(AREA_TROOPS);
         Point start = new Point(9, 4);
-        // TODO remove
         //start = new Point(28, 4);
         //start = new Point(28+63, 4);
         //start = new Point(28+63+62, 4);
