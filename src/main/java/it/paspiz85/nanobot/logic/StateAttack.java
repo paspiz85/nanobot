@@ -69,11 +69,11 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
     @Override
     public void handle(final Context context) throws InterruptedException, BotException {
         while (true) {
-            logger.info("Searching opponent...");
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateAttack is interrupted.");
             }
             final long id = System.currentTimeMillis();
+            logger.info("Found opponent " + id);
             if (Settings.instance().isLogEnemyBase()) {
                 os.saveScreenshot("base_" + id);
             }
@@ -81,12 +81,13 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             boolean doAttack = false;
             try {
                 enemyInfo = getParser().parseEnemyInfo();
-                logger.info(String.format("Opponent %d has %s.", id, enemyInfo.toString()));
+                logger.info(String.format("Detected %s.", id, enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
-                    doAttack = getParser().isCollectorFullBase();
+                    Boolean isCollectorFullBase = getParser().isCollectorFullBase();
+                    doAttack = isCollectorFullBase == null? false : isCollectorFullBase;
                     if (!doAttack) {
-                        logger.info(String.format("Opponent %d has empty collectors.", id));
+                        logger.info("Detected empty collectors.");
                     }
                 }
             } catch (final BotBadBaseException e) {
