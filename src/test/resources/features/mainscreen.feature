@@ -110,3 +110,4 @@ Feature: parsing main screen
       | classpath:/features/img/screen_1436082929588.png  | [65,58,9]    |
       | classpath:/features/img/screen_1436082938601.png  | [65,58,8]    |
       | classpath:/features/img/screen_1436210992377.png  | [40,99,56]   |
+      | classpath:/features/img/screen_1436215222084.png  | [53,100,42]  |
