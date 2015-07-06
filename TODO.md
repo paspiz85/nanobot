@@ -1,8 +1,13 @@
 code
-remove clickable and area
+
+remove clickable 
+add eroes on attack
+miglioramento interfaccia
 ###!important### count trofei
+
 controlli remoti
 mail notify
+
 i18n
 statistics
 
@@ -15,3 +20,5 @@ free ci
 
 other
 donation
+
+pubblicità
