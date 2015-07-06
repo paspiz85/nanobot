@@ -84,8 +84,8 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 logger.info(String.format("Detected %s.", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
-                    Boolean isCollectorFullBase = getParser().isCollectorFullBase();
-                    doAttack = isCollectorFullBase == null? false : isCollectorFullBase;
+                    final Boolean isCollectorFullBase = getParser().isCollectorFullBase();
+                    doAttack = isCollectorFullBase == null ? false : isCollectorFullBase;
                     if (!doAttack) {
                         logger.info("Detected empty collectors.");
                     }

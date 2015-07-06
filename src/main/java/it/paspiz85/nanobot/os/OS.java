@@ -56,6 +56,8 @@ public interface OS {
 
     boolean compareColor(Color c1, Color c2, int var);
 
+    BufferedImage getSubimage(BufferedImage image, Area area);
+
     BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
 
     boolean isClickableActive(Clickable clickable);

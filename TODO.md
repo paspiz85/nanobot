@@ -1,7 +1,7 @@
 code
 
 remove clickable 
-add eroes on attack
+
 miglioramento interfaccia
 ###!important### count trofei
 

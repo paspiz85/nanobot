@@ -44,6 +44,11 @@ public abstract class AbstractOS implements OS, Constants {
     }
 
     @Override
+    public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
+        return getSubimage(image, area.getP1(), area.getP2());
+    }
+
+    @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Point p1, final Point p2) {
         final int x1 = p1.x();
         final int y1 = p1.y();

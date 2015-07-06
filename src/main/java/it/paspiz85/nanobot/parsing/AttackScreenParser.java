@@ -18,7 +18,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -181,24 +180,6 @@ public class AttackScreenParser extends Parser {
         }
     }
 
-    private Integer parseArcherQueenSlot(final BufferedImage image) {
-        Integer result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
-        if (rectangle != null) {
-            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-        }
-        return result;
-    }
-
-    private Integer parseBarbKingSlot(final BufferedImage image) {
-        Integer result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource("bk.png"));
-        if (rectangle != null) {
-            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-        }
-        return result;
-    }
-
     protected final Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
         Integer result = null;
         if (hasDE(image)) {
@@ -225,47 +206,6 @@ public class AttackScreenParser extends Parser {
 
     protected final Integer parseGold(final BufferedImage image) throws BotBadBaseException {
         return parseNumber(image, 0, hasDE(image) ? POINT_GOLD_HAS_DARK : POINT_GOLD_HASNT_DARK, image.getWidth() - 43);
-    }
-
-    public int[] parseTroopCount() {
-        final BufferedImage image = os.screenshot(ATTACK_GROUP);
-        final int[] tmp = new int[11]; // max group size
-        int xStart = 20;
-        final int yStart = 11;
-        Integer no;
-        int curr = 0;
-        while (true) {
-            no = parseNumber(image, 3, new Point(xStart, yStart), ATTACK_GROUP_UNIT_DIFF - 10);
-            if (no == null || no == 0) {
-                break;
-            }
-            if (no >= 5) {
-                tmp[curr] = no;
-            } else {
-                // ignore 1,2,3,4 because they are usually
-                // cc or spells
-                tmp[curr] = 0;
-            }
-            curr++;
-            xStart += ATTACK_GROUP_UNIT_DIFF;
-        }
-        final Integer barbKingSlot = parseBarbKingSlot(image);
-        if (barbKingSlot != null) {
-            tmp[barbKingSlot] = 1;
-            // if BK was found after a 0 slot, new length should be adjusted
-            // according to BK
-            // ie [110, 90, 0, BK] -> len = 4
-            curr = Math.max(curr + 1, barbKingSlot + 1);
-        }
-        final Integer archerQueenSlot = parseArcherQueenSlot(image);
-        if (archerQueenSlot != null) {
-            tmp[archerQueenSlot] = 1;
-            // if AQ was found after a 0 slot, new length should be adjusted
-            // according to AQ
-            // ie [110, 90, 0, AQ] -> len = 4
-            curr = Math.max(curr + 1, archerQueenSlot + 1);
-        }
-        return Arrays.copyOf(tmp, curr);
     }
 
     protected final Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {

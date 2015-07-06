@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -19,6 +20,8 @@ public final class MainScreenParser extends Parser {
     private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
 
     private static final Area AREA_TROOPS = getArea("area.troops");
+
+    private static final Area AREA_EROES = getArea("area.eroes");
 
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
@@ -76,22 +79,30 @@ public final class MainScreenParser extends Parser {
     }
 
     public TroopsInfo parseTroopsInfo() {
-        final BufferedImage image = os.screenshot(AREA_TROOPS);
+        final BufferedImage image = os.screenshot();
+        final BufferedImage imageTroops = os.getSubimage(image, AREA_TROOPS);
         Point start = new Point(9, 4);
         // start = new Point(28, 4);
         // start = new Point(28+63, 4);
         // start = new Point(28+63+62, 4);
         final int[] result = new int[9];
         int len = 0;
-        for (int i = 0; i < result.length; i++) {
-            final Integer n = parseNumber(image, 3, start, 46);
+        while (len < result.length) {
+            final Integer n = parseNumber(imageTroops, 3, start, 46);
             if (n == null) {
                 break;
             }
-            result[i] = n;
-            len++;
+            result[len++] = n;
             start = new Point(start.x() + 62, start.y());
         }
+        final BufferedImage imageEroes = os.getSubimage(image, AREA_EROES);
+        if (searchImage(imageEroes, "king.png") != null) {
+            result[len++] = 1;
+        }
+        //TODO
+//        if (searchImage(imageEroes, "queen.png") != null) {
+//            result[len++] = 1;
+//        }
         return new TroopsInfo(Arrays.copyOf(result, len));
     }
 
