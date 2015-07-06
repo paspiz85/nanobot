@@ -81,7 +81,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             boolean doAttack = false;
             try {
                 enemyInfo = getParser().parseEnemyInfo();
-                logger.info(String.format("Detected %s.", id, enemyInfo.toString()));
+                logger.info(String.format("Detected %s.", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
                     Boolean isCollectorFullBase = getParser().isCollectorFullBase();
