@@ -70,14 +70,14 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         }
         os.zoomUp();
         os.sleepRandom(350);
-        if (!context.isLanguageChecked()) {
-            logger.info("Checking language...");
-            if (getParser().searchButtonAttackLabel() == null) {
-                throw new BotConfigurationException("Make sure in-game language is English!");
-            }
-            logger.info("Checking language OK.");
-            context.setLanguageChecked(true);
-        }
+        /*
+         * if (!context.isLanguageChecked()) {
+         * logger.info("Checking language..."); if
+         * (getParser().searchButtonAttackLabel() == null) { throw new
+         * BotConfigurationException("Make sure in-game language is English!");
+         * } logger.info("Checking language OK.");
+         * context.setLanguageChecked(true); }
+         */
         collecting(context);
         training(context);
         context.setTroopsInfo(null);
