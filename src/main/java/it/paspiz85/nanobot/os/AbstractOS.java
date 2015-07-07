@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.os;
 
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 
@@ -42,6 +43,8 @@ public abstract class AbstractOS implements OS, Constants {
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
 
+    protected abstract Color getColor(Point point);
+
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
         return getSubimage(image, area.getP1(), area.getP2());
@@ -54,6 +57,12 @@ public abstract class AbstractOS implements OS, Constants {
         final int x2 = p2.x();
         final int y2 = p2.y();
         return image.getSubimage(x1, y1, x2 - x1, y2 - y1);
+    }
+
+    @Override
+    public boolean matchColoredPoint(final ColoredPoint point) {
+        final Color actualColor = getColor(point);
+        return compareColor(point.getColor(), actualColor, 5);
     }
 
     @Override

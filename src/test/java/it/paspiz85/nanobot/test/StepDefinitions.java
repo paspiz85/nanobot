@@ -9,6 +9,7 @@ import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -45,6 +46,11 @@ public class StepDefinitions {
         }
 
         private BufferedImage screenshot;
+
+        @Override
+        protected Color getColor(final Point point) {
+            return new Color(screenshot.getRGB(point.x(), point.y()));
+        }
 
         @Override
         protected BufferedImage screenshot(final Point p1, final Point p2) {

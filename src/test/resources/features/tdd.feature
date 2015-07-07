@@ -4,11 +4,12 @@
 Feature: scenarios for Test-Driven-Development
 
 
-  Scenario Outline: parse troops
+  Scenario Outline: check if rax is full
     Given screenshot saved as <imagefile>
-    When counting troops
-    Then troops count is <troops_count>
+    When checking if camps are full
+    Then check is <check>
 
     Examples:
-      | imagefile                                         | troops_count |
-      | classpath:/features/img/screen_1436215222084.png  | [53,100,42]  |
+      | imagefile                                       | check |
+      | classpath:/features/img/train_1435769837116.png | false |
+      | classpath:/features/img/train_1435772811358.png | true  |

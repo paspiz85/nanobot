@@ -36,11 +36,11 @@ public final class MainScreenParser extends Parser {
 
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
 
-    private static final Area AREA_CAMPS_FULL = getArea("area.camps.full");
-
     private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
 
     private static final ColoredPoint BUTTON_WAS_ATTACKED_OKAY = new ColoredPoint(432, 507, new Color(0x5CAC10));
+
+    private static final ColoredPoint POINT_CAMPS_FULL = new ColoredPoint(404, 162, new Color(0xE27F81));
 
     private Point buttonTroops;
 
@@ -52,8 +52,7 @@ public final class MainScreenParser extends Parser {
     }
 
     public Boolean areCampsFull() {
-        final BufferedImage image = os.screenshot(AREA_CAMPS_FULL);
-        return searchImage(image, getClass().getResource("camps_full.png")) != null;
+        return os.matchColoredPoint(POINT_CAMPS_FULL);
     }
 
     public Point getButtonAttack() {
@@ -123,7 +122,9 @@ public final class MainScreenParser extends Parser {
                 AREA_BUTTON_ATTACK.getP1());
     }
 
+    @Deprecated
     public Point searchButtonAttackLabel() {
+        // TODO remove
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_attack_label.png")),
                 AREA_BUTTON_ATTACK.getP1());

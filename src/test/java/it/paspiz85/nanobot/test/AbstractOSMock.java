@@ -2,21 +2,21 @@ package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.AbstractOS;
-import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.function.BooleanSupplier;
 
 public abstract class AbstractOSMock extends AbstractOS {
 
     @Override
-    public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
+    protected Color getColor(final Point point) {
         throw new IllegalStateException("not implemented");
     }
 
     @Override
-    public boolean matchColoredPoint(final ColoredPoint point) {
+    public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
         throw new IllegalStateException("not implemented");
     }
 
