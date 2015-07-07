@@ -4,7 +4,6 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -34,10 +33,10 @@ public final class MainScreenParser extends Parser {
     private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
 
     private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png",
-        "collect/elixir_3.png", "collect/elixir_4.png" };
+            "collect/elixir_3.png", "collect/elixir_4.png" };
 
     private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png",
-        "collect/gold_4.png", "collect/gold_5.png" };
+            "collect/gold_4.png", "collect/gold_5.png" };
 
     private Point buttonTroops;
 
@@ -99,16 +98,21 @@ public final class MainScreenParser extends Parser {
         if (searchImage(imageEroes, "king.png") != null) {
             result[len++] = 1;
         }
-        //TODO
-//        if (searchImage(imageEroes, "queen.png") != null) {
-//            result[len++] = 1;
-//        }
+        // TODO implement queen
+        // if (searchImage(imageEroes, "queen.png") != null) {
+        // result[len++] = 1;
+        // }
         return new TroopsInfo(Arrays.copyOf(result, len));
     }
 
     public Point searchButtonAttack() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, "button_attack.png"), AREA_BUTTON_ATTACK.getP1());
+    }
+
+    public Point searchButtonAttackLabel() {
+        final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
+        return relativePoint(searchImageCenter(image, "button_attack_label.png"), AREA_BUTTON_ATTACK.getP1());
     }
 
     public Point searchButtonTrainClose() {

@@ -193,6 +193,12 @@ public class StepDefinitions {
         point = Parser.getInstance(MainScreenParser.class).searchButtonAttack();
     }
 
+    @When("^searching attack button label point$")
+    public void whenSearchingAttackButtonLabelPoint() throws BotBadBaseException {
+        OSMock.instance.setScreenshot(screenshot);
+        point = Parser.getInstance(MainScreenParser.class).searchButtonAttackLabel();
+    }
+
     @When("^searching close troops button point$")
     public void whenSearchingCloseTroopsButtonPoint() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);

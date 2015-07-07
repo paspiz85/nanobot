@@ -72,7 +72,7 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.sleepRandom(350);
         if (!context.isLanguageChecked()) {
             logger.info("Checking language...");
-            if (getParser().searchButtonAttack() == null) {
+            if (getParser().searchButtonAttackLabel() == null) {
                 throw new BotConfigurationException("Make sure in-game language is English!");
             }
             logger.info("Checking language OK.");
