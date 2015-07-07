@@ -9,11 +9,15 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Stream;
@@ -145,18 +149,24 @@ public final class MainScreenParser extends Parser {
 
     private Point searchFullCollector(final Supplier<URI> uriSupplier) {
         Point point = null;
-        final BufferedImage image = os.screenshot();
-        final URI uri = uriSupplier.get();
-        final Path root = Paths.get(uri);
-        try (Stream<Path> walk = Files.walk(root, 1)) {
-            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
-                final Path next = it.next();
-                if (Files.isDirectory(next)) {
-                    continue;
-                }
-                point = searchImageCenter(image, next.toUri().toURL());
-                if (point != null) {
-                    break;
+        try {
+            final BufferedImage image = os.screenshot();
+            final URI uri = uriSupplier.get();
+            Map<String, String> env = new HashMap<>();
+            env.put("create", "true");
+            // needed for jar packaging
+            FileSystems.newFileSystem(uri, env);
+            final Path root = Paths.get(uri);
+            try (Stream<Path> walk = Files.walk(root, 1)) {
+                for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                    final Path next = it.next();
+                    if (Files.isDirectory(next)) {
+                        continue;
+                    }
+                    point = searchImageCenter(image, next.toUri().toURL());
+                    if (point != null) {
+                        break;
+                    }
                 }
             }
         } catch (final IOException e) {
