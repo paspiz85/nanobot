@@ -9,6 +9,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
@@ -217,13 +218,23 @@ public abstract class Parser {
         widths = getWidths("digit.widths");
     }
 
-    protected final Rectangle findArea(final BufferedImage input, final URL url) {
+    protected final Rectangle findArea(final BufferedImage input, final InputStream in) {
         Rectangle result = null;
         try {
-            final BufferedImage tar = ImageIO.read(url);
+            final BufferedImage tar = ImageIO.read(in);
             final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar,
                     1, 0.9);
             result = doFindAll.isEmpty() ? null : doFindAll.get(0).getBounds();
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, "Unable to read input", e);
+        }
+        return result;
+    }
+
+    protected final Rectangle findArea(final BufferedImage input, final URL url) {
+        Rectangle result = null;
+        try {
+            result = findArea(input, url.openStream());
         } catch (final IOException e) {
             logger.log(Level.SEVERE, "Unable to read url " + url, e);
         }
@@ -307,9 +318,9 @@ public abstract class Parser {
         return result;
     }
 
-    protected final Point searchImage(final BufferedImage image, final String resource) {
+    protected final Point searchImage(final BufferedImage image, final URL resource) {
         Point result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        final Rectangle rectangle = findArea(image, resource);
         if (rectangle != null) {
             final int x = rectangle.getLocation().x;
             final int y = rectangle.getLocation().y;
@@ -321,6 +332,17 @@ public abstract class Parser {
     protected final Point searchImageCenter(final BufferedImage image, final String resource) {
         Point result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        if (rectangle != null) {
+            final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
+            final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);
+            result = new Point(x, y);
+        }
+        return result;
+    }
+
+    protected final Point searchImageCenter(final BufferedImage image, final URL resource) {
+        Point result = null;
+        final Rectangle rectangle = findArea(image, resource);
         if (rectangle != null) {
             final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
             final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);

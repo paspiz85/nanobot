@@ -4,7 +4,17 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
+import java.util.Iterator;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.stream.Stream;
 
 /**
  * Parser for main mode screen.
@@ -30,14 +40,6 @@ public final class MainScreenParser extends Parser {
 
     private static final Area AREA_CAMPS_FULL = getArea("area.camps.full");
 
-    private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
-
-    private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png",
-            "collect/elixir_3.png", "collect/elixir_4.png" };
-
-    private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png",
-            "collect/gold_4.png", "collect/gold_5.png" };
-
     private Point buttonTroops;
 
     private Point buttonTrainClose;
@@ -49,7 +51,7 @@ public final class MainScreenParser extends Parser {
 
     public Boolean areCampsFull() {
         final BufferedImage image = os.screenshot(AREA_CAMPS_FULL);
-        return searchImage(image, "camps_full.png") != null;
+        return searchImage(image, getClass().getResource("camps_full.png")) != null;
     }
 
     public Point getButtonAttack() {
@@ -95,7 +97,7 @@ public final class MainScreenParser extends Parser {
             start = new Point(start.x() + 62, start.y());
         }
         final BufferedImage imageEroes = os.getSubimage(image, AREA_EROES);
-        if (searchImage(imageEroes, "king.png") != null) {
+        if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
             result[len++] = 1;
         }
         // TODO implement queen
@@ -107,62 +109,85 @@ public final class MainScreenParser extends Parser {
 
     public Point searchButtonAttack() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
-        return relativePoint(searchImageCenter(image, "button_attack.png"), AREA_BUTTON_ATTACK.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
+                AREA_BUTTON_ATTACK.getP1());
     }
 
     public Point searchButtonAttackLabel() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
-        return relativePoint(searchImageCenter(image, "button_attack_label.png"), AREA_BUTTON_ATTACK.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_attack_label.png")),
+                AREA_BUTTON_ATTACK.getP1());
     }
 
     public Point searchButtonTrainClose() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_TRAIN_CLOSE);
-        return relativePoint(searchImageCenter(image, "button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
+                AREA_BUTTON_TRAIN_CLOSE.getP1());
     }
 
     public Point searchButtonTroops() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_TROOPS);
-        return relativePoint(searchImageCenter(image, "button_troops.png"), AREA_BUTTON_TROOPS.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_troops.png")),
+                AREA_BUTTON_TROOPS.getP1());
+    }
+
+    public Point searchFullCollector(final Supplier<URI> uriSupplier) {
+        Point point = null;
+        final BufferedImage image = os.screenshot();
+        final URI uri = uriSupplier.get();
+        final Path root = Paths.get(uri);
+        try (Stream<Path> walk = Files.walk(root, 1)) {
+            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                final Path next = it.next();
+                if (Files.isDirectory(next)) {
+                    continue;
+                }
+                point = searchImageCenter(image, next.toUri().toURL());
+                if (point != null) {
+                    break;
+                }
+            }
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+        return point;
     }
 
     public Point searchFullDarkElixirDrill() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_DARK_ELIXIR) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/dark_elixir").toURI();
+            result = searchFullCollector(() -> resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
+        return result;
     }
 
     public Point searchFullElixirCollector() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_ELIXIR) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/elixir").toURI();
+            result = searchFullCollector(() -> resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
+        return result;
     }
 
     public Point searchFullGoldMine() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_GOLD) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/gold").toURI();
+            result = searchFullCollector(() -> resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
+        return result;
     }
 
     public Point searchTrainButton() {
         final BufferedImage image = os.screenshot(AREA_BUTTONS_BARRACK);
-        return relativePoint(searchImage(image, "train.png"), AREA_BUTTONS_BARRACK.getP1());
+        return relativePoint(searchImage(image, getClass().getResource("train.png")), AREA_BUTTONS_BARRACK.getP1());
     }
 }

@@ -224,6 +224,7 @@ public class AttackScreenParser extends Parser {
 
     public Point searchButtonNext() {
         final BufferedImage image = os.screenshot(AREA_NEXT_BUTTON);
-        return relativePoint(searchImageCenter(image, "button_next.png"), AREA_NEXT_BUTTON.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_next.png")),
+                AREA_NEXT_BUTTON.getP1());
     }
 }
