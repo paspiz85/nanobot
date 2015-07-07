@@ -10,11 +10,18 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -216,6 +223,20 @@ public abstract class Parser {
             thresholds[i] = getThreshold("digit." + i);
         }
         widths = getWidths("digit.widths");
+    }
+
+    protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) throws IOException {
+        if (uri.getScheme().equals("jar")) {
+            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
+                final String schemeSpecificPart = uri.getSchemeSpecificPart();
+                final Path path = fileSystem.getPath(schemeSpecificPart.substring(schemeSpecificPart.indexOf("!") + 1,
+                        schemeSpecificPart.length()));
+                pathConsumer.accept(path);
+            }
+        } else {
+            final Path path = Paths.get(uri);
+            pathConsumer.accept(path);
+        }
     }
 
     protected final Rectangle findArea(final BufferedImage input, final InputStream in) {
