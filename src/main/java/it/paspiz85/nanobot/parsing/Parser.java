@@ -227,7 +227,7 @@ public abstract class Parser {
 
     protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) {
         try {
-            if (uri.getScheme().equals("jar")) {
+            if ("jar".equals(uri.getScheme())) {
                 try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
                     final String schemeSpecificPart = uri.getSchemeSpecificPart();
                     final Path path = fileSystem.getPath(schemeSpecificPart.substring(

@@ -12,12 +12,12 @@ import java.awt.Color;
 public enum Clickable {
     BUTTON_ATTACK_UNIT_1(72, 600, null), BUTTON_ATTACK_UNIT_2(145, 600, null), BUTTON_ATTACK_UNIT_3(217, 600, null), BUTTON_ATTACK_UNIT_4(
             288, 600, null), BUTTON_ATTACK_UNIT_5(361, 600, null), BUTTON_ATTACK_UNIT_6(435, 600, null), BUTTON_ATTACK_UNIT_7(
-            505, 600, null), BUTTON_RAX_ARCHER(331, 333, null, "Archer"), BUTTON_RAX_BALLOON(212, 451, null, "Balloon"), BUTTON_RAX_BARB(
-            212, 324, null, "Barb"), BUTTON_RAX_DRAGON(542, 451, null, "Dragon"), BUTTON_RAX_GIANT(432, 333, null,
-            "Giant"), BUTTON_RAX_GOBLIN(542, 333, null, "Goblin"), BUTTON_RAX_HEALER(432, 451, null, "Healer"), BUTTON_RAX_HOGRIDER(
-            331, 333, null, "Hog Rider"), BUTTON_RAX_MINION(212, 324, null, "Minion"), BUTTON_RAX_NO_UNIT(null, null,
-            null, "No Unit"), BUTTON_RAX_PEKKA(642, 451, null, "Pekka"), BUTTON_RAX_WB(642, 333, null, "Wall Breaker"), BUTTON_RAX_WIZARD(
-            331, 451, null, "Wizard");
+                    505, 600, null), BUTTON_RAX_ARCHER(331, 333, null, "Archer"), BUTTON_RAX_BALLOON(212, 451, null, "Balloon"), BUTTON_RAX_BARB(
+                            212, 324, null, "Barb"), BUTTON_RAX_DRAGON(542, 451, null, "Dragon"), BUTTON_RAX_GIANT(432, 333, null,
+                                    "Giant"), BUTTON_RAX_GOBLIN(542, 333, null, "Goblin"), BUTTON_RAX_HEALER(432, 451, null, "Healer"), BUTTON_RAX_HOGRIDER(
+                                            331, 333, null, "Hog Rider"), BUTTON_RAX_MINION(212, 324, null, "Minion"), BUTTON_RAX_NO_UNIT(null, null,
+                                                    null, "No Unit"), BUTTON_RAX_PEKKA(642, 451, null, "Pekka"), BUTTON_RAX_WB(642, 333, null, "Wall Breaker"), BUTTON_RAX_WIZARD(
+                                                            331, 451, null, "Wizard");
 
     public static Clickable fromDescription(final String description) {
         if (description == null) {

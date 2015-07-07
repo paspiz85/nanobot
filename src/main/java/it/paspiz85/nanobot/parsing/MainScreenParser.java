@@ -122,14 +122,6 @@ public final class MainScreenParser extends Parser {
                 AREA_BUTTON_ATTACK.getP1());
     }
 
-    @Deprecated
-    public Point searchButtonAttackLabel() {
-        // TODO remove
-        final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
-        return relativePoint(searchImageCenter(image, getClass().getResource("button_attack_label.png")),
-                AREA_BUTTON_ATTACK.getP1());
-    }
-
     public Point searchButtonTrainClose() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_TRAIN_CLOSE);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),

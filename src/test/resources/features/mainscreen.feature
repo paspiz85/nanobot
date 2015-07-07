@@ -35,18 +35,6 @@ Feature: parsing main screen
       | classpath:/features/img/main_1435603470723.png | [63,598] |
 
 
-  Scenario Outline: search attack button label
-    Given screenshot saved as <imagefile>
-    When searching attack button label point
-    Then point found at <coords>
-
-    Examples:
-      | imagefile                                      | coords   |
-      | classpath:/features/img/main_1435575631326.png | null     |
-      | classpath:/features/img/main_1435601238653.png | [62,643] |
-      | classpath:/features/img/main_1435603470723.png | [62,643] |
-
-
   Scenario Outline: search full gold mine
     Given screenshot saved as <imagefile>
     When searching full gold mine point

@@ -2,6 +2,8 @@ code
 
 remove clickable 
 
+regina arcieri
+
 miglioramento interfaccia
 ###!important### count trofei
 
