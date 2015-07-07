@@ -2,8 +2,8 @@ package it.paspiz85.nanobot.os;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.win32.Win32OS;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -60,11 +60,9 @@ public interface OS {
 
     BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
 
-    boolean isClickableActive(Clickable clickable);
-
-    void leftClick(Clickable clickable, boolean randomize) throws InterruptedException;
-
     void leftClick(Point point, boolean randomize) throws InterruptedException;
+
+    boolean matchColoredPoint(ColoredPoint point);
 
     File saveImage(BufferedImage img, String... filePathRest);
 

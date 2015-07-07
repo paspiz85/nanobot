@@ -120,7 +120,7 @@ public abstract class Parser {
 
     protected static final Point getPoint(final String name) {
         Point point = null;
-        final String value = config.getProperty(name);
+        final String value = getConfig().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             point = new Point(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()));

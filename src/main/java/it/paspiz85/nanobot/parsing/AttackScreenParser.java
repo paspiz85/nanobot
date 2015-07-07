@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.parsing;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -37,9 +38,15 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public class AttackScreenParser extends Parser {
 
-    private static final Area ATTACK_GROUP = new Area(24, 554, 836, 653);
+    private static final ColoredPoint BUTTON_FIND_MATCH = new ColoredPoint(148, 529, new Color(0xD84B00));
 
-    private static final int ATTACK_GROUP_UNIT_DIFF = 72;
+    private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
+
+    private static final Point BUTTON_END_BATTLE = getPoint("point.button.end_battle");
+
+    private static final Point BUTTON_END_BATTLE_QUESTION_OK = getPoint("point.button.end_battle.question_ok");
+
+    private static final Point BUTTON_END_BATTLE_RETURN_HOME = getPoint("point.button.end_battle.return_home");
 
     private static final Color DARKCHECK_COLOR_YES = getColor("darkcheck.color.yes");
 
@@ -116,11 +123,31 @@ public class AttackScreenParser extends Parser {
         return attackableElixirs;
     }
 
+    public Point getButtonEndBattle() {
+        return BUTTON_END_BATTLE_RETURN_HOME;
+    }
+
+    public Point getButtonEndBattleQuestionOK() {
+        return BUTTON_END_BATTLE_QUESTION_OK;
+    }
+
+    public Point getButtonEndBattleReturnHome() {
+        return BUTTON_END_BATTLE;
+    }
+
+    public ColoredPoint getButtonFindMatch() {
+        return BUTTON_FIND_MATCH;
+    }
+
     public Point getButtonNext() {
         if (buttonNext == null) {
             buttonNext = searchButtonNext();
         }
         return buttonNext;
+    }
+
+    public Point getButtonShieldDisable() {
+        return BUTTON_SHIELD_DISABLE;
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {

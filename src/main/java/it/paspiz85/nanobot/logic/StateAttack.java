@@ -5,7 +5,6 @@ import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
@@ -107,11 +106,11 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                         logger.info("Troops count: " + Arrays.toString(troopsCount));
                         attackStrategy.attack(enemyInfo, troopsCount);
                     }
-                    os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattle(), true);
                     os.sleepRandom(1200);
-                    os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattleQuestionOK(), true);
                     os.sleepRandom(1200);
-                    os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattleReturnHome(), true);
                     os.sleepRandom(1200);
                 } else {
                     if (enemyInfo.equals(prevLoot)) {

@@ -1,8 +1,10 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -13,6 +15,10 @@ import java.util.logging.Logger;
  *
  */
 public class DisconnectChecker implements Runnable {
+
+    private static final ColoredPoint UNIT_BLUESTACKS_DC = new ColoredPoint(699, 343, new Color(0x282828));
+
+    private static final Point UNIT_RECONNECT = new Point(435, 400);
 
     private static final OS DEFAAULT_OS = OS.instance();
 
@@ -40,7 +46,7 @@ public class DisconnectChecker implements Runnable {
                 if (Thread.interrupted()) {
                     throw new InterruptedException("Disconnect detector is interrupted.");
                 }
-                if (os.isClickableActive(Clickable.UNIT_BLUESTACKS_DC)) {
+                if (os.matchColoredPoint(UNIT_BLUESTACKS_DC)) {
                     logger.info("Detected disconnect.");
                     synchronized (context) {
                         // case 1: launcher was running and it will be
@@ -67,7 +73,7 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    os.leftClick(Clickable.UNIT_RECONNECT.getPoint(), true);
+                    os.leftClick(UNIT_RECONNECT, true);
                     os.sleepRandom(5000);
                     Thread.sleep(2000);
                     StateIdle.instance().setReloading(false);

@@ -1,8 +1,10 @@
 package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
@@ -34,11 +36,13 @@ public final class MainScreenParser extends Parser {
 
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
-    private static final Area AREA_BUTTONS_BARRACK = getArea("area.buttons.barrack");
-
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
 
     private static final Area AREA_CAMPS_FULL = getArea("area.camps.full");
+
+    private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
+
+    private static final ColoredPoint BUTTON_WAS_ATTACKED_OKAY = new ColoredPoint(432, 507, new Color(0x5CAC10));
 
     private Point buttonTroops;
 
@@ -77,6 +81,14 @@ public final class MainScreenParser extends Parser {
             buttonTroops = searchButtonTroops();
         }
         return buttonTroops;
+    }
+
+    public ColoredPoint getButtonWasAttackedOK() {
+        return BUTTON_WAS_ATTACKED_OKAY;
+    }
+
+    public ColoredPoint getPointWasAttackedHeadline() {
+        return POINT_WAS_ATTACKED_HEADLINE;
     }
 
     public TroopsInfo parseTroopsInfo() {
@@ -131,7 +143,7 @@ public final class MainScreenParser extends Parser {
                 AREA_BUTTON_TROOPS.getP1());
     }
 
-    public Point searchFullCollector(final Supplier<URI> uriSupplier) {
+    private Point searchFullCollector(final Supplier<URI> uriSupplier) {
         Point point = null;
         final BufferedImage image = os.screenshot();
         final URI uri = uriSupplier.get();
@@ -184,10 +196,5 @@ public final class MainScreenParser extends Parser {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
         return result;
-    }
-
-    public Point searchTrainButton() {
-        final BufferedImage image = os.screenshot(AREA_BUTTONS_BARRACK);
-        return relativePoint(searchImage(image, getClass().getResource("train.png")), AREA_BUTTONS_BARRACK.getP1());
     }
 }

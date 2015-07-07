@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.os.win32;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.AbstractOS;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 
@@ -90,17 +90,6 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
         return new Point(point.x, point.y);
     }
 
-    @Override
-    public boolean isClickableActive(final Clickable clickable) {
-        if (clickable.getColor() == null) {
-            throw new IllegalArgumentException(clickable.name());
-        }
-        Point point = clickable.getPoint();
-        point = clientToScreen(point);
-        final Color actualColor = robot.getPixelColor(point.x(), point.y());
-        return compareColor(clickable.getColor(), actualColor, 5);
-    }
-
     private boolean isCtrlKeyDown() {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
     }
@@ -121,6 +110,13 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
         }
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
+    }
+
+    @Override
+    public boolean matchColoredPoint(final ColoredPoint point) {
+        final Point screenPoint = clientToScreen(point);
+        final Color actualColor = robot.getPixelColor(screenPoint.x(), screenPoint.y());
+        return compareColor(point.getColor(), actualColor, 5);
     }
 
     @Override

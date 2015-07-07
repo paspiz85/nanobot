@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.os;
 
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
@@ -55,11 +54,6 @@ public abstract class AbstractOS implements OS, Constants {
         final int x2 = p2.x();
         final int y2 = p2.y();
         return image.getSubimage(x1, y1, x2 - x1, y2 - y1);
-    }
-
-    @Override
-    public final void leftClick(final Clickable clickable, final boolean randomize) throws InterruptedException {
-        leftClick(clickable.getPoint(), randomize);
     }
 
     @Override
