@@ -13,7 +13,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
@@ -142,30 +141,25 @@ public final class MainScreenParser extends Parser {
                 AREA_BUTTON_TROOPS.getP1());
     }
 
-    private Point searchFullCollector(final Supplier<URI> uriSupplier) {
+    private Point searchFullCollector(final URI uri) {
         final Point[] point = new Point[1];
-        try {
-            final BufferedImage image = os.screenshot();
-            final URI uri = uriSupplier.get();
-            doWithPath(uri, (path) -> {
-                try (Stream<Path> walk = Files.walk(path, 1)) {
-                    for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
-                        final Path next = it.next();
-                        if (Files.isDirectory(next)) {
-                            continue;
-                        }
-                        point[0] = searchImageCenter(image, next.toUri().toURL());
-                        if (point != null) {
-                            break;
-                        }
+        final BufferedImage image = os.screenshot();
+        doWithPath(uri, (path) -> {
+            try (Stream<Path> walk = Files.walk(path, 1)) {
+                for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                    final Path next = it.next();
+                    if (Files.isDirectory(next)) {
+                        continue;
                     }
-                } catch (final IOException e) {
-                    logger.log(Level.SEVERE, e.getMessage(), e);
+                    point[0] = searchImageCenter(image, next.toUri().toURL());
+                    if (point[0] != null) {
+                        break;
+                    }
                 }
-            });
-        } catch (final IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-        }
+            } catch (final IOException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }
+        });
         return point[0];
     }
 
@@ -173,7 +167,7 @@ public final class MainScreenParser extends Parser {
         Point result = null;
         try {
             final URI resource = getClass().getResource("collect/dark_elixir").toURI();
-            result = searchFullCollector(() -> resource);
+            result = searchFullCollector(resource);
         } catch (final URISyntaxException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -184,7 +178,7 @@ public final class MainScreenParser extends Parser {
         Point result = null;
         try {
             final URI resource = getClass().getResource("collect/elixir").toURI();
-            result = searchFullCollector(() -> resource);
+            result = searchFullCollector(resource);
         } catch (final URISyntaxException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
@@ -195,7 +189,7 @@ public final class MainScreenParser extends Parser {
         Point result = null;
         try {
             final URI resource = getClass().getResource("collect/gold").toURI();
-            result = searchFullCollector(() -> resource);
+            result = searchFullCollector(resource);
         } catch (final URISyntaxException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }

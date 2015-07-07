@@ -12,14 +12,11 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -165,46 +162,34 @@ public class AttackScreenParser extends Parser {
     }
 
     public Boolean isCollectorFullBase() throws BotException {
+        final int[] attackableElixirs = { 0 };
         final BufferedImage image = os.screenshot(ENEMY_BASE);
-        FileSystem fileSystem = null;
-        Stream<Path> walk = null;
         try {
             final URI uri = getClass().getResource("elixirs").toURI();
-            Path images;
-            if ("jar".equals(uri.getScheme())) {
-                fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
-                images = fileSystem.getPath("/elixir_images");
-            } else {
-                images = Paths.get(uri);
-            }
-            walk = Files.walk(images, 1);
-            final List<Rectangle> matchedElixirs = new ArrayList<>();
-            int attackableElixirs = 0;
-            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
-                final Path next = it.next();
-                if (Files.isDirectory(next)) {
-                    continue;
-                }
-                final BufferedImage tar = ImageIO.read(Files.newInputStream(next, StandardOpenOption.READ));
-                final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image,
-                        tar, 7, 0.8);
-                attackableElixirs += countAttackableElixirs(doFindAll, matchedElixirs, next);
-            }
-            return attackableElixirs >= 0;
-        } catch (final Exception e) {
-            throw new BotException(e.getMessage(), e);
-        } finally {
-            if (fileSystem != null) {
-                try {
-                    fileSystem.close();
-                } catch (final IOException e) {
-                    logger.log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-            if (walk != null) {
-                walk.close();
-            }
+            doWithPath(
+                    uri,
+                    (path) -> {
+                        final List<Rectangle> matchedElixirs = new ArrayList<>();
+                        try (Stream<Path> walk = Files.walk(path, 1)) {
+                            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                                final Path next = it.next();
+                                if (Files.isDirectory(next)) {
+                                    continue;
+                                }
+                                final BufferedImage tar = ImageIO.read(Files.newInputStream(next,
+                                        StandardOpenOption.READ));
+                                final List<RegionMatch> doFindAll = TemplateMatcher
+                                        .findMatchesByGrayscaleAtOriginalResolution(image, tar, 7, 0.8);
+                                attackableElixirs[0] += countAttackableElixirs(doFindAll, matchedElixirs, next);
+                            }
+                        } catch (final IOException e) {
+                            logger.log(Level.SEVERE, e.getMessage(), e);
+                        }
+                    });
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
+        return attackableElixirs[0] >= 0;
     }
 
     protected final Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {

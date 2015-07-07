@@ -225,17 +225,21 @@ public abstract class Parser {
         widths = getWidths("digit.widths");
     }
 
-    protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) throws IOException {
-        if (uri.getScheme().equals("jar")) {
-            try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
-                final String schemeSpecificPart = uri.getSchemeSpecificPart();
-                final Path path = fileSystem.getPath(schemeSpecificPart.substring(schemeSpecificPart.indexOf("!") + 1,
-                        schemeSpecificPart.length()));
+    protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) {
+        try {
+            if (uri.getScheme().equals("jar")) {
+                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
+                    final String schemeSpecificPart = uri.getSchemeSpecificPart();
+                    final Path path = fileSystem.getPath(schemeSpecificPart.substring(
+                            schemeSpecificPart.indexOf("!") + 1, schemeSpecificPart.length()));
+                    pathConsumer.accept(path);
+                }
+            } else {
+                final Path path = Paths.get(uri);
                 pathConsumer.accept(path);
             }
-        } else {
-            final Path path = Paths.get(uri);
-            pathConsumer.accept(path);
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, String.format("Unable to open uri %s: %s", uri, e.getMessage()), e);
         }
     }
 
