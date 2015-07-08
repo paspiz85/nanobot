@@ -1,9 +1,20 @@
 package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.stream.Stream;
 
 /**
  * Parser for main mode screen.
@@ -17,23 +28,19 @@ public final class MainScreenParser extends Parser {
 
     private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
 
+    private static final Area AREA_TROOPS = getArea("area.troops");
+
+    private static final Area AREA_EROES = getArea("area.eroes");
+
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
-
-    private static final Area AREA_BUTTONS_BARRACK = getArea("area.buttons.barrack");
-
-    private static final Point BUTTON_TRAIN_CLOSE = getPoint("point.button.train.close");
 
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
 
-    private static final Area AREA_CAMPS_FULL = getArea("area.camps.full");
+    private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
 
-    private static final String[] COLLECT_DARK_ELIXIR = { "collect/dark_elixir_1.png" };
+    private static final ColoredPoint BUTTON_WAS_ATTACKED_OKAY = new ColoredPoint(432, 507, new Color(0x5CAC10));
 
-    private static final String[] COLLECT_ELIXIR = { "collect/elixir_1.png", "collect/elixir_2.png",
-        "collect/elixir_3.png", "collect/elixir_4.png" };
-
-    private static final String[] COLLECT_GOLD = { "collect/gold_1.png", "collect/gold_2.png", "collect/gold_3.png",
-        "collect/gold_4.png", "collect/gold_5.png" };
+    private static final ColoredPoint POINT_CAMPS_FULL = new ColoredPoint(404, 162, new Color(0xE27F81));
 
     private Point buttonTroops;
 
@@ -45,8 +52,7 @@ public final class MainScreenParser extends Parser {
     }
 
     public Boolean areCampsFull() {
-        final BufferedImage image = os.screenshot(AREA_CAMPS_FULL);
-        return searchImage(image, "camps_full.png") != null;
+        return os.matchColoredPoint(POINT_CAMPS_FULL);
     }
 
     public Point getButtonAttack() {
@@ -74,64 +80,112 @@ public final class MainScreenParser extends Parser {
         return buttonTroops;
     }
 
+    public ColoredPoint getButtonWasAttackedOK() {
+        return BUTTON_WAS_ATTACKED_OKAY;
+    }
+
+    public ColoredPoint getPointWasAttackedHeadline() {
+        return POINT_WAS_ATTACKED_HEADLINE;
+    }
+
     public TroopsInfo parseTroopsInfo() {
-        // TODO Auto-generated method stub
-        return null;
+        final BufferedImage image = os.screenshot();
+        final BufferedImage imageTroops = os.getSubimage(image, AREA_TROOPS);
+        Point start = new Point(9, 4);
+        // start = new Point(28, 4);
+        // start = new Point(28+63, 4);
+        // start = new Point(28+63+62, 4);
+        final int[] result = new int[9];
+        int len = 0;
+        while (len < result.length) {
+            final Integer n = parseNumber(imageTroops, 3, start, 46);
+            if (n == null) {
+                break;
+            }
+            result[len++] = n;
+            start = new Point(start.x() + 62, start.y());
+        }
+        final BufferedImage imageEroes = os.getSubimage(image, AREA_EROES);
+        if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
+            result[len++] = 1;
+        }
+        // TODO implement queen
+        // if (searchImage(imageEroes, "queen.png") != null) {
+        // result[len++] = 1;
+        // }
+        return new TroopsInfo(Arrays.copyOf(result, len));
     }
 
     public Point searchButtonAttack() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
-        return relativePoint(searchImageCenter(image, "button_attack.png"), AREA_BUTTON_ATTACK.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
+                AREA_BUTTON_ATTACK.getP1());
     }
 
     public Point searchButtonTrainClose() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_TRAIN_CLOSE);
-        return relativePoint(searchImageCenter(image, "button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
+                AREA_BUTTON_TRAIN_CLOSE.getP1());
     }
 
     public Point searchButtonTroops() {
         final BufferedImage image = os.screenshot(AREA_BUTTON_TROOPS);
-        return relativePoint(searchImageCenter(image, "button_troops.png"), AREA_BUTTON_TROOPS.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_troops.png")),
+                AREA_BUTTON_TROOPS.getP1());
+    }
+
+    private Point searchFullCollector(final URI uri) {
+        final Point[] point = new Point[1];
+        final BufferedImage image = os.screenshot();
+        doWithPath(uri, (path) -> {
+            try (Stream<Path> walk = Files.walk(path, 1)) {
+                for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                    final Path next = it.next();
+                    if (Files.isDirectory(next)) {
+                        continue;
+                    }
+                    point[0] = searchImageCenter(image, next.toUri().toURL());
+                    if (point[0] != null) {
+                        break;
+                    }
+                }
+            } catch (final IOException e) {
+                logger.log(Level.SEVERE, e.getMessage(), e);
+            }
+        });
+        return point[0];
     }
 
     public Point searchFullDarkElixirDrill() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_DARK_ELIXIR) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/dark_elixir").toURI();
+            result = searchFullCollector(resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
+        return result;
     }
 
     public Point searchFullElixirCollector() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_ELIXIR) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/elixir").toURI();
+            result = searchFullCollector(resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
+        return result;
     }
 
     public Point searchFullGoldMine() {
-        final BufferedImage image = os.screenshot();
-        Point point = null;
-        for (final String resource : COLLECT_GOLD) {
-            point = searchImageCenter(image, resource);
-            if (point != null) {
-                break;
-            }
+        Point result = null;
+        try {
+            final URI resource = getClass().getResource("collect/gold").toURI();
+            result = searchFullCollector(resource);
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        return point;
-    }
-
-    public Point searchTrainButton() {
-        final BufferedImage image = os.screenshot(AREA_BUTTONS_BARRACK);
-        return relativePoint(searchImage(image, "train.png"), AREA_BUTTONS_BARRACK.getP1());
+        return result;
     }
 }

@@ -3,7 +3,6 @@ package it.paspiz85.nanobot.os.win32;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.AbstractOS;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 
@@ -91,14 +90,9 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
     }
 
     @Override
-    public boolean isClickableActive(final Clickable clickable) {
-        if (clickable.getColor() == null) {
-            throw new IllegalArgumentException(clickable.name());
-        }
-        Point point = clickable.getPoint();
-        point = clientToScreen(point);
-        final Color actualColor = robot.getPixelColor(point.x(), point.y());
-        return compareColor(clickable.getColor(), actualColor, 5);
+    protected Color getColor(final Point point) {
+        final Point screenPoint = clientToScreen(point);
+        return robot.getPixelColor(screenPoint.x(), screenPoint.y());
     }
 
     private boolean isCtrlKeyDown() {

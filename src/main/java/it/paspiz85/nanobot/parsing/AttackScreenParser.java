@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.parsing;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -11,15 +12,11 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
@@ -38,9 +35,15 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public class AttackScreenParser extends Parser {
 
-    private static final Area ATTACK_GROUP = new Area(24, 554, 836, 653);
+    private static final ColoredPoint BUTTON_FIND_MATCH = new ColoredPoint(148, 529, new Color(0xD84B00));
 
-    private static final int ATTACK_GROUP_UNIT_DIFF = 72;
+    private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
+
+    private static final Point BUTTON_END_BATTLE = getPoint("point.button.end_battle");
+
+    private static final Point BUTTON_END_BATTLE_QUESTION_OK = getPoint("point.button.end_battle.question_ok");
+
+    private static final Point BUTTON_END_BATTLE_RETURN_HOME = getPoint("point.button.end_battle.return_home");
 
     private static final Color DARKCHECK_COLOR_YES = getColor("darkcheck.color.yes");
 
@@ -117,11 +120,31 @@ public class AttackScreenParser extends Parser {
         return attackableElixirs;
     }
 
+    public Point getButtonEndBattle() {
+        return BUTTON_END_BATTLE_RETURN_HOME;
+    }
+
+    public Point getButtonEndBattleQuestionOK() {
+        return BUTTON_END_BATTLE_QUESTION_OK;
+    }
+
+    public Point getButtonEndBattleReturnHome() {
+        return BUTTON_END_BATTLE;
+    }
+
+    public ColoredPoint getButtonFindMatch() {
+        return BUTTON_FIND_MATCH;
+    }
+
     public Point getButtonNext() {
         if (buttonNext == null) {
             buttonNext = searchButtonNext();
         }
         return buttonNext;
+    }
+
+    public Point getButtonShieldDisable() {
+        return BUTTON_SHIELD_DISABLE;
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
@@ -139,64 +162,34 @@ public class AttackScreenParser extends Parser {
     }
 
     public Boolean isCollectorFullBase() throws BotException {
+        final int[] attackableElixirs = { 0 };
         final BufferedImage image = os.screenshot(ENEMY_BASE);
-        FileSystem fileSystem = null;
-        Stream<Path> walk = null;
         try {
             final URI uri = getClass().getResource("elixirs").toURI();
-            Path images;
-            if ("jar".equals(uri.getScheme())) {
-                fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap());
-                images = fileSystem.getPath("/elixir_images");
-            } else {
-                images = Paths.get(uri);
-            }
-            walk = Files.walk(images, 1);
-            final List<Rectangle> matchedElixirs = new ArrayList<>();
-            int attackableElixirs = 0;
-            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
-                final Path next = it.next();
-                if (Files.isDirectory(next)) {
-                    continue;
-                }
-                final BufferedImage tar = ImageIO.read(Files.newInputStream(next, StandardOpenOption.READ));
-                final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(image,
-                        tar, 7, 0.8);
-                attackableElixirs += countAttackableElixirs(doFindAll, matchedElixirs, next);
-            }
-            return attackableElixirs >= 0;
-        } catch (final Exception e) {
-            throw new BotException(e.getMessage(), e);
-        } finally {
-            if (fileSystem != null) {
-                try {
-                    fileSystem.close();
-                } catch (final IOException e) {
-                    logger.log(Level.SEVERE, e.getMessage(), e);
-                }
-            }
-            if (walk != null) {
-                walk.close();
-            }
+            doWithPath(
+                    uri,
+                    (path) -> {
+                        final List<Rectangle> matchedElixirs = new ArrayList<>();
+                        try (Stream<Path> walk = Files.walk(path, 1)) {
+                            for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
+                                final Path next = it.next();
+                                if (Files.isDirectory(next)) {
+                                    continue;
+                                }
+                                final BufferedImage tar = ImageIO.read(Files.newInputStream(next,
+                                        StandardOpenOption.READ));
+                                final List<RegionMatch> doFindAll = TemplateMatcher
+                                        .findMatchesByGrayscaleAtOriginalResolution(image, tar, 7, 0.8);
+                                attackableElixirs[0] += countAttackableElixirs(doFindAll, matchedElixirs, next);
+                            }
+                        } catch (final IOException e) {
+                            logger.log(Level.SEVERE, e.getMessage(), e);
+                        }
+                    });
+        } catch (final URISyntaxException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
-    }
-
-    private Integer parseArcherQueenSlot(final BufferedImage image) {
-        Integer result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource("aq.png"));
-        if (rectangle != null) {
-            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-        }
-        return result;
-    }
-
-    private Integer parseBarbKingSlot(final BufferedImage image) {
-        Integer result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource("bk.png"));
-        if (rectangle != null) {
-            result = rectangle.x / ATTACK_GROUP_UNIT_DIFF;
-        }
-        return result;
+        return attackableElixirs[0] >= 0;
     }
 
     protected final Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
@@ -227,47 +220,6 @@ public class AttackScreenParser extends Parser {
         return parseNumber(image, 0, hasDE(image) ? POINT_GOLD_HAS_DARK : POINT_GOLD_HASNT_DARK, image.getWidth() - 43);
     }
 
-    public int[] parseTroopCount() {
-        final BufferedImage image = os.screenshot(ATTACK_GROUP);
-        final int[] tmp = new int[11]; // max group size
-        int xStart = 20;
-        final int yStart = 11;
-        Integer no;
-        int curr = 0;
-        while (true) {
-            no = parseNumber(image, 3, new Point(xStart, yStart), ATTACK_GROUP_UNIT_DIFF - 10);
-            if (no == null || no == 0) {
-                break;
-            }
-            if (no >= 5) {
-                tmp[curr] = no;
-            } else {
-                // ignore 1,2,3,4 because they are usually
-                // cc or spells
-                tmp[curr] = 0;
-            }
-            curr++;
-            xStart += ATTACK_GROUP_UNIT_DIFF;
-        }
-        final Integer barbKingSlot = parseBarbKingSlot(image);
-        if (barbKingSlot != null) {
-            tmp[barbKingSlot] = 1;
-            // if BK was found after a 0 slot, new length should be adjusted
-            // according to BK
-            // ie [110, 90, 0, BK] -> len = 4
-            curr = Math.max(curr + 1, barbKingSlot + 1);
-        }
-        final Integer archerQueenSlot = parseArcherQueenSlot(image);
-        if (archerQueenSlot != null) {
-            tmp[archerQueenSlot] = 1;
-            // if AQ was found after a 0 slot, new length should be adjusted
-            // according to AQ
-            // ie [110, 90, 0, AQ] -> len = 4
-            curr = Math.max(curr + 1, archerQueenSlot + 1);
-        }
-        return Arrays.copyOf(tmp, curr);
-    }
-
     protected final Integer parseTrophyDefeat(final BufferedImage image) throws BotBadBaseException {
         // TODO implement trophyDefeat
         return null;
@@ -284,6 +236,7 @@ public class AttackScreenParser extends Parser {
 
     public Point searchButtonNext() {
         final BufferedImage image = os.screenshot(AREA_NEXT_BUTTON);
-        return relativePoint(searchImageCenter(image, "button_next.png"), AREA_NEXT_BUTTON.getP1());
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_next.png")),
+                AREA_NEXT_BUTTON.getP1());
     }
 }

@@ -2,16 +2,16 @@ package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.os.AbstractOS;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.function.BooleanSupplier;
 
 public abstract class AbstractOSMock extends AbstractOS {
 
     @Override
-    public boolean isClickableActive(final Clickable clickable) {
+    protected Color getColor(final Point point) {
         throw new IllegalStateException("not implemented");
     }
 

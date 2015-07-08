@@ -7,6 +7,8 @@ import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
 
+import java.util.Arrays;
+
 /**
  * This state is when bot is in main menu.
  *
@@ -68,14 +70,6 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         }
         os.zoomUp();
         os.sleepRandom(350);
-        if (!context.isLanguageChecked()) {
-            logger.info("Checking language...");
-            if (getParser().searchButtonAttack() == null) {
-                throw new BotConfigurationException("Make sure in-game language is English!");
-            }
-            logger.info("Checking language OK.");
-            context.setLanguageChecked(true);
-        }
         collecting(context);
         training(context);
         context.setTroopsInfo(null);
@@ -99,6 +93,8 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         os.leftClick(getParser().getButtonTroops(), true);
         os.sleepRandom(300);
         final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
+        final int[] troopsCount = troopsInfo.getTroopsCount();
+        logger.info("Troops count: " + Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
         os.leftClick(getParser().getButtonTrainClose(), true);
         os.sleepRandom(200);

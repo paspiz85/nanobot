@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.os;
 
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
 
@@ -43,6 +43,13 @@ public abstract class AbstractOS implements OS, Constants {
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
 
+    protected abstract Color getColor(Point point);
+
+    @Override
+    public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
+        return getSubimage(image, area.getP1(), area.getP2());
+    }
+
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Point p1, final Point p2) {
         final int x1 = p1.x();
@@ -53,8 +60,9 @@ public abstract class AbstractOS implements OS, Constants {
     }
 
     @Override
-    public final void leftClick(final Clickable clickable, final boolean randomize) throws InterruptedException {
-        leftClick(clickable.getPoint(), randomize);
+    public boolean matchColoredPoint(final ColoredPoint point) {
+        final Color actualColor = getColor(point);
+        return compareColor(point.getColor(), actualColor, 5);
     }
 
     @Override

@@ -39,6 +39,10 @@ public abstract class Attack {
 
     protected static final Point TOP = new Point(429, 18);
 
+    private static int diffLoot(final Integer prevLoot, final Integer currLoot) {
+        return zeroIfNull(prevLoot) > zeroIfNull(currLoot) ? zeroIfNull(prevLoot) - zeroIfNull(currLoot) : 0;
+    }
+
     public static Attack[] getAvailableStrategies() {
         if (availableStrategies == null) {
             final List<Attack> list = new ArrayList<>();
@@ -66,6 +70,10 @@ public abstract class Attack {
             noStrategy = new NoAttack();
         }
         return noStrategy;
+    }
+
+    private static int zeroIfNull(final Integer n) {
+        return n == null ? 0 : n;
     }
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
@@ -119,11 +127,10 @@ public abstract class Attack {
                 return;
             }
             diff = 0;
-            diff += prevLoot.getGold() > currLoot.getGold() ? prevLoot.getGold() - currLoot.getGold() : 0;
-            diff += prevLoot.getElixir() > currLoot.getElixir() ? prevLoot.getElixir() - currLoot.getElixir() : 0;
-            diff += prevLoot.getDarkElixir() > currLoot.getDarkElixir() ? prevLoot.getDarkElixir()
-                    - currLoot.getDarkElixir() : 0;
-                    prevLoot = currLoot;
+            diff += diffLoot(prevLoot.getGold(), currLoot.getGold());
+            diff += diffLoot(prevLoot.getElixir(), currLoot.getElixir());
+            diff += diffLoot(prevLoot.getDarkElixir(), currLoot.getDarkElixir());
+            prevLoot = currLoot;
         }
     }
 

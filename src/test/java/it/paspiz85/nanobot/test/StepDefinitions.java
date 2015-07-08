@@ -9,13 +9,17 @@ import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Point;
 
+import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.Arrays;
 
 import javax.imageio.ImageIO;
+
+import junit.framework.AssertionFailedError;
 
 import org.junit.Assert;
 
@@ -42,6 +46,11 @@ public class StepDefinitions {
         }
 
         private BufferedImage screenshot;
+
+        @Override
+        protected Color getColor(final Point point) {
+            return new Color(screenshot.getRGB(point.x(), point.y()));
+        }
 
         @Override
         protected BufferedImage screenshot(final Point p1, final Point p2) {
@@ -141,12 +150,23 @@ public class StepDefinitions {
 
     @Then("^troops count is (.*)$")
     public void thenTroopsCountIs(final String troopsCount) {
-        final String[] split = troopsCount.substring(1, troopsCount.length() - 1).split(",");
-        final int[] expected = new int[split.length];
-        for (int i = 0; i < split.length; i++) {
-            expected[i] = Integer.parseInt(split[i].trim());
+        final String arr = troopsCount.substring(1, troopsCount.length() - 1).trim();
+        final int[] expected;
+        if (arr.length() == 0) {
+            expected = new int[0];
+        } else {
+            final String[] split = arr.split(",");
+            expected = new int[split.length];
+            for (int i = 0; i < split.length; i++) {
+                expected[i] = Integer.parseInt(split[i].trim());
+            }
         }
-        Assert.assertArrayEquals(expected, this.troopsCount);
+        try {
+            Assert.assertArrayEquals(expected, this.troopsCount);
+        } catch (final AssertionError e) {
+            throw new AssertionFailedError(String.format("expected <%s> but was <%s>", Arrays.toString(expected),
+                    Arrays.toString(this.troopsCount)));
+        }
     }
 
     @When("^checking collectors$")
@@ -161,16 +181,16 @@ public class StepDefinitions {
         check = Parser.getInstance(MainScreenParser.class).areCampsFull();
     }
 
+    @When("^counting troops$")
+    public void whenCountingTroops() throws BotException {
+        OSMock.instance.setScreenshot(screenshot);
+        troopsCount = Parser.getInstance(MainScreenParser.class).parseTroopsInfo().getTroopsCount();
+    }
+
     @When("^parsing enemy info$")
     public void whenParsingEnemyInfo() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
         enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
-    }
-
-    @When("^parsing troops$")
-    public void whenParsingTroops() throws BotException {
-        OSMock.instance.setScreenshot(screenshot);
-        troopsCount = Parser.getInstance(AttackScreenParser.class).parseTroopCount();
     }
 
     @When("^searching attack button point$")

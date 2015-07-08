@@ -9,11 +9,19 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
 import java.net.URL;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -89,7 +97,7 @@ public abstract class Parser {
 
     private static int[][] getOffset(final String name) {
         int[][] result = null;
-        final String value = getConfig().getProperty(name + ".offset");
+        final String value = getConfig().getProperty(name);
         if (value != null) {
             final String[] points = value.split(";");
             result = new int[points.length][];
@@ -104,9 +112,22 @@ public abstract class Parser {
         return result;
     }
 
+    private static int[][] getOffset(final String name, final String fallback) {
+        int[][] result = getOffset(name);
+        if (result == null) {
+            result = getOffset(fallback);
+        }
+        return result;
+    }
+
+    private static int[][][] getOffsets(final String name) {
+        return new int[][][] { getOffset(name + ".a", name), getOffset(name + ".b", name),
+                getOffset(name + ".c", name), getOffset(name + ".d", name) };
+    }
+
     protected static final Point getPoint(final String name) {
         Point point = null;
-        final String value = config.getProperty(name);
+        final String value = getConfig().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             point = new Point(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()));
@@ -149,15 +170,41 @@ public abstract class Parser {
         return result;
     }
 
+    private static int[] getWidth(final String name) {
+        int[] result = null;
+        final String value = getConfig().getProperty(name);
+        if (value != null) {
+            final String[] split = value.split(",");
+            result = new int[split.length];
+            for (int i = 0; i < split.length; i++) {
+                result[i] = Integer.parseInt(split[i].trim());
+            }
+        }
+        return result;
+    }
+
+    private static int[] getWidth(final String name, final String fallback) {
+        int[] result = getWidth(name);
+        if (result == null) {
+            result = getWidth(fallback);
+        }
+        return result;
+    }
+
+    private static int[][] getWidths(final String name) {
+        return new int[][] { getWidth(name + ".a", name), getWidth(name + ".b", name), getWidth(name + ".c", name),
+                getWidth(name + ".d", name) };
+    }
+
     private final int[][][] colors;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final int[][][] offsets;
+    private final int[][][][] offsets;
 
     protected final OS os = DEFAULT_OS;
 
-    private final int[] widths;
+    private final int[][] widths;
 
     private final int[] thresholds;
 
@@ -167,25 +214,52 @@ public abstract class Parser {
     private final Integer learnMode = null;
 
     Parser() {
-        offsets = new int[10][][];
+        offsets = new int[10][][][];
         colors = new int[10][][];
         thresholds = new int[10];
         for (int i = 0; i < 10; i++) {
-            offsets[i] = getOffset("digit." + i);
-            colors[i] = getRGBseries("digit." + i);
+            offsets[i] = getOffsets("digit." + i + ".offset");
+            colors[i] = getRGBseries("digit." + i + ".color");
             thresholds[i] = getThreshold("digit." + i);
         }
-        // TODO configure
-        widths = new int[] { 12, 6, 10, 8, 12, 10, 10, 9, 11, 11 };
+        widths = getWidths("digit.widths");
+    }
+
+    protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) {
+        try {
+            if ("jar".equals(uri.getScheme())) {
+                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
+                    final String schemeSpecificPart = uri.getSchemeSpecificPart();
+                    final Path path = fileSystem.getPath(schemeSpecificPart.substring(
+                            schemeSpecificPart.indexOf("!") + 1, schemeSpecificPart.length()));
+                    pathConsumer.accept(path);
+                }
+            } else {
+                final Path path = Paths.get(uri);
+                pathConsumer.accept(path);
+            }
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, String.format("Unable to open uri %s: %s", uri, e.getMessage()), e);
+        }
+    }
+
+    protected final Rectangle findArea(final BufferedImage input, final InputStream in) {
+        Rectangle result = null;
+        try {
+            final BufferedImage tar = ImageIO.read(in);
+            final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar,
+                    1, 0.9);
+            result = doFindAll.isEmpty() ? null : doFindAll.get(0).getBounds();
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, "Unable to read input", e);
+        }
+        return result;
     }
 
     protected final Rectangle findArea(final BufferedImage input, final URL url) {
         Rectangle result = null;
         try {
-            final BufferedImage tar = ImageIO.read(url);
-            final List<RegionMatch> doFindAll = TemplateMatcher.findMatchesByGrayscaleAtOriginalResolution(input, tar,
-                    1, 0.9);
-            result = doFindAll.isEmpty() ? null : doFindAll.get(0).getBounds();
+            result = findArea(input, url.openStream());
         } catch (final IOException e) {
             logger.log(Level.SEVERE, "Unable to read url " + url, e);
         }
@@ -196,16 +270,17 @@ public abstract class Parser {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
             final int[] expected = colors[i][type];
-            final int[] actual = new int[offsets[i].length];
+            final int[] actual = new int[offsets[i][type].length];
             for (int j = 0; j < actual.length; j++) {
-                actual[j] = image.getRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1]);
+                actual[j] = image.getRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1]);
             }
             boolean found = true;
             int count = 0;
             for (int j = 0; j < actual.length; j++) {
                 final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
                 if (learnMode != null) {
-                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], compare ? 0xFF : 0xFF0000);
+                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], compare ? 0xFF
+                            : 0xFF0000);
                 }
                 if (!compare) {
                     found = false;
@@ -225,14 +300,16 @@ public abstract class Parser {
                 if (found) {
                     final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
                     System.out.println(f.getAbsolutePath());
+                    System.out.println();
                 } else {
                     final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
                     System.out.println(f.getAbsolutePath());
+                    System.out.println();
                 }
             }
             if (learnMode != null) {
                 for (int j = 0; j < actual.length; j++) {
-                    image.setRGB(start.x() + offsets[i][j][0], start.y() + offsets[i][j][1], actual[j]);
+                    image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], actual[j]);
                 }
             }
             if (found) {
@@ -250,7 +327,7 @@ public abstract class Parser {
             final Integer i = parseDigit(image, new Point(curr, start.y()), type);
             if (i != null) {
                 no += i;
-                curr += widths[i] - 1;
+                curr += widths[type][i] - 1;
             } else {
                 curr++;
             }
@@ -266,9 +343,9 @@ public abstract class Parser {
         return result;
     }
 
-    protected final Point searchImage(final BufferedImage image, final String resource) {
+    protected final Point searchImage(final BufferedImage image, final URL resource) {
         Point result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        final Rectangle rectangle = findArea(image, resource);
         if (rectangle != null) {
             final int x = rectangle.getLocation().x;
             final int y = rectangle.getLocation().y;
@@ -280,6 +357,17 @@ public abstract class Parser {
     protected final Point searchImageCenter(final BufferedImage image, final String resource) {
         Point result = null;
         final Rectangle rectangle = findArea(image, getClass().getResource(resource));
+        if (rectangle != null) {
+            final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
+            final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);
+            result = new Point(x, y);
+        }
+        return result;
+    }
+
+    protected final Point searchImageCenter(final BufferedImage image, final URL resource) {
+        Point result = null;
+        final Rectangle rectangle = findArea(image, resource);
         if (rectangle != null) {
             final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
             final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);

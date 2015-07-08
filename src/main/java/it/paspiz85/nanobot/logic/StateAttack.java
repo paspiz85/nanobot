@@ -5,7 +5,6 @@ import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
@@ -13,6 +12,7 @@ import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.net.URL;
+import java.util.Arrays;
 import java.util.logging.Level;
 
 import javax.sound.sampled.AudioInputStream;
@@ -43,9 +43,9 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
     }
 
     public boolean doConditionsMatch(final EnemyInfo loot) {
-        int gold = loot.getGold();
-        int elixir = loot.getElixir();
-        int de = loot.getDarkElixir();
+        int gold = loot.getGold() == null ? 0 : loot.getGold();
+        int elixir = loot.getElixir() == null ? 0 : loot.getElixir();
+        int de = loot.getDarkElixir() == null ? 0 : loot.getDarkElixir();
         // if threshold is 0 or not set, do not match based on them
         final int goldThreshold = Settings.instance().getGoldThreshold();
         final int elixirThreshold = Settings.instance().getElixirThreshold();
@@ -68,11 +68,11 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
     @Override
     public void handle(final Context context) throws InterruptedException, BotException {
         while (true) {
-            logger.info("Searching opponent...");
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateAttack is interrupted.");
             }
             final long id = System.currentTimeMillis();
+            logger.info("Found opponent " + id);
             if (Settings.instance().isLogEnemyBase()) {
                 os.saveScreenshot("base_" + id);
             }
@@ -80,12 +80,13 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             boolean doAttack = false;
             try {
                 enemyInfo = getParser().parseEnemyInfo();
-                logger.info(String.format("Opponent %d has %s.", id, enemyInfo.toString()));
+                logger.info(String.format("Detected %s.", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
-                    doAttack = getParser().isCollectorFullBase();
+                    final Boolean isCollectorFullBase = getParser().isCollectorFullBase();
+                    doAttack = isCollectorFullBase == null ? false : isCollectorFullBase;
                     if (!doAttack) {
-                        logger.info(String.format("Opponent %d has empty collectors.", id));
+                        logger.info("Detected empty collectors.");
                     }
                 }
             } catch (final BotBadBaseException e) {
@@ -101,13 +102,15 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     playAttackReady();
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
-                        attackStrategy.attack(enemyInfo, troopsInfo.getTroopsCount());
+                        final int[] troopsCount = troopsInfo.getTroopsCount();
+                        logger.info("Troops count: " + Arrays.toString(troopsCount));
+                        attackStrategy.attack(enemyInfo, troopsCount);
                     }
-                    os.leftClick(Clickable.BUTTON_END_BATTLE.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattle(), true);
                     os.sleepRandom(1200);
-                    os.leftClick(Clickable.BUTTON_END_BATTLE_QUESTION_OKAY.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattleQuestionOK(), true);
                     os.sleepRandom(1200);
-                    os.leftClick(Clickable.BUTTON_END_BATTLE_RETURN_HOME.getPoint(), true);
+                    os.leftClick(getParser().getButtonEndBattleReturnHome(), true);
                     os.sleepRandom(1200);
                 } else {
                     if (enemyInfo.equals(prevLoot)) {

@@ -38,7 +38,7 @@ public final class StateTrainTroops extends State<MainScreenParser> {
                 final int clicks = 10 + OS.RANDOM.nextInt(10);
                 logger.fine("Try training " + clicks + " " + troop.getDescription());
                 for (int i = 0; i < clicks; i++) {
-                    os.leftClick(troop, true);
+                    os.leftClick(troop.getPoint(), true);
                     os.sleepRandom(75);
                 }
             }

@@ -22,6 +22,16 @@ Skipping tests and checkstyle:
 mvn clean install -Dmaven.test.skip=true -Dcheckstyle.skip=true
 ```
 
+##### Running
+```
+java -jar target/nanobot.jar
+```
+
+Or:
+```
+java -jar $(ls -1rt target/*.jar)
+```
+
 ##### Running from source
 ```
 mvn clean compile exec:exec
@@ -29,7 +39,7 @@ mvn clean compile exec:exec
 
 ##### Debugging
 ```
-mvnDebug clean compile exec:exec
+mvn clean compile exec:exec -Ddebug=true
 ```
 
 ##### Releasing

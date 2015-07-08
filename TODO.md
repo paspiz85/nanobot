@@ -1,8 +1,15 @@
 code
-remove clickable and area
+
+remove clickable 
+
+regina arcieri
+
+miglioramento interfaccia
 ###!important### count trofei
+
 controlli remoti
 mail notify
+
 i18n
 statistics
 
@@ -15,3 +22,5 @@ free ci
 
 other
 donation
+
+pubblicità
