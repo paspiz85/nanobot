@@ -4,6 +4,7 @@
 * Git
 * JDK 8
 * Maven
+Check that your SSH key (~/.ssh/id_rsa.pub) is configured on [GitHub] (https://github.com/settings/ssh).
 
 ###Instructions
 Download source code with:
@@ -43,7 +44,10 @@ mvn clean compile exec:exec -Ddebug=true
 ```
 
 ##### Releasing
-Check that your SSH key (~/.ssh/id_rsa.pub) is configured on [GitHub] (https://github.com/settings/ssh).
+To list tags:
+```
+git tag -l
+```
 
 To prepare a release (POM changes and tag create):
 ```
@@ -51,3 +55,12 @@ mvn release:clean release:prepare
 ```
 
 Then continue release on [GitHub] (https://github.com/paspiz85/nanobot/releases) and edit tag adding description and executable jar.
+
+##### Rollback Release
+To delete a tag:
+```
+git tag -d <tagname>
+git push origin :refs/tags/<tagname>
+```
+
+Then continue deleting release on [GitHub] (https://github.com/paspiz85/nanobot/releases).

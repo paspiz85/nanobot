@@ -73,6 +73,8 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             }
             final long id = System.currentTimeMillis();
             logger.info("Found opponent " + id);
+            // to avoid fog
+            os.sleepRandom(500);
             if (Settings.instance().isLogEnemyBase()) {
                 os.saveScreenshot("base_" + id);
             }
