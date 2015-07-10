@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -93,22 +93,22 @@ public class MainController implements ApplicationAwareController, Constants {
     private CheckBox playSoundCheckBox;
 
     @FXML
-    private ComboBox<Clickable> rax1ComboBox;
+    private ComboBox<TroopButton> rax1ComboBox;
 
     @FXML
-    private ComboBox<Clickable> rax2ComboBox;
+    private ComboBox<TroopButton> rax2ComboBox;
 
     @FXML
-    private ComboBox<Clickable> rax3ComboBox;
+    private ComboBox<TroopButton> rax3ComboBox;
 
     @FXML
-    private ComboBox<Clickable> rax4ComboBox;
+    private ComboBox<TroopButton> rax4ComboBox;
 
     @FXML
-    private ComboBox<Clickable> rax5ComboBox;
+    private ComboBox<TroopButton> rax5ComboBox;
 
     @FXML
-    private ComboBox<Clickable> rax6ComboBox;
+    private ComboBox<TroopButton> rax6ComboBox;
 
     @FXML
     private CheckBox saveEnemyCheckBox;
@@ -244,7 +244,7 @@ public class MainController implements ApplicationAwareController, Constants {
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
         autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-        final Clickable[] availableTroops = model.getAvailableTroops();
+        final TroopButton[] availableTroops = model.getAvailableTroops();
         rax1ComboBox.getItems().addAll(availableTroops);
         rax2ComboBox.getItems().addAll(availableTroops);
         rax3ComboBox.getItems().addAll(availableTroops);

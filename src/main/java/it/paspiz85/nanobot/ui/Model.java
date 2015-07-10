@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -77,7 +77,7 @@ public final class Model implements Constants {
         return result;
     }
 
-    public Clickable[] getAvailableTroops() {
+    public TroopButton[] getAvailableTroops() {
         return Settings.instance().getAvailableTroops();
     }
 

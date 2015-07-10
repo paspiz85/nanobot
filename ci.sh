@@ -18,10 +18,11 @@ function notify {
 
 rm -rf $FOLDER
 echo "User: $USER" > $LOGFILE
-git clone $GIT_URL $FOLDER
-pushd $FOLDER
+git clone $GIT_URL $FOLDER >> $LOGFILE
+pushd $FOLDER >> $LOGFILE
 {
-	git checkout $GIT_BRANCH
+	pwd >> $LOGFILE
+	git checkout $GIT_BRANCH >> $LOGFILE
 	mvn --version >> $LOGFILE
 	mvn clean install >> $LOGFILE
 	RESULT=$?

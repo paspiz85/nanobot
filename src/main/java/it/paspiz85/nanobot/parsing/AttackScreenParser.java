@@ -120,6 +120,36 @@ public class AttackScreenParser extends Parser {
         return attackableElixirs;
     }
 
+    public Point getButtonAttackUnit(final int x) {
+        Point result;
+        switch (x) {
+        case 1:
+            result = new Point(72, 600);
+            break;
+        case 2:
+            result = new Point(145, 600);
+            break;
+        case 3:
+            result = new Point(217, 600);
+            break;
+        case 4:
+            result = new Point(288, 600);
+            break;
+        case 5:
+            result = new Point(361, 600);
+            break;
+        case 6:
+            result = new Point(435, 600);
+            break;
+        case 7:
+            result = new Point(505, 600);
+            break;
+        default:
+            throw new IllegalArgumentException(x + "");
+        }
+        return result;
+    }
+
     public Point getButtonEndBattle() {
         return BUTTON_END_BATTLE_RETURN_HOME;
     }

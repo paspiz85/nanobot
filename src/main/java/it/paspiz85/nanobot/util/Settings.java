@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.TroopButton;
 
 import java.util.logging.Level;
 
@@ -51,7 +51,7 @@ public final class Settings {
 
     private Attack attackStrategy = Attack.noStrategy();
 
-    private final Clickable[] availableTroops;
+    private final TroopButton[] availableTroops;
 
     private final SettingsPersister configPersister = new SettingsPersister();
 
@@ -75,23 +75,20 @@ public final class Settings {
 
     private boolean playSound;
 
-    private final Clickable[] raxInfo = new Clickable[] { Clickable.BUTTON_RAX_BARB, Clickable.BUTTON_RAX_BARB,
-            Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_NO_UNIT,
-            Clickable.BUTTON_RAX_NO_UNIT };
+    private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
+            TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
 
     private Settings() {
-        availableTroops = new Clickable[] { Clickable.BUTTON_RAX_NO_UNIT, Clickable.BUTTON_RAX_BARB,
-                Clickable.BUTTON_RAX_ARCHER, Clickable.BUTTON_RAX_GIANT, Clickable.BUTTON_RAX_GOBLIN,
-                Clickable.BUTTON_RAX_WB, Clickable.BUTTON_RAX_BALLOON, Clickable.BUTTON_RAX_WIZARD,
-                Clickable.BUTTON_RAX_HEALER, Clickable.BUTTON_RAX_DRAGON, Clickable.BUTTON_RAX_PEKKA,
-                Clickable.BUTTON_RAX_MINION, Clickable.BUTTON_RAX_HOGRIDER };
+        availableTroops = new TroopButton[] { TroopButton.NO_UNIT, TroopButton.BARB, TroopButton.ARCHER,
+                TroopButton.GIANT, TroopButton.GOBLIN, TroopButton.WB, TroopButton.BALLOON, TroopButton.WIZARD,
+                TroopButton.HEALER, TroopButton.DRAGON, TroopButton.PEKKA, TroopButton.MINION, TroopButton.HOGRIDER };
     }
 
     public Attack getAttackStrategy() {
         return this.attackStrategy;
     }
 
-    public Clickable[] getAvailableTroops() {
+    public TroopButton[] getAvailableTroops() {
         return availableTroops;
     }
 
@@ -115,7 +112,7 @@ public final class Settings {
         return maxThThreshold;
     }
 
-    public Clickable[] getRaxInfo() {
+    public TroopButton[] getRaxInfo() {
         return raxInfo;
     }
 
@@ -184,7 +181,7 @@ public final class Settings {
         final String[] splits = raxInfoProperty.split("\\s*,\\s*");
         for (int i = 0; i < splits.length && i < raxCount; i++) {
             final String split = splits[i];
-            raxInfo[i] = Clickable.fromDescription(split);
+            raxInfo[i] = TroopButton.fromDescription(split);
         }
     }
 }

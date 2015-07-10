@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.parsing.Clickable;
+import it.paspiz85.nanobot.parsing.TroopButton;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -141,10 +141,10 @@ public final class SettingsPersister implements Constants {
             configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(settings.isPlaySound()));
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
-            final Clickable[] raxInfo = settings.getRaxInfo();
+            final TroopButton[] raxInfo = settings.getRaxInfo();
             final StringBuilder raxProp = new StringBuilder();
             for (int i = 0; i < raxInfo.length; i++) {
-                final Clickable unit = raxInfo[i];
+                final TroopButton unit = raxInfo[i];
                 if (i > 0) {
                     raxProp.append(", ");
                 }

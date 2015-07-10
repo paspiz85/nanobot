@@ -24,3 +24,5 @@ other
 donation
 
 pubblicità
+
+test raccolta risorse

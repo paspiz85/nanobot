@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.attack;
 
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.util.Point;
 
 /**
@@ -22,7 +21,7 @@ public final class Attack4SideParallelHalf2Wave extends Attack {
                 int unitCount = attackGroup[unitIdx];
                 unitCount = unitCount / 2 + wave * (unitCount % 2);
                 // select unit
-                os.leftClick(Clickable.getButtonAttackUnit(unitIdx + 1).getPoint(), true);
+                os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
                 os.sleepRandom(100);
                 final Point[] topToRightPoints = pointsBetweenFromToInclusive(TOP, RIGHT, unitCount / 4 + unitCount % 4);
                 final Point[] topToLeftPoints = pointsBetweenFromToInclusive(TOP, LEFT, unitCount / 4);
@@ -45,7 +44,7 @@ public final class Attack4SideParallelHalf2Wave extends Attack {
                 int unitCount = attackGroup[unitIdx];
                 unitCount = unitCount / 2 + wave * (unitCount % 2);
                 // select unit
-                os.leftClick(Clickable.getButtonAttackUnit(unitIdx + 1).getPoint(), true);
+                os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
                 os.sleepRandom(100);
                 final Point[] rightToBottomPoints = pointsBetweenFromToInclusive(RIGHT, BOTTOM_RIGHT, unitCount / 4);
                 final Point[] leftToBottomPoints = pointsBetweenFromToInclusive(LEFT, BOTTOM_LEFT, unitCount / 4);

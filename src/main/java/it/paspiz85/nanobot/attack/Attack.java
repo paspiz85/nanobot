@@ -19,6 +19,8 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
+    private static AttackScreenParser attackScreenParser = Parser.getInstance(AttackScreenParser.class);
+
     private static Attack[] availableStrategies;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
@@ -56,6 +58,10 @@ public abstract class Attack {
             availableStrategies = list.toArray(new Attack[0]);
         }
         return availableStrategies;
+    }
+
+    protected static Point getButtonAttackUnit(final int x) {
+        return attackScreenParser.getButtonAttackUnit(x);
     }
 
     public static Attack manualStrategy() {

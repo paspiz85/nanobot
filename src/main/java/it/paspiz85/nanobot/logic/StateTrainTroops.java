@@ -1,9 +1,9 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.parsing.Clickable;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Settings;
 
 /**
@@ -31,10 +31,10 @@ public final class StateTrainTroops extends State<MainScreenParser> {
     public void handle(final Context context) throws InterruptedException {
         // first barracks must be opened at this point
         logger.info("Training Troops.");
-        final Clickable[] raxInfo = Settings.instance().getRaxInfo();
+        final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
         for (int currRax = 0; currRax < raxInfo.length; currRax++) {
-            final Clickable troop = raxInfo[currRax];
-            if (troop != Clickable.BUTTON_RAX_NO_UNIT) {
+            final TroopButton troop = raxInfo[currRax];
+            if (troop != TroopButton.NO_UNIT) {
                 final int clicks = 10 + OS.RANDOM.nextInt(10);
                 logger.fine("Try training " + clicks + " " + troop.getDescription());
                 for (int i = 0; i < clicks; i++) {
