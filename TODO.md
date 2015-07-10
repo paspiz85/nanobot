@@ -1,28 +1,36 @@
-code
+## Funzionalità
 
-remove clickable 
+count trofei
 
-regina arcieri
-
-miglioramento interfaccia
-###!important### count trofei
+regina degli arcieri
 
 controlli remoti
-mail notify
+notifiche (mail?)
 
-i18n
 statistics
 
-continuos code
-todo annotation
-remove v-ppizzuti
 
-management
-free ci
 
-other
-donation
-
-pubblicità
+## Improvments
 
 test raccolta risorse
+
+aggiustare i settings
+i18n
+
+
+
+## Code cleanup + Documentazione
+
+remove v-ppizzuti
+Continuos Integration
+todo annotation
+
+
+
+## Ricavi
+
+donation
+pubblicità
+
+

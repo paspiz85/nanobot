@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
 /**
  * Abstract implementation of {@link OS}.
  *
- * @author v-ppizzuti
+ * @author paspiz85
  *
  */
 public abstract class AbstractOS implements OS, Constants {
