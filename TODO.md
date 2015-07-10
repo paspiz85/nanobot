@@ -13,6 +13,8 @@ statistics
 
 ## Improvments
 
+gestione errori
+
 test raccolta risorse
 
 aggiustare i settings
