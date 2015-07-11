@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.util;
 
+
 /**
  * Application constants.
  *

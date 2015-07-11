@@ -26,7 +26,7 @@ public abstract class AbstractOS implements OS, Constants {
 
     private static final Area FULLSCREEN = new Area(0, 0, BS_RES_X - 1, BS_RES_Y - 1);
 
-    private final Logger logger = Logger.getLogger(getClass().getName());
+    protected final Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
     public final boolean compareColor(final Color c1, final Color c2, final int var) {

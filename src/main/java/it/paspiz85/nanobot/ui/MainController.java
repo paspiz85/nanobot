@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.ui;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
@@ -24,6 +25,7 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -192,19 +194,18 @@ public class MainController implements ApplicationAwareController, Constants {
     private void initialize() {
         LogHandler.initialize(textArea);
         model.initialize(() -> setupResolution(), () -> updateUI());
-        initLabels();
+        versionLabel.setText(BuildInfo.instance().getName());
+        final String timestamp = BuildInfo.instance().getTimestamp();
+        if (timestamp != null) {
+            final Tooltip tooltip = new Tooltip();
+            tooltip.setText("Build-Timestamp: " + timestamp);
+            versionLabel.setTooltip(tooltip);
+        }
         initLinks();
         initSettingsPane();
         updateUI();
         if (model.checkForUpdate()) {
             updateLabel.setVisible(true);
-        }
-    }
-
-    private void initLabels() {
-        final String version = getClass().getPackage().getImplementationVersion();
-        if (version != null) {
-            versionLabel.setText(NAME + " v" + version);
         }
     }
 

@@ -15,7 +15,6 @@ import java.util.Arrays;
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.NativeHookException;
@@ -70,8 +69,6 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
     }
 
     private HWND handler;
-
-    private final Logger logger = Logger.getLogger(getClass().getName());
 
     private Robot robot;
 
