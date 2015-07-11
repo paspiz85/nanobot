@@ -193,18 +193,10 @@ public class MainController implements ApplicationAwareController, Constants {
         model.initialize(() -> setupResolution(), () -> updateUI());
         if (BuildInfo.instance().checkForUpdate() == null) {
             versionLabel.setText(BuildInfo.instance().getName());
-            final String timestamp = BuildInfo.instance().getTimestamp();
-            if (timestamp != null) {
-                final Tooltip tooltip = new Tooltip();
-                tooltip.setText("Build-Timestamp: " + timestamp);
-                versionLabel.setTooltip(tooltip);
-            }
             githubLink.setText(BuildInfo.instance().getRepositoryUrl());
-            githubLink.setVisible(true);
         } else {
             versionLabel.setText(BuildInfo.instance().getName() + " (UPDATE AVAILABLE!)");
             githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
-            githubLink.setVisible(true);
         }
         githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
@@ -221,6 +213,10 @@ public class MainController implements ApplicationAwareController, Constants {
         });
         initSettingsPane();
         updateUI();
+        final String timestamp = BuildInfo.instance().getTimestamp();
+        if (timestamp != null) {
+            logger.info("Running build " + timestamp);
+        }
     }
 
     private void initSettingsPane() {
