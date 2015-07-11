@@ -74,9 +74,7 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }
-        if (Settings.instance().isTrainTroops()) {
-            training(context);
-        }
+        training(context);
         context.setTroopsInfo(null);
         if (getParser().areCampsFull()) {
             logger.info("Camp is full.");

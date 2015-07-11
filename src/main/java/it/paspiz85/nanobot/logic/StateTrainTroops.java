@@ -29,23 +29,24 @@ public final class StateTrainTroops extends State<MainScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        // first barracks must be opened at this point
-        logger.info("Training Troops.");
-        final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
-        for (int currRax = 0; currRax < raxInfo.length; currRax++) {
-            final TroopButton troop = raxInfo[currRax];
-            if (troop != TroopButton.NO_UNIT) {
-                final int clicks = 10 + OS.RANDOM.nextInt(10);
-                logger.fine("Try training " + clicks + " " + troop.getDescription());
-                for (int i = 0; i < clicks; i++) {
-                    os.leftClick(troop.getPoint(), true);
-                    os.sleepRandom(75);
+        if (Settings.instance().isTrainTroops()) {
+            logger.info("Training Troops.");
+            final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
+            for (int currRax = 0; currRax < raxInfo.length; currRax++) {
+                final TroopButton troop = raxInfo[currRax];
+                if (troop != TroopButton.NO_UNIT) {
+                    final int clicks = 10 + OS.RANDOM.nextInt(10);
+                    logger.fine("Try training " + clicks + " " + troop.getDescription());
+                    for (int i = 0; i < clicks; i++) {
+                        os.leftClick(troop.getPoint(), true);
+                        os.sleepRandom(75);
+                    }
                 }
-            }
-            if (currRax < raxInfo.length - 1) {
-                logger.fine("Goto next barrack");
-                os.leftClick(getParser().getButtonTrainNext(), true);
-                os.sleepRandom(350);
+                if (currRax < raxInfo.length - 1) {
+                    logger.fine("Goto next barrack");
+                    os.leftClick(getParser().getButtonTrainNext(), true);
+                    os.sleepRandom(350);
+                }
             }
         }
         logger.fine("Close Training Troops.");
