@@ -13,6 +13,8 @@ statistics
 
 ## Improvments
 
+data build
+
 gestione errori
 
 test raccolta risorse
