@@ -100,8 +100,7 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws InterruptedException,
-            BotException {
+    public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws Exception {
         logger.info("Starting...");
         if (!setupDone) {
             os.setup();
@@ -123,6 +122,9 @@ public final class Looper {
                 context.setState(StateIdle.instance());
                 loop(context);
             }
+        } catch (Exception e) {
+            logger.log(Level.SEVERE, "looper exception", e);
+            throw e;
         } finally {
             running = false;
             logger.fine("looper stopped");
