@@ -43,48 +43,45 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Label layoutX="12.0" layoutY="20.0" text="Gold more than" GridPane.rowIndex="0" />
-                        <TextField fx:id="goldField" layoutX="127.0" layoutY="15.0" prefHeight="16.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" />
-                        <Label layoutX="12.0" layoutY="50.0" text="Elixir more than" GridPane.rowIndex="1" />
-                        <TextField fx:id="elixirField" layoutX="127.0" layoutY="45.0" prefHeight="16.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Label layoutX="12.0" layoutY="80.0" text="DE more than" GridPane.rowIndex="2" />
-                        <TextField fx:id="deField" layoutX="127.0" layoutY="75.0" prefHeight="26.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                        <Label disable="true" layoutX="12.0" layoutY="110.0" text="Max TH level" GridPane.rowIndex="3" />
-                        <TextField fx:id="maxThField" editable="false" layoutX="127.0" layoutY="105.0" prefHeight="26.0" prefWidth="51.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                        <Label text="Detect empty collectors?" GridPane.rowIndex="4" />
-                        <CheckBox fx:id="detectEmptyCollectorsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-                        <Label text="Match all conditions?" GridPane.rowIndex="5" />
-                        <CheckBox fx:id="isMatchAllConditionsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="5" />
-                        <Label text="Play sound on match?" GridPane.rowIndex="6" />
-                        <CheckBox fx:id="playSoundCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="6" />
-                        <Label text="Log Level" GridPane.rowIndex="7" />
-                        <ComboBox fx:id="logLevelComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
-                        <Label text="Save enemy screenshot?" GridPane.rowIndex="8" />
-                        <CheckBox fx:id="saveEnemyCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="8" />
-      					<Hyperlink fx:id="screenshotLink" layoutX="802.0" layoutY="516.0" text="Screenshot now!" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="8">
-                           <GridPane.margin>
-                              <Insets left="25.0" />
-                           </GridPane.margin></Hyperlink>
-                        <Label text="Auto attack?" GridPane.rowIndex="9" />
-                        <ComboBox fx:id="autoAttackComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-                        <Label text="Rax 1" GridPane.rowIndex="10" />
-                        <Label text="Rax 2" GridPane.rowIndex="11" />
-                        <Label text="Rax 3" GridPane.rowIndex="12" />
-                        <Label text="Rax 4" GridPane.rowIndex="13" />
-                        <Label text="Rax 5" GridPane.rowIndex="14" />
-                        <Label text="Rax 6" GridPane.rowIndex="15" />
-                        <ComboBox fx:id="rax1ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-                        <ComboBox fx:id="rax2ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-                        <ComboBox fx:id="rax3ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-                        <ComboBox fx:id="rax4ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="13" />
-                        <ComboBox fx:id="rax5ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="14" />
-                        <ComboBox fx:id="rax6ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
-                     </children>
+                        <Label text="Collect resources?" GridPane.rowIndex="0" />
+                        <CheckBox fx:id="collectResourcesCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <Label text="Train troops?" GridPane.rowIndex="1" />
+                        <CheckBox fx:id="trainTroopsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Label text="Rax 1" GridPane.rowIndex="2" />
+                        <Label text="Rax 2" GridPane.rowIndex="3" />
+                        <Label text="Rax 3" GridPane.rowIndex="4" />
+                        <Label text="Rax 4" GridPane.rowIndex="5" />
+                        <Label text="Rax 5" GridPane.rowIndex="6" />
+                        <Label text="Rax 6" GridPane.rowIndex="7" />
+                        <ComboBox fx:id="rax1ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <ComboBox fx:id="rax2ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="rax3ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <ComboBox fx:id="rax4ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <ComboBox fx:id="rax5ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="6" />
+                        <ComboBox fx:id="rax6ComboBox" prefWidth="150.0" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                        <Label text="Auto attack?" GridPane.rowIndex="8" />
+                        <ComboBox fx:id="autoAttackComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="8" />
+                        <Label layoutX="12.0" layoutY="20.0" text="Gold more than" GridPane.rowIndex="9" />
+                        <TextField fx:id="goldField" layoutX="127.0" layoutY="15.0" prefHeight="16.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="9" />
+                        <Label layoutX="12.0" layoutY="50.0" text="Elixir more than" GridPane.rowIndex="10" />
+                        <TextField fx:id="elixirField" layoutX="127.0" layoutY="45.0" prefHeight="16.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="10" />
+                        <Label layoutX="12.0" layoutY="80.0" text="DE more than" GridPane.rowIndex="11" />
+                        <TextField fx:id="deField" layoutX="127.0" layoutY="75.0" prefHeight="26.0" prefWidth="51.0" text="0" GridPane.columnIndex="1" GridPane.rowIndex="11" />
+                        <Label disable="true" layoutX="12.0" layoutY="110.0" text="Max TH level" GridPane.rowIndex="12" />
+                        <TextField fx:id="maxThField" editable="false" layoutX="127.0" layoutY="105.0" prefHeight="26.0" prefWidth="51.0" GridPane.columnIndex="1" GridPane.rowIndex="12" />
+                        <Label text="Detect empty collectors?" GridPane.rowIndex="13" />
+                        <CheckBox fx:id="detectEmptyCollectorsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="13" />
+                        <Label text="Match all conditions?" GridPane.rowIndex="14" />
+                        <CheckBox fx:id="isMatchAllConditionsCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="14" />
+                        <Label text="Log Level" GridPane.rowIndex="15" />
+                        <ComboBox fx:id="logLevelComboBox" prefHeight="29.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="15" />
+                    </children>
                   </GridPane>
                   <HBox alignment="CENTER" spacing="10.0" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
                      <children>
                         <Button mnemonicParsing="false" onAction="#handleSaveButtonAction" text="Save" />
                         <Button mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
+                        <Button id="screenshotButton" disable="true" mnemonicParsing="false" onAction="#handleScreenshotButtonAction" text="Screenshot" />
                      </children>
                   </HBox>
                </children>

@@ -38,7 +38,9 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_MAX_TH = "max_th";
 
-    private static final String PROPERTY_PLAY_SOUND = "play_sound";
+    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
+
+    private static final String PROPERTY_COLLECT_RESOURCES = "collect_resources";
 
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
@@ -93,9 +95,13 @@ public final class SettingsPersister implements Constants {
             if (detectEmptyCollectorsProperty != null) {
                 settings.setDetectEmptyCollectors(Boolean.parseBoolean(detectEmptyCollectorsProperty));
             }
-            final String playSoundProperty = configProperties.getProperty(PROPERTY_PLAY_SOUND);
-            if (playSoundProperty != null) {
-                settings.setPlaySound(Boolean.parseBoolean(playSoundProperty));
+            final String collectResourcesProperty = configProperties.getProperty(PROPERTY_COLLECT_RESOURCES);
+            if (collectResourcesProperty != null) {
+                settings.setCollectResources(Boolean.parseBoolean(collectResourcesProperty));
+            }
+            final String trainTroopsProperty = configProperties.getProperty(PROPERTY_TRAIN_TROOPS);
+            if (trainTroopsProperty != null) {
+                settings.setTrainTroops(Boolean.parseBoolean(trainTroopsProperty));
             }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
@@ -116,9 +122,6 @@ public final class SettingsPersister implements Constants {
                 settings.setRaxInfo(raxInfoProperty);
             }
             final String logEnemyBase = configProperties.getProperty(PROPERTY_LOG_ENEMY_BASE);
-            if (logEnemyBase != null) {
-                settings.setLogEnemyBase(Boolean.parseBoolean(logEnemyBase));
-            }
             final String logLevel = configProperties.getProperty(PROPERTY_LOG_LEVEL);
             if (logLevel != null) {
                 settings.setLogLevel(Level.parse(logLevel));
@@ -138,7 +141,8 @@ public final class SettingsPersister implements Constants {
             configProperties.setProperty(PROPERTY_IS_MATCH_ALL_CONDS, String.valueOf(settings.isMatchAllConditions()));
             configProperties.setProperty(PROPERTY_DETECT_EMPTY_COLLECTORS,
                     String.valueOf(settings.isDetectEmptyCollectors()));
-            configProperties.setProperty(PROPERTY_PLAY_SOUND, String.valueOf(settings.isPlaySound()));
+            configProperties.setProperty(PROPERTY_COLLECT_RESOURCES, String.valueOf(settings.isCollectResources()));
+            configProperties.setProperty(PROPERTY_TRAIN_TROOPS, String.valueOf(settings.isTrainTroops()));
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
             final TroopButton[] raxInfo = settings.getRaxInfo();
@@ -151,7 +155,6 @@ public final class SettingsPersister implements Constants {
                 raxProp.append(unit.getDescription());
             }
             configProperties.setProperty(PROPERTY_RAX_INFO, raxProp.toString());
-            configProperties.setProperty(PROPERTY_LOG_ENEMY_BASE, String.valueOf(settings.isLogEnemyBase()));
             configProperties.setProperty(PROPERTY_LOG_LEVEL, String.valueOf(settings.getLogLevel()));
             configProperties.store(fos, null);
             logger.info("Settings are saved.");

@@ -3,7 +3,6 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
@@ -11,13 +10,7 @@ import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
-import java.net.URL;
 import java.util.Arrays;
-import java.util.logging.Level;
-
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 
 /**
  * Attack state is when bot find and attack an opponent.
@@ -75,9 +68,6 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             logger.info("Found opponent " + id);
             // to avoid fog
             os.sleepRandom(500);
-            if (Settings.instance().isLogEnemyBase()) {
-                os.saveScreenshot("base_" + id);
-            }
             EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
@@ -101,7 +91,6 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 // attack or let user manually attack
                 final Attack attackStrategy = Settings.instance().getAttackStrategy();
                 if (attackStrategy != Attack.manualStrategy()) {
-                    playAttackReady();
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
                         final int[] troopsCount = troopsInfo.getTroopsCount();
@@ -117,21 +106,8 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 } else {
                     if (enemyInfo.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
-                    } else {
-                        playAttackReady();
                     }
                     prevLoot = enemyInfo;
-                    /**
-                     * NOTE: minor race condition 1. Matching base found. 2.
-                     * sound is played. 3. prevLoot is set to full available
-                     * loot 4. Thread.sleep(XXX) 5. StateIdle -> next is
-                     * available to state is set back to attack. 6. user drops
-                     * units, loot number changes AFTER state is set BEFORE this
-                     * state parsed the image. 7. loot is different now. 8.
-                     * sound is played again which is wrong. 9. won't happen
-                     * more than once since next button won't be available after
-                     * attack has started.
-                     */
                     Thread.sleep(5000);
                 }
                 break;
@@ -147,21 +123,5 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             }
         }
         context.setState(StateIdle.instance());
-    }
-
-    void playAttackReady() {
-        if (!Settings.instance().isPlaySound()) {
-            return;
-        }
-        final String[] clips = new String[] { "../audio/fight.wav", "../audio/finishim.wav", "../audio/getoverhere.wav" };
-        final URL resource = this.getClass().getResource(clips[OS.RANDOM.nextInt(clips.length)]);
-        try (Clip clip = AudioSystem.getClip();
-                AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(resource)) {
-            clip.open(audioInputStream);
-            clip.start();
-            Thread.sleep(2000);
-        } catch (final Exception ex) {
-            logger.log(Level.WARNING, "Unable to play audio.", ex);
-        }
     }
 }

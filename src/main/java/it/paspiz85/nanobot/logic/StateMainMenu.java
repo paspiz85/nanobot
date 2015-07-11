@@ -6,6 +6,7 @@ import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Arrays;
 
@@ -70,8 +71,12 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         }
         os.zoomUp();
         os.sleepRandom(350);
-        collecting(context);
-        training(context);
+        if (Settings.instance().isCollectResources()) {
+            collecting(context);
+        }
+        if (Settings.instance().isTrainTroops()) {
+            training(context);
+        }
         context.setTroopsInfo(null);
         if (getParser().areCampsFull()) {
             logger.info("Camp is full.");

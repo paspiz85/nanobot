@@ -57,23 +57,23 @@ public final class Settings {
 
     private int darkElixirThreshold;
 
-    private boolean detectEmptyCollectors;
+    private boolean trainTroops = true;
 
-    private int elixirThreshold;
+    private boolean collectResources = true;
 
-    private int goldThreshold;
+    private boolean detectEmptyCollectors = true;
+
+    private int elixirThreshold = 100000;
+
+    private int goldThreshold = 100000;
 
     private boolean isInitialized;
-
-    private boolean logEnemyBase;
 
     private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
 
     private int maxThThreshold;
-
-    private boolean playSound;
 
     private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
             TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
@@ -116,20 +116,20 @@ public final class Settings {
         return raxInfo;
     }
 
-    public boolean isDetectEmptyCollectors() {
-        return detectEmptyCollectors;
+    public boolean isCollectResources() {
+        return collectResources;
     }
 
-    public boolean isLogEnemyBase() {
-        return logEnemyBase;
+    public boolean isDetectEmptyCollectors() {
+        return detectEmptyCollectors;
     }
 
     public boolean isMatchAllConditions() {
         return matchAllConditions;
     }
 
-    public boolean isPlaySound() {
-        return playSound;
+    public boolean isTrainTroops() {
+        return trainTroops;
     }
 
     public void save() {
@@ -138,6 +138,10 @@ public final class Settings {
 
     public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
+    }
+
+    public void setCollectResources(final boolean collectResources) {
+        this.collectResources = collectResources;
     }
 
     public void setDarkElixirThreshold(final int darkElixirThreshold) {
@@ -156,10 +160,6 @@ public final class Settings {
         this.goldThreshold = goldThreshold;
     }
 
-    public void setLogEnemyBase(final boolean logEnemyBase) {
-        this.logEnemyBase = logEnemyBase;
-    }
-
     public void setLogLevel(final Level logLevel) {
         this.logLevel = logLevel;
     }
@@ -172,10 +172,6 @@ public final class Settings {
         this.maxThThreshold = maxThThreshold;
     }
 
-    public void setPlaySound(final boolean playSound) {
-        this.playSound = playSound;
-    }
-
     public void setRaxInfo(final String raxInfoProperty) {
         final int raxCount = raxInfo.length;
         final String[] splits = raxInfoProperty.split("\\s*,\\s*");
@@ -183,5 +179,9 @@ public final class Settings {
             final String split = splits[i];
             raxInfo[i] = TroopButton.fromDescription(split);
         }
+    }
+
+    public void setTrainTroops(final boolean trainTroops) {
+        this.trainTroops = trainTroops;
     }
 }

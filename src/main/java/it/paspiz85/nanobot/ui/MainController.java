@@ -25,7 +25,6 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -92,7 +91,10 @@ public class MainController implements ApplicationAwareController, Constants {
     private final OS os = DEFAULT_OS;
 
     @FXML
-    private CheckBox playSoundCheckBox;
+    private CheckBox collectResourcesCheckBox;
+
+    @FXML
+    private CheckBox trainTroopsCheckBox;
 
     @FXML
     private ComboBox<TroopButton> rax1ComboBox;
@@ -113,12 +115,6 @@ public class MainController implements ApplicationAwareController, Constants {
     private ComboBox<TroopButton> rax6ComboBox;
 
     @FXML
-    private CheckBox saveEnemyCheckBox;
-
-    @FXML
-    private Hyperlink screenshotLink;
-
-    @FXML
     private Button settingsButton;
 
     @FXML
@@ -129,6 +125,9 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private Button stopButton;
+
+    @FXML
+    private Button screenshotButton;
 
     @FXML
     private TextArea textArea;
@@ -158,9 +157,9 @@ public class MainController implements ApplicationAwareController, Constants {
             }
             settings.setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
             settings.setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
-            settings.setPlaySound(playSoundCheckBox.isSelected());
+            settings.setCollectResources(collectResourcesCheckBox.isSelected());
+            settings.setTrainTroops(trainTroopsCheckBox.isSelected());
             settings.setLogLevel(logLevelComboBox.getValue());
-            settings.setLogEnemyBase(saveEnemyCheckBox.isSelected());
             settings.setAttackStrategy(autoAttackComboBox.getValue());
             settings.getRaxInfo()[0] = rax1ComboBox.getValue();
             settings.getRaxInfo()[1] = rax2ComboBox.getValue();
@@ -170,6 +169,11 @@ public class MainController implements ApplicationAwareController, Constants {
             settings.getRaxInfo()[5] = rax6ComboBox.getValue();
         });
         showSettings(false);
+    }
+
+    @FXML
+    public void handleScreenshotButtonAction() {
+        model.saveScreenshot();
     }
 
     @FXML
@@ -207,9 +211,6 @@ public class MainController implements ApplicationAwareController, Constants {
         donateLink.setOnAction(event -> {
             application.getHostServices().showDocument(BuildInfo.instance().getDonateUrl());
             donateLink.setVisited(false);
-        });
-        screenshotLink.setOnAction(event -> {
-            model.saveScreenshot();
         });
         initSettingsPane();
         updateUI();
@@ -309,7 +310,7 @@ public class MainController implements ApplicationAwareController, Constants {
         stopButton.setDisable(!running);
         final boolean setupDone = model.isSetupDone();
         if (setupDone) {
-            screenshotLink.setVisible(true);
+            screenshotButton.setDisable(false);
         }
         final Settings settings = model.loadSettings();
         goldField.setText(settings.getGoldThreshold() + "");
@@ -318,9 +319,9 @@ public class MainController implements ApplicationAwareController, Constants {
         maxThField.setText(settings.getMaxThThreshold() + "");
         detectEmptyCollectorsCheckBox.setSelected(settings.isDetectEmptyCollectors());
         isMatchAllConditionsCheckBox.setSelected(settings.isMatchAllConditions());
-        playSoundCheckBox.setSelected(settings.isPlaySound());
+        collectResourcesCheckBox.setSelected(settings.isCollectResources());
+        trainTroopsCheckBox.setSelected(settings.isTrainTroops());
         logLevelComboBox.getSelectionModel().select(settings.getLogLevel());
-        saveEnemyCheckBox.setSelected(settings.isLogEnemyBase());
         autoAttackComboBox.getSelectionModel().select(settings.getAttackStrategy());
         rax1ComboBox.getSelectionModel().select(settings.getRaxInfo()[0]);
         rax2ComboBox.getSelectionModel().select(settings.getRaxInfo()[1]);
