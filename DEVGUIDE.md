@@ -55,6 +55,7 @@ mvn release:clean release:prepare
 ```
 
 Then continue release on [GitHub] (https://github.com/paspiz85/nanobot/releases) and edit tag adding description and executable jar.
+ATTENTION: name resease with v prefix. For example 1.1.0 must be v1.1.0
 
 ##### Rollback Release
 To delete a tag:

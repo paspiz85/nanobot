@@ -16,11 +16,6 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 
-import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.kohsuke.github.GHRelease;
-import org.kohsuke.github.GHRepository;
-import org.kohsuke.github.GitHub;
-
 /**
  * Bot model.
  *
@@ -49,32 +44,6 @@ public final class Model implements Constants {
     private Service<Void> runningService;
 
     private Model() {
-    }
-
-    /**
-     * GitHub dependency is only used here and unused parts are excluded. Make
-     * sure it works fine if it is used somewhere else.
-     */
-    public boolean checkForUpdate() {
-        boolean result = false;
-        try {
-            final String current = getClass().getPackage().getImplementationVersion();
-            if (current != null) {
-                final DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
-                final GitHub github = GitHub.connectAnonymously();
-                final GHRepository repository = github.getRepository(REPOSITORY_NAME);
-                for (final GHRelease r : repository.listReleases()) {
-                    final String release = r.getName().substring(1);
-                    final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-                    if (currentVersion.compareTo(releaseVersion) < 0) {
-                        result = true;
-                    }
-                }
-            }
-        } catch (final Exception e) {
-            logger.log(Level.WARNING, "Unable to get latest version", e);
-        }
-        return result;
     }
 
     public TroopButton[] getAvailableTroops() {

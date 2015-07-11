@@ -134,9 +134,6 @@ public class MainController implements ApplicationAwareController, Constants {
     private TextArea textArea;
 
     @FXML
-    private Label updateLabel;
-
-    @FXML
     private Label versionLabel;
 
     @FXML
@@ -194,37 +191,36 @@ public class MainController implements ApplicationAwareController, Constants {
     private void initialize() {
         LogHandler.initialize(textArea);
         model.initialize(() -> setupResolution(), () -> updateUI());
-        versionLabel.setText(BuildInfo.instance().getName());
-        final String timestamp = BuildInfo.instance().getTimestamp();
-        if (timestamp != null) {
-            final Tooltip tooltip = new Tooltip();
-            tooltip.setText("Build-Timestamp: " + timestamp);
-            versionLabel.setTooltip(tooltip);
+        if (BuildInfo.instance().checkForUpdate() == null) {
+            versionLabel.setText(BuildInfo.instance().getName());
+            final String timestamp = BuildInfo.instance().getTimestamp();
+            if (timestamp != null) {
+                final Tooltip tooltip = new Tooltip();
+                tooltip.setText("Build-Timestamp: " + timestamp);
+                versionLabel.setTooltip(tooltip);
+            }
+            githubLink.setText(BuildInfo.instance().getRepositoryUrl());
+            githubLink.setVisible(true);
+        } else {
+            versionLabel.setText(BuildInfo.instance().getName() + " (UPDATE AVAILABLE!)");
+            githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
+            githubLink.setVisible(true);
         }
-        initLinks();
-        initSettingsPane();
-        updateUI();
-        if (model.checkForUpdate()) {
-            updateLabel.setVisible(true);
-        }
-    }
-
-    private void initLinks() {
         githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
         });
-        githubLink.setText(REPOSITORY_URL);
-        githubLink.setVisible(true);
         final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
         donateLink.setGraphic(new ImageView(heartIcon));
         donateLink.setOnAction(event -> {
-            application.getHostServices().showDocument(REPOSITORY_URL + "#donate");
+            application.getHostServices().showDocument(BuildInfo.instance().getDonateUrl());
             donateLink.setVisited(false);
         });
         screenshotLink.setOnAction(event -> {
             model.saveScreenshot();
         });
+        initSettingsPane();
+        updateUI();
     }
 
     private void initSettingsPane() {

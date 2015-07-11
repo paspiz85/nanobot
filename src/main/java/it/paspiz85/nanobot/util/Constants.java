@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.util;
 
-
 /**
  * Application constants.
  *
@@ -17,8 +16,4 @@ public interface Constants {
     String IMG_FOLDER = "img";
 
     String NAME = "NanoBot";
-
-    String REPOSITORY_NAME = "paspiz85/nanobot";
-
-    String REPOSITORY_URL = "https://github.com/" + REPOSITORY_NAME;
 }
