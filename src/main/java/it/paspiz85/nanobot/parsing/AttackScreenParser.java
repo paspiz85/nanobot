@@ -35,9 +35,7 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public class AttackScreenParser extends Parser {
 
-    private static final ColoredPoint BUTTON_FIND_MATCH = new ColoredPoint(148, 529, new Color(0xD84B00));
-
-    private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
+    private static final Area AREA_NEXT_BUTTON = new Area(692, 488, 739, 547);
 
     private static final Point BUTTON_END_BATTLE = getPoint("point.button.end_battle");
 
@@ -45,9 +43,15 @@ public class AttackScreenParser extends Parser {
 
     private static final Point BUTTON_END_BATTLE_RETURN_HOME = getPoint("point.button.end_battle.return_home");
 
-    private static final Color DARKCHECK_COLOR_YES = getColor("darkcheck.color.yes");
+    private static final ColoredPoint BUTTON_FIND_MATCH = new ColoredPoint(148, 529, new Color(0xD84B00));
+
+    private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
 
     private static final Color DARKCHECK_COLOR_NO = getColor("darkcheck.color.no");
+
+    private static final Color DARKCHECK_COLOR_YES = getColor("darkcheck.color.yes");
+
+    private static final Point DARKCHECK_POINT = getPoint("darkcheck.point");
 
     private static final Area ENEMY_BASE = new Area(31, 0, 831, 510);
 
@@ -63,15 +67,11 @@ public class AttackScreenParser extends Parser {
 
     protected static final Area ENEMY_LOOT = new Area(17, 68, 138, 240);
 
-    private static final Area AREA_NEXT_BUTTON = new Area(692, 488, 739, 547);
-
     private static final Point POINT_DARK_ELIXIR = new Point(33, 57 + 2);
 
     private static final Point POINT_ELIXIR_HAS_DARK = new Point(33, 29 + 2);
 
     private static final Point POINT_ELIXIR_HASNT_DARK = new Point(33, 30);
-
-    private static final Point DARKCHECK_POINT = getPoint("darkcheck.point");
 
     private static final Point POINT_GOLD_HAS_DARK = getPoint("point.gold.hasdark");
 

@@ -53,13 +53,11 @@ public final class Settings {
 
     private final TroopButton[] availableTroops;
 
+    private boolean collectResources = true;
+
     private final SettingsPersister configPersister = new SettingsPersister();
 
     private int darkElixirThreshold;
-
-    private boolean trainTroops = true;
-
-    private boolean collectResources = true;
 
     private boolean detectEmptyCollectors = true;
 
@@ -77,6 +75,8 @@ public final class Settings {
 
     private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
             TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
+
+    private boolean trainTroops = true;
 
     private Settings() {
         availableTroops = new TroopButton[] { TroopButton.NO_UNIT, TroopButton.BARB, TroopButton.ARCHER,

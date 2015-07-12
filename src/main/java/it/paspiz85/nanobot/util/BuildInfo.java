@@ -24,13 +24,13 @@ public final class BuildInfo implements Constants {
 
     private static final String DONATE_PATH = "#donate";
 
-    private static final String RELEASES_LATEST_PATH = "/releases/latest";
-
     private static final String DONATE_URL = "http://rawgit.com/paspiz85/nanobot/master/donate.html";
 
     private static final String GITHUB_URL = "https://github.com/";
 
     private static BuildInfo instance;
+
+    private static final String RELEASES_LATEST_PATH = "/releases/latest";
 
     private static final String REPOSITORY_NAME = "paspiz85/nanobot";
 

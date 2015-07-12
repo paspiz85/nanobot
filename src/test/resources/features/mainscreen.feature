@@ -37,11 +37,11 @@ Feature: parsing main screen
 
   Scenario Outline: search full gold mine
     Given screenshot saved as <imagefile>
-    When searching full gold mine point
-    Then point found at <coords>
+    When searching full gold mine points
+    Then points found are <pointset>
 
     Examples:
-      | imagefile                                      | coords    |
+      | imagefile                                      | pointset  |
       | classpath:/features/img/main_1435696574573.png | [449,436] |
       | classpath:/features/img/main_1435698446657.png | [261,225] |
       | classpath:/features/img/main_1435699320137.png | [618,281] |
@@ -51,11 +51,11 @@ Feature: parsing main screen
 
   Scenario Outline: search full elixir collector
     Given screenshot saved as <imagefile>
-    When searching full elixir collector point
-    Then point found at <coords>
+    When searching full elixir collector points
+    Then points found are <pointset>
 
     Examples:
-      | imagefile                                      | coords    |
+      | imagefile                                      | pointset  |
       | classpath:/features/img/main_1435603470723.png | [458,193] |
       | classpath:/features/img/main_1435699887290.png | [289,195] |
       | classpath:/features/img/main_1435700716498.png | [279,370] |
@@ -64,11 +64,11 @@ Feature: parsing main screen
 
   Scenario Outline: search full dark elixir drill
     Given screenshot saved as <imagefile>
-    When searching full dark elixir drill point
-    Then point found at <coords>
+    When searching full dark elixir drill points
+    Then points found are <pointset>
 
     Examples:
-      | imagefile                                      | coords    |
+      | imagefile                                      | pointset  |
       | classpath:/features/img/main_1435601238653.png | [326,325] |
       | classpath:/features/img/main_1435603470723.png | null      |
 

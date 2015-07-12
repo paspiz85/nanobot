@@ -24,29 +24,29 @@ import java.util.stream.Stream;
  */
 public final class MainScreenParser extends Parser {
 
-    private static final Area AREA_BUTTON_TROOPS = getArea("area.button.troops");
+    private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
     private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
 
-    private static final Area AREA_TROOPS = getArea("area.troops");
+    private static final Area AREA_BUTTON_TROOPS = getArea("area.button.troops");
 
     private static final Area AREA_EROES = getArea("area.eroes");
 
-    private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
+    private static final Area AREA_TROOPS = getArea("area.troops");
 
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
-
-    private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
 
     private static final ColoredPoint BUTTON_WAS_ATTACKED_OKAY = new ColoredPoint(432, 507, new Color(0x5CAC10));
 
     private static final ColoredPoint POINT_CAMPS_FULL = new ColoredPoint(404, 162, new Color(0xE27F81));
 
-    private Point buttonTroops;
+    private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
+
+    private Point buttonAttack;
 
     private Point buttonTrainClose;
 
-    private Point buttonAttack;
+    private Point buttonTroops;
 
     MainScreenParser() {
     }

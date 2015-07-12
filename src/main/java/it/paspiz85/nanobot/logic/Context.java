@@ -21,9 +21,9 @@ public final class Context {
 
     private int trainCount;
 
-    private boolean waitDone;
-
     private TroopsInfo troopsInfo;
+
+    private boolean waitDone;
 
     public int getTrainCount() {
         return trainCount;

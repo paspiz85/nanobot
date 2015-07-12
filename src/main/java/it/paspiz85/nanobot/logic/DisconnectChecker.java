@@ -16,11 +16,11 @@ import java.util.logging.Logger;
  */
 public class DisconnectChecker implements Runnable {
 
+    private static final OS DEFAAULT_OS = OS.instance();
+
     private static final ColoredPoint UNIT_BLUESTACKS_DC = new ColoredPoint(699, 343, new Color(0x282828));
 
     private static final Point UNIT_RECONNECT = new Point(435, 400);
-
-    private static final OS DEFAAULT_OS = OS.instance();
 
     private final Context context;
 

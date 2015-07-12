@@ -6,7 +6,7 @@ package it.paspiz85.nanobot.util;
  * @author paspiz85
  *
  */
-public class Point {
+public class Point implements Comparable<Point> {
 
     private final int x;
 
@@ -15,6 +15,11 @@ public class Point {
     public Point(final int x, final int y) {
         this.x = x;
         this.y = y;
+    }
+
+    @Override
+    public int compareTo(final Point o) {
+        return this.x != o.x ? this.x - o.y : this.y - o.y;
     }
 
     @Override

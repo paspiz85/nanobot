@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.Arrays;
+import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
@@ -78,6 +79,8 @@ public class StepDefinitions {
 
     private Point point;
 
+    private TreeSet<Point> pointset;
+
     private BufferedImage screenshot;
 
     private int[] troopsCount;
@@ -97,6 +100,18 @@ public class StepDefinitions {
             }
             break;
         }
+    }
+
+    private void markPointFound(final int x, final int y, final int rgb) {
+        screenshot.setRGB(x, y, rgb);
+        screenshot.setRGB(x - 1, y - 1, rgb);
+        screenshot.setRGB(x - 2, y - 2, rgb);
+        screenshot.setRGB(x - 1, y + 1, rgb);
+        screenshot.setRGB(x - 2, y + 2, rgb);
+        screenshot.setRGB(x + 1, y - 1, rgb);
+        screenshot.setRGB(x + 2, y - 2, rgb);
+        screenshot.setRGB(x + 1, y + 1, rgb);
+        screenshot.setRGB(x + 2, y + 2, rgb);
     }
 
     private Point parsePoint(final String coords) {
@@ -146,6 +161,19 @@ public class StepDefinitions {
     public void thenPointFoundAt(final String coords) {
         final Point point = parsePoint(coords);
         Assert.assertEquals(point, this.point);
+    }
+
+    @Then("^points found are (.*)$")
+    public void thenPointsFoundAre(final String pointset) {
+        final String[] coords = pointset.split(";");
+        final TreeSet<Point> expected = new TreeSet<Point>();
+        for (final String c : coords) {
+            final Point point = parsePoint(c);
+            if (point != null) {
+                expected.add(point);
+            }
+        }
+        Assert.assertEquals(expected, this.pointset);
     }
 
     @Then("^troops count is (.*)$")
@@ -205,22 +233,46 @@ public class StepDefinitions {
         point = Parser.getInstance(MainScreenParser.class).searchButtonTrainClose();
     }
 
-    @When("^searching full dark elixir drill point$")
-    public void whenSearchingFullDarkElixirDrillPoint() throws BotBadBaseException {
+    @When("^searching full dark elixir drill points$")
+    public void whenSearchingFullDarkElixirDrillPoints() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+        pointset = new TreeSet<>();
+        while (true) {
+            final Point point = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+            if (point == null) {
+                break;
+            }
+            pointset.add(point);
+            markPointFound(point.x(), point.y(), 0xFFFFFF);
+        }
     }
 
-    @When("^searching full elixir collector point$")
-    public void whenSearchingFullElixirCollectorPoint() throws BotBadBaseException {
+    @When("^searching full elixir collector points$")
+    public void whenSearchingFullElixirCollectorPoints() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+        pointset = new TreeSet<>();
+        while (true) {
+            final Point point = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+            if (point == null) {
+                break;
+            }
+            pointset.add(point);
+            markPointFound(point.x(), point.y(), 0xFFFF00);
+        }
     }
 
-    @When("^searching full gold mine point$")
-    public void whenSearchingFullGoldMinePoint() throws BotBadBaseException {
+    @When("^searching full gold mine points$")
+    public void whenSearchingFullGoldMinePoints() throws BotBadBaseException {
         OSMock.instance.setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+        pointset = new TreeSet<>();
+        while (true) {
+            final Point point = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+            if (point == null) {
+                break;
+            }
+            pointset.add(point);
+            markPointFound(point.x(), point.y(), 0xFF);
+        }
     }
 
     @When("^searching next button point$")

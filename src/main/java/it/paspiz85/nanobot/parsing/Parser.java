@@ -198,20 +198,20 @@ public abstract class Parser {
 
     private final int[][][] colors;
 
+    /*
+     * Set this var for debugging image screen parsing
+     */
+    private final Integer learnMode = null;
+
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private final int[][][][] offsets;
 
     protected final OS os = DEFAULT_OS;
 
-    private final int[][] widths;
-
     private final int[] thresholds;
 
-    /*
-     * Set this var for debugging image screen parsing
-     */
-    private final Integer learnMode = null;
+    private final int[][] widths;
 
     Parser() {
         offsets = new int[10][][][];

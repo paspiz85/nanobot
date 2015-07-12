@@ -22,6 +22,8 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_ATTACK_STRAT = "attack_strat";
 
+    private static final String PROPERTY_COLLECT_RESOURCES = "collect_resources";
+
     private static final String PROPERTY_DE = "de";
 
     private static final String PROPERTY_DETECT_EMPTY_COLLECTORS = "detect_empty_collectors";
@@ -38,11 +40,9 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_MAX_TH = "max_th";
 
-    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
-
-    private static final String PROPERTY_COLLECT_RESOURCES = "collect_resources";
-
     private static final String PROPERTY_RAX_INFO = "rax_info";
+
+    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
 
     private File configFile;
 

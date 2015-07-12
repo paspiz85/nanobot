@@ -46,6 +46,9 @@ public class MainController implements ApplicationAwareController, Constants {
     private ComboBox<Attack> autoAttackComboBox;
 
     @FXML
+    private CheckBox collectResourcesCheckBox;
+
+    @FXML
     private GridPane configGridPane;
 
     @FXML
@@ -91,12 +94,6 @@ public class MainController implements ApplicationAwareController, Constants {
     private final OS os = DEFAULT_OS;
 
     @FXML
-    private CheckBox collectResourcesCheckBox;
-
-    @FXML
-    private CheckBox trainTroopsCheckBox;
-
-    @FXML
     private ComboBox<TroopButton> rax1ComboBox;
 
     @FXML
@@ -115,6 +112,9 @@ public class MainController implements ApplicationAwareController, Constants {
     private ComboBox<TroopButton> rax6ComboBox;
 
     @FXML
+    private Button screenshotButton;
+
+    @FXML
     private Button settingsButton;
 
     @FXML
@@ -127,10 +127,10 @@ public class MainController implements ApplicationAwareController, Constants {
     private Button stopButton;
 
     @FXML
-    private Button screenshotButton;
+    private TextArea textArea;
 
     @FXML
-    private TextArea textArea;
+    private CheckBox trainTroopsCheckBox;
 
     @FXML
     private Label versionLabel;

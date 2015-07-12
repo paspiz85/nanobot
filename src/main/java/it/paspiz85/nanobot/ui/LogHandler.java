@@ -54,11 +54,11 @@ public class LogHandler extends Handler {
 
     private final Formatter formatter = new LogFormatter();
 
-    private TextArea textArea;
+    private int lastCleanPosition;
 
     private Long lastCleanTime;
 
-    private int lastCleanPosition;
+    private TextArea textArea;
 
     private synchronized void append(final LogRecord record) {
         textArea.appendText(formatter.format(record));
