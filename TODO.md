@@ -6,8 +6,6 @@
 
 hide config
 
-gestione errori via mail paspiz85+nanobot.info 
-
 test raccolta risorse
 
 
