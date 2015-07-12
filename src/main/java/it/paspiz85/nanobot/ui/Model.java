@@ -9,7 +9,6 @@ import it.paspiz85.nanobot.util.Settings;
 import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.concurrent.Service;
@@ -77,8 +76,7 @@ public final class Model implements Constants {
         });
         runningService.setOnFailed(event -> {
             runningService.reset();
-            logger.log(Level.SEVERE, "Running is failed: " + runningService.getException().getMessage(),
-                    runningService.getException());
+            logger.warning("Running is failed.");
         });
     }
 

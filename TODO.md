@@ -1,3 +1,15 @@
+## Bugfix
+
+Ridurre dimensione logarea
+
+
+## Improvments
+
+gestione errori via mail paspiz85+nanobot.info 
+
+test raccolta risorse
+
+
 ## Funzionalità
 
 count trofei
@@ -9,17 +21,7 @@ notifiche (mail?)
 
 statistics
 
-
-
-## Improvments
-
-gestione errori
-
-test raccolta risorse
-
-aggiustare i settings
 i18n
-
 
 
 ## Code cleanup + Documentazione

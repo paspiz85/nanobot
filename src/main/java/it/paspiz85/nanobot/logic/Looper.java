@@ -101,37 +101,42 @@ public final class Looper {
     }
 
     public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws Exception {
-        logger.info("Starting...");
-        if (!setupDone) {
-            os.setup();
-            setupDone = true;
-        }
-        os.setupResolution(setupResolution);
-        logger.info("Setup is successful.");
-        final Context context = new Context();
-        logger.fine("Starting disconnect detector...");
-        final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),
-                "DisconnectCheckerThread");
-        dcThread.setDaemon(true);
-        dcThread.start();
         try {
-            running = true;
-            logger.fine("looper running");
-            updateUI.run();
-            while (true) {
-                context.setState(StateIdle.instance());
-                loop(context);
+            logger.info("Starting...");
+            if (!setupDone) {
+                os.setup();
+                setupDone = true;
             }
-        } catch (Exception e) {
-            logger.log(Level.SEVERE, "looper exception", e);
+            os.setupResolution(setupResolution);
+            logger.info("Setup is successful.");
+            final Context context = new Context();
+            logger.fine("Starting disconnect detector...");
+            final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),
+                    "DisconnectCheckerThread");
+            dcThread.setDaemon(true);
+            dcThread.start();
+            try {
+                running = true;
+                logger.fine("looper running");
+                updateUI.run();
+                while (true) {
+                    context.setState(StateIdle.instance());
+                    loop(context);
+                }
+            } finally {
+                running = false;
+                logger.fine("looper stopped");
+                updateUI.run();
+                dcThread.interrupt();
+                this.waitingForDcChecker = false;
+                context.setWaitDone(false);
+            }
+        } catch (final BotException e) {
+            logger.log(Level.WARNING, e.getMessage());
             throw e;
-        } finally {
-            running = false;
-            logger.fine("looper stopped");
-            updateUI.run();
-            dcThread.interrupt();
-            this.waitingForDcChecker = false;
-            context.setWaitDone(false);
+        } catch (final Exception e) {
+            logger.log(Level.SEVERE, "Got exception: " + e.getMessage(), e);
+            throw e;
         }
     }
 }

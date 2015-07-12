@@ -42,6 +42,8 @@ public class LogHandler extends Handler {
         }
     }
 
+    private static final long CLEAN_INTERVAL = 2 * 60 * 60 * 1000;
+
     static void initialize(final TextArea textArea) {
         for (final Handler h : Logger.getLogger("").getHandlers()) {
             if (h instanceof LogHandler) {
@@ -53,6 +55,20 @@ public class LogHandler extends Handler {
     private final Formatter formatter = new LogFormatter();
 
     private TextArea textArea;
+
+    private Long lastCleanTime = null;
+
+    private int lastCleanPosition = 0;
+
+    private synchronized void append(final LogRecord record) {
+        textArea.appendText(formatter.format(record));
+        final long t = System.currentTimeMillis();
+        if (lastCleanTime == null || lastCleanTime + CLEAN_INTERVAL < t) {
+            textArea.deleteText(0, lastCleanPosition);
+            lastCleanTime = t;
+            lastCleanPosition = textArea.getLength();
+        }
+    }
 
     @Override
     public void close() throws SecurityException {
@@ -66,7 +82,7 @@ public class LogHandler extends Handler {
     @Override
     public void publish(final LogRecord record) {
         if (textArea != null && record.getLevel().intValue() >= Settings.instance().getLogLevel().intValue()) {
-            Platform.runLater(() -> textArea.appendText(formatter.format(record)));
+            Platform.runLater(() -> append(record));
         }
     }
 
