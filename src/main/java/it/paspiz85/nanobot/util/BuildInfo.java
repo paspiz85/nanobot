@@ -26,6 +26,8 @@ public final class BuildInfo implements Constants {
 
     private static final String RELEASES_LATEST_PATH = "/releases/latest";
 
+    private static final String DONATE_URL = "http://rawgit.com/paspiz85/nanobot/master/donate.html";
+
     private static final String GITHUB_URL = "https://github.com/";
 
     private static BuildInfo instance;
@@ -77,7 +79,7 @@ public final class BuildInfo implements Constants {
     }
 
     public String getDonateUrl() {
-        return GITHUB_URL + REPOSITORY_NAME + DONATE_PATH;
+        return DONATE_URL;
     }
 
     public String getLatestVersion() {

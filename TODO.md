@@ -34,7 +34,7 @@ todo annotation
 
 ## Ricavi
 
-donation
+donation page
 pubblicità
 
 
