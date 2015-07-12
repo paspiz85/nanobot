@@ -56,9 +56,9 @@ public class LogHandler extends Handler {
 
     private TextArea textArea;
 
-    private Long lastCleanTime = null;
+    private Long lastCleanTime;
 
-    private int lastCleanPosition = 0;
+    private int lastCleanPosition;
 
     private synchronized void append(final LogRecord record) {
         textArea.appendText(formatter.format(record));
