@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.web.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.text.*?>
@@ -10,12 +11,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="640.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.paspiz85.nanobot.ui.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="it.paspiz85.nanobot.ui.MainController">
    <children>
       <Hyperlink fx:id="donateLink" layoutX="14.0" layoutY="511.0" text="Donate!" textFill="#ec725a" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="10.0" />
       <Label fx:id="versionLabel" layoutX="836.0" layoutY="5.0" text="NanoBot vX.X.X" textFill="#b91010" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="10.0" />
       <Hyperlink fx:id="githubLink" layoutX="802.0" layoutY="516.0" text="https://github.com/paspiz85/nanobot" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="25.0" />
-      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="35.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
+      <StackPane prefHeight="150.0" prefWidth="200.0" AnchorPane.bottomAnchor="120.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="45.0">
          <children>
             <AnchorPane fx:id="setupPane" prefHeight="200.0" prefWidth="200.0" visible="false">
                <children>
@@ -100,5 +101,6 @@
             </AnchorPane>
          </children>
       </StackPane>
+      <WebView fx:id="webView" prefHeight="120.0" prefWidth="-1.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" />
    </children>
 </AnchorPane>

@@ -29,6 +29,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.web.WebView;
 
 /**
  * Main GUI controller.
@@ -62,6 +63,9 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private Label donateLabel;
+
+    @FXML
+    private WebView webView;
 
     @FXML
     private Hyperlink donateLink;
@@ -212,6 +216,7 @@ public class MainController implements ApplicationAwareController, Constants {
             application.getHostServices().showDocument(BuildInfo.instance().getDonateUrl());
             donateLink.setVisited(false);
         });
+        webView.getEngine().load(BuildInfo.instance().getAdUrl());
         initSettingsPane();
         updateUI();
         final String timestamp = BuildInfo.instance().getTimestamp();

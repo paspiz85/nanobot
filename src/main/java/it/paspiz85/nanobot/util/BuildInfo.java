@@ -22,7 +22,7 @@ import org.kohsuke.github.GitHub;
  */
 public final class BuildInfo implements Constants {
 
-    private static final String DONATE_PATH = "#donate";
+    private static final String AD_URL = "http://paspiz85.altervista.org/nanobot/ad.php";
 
     private static final String DONATE_URL = "http://rawgit.com/paspiz85/nanobot/master/donate.html";
 
@@ -76,6 +76,10 @@ public final class BuildInfo implements Constants {
             }
         }
         return result;
+    }
+
+    public String getAdUrl() {
+        return AD_URL;
     }
 
     public String getDonateUrl() {
