@@ -217,6 +217,14 @@ public class MainController implements ApplicationAwareController, Constants {
             donateLink.setVisited(false);
         });
         webView.getEngine().load(BuildInfo.instance().getAdUrl());
+        webView.getEngine().locationProperty().addListener((observable, oldLocation, newLocation) -> {
+            if (BuildInfo.instance().getAdUrl().equals(oldLocation)) {
+                application.getHostServices().showDocument(newLocation);
+                Platform.runLater(() -> {
+                    webView.getEngine().reload();
+                });
+            }
+        });
         initSettingsPane();
         updateUI();
         final String timestamp = BuildInfo.instance().getTimestamp();
