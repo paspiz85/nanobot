@@ -2,7 +2,7 @@
 FOLDER="/tmp/nanobot"
 LOGFILE="/tmp/nanobot.log"
 GIT_URL="https://github.com/paspiz85/nanobot.git"
-GIT_BRANCH="feature/collecting"
+GIT_BRANCH="master"
 JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.8.0_45.jdk/Contents/Home
 
 function notify {

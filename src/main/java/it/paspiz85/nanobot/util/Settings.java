@@ -72,16 +72,6 @@ public final class Settings {
 
     private String userMailAddress = "";
 
-    
-    public String getUserMailAddress() {
-        return userMailAddress;
-    }
-
-    
-    public void setUserMailAddress(String userMailAddress) {
-        this.userMailAddress = userMailAddress;
-    }
-
     private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
@@ -129,6 +119,10 @@ public final class Settings {
 
     public TroopButton[] getRaxInfo() {
         return raxInfo;
+    }
+
+    public String getUserMailAddress() {
+        return userMailAddress;
     }
 
     public UUID getUuid() {
@@ -202,6 +196,10 @@ public final class Settings {
 
     public void setTrainTroops(final boolean trainTroops) {
         this.trainTroops = trainTroops;
+    }
+
+    public void setUserMailAddress(final String userMailAddress) {
+        this.userMailAddress = userMailAddress;
     }
 
     void setUuid(final UUID uuid) {
