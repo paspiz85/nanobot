@@ -64,13 +64,13 @@ public final class Looper {
         } catch (final InterruptedException e) {
             // either by dc checker
             if (context.isDisconnected()) {
-                logger.info("Interrupted by dc checker.");
+                logger.info("Interrupted by DisconnectChecker.");
                 context.setDisconnected(false);
                 context.setWaitDone(false);
                 return;
                 // or by user
             } else {
-                logger.info("Interrupted by user.");
+                logger.info("Interrupted by User.");
                 throw e;
             }
         } catch (final Exception e) {
@@ -131,6 +131,9 @@ public final class Looper {
                 this.waitingForDcChecker = false;
                 context.setWaitDone(false);
             }
+        } catch (final InterruptedException e) {
+            logger.log(Level.FINE, e.getMessage());
+            throw e;
         } catch (final BotException e) {
             logger.log(Level.WARNING, e.getMessage());
             throw e;

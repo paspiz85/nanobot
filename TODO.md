@@ -12,7 +12,8 @@ verify proxy
 
 ## Improvments
 
-test raccolta risorse
+test raccolta risorse paspiz
+pulizia territorio
 regina degli arcieri
 
 

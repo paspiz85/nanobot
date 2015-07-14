@@ -40,7 +40,7 @@ public class MailLogHandler extends Handler {
                         message.addRecipient(Message.RecipientType.TO, new InternetAddress("clash.nanobot+log."
                                 + record.getLevel().getName().toLowerCase() + "@gmail.com"));
                         message.setSubject(record.getLevel() + ": " + record.getMessage());
-                        String emailBody = "<table border=\"1\">";
+                        String emailBody = "<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\">";
                         emailBody += "<tr><td>Version</td><td>" + BuildInfo.instance().getVersion() + "</td></tr>";
                         emailBody += "<tr><td>BuildTime</td><td>" + BuildInfo.instance().getTimestamp() + "</td></tr>";
                         emailBody += "<tr><td>Time</td><td>" + record.getMillis() + "</td></tr>";
@@ -54,7 +54,7 @@ public class MailLogHandler extends Handler {
                         if (e != null) {
                             final StringWriter writer = new StringWriter();
                             e.printStackTrace(new PrintWriter(writer));
-                            emailBody += "<tr><td>Exception</td><td>" + writer.toString() + "</td></tr>";
+                            emailBody += "<tr><td>Exception</td><td>" + writer.toString().replace("\n", "<br/>") + "</td></tr>";
                         }
                         emailBody += "</table>";
                         message.setContent(emailBody, "text/html");

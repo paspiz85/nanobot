@@ -80,6 +80,8 @@ public class DisconnectChecker implements Runnable {
                 }
                 Thread.sleep(30000);
             }
+        } catch (final InterruptedException e) {
+            logger.log(Level.INFO, "DisconnectChecker interrupted");
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "dc checker: " + e.getMessage(), e);
         }
