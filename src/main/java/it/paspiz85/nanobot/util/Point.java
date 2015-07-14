@@ -19,7 +19,7 @@ public class Point implements Comparable<Point> {
 
     @Override
     public int compareTo(final Point o) {
-        return this.x != o.x ? this.x - o.y : this.y - o.y;
+        return this.x != o.x ? this.x - o.x : this.y - o.y;
     }
 
     @Override

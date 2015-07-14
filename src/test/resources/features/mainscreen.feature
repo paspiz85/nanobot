@@ -30,7 +30,7 @@ Feature: parsing main screen
 
     Examples:
       | imagefile                                      | coords   |
-      | classpath:/features/img/main_1435575631326.png | [63,598]     |
+      | classpath:/features/img/main_1435575631326.png | [63,598] |
       | classpath:/features/img/main_1435601238653.png | [63,598] |
       | classpath:/features/img/main_1435603470723.png | [63,598] |
 
@@ -42,11 +42,8 @@ Feature: parsing main screen
 
     Examples:
       | imagefile                                      | pointset  |
-      | classpath:/features/img/main_1435696574573.png | [449,436] |
-      | classpath:/features/img/main_1435698446657.png | [261,225] |
-      | classpath:/features/img/main_1435699320137.png | [618,281] |
-      | classpath:/features/img/main_1435700312519.png | [440,162] |
-      | classpath:/features/img/main_1435701087138.png | [308,401] |
+      | classpath:/features/img/screen_1436831885504.png | [280,281]; [289,316]; [336,239]; [393,196]; [440,387]; [496,345] |
+      | classpath:/features/img/screen_1436831849088.png | [261,323]; [355,394]; [430,450]; [477,374]; [609,316]            |
 
 
   Scenario Outline: search full elixir collector
@@ -56,10 +53,8 @@ Feature: parsing main screen
 
     Examples:
       | imagefile                                      | pointset  |
-      | classpath:/features/img/main_1435603470723.png | [458,193] |
-      | classpath:/features/img/main_1435699887290.png | [289,195] |
-      | classpath:/features/img/main_1435700716498.png | [279,370] |
-      | classpath:/features/img/main_1435701555074.png | [420,406] |
+      | classpath:/features/img/screen_1436831885504.png | [307,250]; [383,377]; [420,165]; [467,172]; [533,320]; [561,243] |
+      | classpath:/features/img/screen_1436831849088.png | [298,342]; [402,419]; [430,172]; [458,193]; [505,384]; [561,342] |
 
 
   Scenario Outline: search full dark elixir drill
@@ -69,8 +64,8 @@ Feature: parsing main screen
 
     Examples:
       | imagefile                                      | pointset  |
-      | classpath:/features/img/main_1435601238653.png | [326,325] |
-      | classpath:/features/img/main_1435603470723.png | null      |
+      | classpath:/features/img/screen_1436831885504.png | [552,283] |
+      | classpath:/features/img/screen_1436831849088.png | [326,325] |
 
 
   Scenario Outline: check if rax is full
