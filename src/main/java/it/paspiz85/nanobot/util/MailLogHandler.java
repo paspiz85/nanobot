@@ -54,7 +54,8 @@ public class MailLogHandler extends Handler {
                         if (e != null) {
                             final StringWriter writer = new StringWriter();
                             e.printStackTrace(new PrintWriter(writer));
-                            emailBody += "<tr><td>Exception</td><td>" + writer.toString().replace("\n", "<br/>") + "</td></tr>";
+                            emailBody += "<tr><td>Exception</td><td>" + writer.toString().replace("\n", "<br/>")
+                                    + "</td></tr>";
                         }
                         emailBody += "</table>";
                         message.setContent(emailBody, "text/html");

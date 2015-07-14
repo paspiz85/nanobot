@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.util;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
 
+import java.util.UUID;
 import java.util.logging.Level;
 
 /**
@@ -67,6 +68,8 @@ public final class Settings {
 
     private boolean isInitialized;
 
+    private String uuid = UUID.randomUUID().toString();
+
     private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
@@ -114,6 +117,10 @@ public final class Settings {
 
     public TroopButton[] getRaxInfo() {
         return raxInfo;
+    }
+
+    public String getUuid() {
+        return uuid;
     }
 
     public boolean isCollectResources() {
@@ -183,5 +190,9 @@ public final class Settings {
 
     public void setTrainTroops(final boolean trainTroops) {
         this.trainTroops = trainTroops;
+    }
+
+    public void setUuid(final String uuid) {
+        this.uuid = uuid;
     }
 }

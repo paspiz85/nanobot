@@ -42,6 +42,8 @@ public final class SettingsPersister implements Constants {
 
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
+    private static final String PROPERTY_UUID = "uuid";
+
     private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
 
     private File configFile;
@@ -103,6 +105,10 @@ public final class SettingsPersister implements Constants {
             if (trainTroopsProperty != null) {
                 settings.setTrainTroops(Boolean.parseBoolean(trainTroopsProperty));
             }
+            final String uuidProperty = configProperties.getProperty(PROPERTY_UUID);
+            if (uuidProperty != null) {
+                settings.setUuid(uuidProperty);
+            }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
                 boolean found = false;
@@ -143,6 +149,7 @@ public final class SettingsPersister implements Constants {
                     String.valueOf(settings.isDetectEmptyCollectors()));
             configProperties.setProperty(PROPERTY_COLLECT_RESOURCES, String.valueOf(settings.isCollectResources()));
             configProperties.setProperty(PROPERTY_TRAIN_TROOPS, String.valueOf(settings.isTrainTroops()));
+            configProperties.setProperty(PROPERTY_UUID, settings.getUuid());
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
             final TroopButton[] raxInfo = settings.getRaxInfo();

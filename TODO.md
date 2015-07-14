@@ -1,5 +1,7 @@
 ## Monetize
 
+specificare id 
+specificare indirizzo mail
 hide config
 donation page
 
@@ -13,18 +15,17 @@ verify proxy
 ## Improvments
 
 test raccolta risorse paspiz
-pulizia territorio
 regina degli arcieri
+count trofei
 
 
 ## Funzionalità
 
-scripts
-count trofei
+scripts engine
+pulizia territorio
 controlli remoti
 statistics
 i18n
-specificare indirizzo mail
 
 
 ## Code cleanup + Documentazione

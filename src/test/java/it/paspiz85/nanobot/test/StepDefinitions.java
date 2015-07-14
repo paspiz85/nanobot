@@ -165,7 +165,7 @@ public class StepDefinitions {
 
     @Then("^points found are (.*)$")
     public void thenPointsFoundAre(final String pointset) {
-        //os.saveImage(screenshot, "test");
+        // os.saveImage(screenshot, "test");
         final String[] coords = pointset.split(";");
         final TreeSet<Point> expected = new TreeSet<Point>();
         for (final String c : coords) {
