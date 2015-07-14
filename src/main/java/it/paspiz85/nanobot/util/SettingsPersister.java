@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,6 +44,8 @@ public final class SettingsPersister implements Constants {
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
     private static final String PROPERTY_UUID = "uuid";
+
+    private static final String PROPERTY_USER_MAIL_ADDRESS = "user_mail_address";
 
     private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
 
@@ -107,7 +110,11 @@ public final class SettingsPersister implements Constants {
             }
             final String uuidProperty = configProperties.getProperty(PROPERTY_UUID);
             if (uuidProperty != null) {
-                settings.setUuid(uuidProperty);
+                settings.setUuid(UUID.fromString(uuidProperty));
+            }
+            final String userMailAddressProperty = configProperties.getProperty(PROPERTY_USER_MAIL_ADDRESS);
+            if (userMailAddressProperty != null) {
+                settings.setUserMailAddress(userMailAddressProperty);
             }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
@@ -149,7 +156,8 @@ public final class SettingsPersister implements Constants {
                     String.valueOf(settings.isDetectEmptyCollectors()));
             configProperties.setProperty(PROPERTY_COLLECT_RESOURCES, String.valueOf(settings.isCollectResources()));
             configProperties.setProperty(PROPERTY_TRAIN_TROOPS, String.valueOf(settings.isTrainTroops()));
-            configProperties.setProperty(PROPERTY_UUID, settings.getUuid());
+            configProperties.setProperty(PROPERTY_UUID, settings.getUuid().toString());
+            configProperties.setProperty(PROPERTY_USER_MAIL_ADDRESS, settings.getUserMailAddress());
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
                     String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
             final TroopButton[] raxInfo = settings.getRaxInfo();

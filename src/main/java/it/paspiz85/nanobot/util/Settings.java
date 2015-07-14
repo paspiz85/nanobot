@@ -68,7 +68,19 @@ public final class Settings {
 
     private boolean isInitialized;
 
-    private String uuid = UUID.randomUUID().toString();
+    private UUID uuid = UUID.randomUUID();
+
+    private String userMailAddress = "";
+
+    
+    public String getUserMailAddress() {
+        return userMailAddress;
+    }
+
+    
+    public void setUserMailAddress(String userMailAddress) {
+        this.userMailAddress = userMailAddress;
+    }
 
     private Level logLevel = Level.INFO;
 
@@ -119,7 +131,7 @@ public final class Settings {
         return raxInfo;
     }
 
-    public String getUuid() {
+    public UUID getUuid() {
         return uuid;
     }
 
@@ -192,7 +204,7 @@ public final class Settings {
         this.trainTroops = trainTroops;
     }
 
-    public void setUuid(final String uuid) {
+    void setUuid(final UUID uuid) {
         this.uuid = uuid;
     }
 }

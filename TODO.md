@@ -1,7 +1,7 @@
 ## Monetize
 
-specificare id 
-specificare indirizzo mail
+servizio web per fornire le properties di config input crypto(usermailaddress+/uuid, key)
+key scolpita nel sorgente del crypto service
 hide config
 donation page
 
@@ -21,6 +21,7 @@ count trofei
 
 ## Funzionalità
 
+specificare indirizzo mail interfaccia
 scripts engine
 pulizia territorio
 controlli remoti
