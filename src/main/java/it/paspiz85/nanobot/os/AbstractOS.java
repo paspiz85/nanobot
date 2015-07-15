@@ -26,7 +26,7 @@ public abstract class AbstractOS implements OS, Constants {
 
     private static final String IMG_FOLDER = "img";
 
-    private final Area FULLSCREEN = new Area(0, 0, getGameWidth() - 1, getGameHeight() - 1);
+    private final Area fullscreenArea = new Area(0, 0, getGameWidth() - 1, getGameHeight() - 1);
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -115,7 +115,7 @@ public abstract class AbstractOS implements OS, Constants {
     public final BufferedImage screenshot(final Area area) {
         BufferedImage result;
         if (area == null) {
-            result = screenshot(FULLSCREEN.getP1(), FULLSCREEN.getP2());
+            result = screenshot(fullscreenArea.getP1(), fullscreenArea.getP2());
         } else {
             result = screenshot(area.getP1(), area.getP2());
         }
