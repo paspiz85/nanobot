@@ -9,12 +9,10 @@ donation page
 ## Bugfix
 
 install on win
-verify proxy per checkupdate and config download
 
 
 ## Improvments
 
-test raccolta risorse paspiz
 regina degli arcieri
 count trofei
 
@@ -29,9 +27,6 @@ i18n
 
 
 ## Code cleanup + Documentazione
-
-disable script button
-reenable update check on startup
 
 remove v-ppizzuti
 remove unused imgs

@@ -50,8 +50,7 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    // TODO re-enable to true
-    private boolean checkVersionOnStartup;
+    private boolean checkUpdateOnStartup = true;
 
     private Attack attackStrategy = Attack.noStrategy();
 
@@ -132,8 +131,8 @@ public final class Settings {
         return uuid;
     }
 
-    public boolean isCheckVersionOnStartup() {
-        return checkVersionOnStartup;
+    public boolean isCheckUpdateOnStartup() {
+        return checkUpdateOnStartup;
     }
 
     public boolean isCollectResources() {
@@ -160,8 +159,8 @@ public final class Settings {
         this.attackStrategy = attackStrategy;
     }
 
-    public void setCheckVersionOnStartup(final boolean checkVersionOnStartup) {
-        this.checkVersionOnStartup = checkVersionOnStartup;
+    public void setCheckUpdateOnStartup(final boolean checkVersionOnStartup) {
+        this.checkUpdateOnStartup = checkVersionOnStartup;
     }
 
     public void setCollectResources(final boolean collectResources) {

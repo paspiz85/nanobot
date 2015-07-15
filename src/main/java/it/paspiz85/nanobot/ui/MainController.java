@@ -115,9 +115,6 @@ public class MainController implements ApplicationAwareController {
     private ComboBox<TroopButton> rax6ComboBox;
 
     @FXML
-    private Button scriptsButton;
-
-    @FXML
     private Button settingsButton;
 
     @FXML
@@ -232,7 +229,7 @@ public class MainController implements ApplicationAwareController {
         ScriptManager.instance().setConfirm((str) -> confirm(str));
         ScriptManager.instance().setPrompt((str) -> prompt(str));
         model.initialize(() -> setupResolution(), () -> updateUI());
-        if (Settings.instance().isCheckVersionOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
+        if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
             versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
             githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
         } else {
@@ -351,10 +348,6 @@ public class MainController implements ApplicationAwareController {
         final boolean running = model.isRunning();
         startButton.setDisable(running);
         stopButton.setDisable(!running);
-        final boolean setupDone = model.isSetupDone();
-        if (setupDone) {
-            scriptsButton.setDisable(false);
-        }
         final Settings settings = model.loadSettings();
         goldField.setText(settings.getGoldThreshold() + "");
         elixirField.setText(settings.getElixirThreshold() + "");

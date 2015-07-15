@@ -24,7 +24,7 @@ public final class BuildInfo {
 
     private static final String AD_URL = "http://paspiz85.altervista.org/nanobot/ad.php";
 
-    private static final String DONATE_URL = "http://rawgit.com/paspiz85/nanobot/master/donate.html";
+    private static final String DONATE_URL = "https://cdn.rawgit.com/paspiz85/nanobot/master/donate.html";
 
     private static final String GITHUB_URL = "https://github.com/";
 
