@@ -59,7 +59,10 @@ public final class ScriptManager {
     private ScriptManager() {
         factory = new ScriptEngineManager();
         scripts = new TreeMap<>();
-        scanPath(Paths.get("scripts"));
+        Path extScripts = Paths.get("scripts");
+        if (extScripts.toFile().exists()) {
+            scanPath(extScripts);
+        }
         try {
             Utils.doWithPath(getClass().getResource("../scripts").toURI(), (path) -> {
                 scanPath(path);
