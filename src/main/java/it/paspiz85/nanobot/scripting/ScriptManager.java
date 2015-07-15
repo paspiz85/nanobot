@@ -64,7 +64,7 @@ public final class ScriptManager {
             scanPath(extScripts);
         }
         try {
-            Utils.doWithPath(getClass().getResource("../scripts").toURI(), (path) -> {
+            Utils.doWithPath(getClass().getResource("../scripts/").toURI(), (path) -> {
                 scanPath(path);
             });
         } catch (final URISyntaxException e) {
