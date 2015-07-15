@@ -8,9 +8,8 @@ donation page
 
 ## Bugfix
 
-rendere visibile build timestamp
 install on win
-verify proxy
+verify proxy per checkupdate and config download
 
 
 ## Improvments
@@ -23,7 +22,6 @@ count trofei
 ## Funzionalità
 
 specificare indirizzo mail interfaccia
-scripts engine
 pulizia territorio
 controlli remoti
 statistics
@@ -31,6 +29,9 @@ i18n
 
 
 ## Code cleanup + Documentazione
+
+disable script button
+reenable update check on startup
 
 remove v-ppizzuti
 remove unused imgs

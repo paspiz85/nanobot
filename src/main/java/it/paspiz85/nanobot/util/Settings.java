@@ -50,6 +50,9 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
+    // TODO re-enable to true
+    private boolean checkVersionOnStartup;
+
     private Attack attackStrategy = Attack.noStrategy();
 
     private final TroopButton[] availableTroops;
@@ -129,6 +132,10 @@ public final class Settings {
         return uuid;
     }
 
+    public boolean isCheckVersionOnStartup() {
+        return checkVersionOnStartup;
+    }
+
     public boolean isCollectResources() {
         return collectResources;
     }
@@ -151,6 +158,10 @@ public final class Settings {
 
     public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
+    }
+
+    public void setCheckVersionOnStartup(final boolean checkVersionOnStartup) {
+        this.checkVersionOnStartup = checkVersionOnStartup;
     }
 
     public void setCollectResources(final boolean collectResources) {

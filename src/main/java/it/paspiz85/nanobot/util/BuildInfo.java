@@ -20,7 +20,7 @@ import org.kohsuke.github.GitHub;
  * @author paspiz85
  *
  */
-public final class BuildInfo implements Constants {
+public final class BuildInfo {
 
     private static final String AD_URL = "http://paspiz85.altervista.org/nanobot/ad.php";
 

@@ -1,7 +1,6 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.game.GameConstants;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
@@ -16,7 +15,13 @@ import java.util.Arrays;
  * @author paspiz85
  *
  */
-public final class StateMainMenu extends State<MainScreenParser> implements GameConstants {
+public final class StateMainMenu extends State<MainScreenParser> {
+
+    private static final int DARK_ELIXIR_DRILL_MAX_NUMBER = 4;
+
+    private static final int ELIXIR_COLLECTOR_MAX_NUMBER = 8;
+
+    private static final int GOLD_MINE_MAX_NUMBER = 8;
 
     private static StateMainMenu instance;
 
@@ -38,24 +43,24 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
             for (int i = 0; i < GOLD_MINE_MAX_NUMBER; i++) {
                 final Point p = getParser().searchFullGoldMine();
                 if (p != null) {
-                    os.leftClick(p, false);
-                    os.sleepRandom(200);
+                    platform.leftClick(p, false);
+                    platform.sleepRandom(200);
                     count++;
                 }
             }
             for (int i = 0; i < ELIXIR_COLLECTOR_MAX_NUMBER; i++) {
                 final Point p = getParser().searchFullElixirCollector();
                 if (p != null) {
-                    os.leftClick(p, false);
-                    os.sleepRandom(200);
+                    platform.leftClick(p, false);
+                    platform.sleepRandom(200);
                     count++;
                 }
             }
             for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
                 final Point p = getParser().searchFullDarkElixirDrill();
                 if (p != null) {
-                    os.leftClick(p, false);
-                    os.sleepRandom(200);
+                    platform.leftClick(p, false);
+                    platform.sleepRandom(200);
                     count++;
                 }
             }
@@ -69,8 +74,8 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
-        os.zoomUp();
-        os.sleepRandom(350);
+        platform.zoomUp();
+        platform.sleepRandom(350);
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }
@@ -79,40 +84,40 @@ public final class StateMainMenu extends State<MainScreenParser> implements Game
         if (getParser().areCampsFull()) {
             logger.info("Camp is full.");
             logger.fine("Close barracks");
-            os.leftClick(getParser().getButtonTrainClose(), true);
-            os.sleepRandom(200);
+            platform.leftClick(getParser().getButtonTrainClose(), true);
+            platform.sleepRandom(200);
             reviewTroops(context);
             logger.fine("Press Attack.");
-            os.leftClick(getParser().getButtonAttack(), true);
-            os.sleepRandom(1000);
+            platform.leftClick(getParser().getButtonAttack(), true);
+            platform.sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             context.setState(StateTrainTroops.instance());
         }
-        os.sleepRandom(500);
+        platform.sleepRandom(500);
     }
 
     private void reviewTroops(final Context context) throws InterruptedException {
-        os.leftClick(getParser().getButtonTroops(), true);
-        os.sleepRandom(300);
+        platform.leftClick(getParser().getButtonTroops(), true);
+        platform.sleepRandom(300);
         final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
         final int[] troopsCount = troopsInfo.getTroopsCount();
         logger.info("Troops count: " + Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
-        os.leftClick(getParser().getButtonTrainClose(), true);
-        os.sleepRandom(200);
+        platform.leftClick(getParser().getButtonTrainClose(), true);
+        platform.sleepRandom(200);
     }
 
     private void training(final Context context) throws InterruptedException, BotConfigurationException {
         final Point buttonTrainClose = getParser().searchButtonTrainClose();
         if (buttonTrainClose != null) {
             logger.fine("Close previous train");
-            os.leftClick(buttonTrainClose, true);
-            os.sleepRandom(500);
+            platform.leftClick(buttonTrainClose, true);
+            platform.sleepRandom(500);
         }
-        os.leftClick(getParser().getButtonTroops(), true);
-        os.sleepRandom(500);
-        os.leftClick(getParser().getButtonTrainNext(), true);
-        os.sleepRandom(500);
+        platform.leftClick(getParser().getButtonTroops(), true);
+        platform.sleepRandom(500);
+        platform.leftClick(getParser().getButtonTrainNext(), true);
+        platform.sleepRandom(500);
     }
 }

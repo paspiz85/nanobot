@@ -1,10 +1,10 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
 import java.util.ArrayList;
@@ -26,8 +26,6 @@ public abstract class Attack {
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
     protected static final Point BOTTOM_RIGHT = new Point(537, 538);
-
-    private static final OS DEFAULT_OS = OS.instance();
 
     protected static final Point LEFT = new Point(19, 307);
 
@@ -84,14 +82,14 @@ public abstract class Attack {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected final OS os = DEFAULT_OS;
+    protected final Platform platform = Platform.instance();
 
     Attack() {
     }
 
     public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
         logger.info("Attacking...");
-        os.zoomUp();
+        platform.zoomUp();
         doDropUnits(attackGroup);
         sleepUntilLootDoesNotChange(loot);
         logger.info("No more loot.");

@@ -1,7 +1,7 @@
-package it.paspiz85.nanobot.os;
+package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.os.win32.Win32OS;
+import it.paspiz85.nanobot.platform.win32.Win32Platform;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
@@ -10,7 +10,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 
@@ -20,7 +19,11 @@ import java.util.function.Supplier;
  * @author paspiz85
  *
  */
-public interface OS {
+public interface Platform {
+
+    int WIDTH = 860;
+
+    int HEIGHT = 720;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
     Supplier<Class<?>> CLASS_FINDER = new Supplier() {
@@ -31,7 +34,7 @@ public interface OS {
         public Class<?> get() {
             if (cache == null) {
                 try {
-                    final String className = System.getProperty(CLASS_PROPERTY, Win32OS.class.getName());
+                    final String className = System.getProperty(CLASS_PROPERTY, Win32Platform.class.getName());
                     cache = Class.forName(className);
                 } catch (final ClassNotFoundException e) {
                     throw new IllegalStateException("unable to initialize OS class", e);
@@ -41,13 +44,11 @@ public interface OS {
         }
     };
 
-    String CLASS_PROPERTY = OS.class.getName();
+    String CLASS_PROPERTY = Platform.class.getName();
 
-    Random RANDOM = new Random();
-
-    static OS instance() {
+    static Platform instance() {
         try {
-            return (OS) CLASS_FINDER.get().getMethod("instance").invoke(null);
+            return (Platform) CLASS_FINDER.get().getMethod("instance").invoke(null);
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
                 | SecurityException e) {
             throw new IllegalStateException("unable to initialize OS", e);
@@ -55,10 +56,6 @@ public interface OS {
     }
 
     boolean compareColor(Color c1, Color c2, int var);
-
-    int getGameHeight();
-
-    int getGameWidth();
 
     BufferedImage getSubimage(BufferedImage image, Area area);
 

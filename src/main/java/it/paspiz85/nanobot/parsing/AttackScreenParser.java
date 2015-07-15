@@ -5,6 +5,7 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.Polygon;
@@ -181,9 +182,9 @@ public class AttackScreenParser extends Parser {
         final int rgb = image.getRGB(DARKCHECK_POINT.x(), DARKCHECK_POINT.y());
         final Color deCheck = new Color(rgb);
         boolean result;
-        if (os.compareColor(deCheck, DARKCHECK_COLOR_YES, 7)) {
+        if (platform.compareColor(deCheck, DARKCHECK_COLOR_YES, 7)) {
             result = true;
-        } else if (os.compareColor(deCheck, DARKCHECK_COLOR_NO, 7)) {
+        } else if (platform.compareColor(deCheck, DARKCHECK_COLOR_NO, 7)) {
             result = false;
         } else {
             throw new BotBadBaseException("de: " + Integer.toHexString(deCheck.getRGB()));
@@ -193,10 +194,10 @@ public class AttackScreenParser extends Parser {
 
     public Boolean isCollectorFullBase() throws BotException {
         final int[] attackableElixirs = { 0 };
-        final BufferedImage image = os.screenshot(ENEMY_BASE);
+        final BufferedImage image = platform.screenshot(ENEMY_BASE);
         try {
             final URI uri = getClass().getResource("elixirs").toURI();
-            doWithPath(
+            Utils.doWithPath(
                     uri,
                     (path) -> {
                         final List<Rectangle> matchedElixirs = new ArrayList<>();
@@ -236,7 +237,7 @@ public class AttackScreenParser extends Parser {
     }
 
     public EnemyInfo parseEnemyInfo() throws BotBadBaseException {
-        final BufferedImage image = os.screenshot(ENEMY_LOOT);
+        final BufferedImage image = platform.screenshot(ENEMY_LOOT);
         final EnemyInfo info = new EnemyInfo();
         info.setGold(parseGold(image));
         info.setElixir(parseElixir(image));
@@ -265,7 +266,7 @@ public class AttackScreenParser extends Parser {
     }
 
     public Point searchButtonNext() {
-        final BufferedImage image = os.screenshot(AREA_NEXT_BUTTON);
+        final BufferedImage image = platform.screenshot(AREA_NEXT_BUTTON);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_next.png")),
                 AREA_NEXT_BUTTON.getP1());
     }

@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.parsing;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -52,7 +53,7 @@ public final class MainScreenParser extends Parser {
     }
 
     public Boolean areCampsFull() {
-        return os.matchColoredPoint(POINT_CAMPS_FULL);
+        return platform.matchColoredPoint(POINT_CAMPS_FULL);
     }
 
     public Point getButtonAttack() {
@@ -89,8 +90,8 @@ public final class MainScreenParser extends Parser {
     }
 
     public TroopsInfo parseTroopsInfo() {
-        final BufferedImage image = os.screenshot();
-        final BufferedImage imageTroops = os.getSubimage(image, AREA_TROOPS);
+        final BufferedImage image = platform.screenshot();
+        final BufferedImage imageTroops = platform.getSubimage(image, AREA_TROOPS);
         Point start = new Point(9, 4);
         // start = new Point(28, 4);
         // start = new Point(28+63, 4);
@@ -105,7 +106,7 @@ public final class MainScreenParser extends Parser {
             result[len++] = n;
             start = new Point(start.x() + 62, start.y());
         }
-        final BufferedImage imageEroes = os.getSubimage(image, AREA_EROES);
+        final BufferedImage imageEroes = platform.getSubimage(image, AREA_EROES);
         if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
             result[len++] = 1;
         }
@@ -117,27 +118,27 @@ public final class MainScreenParser extends Parser {
     }
 
     public Point searchButtonAttack() {
-        final BufferedImage image = os.screenshot(AREA_BUTTON_ATTACK);
+        final BufferedImage image = platform.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
                 AREA_BUTTON_ATTACK.getP1());
     }
 
     public Point searchButtonTrainClose() {
-        final BufferedImage image = os.screenshot(AREA_BUTTON_TRAIN_CLOSE);
+        final BufferedImage image = platform.screenshot(AREA_BUTTON_TRAIN_CLOSE);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
                 AREA_BUTTON_TRAIN_CLOSE.getP1());
     }
 
     public Point searchButtonTroops() {
-        final BufferedImage image = os.screenshot(AREA_BUTTON_TROOPS);
+        final BufferedImage image = platform.screenshot(AREA_BUTTON_TROOPS);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_troops.png")),
                 AREA_BUTTON_TROOPS.getP1());
     }
 
     private Point searchFullCollector(final URI uri) {
         final Point[] point = new Point[1];
-        final BufferedImage image = os.screenshot();
-        doWithPath(uri, (path) -> {
+        final BufferedImage image = platform.screenshot();
+        Utils.doWithPath(uri, (path) -> {
             try (Stream<Path> walk = Files.walk(path, 1)) {
                 for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
                     final Path next = it.next();

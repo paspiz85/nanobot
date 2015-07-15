@@ -43,18 +43,18 @@ public final class StateIdle extends State<Parser> {
             }
             if (reloading) {
                 logger.info("reloading...");
-                os.zoomUp();
+                platform.zoomUp();
                 Thread.sleep(2000);
                 continue;
             }
-            if (os.matchColoredPoint(mainScreenParser.getPointWasAttackedHeadline())
-                    || os.matchColoredPoint(mainScreenParser.getButtonWasAttackedOK())) {
+            if (platform.matchColoredPoint(mainScreenParser.getPointWasAttackedHeadline())
+                    || platform.matchColoredPoint(mainScreenParser.getButtonWasAttackedOK())) {
                 logger.info("Was attacked.");
-                os.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
-                os.sleepRandom(250);
+                platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
+                platform.sleepRandom(250);
             } else if (mainScreenParser.searchButtonTrainClose() != null) {
-                os.leftClick(mainScreenParser.getButtonTrainClose(), true);
-                os.sleepRandom(250);
+                platform.leftClick(mainScreenParser.getButtonTrainClose(), true);
+                platform.sleepRandom(250);
                 nextState = StateMainMenu.instance();
                 break;
             } else if (mainScreenParser.searchButtonAttack() != null) {
@@ -63,7 +63,7 @@ public final class StateIdle extends State<Parser> {
             } else if (attackScreenParser.searchButtonNext() != null) {
                 nextState = StateAttack.instance();
                 break;
-            } else if (os.matchColoredPoint(attackScreenParser.getButtonFindMatch())) {
+            } else if (platform.matchColoredPoint(attackScreenParser.getButtonFindMatch())) {
                 nextState = StateFindAMatch.instance();
                 break;
             }

@@ -1,6 +1,6 @@
 package it.paspiz85.nanobot.parsing;
 
-import it.paspiz85.nanobot.os.OS;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Config;
 import it.paspiz85.nanobot.util.Point;
@@ -11,17 +11,10 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.net.URL;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -37,8 +30,6 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  *
  */
 public abstract class Parser {
-
-    private static final OS DEFAULT_OS = OS.instance();
 
     private static final Map<String, Parser> INSTANCES = new HashMap<>();
 
@@ -193,7 +184,7 @@ public abstract class Parser {
 
     private final int[][][][] offsets;
 
-    protected final OS os = DEFAULT_OS;
+    protected final Platform platform = Platform.instance();
 
     private final int[] thresholds;
 
@@ -209,24 +200,6 @@ public abstract class Parser {
             thresholds[i] = getThreshold("digit." + i);
         }
         widths = getWidths("digit.widths");
-    }
-
-    protected final void doWithPath(final URI uri, final Consumer<Path> pathConsumer) {
-        try {
-            if ("jar".equals(uri.getScheme())) {
-                try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
-                    final String schemeSpecificPart = uri.getSchemeSpecificPart();
-                    final Path path = fileSystem.getPath(schemeSpecificPart.substring(
-                            schemeSpecificPart.indexOf("!") + 1, schemeSpecificPart.length()));
-                    pathConsumer.accept(path);
-                }
-            } else {
-                final Path path = Paths.get(uri);
-                pathConsumer.accept(path);
-            }
-        } catch (final IOException e) {
-            logger.log(Level.SEVERE, String.format("Unable to open uri %s: %s", uri, e.getMessage()), e);
-        }
     }
 
     protected final Rectangle findArea(final BufferedImage input, final InputStream in) {
@@ -263,7 +236,8 @@ public abstract class Parser {
             boolean found = true;
             int count = 0;
             for (int j = 0; j < actual.length; j++) {
-                final boolean compare = os.compareColor(new Color(actual[j]), new Color(expected[j]), thresholds[i]);
+                final boolean compare = platform.compareColor(new Color(actual[j]), new Color(expected[j]),
+                        thresholds[i]);
                 if (learnMode != null) {
                     image.setRGB(start.x() + offsets[i][type][j][0], start.y() + offsets[i][type][j][1], compare ? 0xFF
                             : 0xFF0000);
@@ -284,11 +258,12 @@ public abstract class Parser {
                 }
                 System.out.println(s);
                 if (found) {
-                    final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
+                    final File f = platform.saveImage(image, "test_" + System.currentTimeMillis() + "_found");
                     System.out.println(f.getAbsolutePath());
                     System.out.println();
                 } else {
-                    final File f = os.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_" + count);
+                    final File f = platform.saveImage(image, "test_" + System.currentTimeMillis() + "_notfound_"
+                            + count);
                     System.out.println(f.getAbsolutePath());
                     System.out.println();
                 }

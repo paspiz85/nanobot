@@ -21,8 +21,8 @@ public final class Attack4SideParallelFull2Wave extends Attack {
                 int unitCount = attackGroup[unitIdx];
                 unitCount = unitCount / 2 + wave * (unitCount % 2);
                 // select unit
-                os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
-                os.sleepRandom(100);
+                platform.leftClick(getButtonAttackUnit(unitIdx + 1), true);
+                platform.sleepRandom(100);
                 final Point[] topToRightPoints = pointsBetweenFromToInclusive(TOP, RIGHT, unitCount / 4 + unitCount % 4);
                 final Point[] topToLeftPoints = pointsBetweenFromToInclusive(TOP, LEFT, unitCount / 4);
                 final Point[] rightToBottomPoints = pointsBetweenFromToInclusive(RIGHT, BOTTOM_RIGHT, unitCount / 4);
@@ -31,25 +31,25 @@ public final class Attack4SideParallelFull2Wave extends Attack {
                 // top to mid from both sides in parallel
                 for (int i = 0; i < topToRightPoints.length; i++) {
                     final Point topRightPoint = topToRightPoints[i];
-                    os.leftClick(topRightPoint, false);
-                    os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                    platform.leftClick(topRightPoint, false);
+                    platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                     if (i < topToLeftPoints.length) {
                         final Point topLeftPoint = topToLeftPoints[i];
-                        os.leftClick(topLeftPoint, false);
-                        os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                        platform.leftClick(topLeftPoint, false);
+                        platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                     }
                 }
                 // select unit
-                os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
-                os.sleepRandom(100);
+                platform.leftClick(getButtonAttackUnit(unitIdx + 1), true);
+                platform.sleepRandom(100);
                 // mid to bottom from both sides in parallel
                 for (int i = 0; i < rightToBottomPoints.length; i++) {
                     final Point rightToBottomPoint = rightToBottomPoints[i];
-                    os.leftClick(rightToBottomPoint, false);
-                    os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                    platform.leftClick(rightToBottomPoint, false);
+                    platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                     final Point leftToBottomPoint = leftToBottomPoints[i];
-                    os.leftClick(leftToBottomPoint, false);
-                    os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                    platform.leftClick(leftToBottomPoint, false);
+                    platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                 }
             }
         }

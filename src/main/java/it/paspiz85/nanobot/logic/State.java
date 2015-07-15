@@ -1,9 +1,8 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.Parser;
-import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
 import java.util.function.Supplier;
@@ -17,13 +16,11 @@ import java.util.logging.Logger;
  * @param <P>
  *            parser to grab screen info.
  */
-public abstract class State<P extends Parser> implements Constants {
-
-    private static final OS DEFAULT_OS = OS.instance();
+public abstract class State<P extends Parser> {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected final OS os = DEFAULT_OS;
+    protected final Platform platform = Platform.instance();
 
     private final P parser;
 
@@ -44,7 +41,7 @@ public abstract class State<P extends Parser> implements Constants {
                 return point;
             }
             logger.fine("Point not found.");
-            os.sleepRandom(500);
+            platform.sleepRandom(500);
         }
     }
 }
