@@ -16,11 +16,6 @@ import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
 
-import org.jnativehook.GlobalScreen;
-import org.jnativehook.NativeHookException;
-import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseListener;
-
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef;
 import com.sun.jna.platform.win32.WinDef.HWND;
@@ -38,6 +33,10 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  *
  */
 public final class Win32OS extends AbstractOS implements OS, Constants {
+
+    private static final int BS_RES_X = 860;
+
+    private static final int BS_RES_Y = 720;
 
     private static Win32OS instance;
 
@@ -60,6 +59,8 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
     private static final int WM_LBUTTONDOWN = 0x201;
 
     private static final int WM_LBUTTONUP = 0x202;
+
+    private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
     public static Win32OS instance() {
         if (instance == null) {
@@ -90,6 +91,16 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
     protected Color getColor(final Point point) {
         final Point screenPoint = clientToScreen(point);
         return robot.getPixelColor(screenPoint.x(), screenPoint.y());
+    }
+
+    @Override
+    public int getGameHeight() {
+        return BS_RES_Y;
+    }
+
+    @Override
+    public int getGameWidth() {
+        return BS_RES_X;
     }
 
     private boolean isCtrlKeyDown() {
@@ -176,47 +187,6 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
             throw e;
         } catch (final Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
-        }
-    }
-
-    @Override
-    public Point waitForClick() throws InterruptedException, BotConfigurationException {
-        try {
-            final Point[] result = new Point[1];
-            GlobalScreen.registerNativeHook();
-            GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
-
-                @Override
-                public void nativeMouseClicked(final NativeMouseEvent e) {
-                    // not relative to window
-                    final int x = e.getX();
-                    final int y = e.getY();
-                    logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-                    final POINT screenPoint = new POINT(x, y);
-                    User32.INSTANCE.ScreenToClient(handler, screenPoint);
-                    result[0] = new Point(screenPoint.x, screenPoint.y);
-                    synchronized (GlobalScreen.getInstance()) {
-                        GlobalScreen.getInstance().notify();
-                    }
-                }
-
-                @Override
-                public void nativeMousePressed(final NativeMouseEvent e) {
-                }
-
-                @Override
-                public void nativeMouseReleased(final NativeMouseEvent e) {
-                }
-            });
-            synchronized (GlobalScreen.getInstance()) {
-                while (result[0] == null) {
-                    GlobalScreen.getInstance().wait();
-                }
-            }
-            GlobalScreen.unregisterNativeHook();
-            return result[0];
-        } catch (final NativeHookException e) {
-            throw new BotConfigurationException("Unable to capture mouse movement.", e);
         }
     }
 

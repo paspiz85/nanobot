@@ -56,6 +56,10 @@ public interface OS {
 
     boolean compareColor(Color c1, Color c2, int var);
 
+    int getGameHeight();
+
+    int getGameWidth();
+
     BufferedImage getSubimage(BufferedImage image, Area area);
 
     BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
@@ -87,8 +91,6 @@ public interface OS {
      *             thread interrupted.
      */
     void sleepRandom(int sleepInMs) throws InterruptedException;
-
-    Point waitForClick() throws InterruptedException, BotConfigurationException;
 
     void zoomUp() throws InterruptedException;
 }

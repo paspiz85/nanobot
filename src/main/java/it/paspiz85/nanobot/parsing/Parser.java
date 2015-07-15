@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.util.Area;
+import it.paspiz85.nanobot.util.Config;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -20,7 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,8 +38,6 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public abstract class Parser {
 
-    private static Properties config;
-
     private static final OS DEFAULT_OS = OS.instance();
 
     private static final Map<String, Parser> INSTANCES = new HashMap<>();
@@ -48,7 +46,7 @@ public abstract class Parser {
 
     protected static final Area getArea(final String name) {
         Area area = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             area = new Area(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()),
@@ -64,18 +62,6 @@ public abstract class Parser {
             color = new Color(value);
         }
         return color;
-    }
-
-    private static Properties getConfig() {
-        if (config == null) {
-            try {
-                config = new Properties();
-                config.load(Parser.class.getResourceAsStream("config.properties"));
-            } catch (final IOException e) {
-                throw new ExceptionInInitializerError(e);
-            }
-        }
-        return config;
     }
 
     @SuppressWarnings("unchecked")
@@ -97,7 +83,7 @@ public abstract class Parser {
 
     private static int[][] getOffset(final String name) {
         int[][] result = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] points = value.split(";");
             result = new int[points.length][];
@@ -127,7 +113,7 @@ public abstract class Parser {
 
     protected static final Point getPoint(final String name) {
         Point point = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             point = new Point(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()));
@@ -137,7 +123,7 @@ public abstract class Parser {
 
     private static Integer getRGB(final String name) {
         Integer color = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             color = Integer.decode(value.replace("#", "0x").trim());
         }
@@ -146,7 +132,7 @@ public abstract class Parser {
 
     private static int[] getRGBs(final String name) {
         int[] colors = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             colors = new int[split.length];
@@ -163,7 +149,7 @@ public abstract class Parser {
 
     private static int getThreshold(final String name) {
         int result = THRESHOLD_DEFAULT;
-        final String value = getConfig().getProperty(name + ".threshold");
+        final String value = Config.instance().getProperty(name + ".threshold");
         if (value != null) {
             result = Integer.parseInt(value.trim());
         }
@@ -172,7 +158,7 @@ public abstract class Parser {
 
     private static int[] getWidth(final String name) {
         int[] result = null;
-        final String value = getConfig().getProperty(name);
+        final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
             result = new int[split.length];

@@ -24,7 +24,9 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractOS implements OS, Constants {
 
-    private static final Area FULLSCREEN = new Area(0, 0, BS_RES_X - 1, BS_RES_Y - 1);
+    private static final String IMG_FOLDER = "img";
+
+    private final Area FULLSCREEN = new Area(0, 0, getGameWidth() - 1, getGameHeight() - 1);
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 

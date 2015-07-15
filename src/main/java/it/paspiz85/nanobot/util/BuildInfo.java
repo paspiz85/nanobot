@@ -34,6 +34,8 @@ public final class BuildInfo implements Constants {
 
     private static final String REPOSITORY_NAME = "paspiz85/nanobot";
 
+    private static final String NAME = "NanoBot";
+
     public static BuildInfo instance() {
         if (instance == null) {
             instance = new BuildInfo();
@@ -86,6 +88,17 @@ public final class BuildInfo implements Constants {
         return DONATE_URL;
     }
 
+    public String getFullName() {
+        String buildName;
+        final String version = getVersion();
+        if (version == null) {
+            buildName = "Development build";
+        } else {
+            buildName = NAME + " v" + version;
+        }
+        return buildName;
+    }
+
     public String getLatestVersion() {
         String result = null;
         try {
@@ -113,14 +126,7 @@ public final class BuildInfo implements Constants {
     }
 
     public String getName() {
-        String buildName;
-        final String version = getVersion();
-        if (version == null) {
-            buildName = "Development build";
-        } else {
-            buildName = NAME + " v" + version;
-        }
-        return buildName;
+        return NAME;
     }
 
     public String getRepositoryUrl() {

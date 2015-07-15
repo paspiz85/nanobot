@@ -200,10 +200,10 @@ public class MainController implements ApplicationAwareController, Constants {
         LogHandler.initialize(textArea);
         model.initialize(() -> setupResolution(), () -> updateUI());
         if (BuildInfo.instance().checkForUpdate() == null) {
-            versionLabel.setText(BuildInfo.instance().getName());
+            versionLabel.setText(BuildInfo.instance().getFullName());
             githubLink.setText(BuildInfo.instance().getRepositoryUrl());
         } else {
-            versionLabel.setText(BuildInfo.instance().getName() + " (UPDATE AVAILABLE!)");
+            versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
             githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
         }
         githubLink.setOnAction(event -> {
@@ -300,9 +300,9 @@ public class MainController implements ApplicationAwareController, Constants {
                 alert.initOwner(application.getPrimaryStage());
                 alert.setTitle("Resolution");
                 alert.setHeaderText("Confirm changing resolution");
-                alert.setContentText(String.format("%s must run in resolution %dx%d.\n"
-                        + "Click YES to change it automatically, NO to do it later.\n", BS_WINDOW_NAME, BS_RES_X,
-                        BS_RES_Y));
+                alert.setContentText(String.format("Game must run in resolution %dx%d.\n"
+                        + "Click YES to change it automatically, NO to do it later.\n", os.getGameWidth(),
+                        os.getGameHeight()));
                 final Optional<ButtonType> result = alert.showAndWait();
                 ret[0] = result.get() == ButtonType.OK;
             });

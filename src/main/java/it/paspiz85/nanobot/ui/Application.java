@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.ui;
 
+import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Logging;
 
@@ -36,7 +37,7 @@ public class Application extends javafx.application.Application implements Const
     @Override
     public void start(final Stage primaryStage) throws IOException {
         this.primaryStage = primaryStage;
-        primaryStage.setTitle(NAME);
+        primaryStage.setTitle(BuildInfo.instance().getName());
         final FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Application.class.getResource("MainView.fxml"));
         final Parent parent = loader.load();

@@ -8,6 +8,7 @@ donation page
 
 ## Bugfix
 
+rendere visibile build timestamp
 install on win
 verify proxy
 

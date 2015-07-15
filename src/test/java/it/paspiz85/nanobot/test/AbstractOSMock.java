@@ -16,6 +16,16 @@ public abstract class AbstractOSMock extends AbstractOS {
     }
 
     @Override
+    public int getGameHeight() {
+        return 720;
+    }
+
+    @Override
+    public int getGameWidth() {
+        return 860;
+    }
+
+    @Override
     public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
         throw new IllegalStateException("not implemented");
     }
@@ -32,11 +42,6 @@ public abstract class AbstractOSMock extends AbstractOS {
 
     @Override
     public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
-        throw new IllegalStateException("not implemented");
-    }
-
-    @Override
-    public Point waitForClick() throws InterruptedException, BotConfigurationException {
         throw new IllegalStateException("not implemented");
     }
 
