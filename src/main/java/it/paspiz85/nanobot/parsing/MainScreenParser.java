@@ -138,7 +138,7 @@ public final class MainScreenParser extends Parser {
     private Point searchFullCollector(final URI uri) {
         final Point[] point = new Point[1];
         final BufferedImage image = platform.screenshot();
-        Utils.doWithPath(uri, (path) -> {
+        Utils.withClasspathFolder(uri, (path) -> {
             try (Stream<Path> walk = Files.walk(path, 1)) {
                 for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
                     final Path next = it.next();

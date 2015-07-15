@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -64,7 +65,7 @@ public final class ScriptManager {
             scanPath(extScripts);
         }
         try {
-            Utils.doWithPath(getClass().getResource("/scripts").toURI(), (path) -> {
+            Utils.withClasspathFolder(Utils.getParentResource(getClass(), "scripts").toURI(), (path) -> {
                 scanPath(path);
             });
         } catch (final URISyntaxException e) {

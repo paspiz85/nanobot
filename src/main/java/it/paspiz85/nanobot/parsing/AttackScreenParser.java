@@ -197,7 +197,7 @@ public class AttackScreenParser extends Parser {
         final BufferedImage image = platform.screenshot(ENEMY_BASE);
         try {
             final URI uri = getClass().getResource("elixirs").toURI();
-            Utils.doWithPath(
+            Utils.withClasspathFolder(
                     uri,
                     (path) -> {
                         final List<Rectangle> matchedElixirs = new ArrayList<>();

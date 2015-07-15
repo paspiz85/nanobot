@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.util;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -24,7 +25,15 @@ public final class Utils {
 
     private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
-    public static void doWithPath(final URI uri, final Consumer<Path> pathConsumer) {
+    public static URL getParentResource(Class<?> c, String resource) {
+        String name = c.getName();
+        name = name.substring(0, name.lastIndexOf("."));
+        name = name.substring(0, name.lastIndexOf(".") + 1);
+        name = name.replace(".", "/");
+        return c.getClassLoader().getResource(name + resource);
+    }
+
+    public static void withClasspathFolder(final URI uri, final Consumer<Path> pathConsumer) {
         try {
             if ("jar".equals(uri.getScheme())) {
                 try (FileSystem fileSystem = FileSystems.newFileSystem(uri, Collections.emptyMap())) {
