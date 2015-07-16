@@ -8,10 +8,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -49,24 +49,20 @@ public final class ScriptManager {
 
     private Function<String, Boolean> confirm;
 
+    private final Map<String, Path> embeddedScripts;
+
     private final ScriptEngineManager factory;
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
     private Function<String, String> prompt;
 
-    private final Map<String, Path> scripts;
-
     private ScriptManager() {
         factory = new ScriptEngineManager();
-        scripts = new TreeMap<>();
-        Path extScripts = Paths.get("scripts");
-        if (extScripts.toFile().exists()) {
-            scanPath(extScripts);
-        }
+        embeddedScripts = new TreeMap<>();
         try {
             Utils.withClasspathFolder(Utils.getParentResource(getClass(), "scripts").toURI(), (path) -> {
-                scanPath(path);
+                ScriptManager.this.embeddedScripts.putAll(scanPath(path));
             });
         } catch (final URISyntaxException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -84,13 +80,25 @@ public final class ScriptManager {
     }
 
     public Set<String> getScripts() {
-        return scripts.keySet();
+        return getScriptsMap().keySet();
+    }
+
+    private Map<String, Path> getScriptsMap() {
+        Map<String, Path> scripts = new TreeMap<>();
+        final Path extScripts = Paths.get("scripts");
+        if (extScripts.toFile().exists()) {
+            scripts = scanPath(extScripts);
+            scripts.putAll(embeddedScripts);
+        } else {
+            scripts = Collections.unmodifiableMap(embeddedScripts);
+        }
+        return scripts;
     }
 
     public void run(final String script) {
         final String msg = "Running script " + script;
         try {
-            final Path path = scripts.get(script);
+            final Path path = getScriptsMap().get(script);
             if (path == null) {
                 throw new IllegalArgumentException("Script not found");
             }
@@ -106,18 +114,20 @@ public final class ScriptManager {
         }
     }
 
-    private void scanPath(final Path path) {
+    private Map<String, Path> scanPath(final Path path) {
+        final Map<String, Path> scripts = new TreeMap<>();
         try (Stream<Path> walk = Files.walk(path, 1)) {
             for (final Iterator<Path> it = walk.iterator(); it.hasNext();) {
                 final Path next = it.next();
                 if (Files.isDirectory(next)) {
                     continue;
                 }
-                ScriptManager.this.scripts.put(next.getFileName().toString(), next);
+                scripts.put(next.getFileName().toString(), next);
             }
-        } catch (final IOException e1) {
-            logger.log(Level.SEVERE, e1.getMessage(), e1);
+        } catch (final IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         }
+        return scripts;
     }
 
     public void setAlert(final Consumer<String> alert) {

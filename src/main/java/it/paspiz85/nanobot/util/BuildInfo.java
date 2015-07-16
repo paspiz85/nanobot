@@ -52,10 +52,13 @@ public final class BuildInfo {
         try {
             final Enumeration<URL> resources = getClass().getClassLoader().getResources(JarFile.MANIFEST_NAME);
             while (resources.hasMoreElements()) {
-                try (InputStream in = resources.nextElement().openStream()) {
+                URL url = resources.nextElement();
+                logger.finer("Searching manifest in " + url);
+                try (InputStream in = url.openStream()) {
                     final Manifest man = new Manifest(in);
                     if (NAME.toLowerCase().equals(man.getMainAttributes().getValue("Build-Name"))) {
                         manifest = man;
+                        logger.finer("Manifest found");
                         break;
                     }
                 }
@@ -67,16 +70,21 @@ public final class BuildInfo {
     }
 
     public String checkForUpdate() {
+        logger.finer("checkForUpdate");
         String result = null;
         final String current = getVersion();
         final String release = getLatestVersion();
         if (current != null && release != null) {
+            logger.finer("Comparing current and release versions");
             final DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
             final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-            if (currentVersion.compareTo(releaseVersion) < 0) {
+            int compare = currentVersion.compareTo(releaseVersion);
+            logger.finer("Comparing result is " + compare);
+            if (compare < 0) {
                 result = release;
             }
         }
+        logger.finer("checkForUpdate result is " + result);
         return result;
     }
 

@@ -250,11 +250,22 @@ public class MainController implements ApplicationAwareController {
         webView.getEngine().locationProperty().addListener((observable, oldLocation, newLocation) -> {
             if (BuildInfo.instance().getAdUrl().equals(oldLocation)) {
                 application.getHostServices().showDocument(newLocation);
-                javafx.application.Platform.runLater(() -> {
-                    webView.getEngine().reload();
-                });
             }
         });
+        Thread reloadThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(60000);
+                    javafx.application.Platform.runLater(() -> {
+                        webView.getEngine().reload();
+                    });
+                } catch (Exception e) {
+                    logger.log(Level.FINE, "Refresh failed", e);
+                }
+            }
+        }, "AdvReloader");
+        reloadThread.setDaemon(true);
+        reloadThread.start();
         initSettingsPane();
         updateUI();
     }
@@ -273,7 +284,7 @@ public class MainController implements ApplicationAwareController {
         elixirField.textProperty().addListener(intFieldListener);
         deField.textProperty().addListener(intFieldListener);
         maxThField.textProperty().addListener(intFieldListener);
-        logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
+        logLevelComboBox.getItems().addAll(Level.FINEST, Level.FINER, Level.FINE, Level.CONFIG, Level.INFO, Level.WARNING, Level.SEVERE);
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
         autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
