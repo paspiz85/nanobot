@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.util;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
+import java.nio.channels.ClosedByInterruptException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Path;
@@ -46,6 +47,8 @@ public final class Utils {
                 final Path path = Paths.get(uri);
                 pathConsumer.accept(path);
             }
+        } catch (final ClosedByInterruptException e) {
+            LOGGER.log(Level.FINER, String.format("Unable to open uri %s: %s", uri, e.getMessage()), e);
         } catch (final IOException e) {
             LOGGER.log(Level.SEVERE, String.format("Unable to open uri %s: %s", uri, e.getMessage()), e);
         }
