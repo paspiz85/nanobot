@@ -52,7 +52,7 @@ public final class BuildInfo {
         try {
             final Enumeration<URL> resources = getClass().getClassLoader().getResources(JarFile.MANIFEST_NAME);
             while (resources.hasMoreElements()) {
-                URL url = resources.nextElement();
+                final URL url = resources.nextElement();
                 logger.finer("Searching manifest in " + url);
                 try (InputStream in = url.openStream()) {
                     final Manifest man = new Manifest(in);
@@ -78,7 +78,7 @@ public final class BuildInfo {
             logger.finer("Comparing current and release versions");
             final DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
             final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-            int compare = currentVersion.compareTo(releaseVersion);
+            final int compare = currentVersion.compareTo(releaseVersion);
             logger.finer("Comparing result is " + compare);
             if (compare < 0) {
                 result = release;

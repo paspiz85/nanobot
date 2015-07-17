@@ -38,6 +38,10 @@ public final class Model {
 
     private Service<Void> runningService;
 
+    private Service<Void> scriptService;
+
+    private String runningScript;
+
     private Model() {
     }
 
@@ -78,6 +82,35 @@ public final class Model {
             runningService.reset();
             logger.warning("Running is failed.");
         });
+        scriptService = new Service<Void>() {
+
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        ScriptManager.instance().run(runningScript);
+                        return null;
+                    }
+                };
+            }
+        };
+        scriptService.setOnCancelled(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.warning("Script is cancelled.");
+        });
+        scriptService.setOnFailed(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.warning("Script is failed.");
+        });
+        scriptService.setOnSucceeded(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.info("Script is succeeded.");
+        });
     }
 
     public boolean isRunning() {
@@ -93,7 +126,10 @@ public final class Model {
     }
 
     public void runScript(final String script) {
-        ScriptManager.instance().run(script);
+        this.runningScript = script;
+        if (scriptService.getState() == State.READY) {
+            scriptService.start();
+        }
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

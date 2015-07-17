@@ -26,7 +26,7 @@ public final class Utils {
 
     private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
-    public static URL getParentResource(Class<?> c, String resource) {
+    public static URL getParentResource(final Class<?> c, final String resource) {
         String name = c.getName();
         name = name.substring(0, name.lastIndexOf("."));
         name = name.substring(0, name.lastIndexOf(".") + 1);

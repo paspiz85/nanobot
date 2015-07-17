@@ -135,6 +135,27 @@ public class MainController implements ApplicationAwareController {
     @FXML
     private Label versionLabel;
 
+    private void alert(final String str) {
+        platformRunNow(() -> {
+            final Alert dialog = new Alert(AlertType.INFORMATION);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<ButtonType> result = dialog.showAndWait();
+        });
+    }
+
+    private boolean confirm(final String str) {
+        final boolean[] toReturn = new boolean[1];
+        platformRunNow(() -> {
+            final Alert dialog = new Alert(AlertType.CONFIRMATION);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<ButtonType> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() && result.get() == ButtonType.OK;
+        });
+        return toReturn[0];
+    }
+
     @FXML
     public void handleCancelButtonAction() {
         showSettings(false);
@@ -199,35 +220,13 @@ public class MainController implements ApplicationAwareController {
         model.stop();
     }
 
-    private void alert(String str) {
-        final Alert dialog = new Alert(AlertType.INFORMATION);
-        dialog.initOwner(application.getPrimaryStage());
-        dialog.setHeaderText(str);
-        final Optional<ButtonType> result = dialog.showAndWait();
-    }
-
-    private boolean confirm(String str) {
-        final Alert dialog = new Alert(AlertType.CONFIRMATION);
-        dialog.initOwner(application.getPrimaryStage());
-        dialog.setHeaderText(str);
-        final Optional<ButtonType> result = dialog.showAndWait();
-        return result.isPresent() && result.get() == ButtonType.OK;
-    }
-
-    private String prompt(String str) {
-        final TextInputDialog dialog = new TextInputDialog("");
-        dialog.initOwner(application.getPrimaryStage());
-        dialog.setHeaderText(str);
-        final Optional<String> result = dialog.showAndWait();
-        return result.isPresent() ? result.get() : null;
-    }
-
     @FXML
     private void initialize() {
         LogHandler.initialize(textArea);
         ScriptManager.instance().setAlert((str) -> alert(str));
         ScriptManager.instance().setConfirm((str) -> confirm(str));
         ScriptManager.instance().setPrompt((str) -> prompt(str));
+        ScriptManager.instance().setSelect((str, options) -> select(str, options));
         model.initialize(() -> setupResolution(), () -> updateUI());
         if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
             versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
@@ -252,14 +251,14 @@ public class MainController implements ApplicationAwareController {
                 application.getHostServices().showDocument(newLocation);
             }
         });
-        Thread reloadThread = new Thread(() -> {
+        final Thread reloadThread = new Thread(() -> {
             while (true) {
                 try {
                     Thread.sleep(60000);
                     javafx.application.Platform.runLater(() -> {
                         webView.getEngine().reload();
                     });
-                } catch (Exception e) {
+                } catch (final Exception e) {
                     logger.log(Level.FINE, "Refresh failed", e);
                 }
             }
@@ -284,7 +283,8 @@ public class MainController implements ApplicationAwareController {
         elixirField.textProperty().addListener(intFieldListener);
         deField.textProperty().addListener(intFieldListener);
         maxThField.textProperty().addListener(intFieldListener);
-        logLevelComboBox.getItems().addAll(Level.FINEST, Level.FINER, Level.FINE, Level.CONFIG, Level.INFO, Level.WARNING, Level.SEVERE);
+        logLevelComboBox.getItems().addAll(Level.FINEST, Level.FINER, Level.FINE, Level.CONFIG, Level.INFO,
+                Level.WARNING, Level.SEVERE);
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
         autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
@@ -298,7 +298,7 @@ public class MainController implements ApplicationAwareController {
         updateUI();
     }
 
-    private void platformRunNow(final Runnable runnable) throws InterruptedException {
+    private void platformRunNow(final Runnable runnable) {
         final boolean[] done = new boolean[1];
         final Runnable sync = new Runnable() {
 
@@ -317,10 +317,38 @@ public class MainController implements ApplicationAwareController {
         logger.fine("platformRunNow wait start");
         synchronized (sync) {
             while (!done[0]) {
-                sync.wait();
+                try {
+                    sync.wait();
+                } catch (final InterruptedException e) {
+                    logger.log(Level.WARNING, e.getMessage(), e);
+                }
             }
         }
         logger.fine("platformRunNow wait complete");
+    }
+
+    private String prompt(final String str) {
+        final String[] toReturn = new String[1];
+        platformRunNow(() -> {
+            final TextInputDialog dialog = new TextInputDialog("");
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<String> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() ? result.get() : null;
+        });
+        return toReturn[0];
+    }
+
+    private String select(final String str, final String[] options) {
+        final String[] toReturn = new String[1];
+        platformRunNow(() -> {
+            final ChoiceDialog<String> dialog = new ChoiceDialog<>(null, options);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<String> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() ? result.get() : null;
+        });
+        return toReturn[0];
     }
 
     @Override
