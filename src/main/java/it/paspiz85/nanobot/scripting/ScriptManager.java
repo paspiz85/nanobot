@@ -128,7 +128,7 @@ public final class ScriptManager {
             engine.eval(new InputStreamReader(in), context);
             logger.info(msg + " completed");
         } catch (final Exception e) {
-            logger.log(Level.SEVERE, msg + " failed: " + e.getMessage(), e);
+            logger.log(Level.WARNING, msg + " failed: " + e.getMessage(), e);
         } finally {
             closeContext(context);
         }
