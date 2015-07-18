@@ -33,11 +33,11 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
         if (Settings.instance().getAttackStrategy() != Attack.noStrategy()
-                && os.matchColoredPoint(getParser().getButtonFindMatch())) {
-            os.leftClick(getParser().getButtonFindMatch(), true);
-            os.sleepRandom(300);
-            os.leftClick(getParser().getButtonShieldDisable(), true);
-            os.sleepRandom(100);
+                && platform.matchColoredPoint(getParser().getButtonFindMatch())) {
+            platform.leftClick(getParser().getButtonFindMatch(), true);
+            platform.sleepRandom(300);
+            platform.leftClick(getParser().getButtonShieldDisable(), true);
+            platform.sleepRandom(100);
             sleepUntilPointFound(() -> getParser().searchButtonNext());
             context.setState(StateAttack.instance());
         } else {

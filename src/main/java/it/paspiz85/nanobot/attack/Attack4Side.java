@@ -19,8 +19,8 @@ public final class Attack4Side extends Attack {
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit
-            os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
-            os.sleepRandom(100);
+            platform.leftClick(getButtonAttackUnit(unitIdx + 1), true);
+            platform.sleepRandom(100);
             // if count is less than 4, only first side will be used.
             final Point[] topToRightPoints = pointsBetweenFromToInclusive(TOP, RIGHT, unitCount / 4 + unitCount % 4);
             final Point[] rightToBottomPoints = pointsBetweenFromToInclusive(RIGHT, BOTTOM_RIGHT, unitCount / 4);
@@ -30,8 +30,8 @@ public final class Attack4Side extends Attack {
             for (final Point[] points : new Point[][] { topToRightPoints, rightToBottomPoints, bottomToLeftPoints,
                     leftToTopPoints }) {
                 for (final Point point : points) {
-                    os.leftClick(point, false);
-                    os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                    platform.leftClick(point, false);
+                    platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                 }
             }
         }

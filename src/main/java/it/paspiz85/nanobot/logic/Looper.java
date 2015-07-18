@@ -2,7 +2,7 @@ package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.os.OS;
+import it.paspiz85.nanobot.platform.Platform;
 
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
@@ -16,8 +16,6 @@ import java.util.logging.Logger;
  */
 public final class Looper {
 
-    private static final OS DEFAULT_OS = OS.instance();
-
     private static Looper instance;
 
     public static Looper instance() {
@@ -29,7 +27,7 @@ public final class Looper {
 
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final OS os = DEFAULT_OS;
+    private final Platform platform = Platform.instance();
 
     private boolean running;
 
@@ -104,10 +102,10 @@ public final class Looper {
         try {
             logger.info("Starting...");
             if (!setupDone) {
-                os.setup();
+                platform.setup();
                 setupDone = true;
             }
-            os.setupResolution(setupResolution);
+            platform.setupResolution(setupResolution);
             logger.info("Setup is successful.");
             final Context context = new Context();
             logger.fine("Starting disconnect detector...");

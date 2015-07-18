@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.util;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -27,13 +28,13 @@ public final class Config {
 
     public Properties getProperties() {
         if (properties == null) {
-            try {
-                final Properties props = new Properties();
-                props.load(Config.class.getResourceAsStream("../config.properties"));
-                properties = props;
+            final Properties props = new Properties();
+            try (InputStream in = Utils.getParentResource(Config.class, "config.properties").openStream()) {
+                props.load(in);
             } catch (final IOException e) {
                 throw new ExceptionInInitializerError(e);
             }
+            properties = props;
         }
         return properties;
     }

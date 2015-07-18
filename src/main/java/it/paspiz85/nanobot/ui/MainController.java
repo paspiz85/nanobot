@@ -1,17 +1,16 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.BuildInfo;
-import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javafx.application.Platform;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
@@ -20,11 +19,13 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -37,9 +38,7 @@ import javafx.scene.web.WebView;
  * @author paspiz85
  *
  */
-public class MainController implements ApplicationAwareController, Constants {
-
-    private static final OS DEFAULT_OS = OS.instance();
+public class MainController implements ApplicationAwareController {
 
     private Application application;
 
@@ -95,7 +94,7 @@ public class MainController implements ApplicationAwareController, Constants {
 
     private final Model model = Model.instance();
 
-    private final OS os = DEFAULT_OS;
+    private final Platform platform = Platform.instance();
 
     @FXML
     private ComboBox<TroopButton> rax1ComboBox;
@@ -114,9 +113,6 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private ComboBox<TroopButton> rax6ComboBox;
-
-    @FXML
-    private Button screenshotButton;
 
     @FXML
     private Button settingsButton;
@@ -138,6 +134,27 @@ public class MainController implements ApplicationAwareController, Constants {
 
     @FXML
     private Label versionLabel;
+
+    private void alert(final String str) {
+        platformRunNow(() -> {
+            final Alert dialog = new Alert(AlertType.INFORMATION);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<ButtonType> result = dialog.showAndWait();
+        });
+    }
+
+    private boolean confirm(final String str) {
+        final boolean[] toReturn = new boolean[1];
+        platformRunNow(() -> {
+            final Alert dialog = new Alert(AlertType.CONFIRMATION);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<ButtonType> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() && result.get() == ButtonType.OK;
+        });
+        return toReturn[0];
+    }
 
     @FXML
     public void handleCancelButtonAction() {
@@ -176,8 +193,16 @@ public class MainController implements ApplicationAwareController, Constants {
     }
 
     @FXML
-    public void handleScreenshotButtonAction() {
-        model.saveScreenshot();
+    public void handleScriptsButtonAction() {
+        final ChoiceDialog<String> dialog = new ChoiceDialog<>(null, model.getScripts());
+        dialog.initOwner(application.getPrimaryStage());
+        dialog.setTitle("Scripts");
+        dialog.setHeaderText("Select script to run");
+        dialog.setContentText("Script:");
+        final Optional<String> result = dialog.showAndWait();
+        if (result.isPresent()) {
+            model.runScript(result.get());
+        }
     }
 
     @FXML
@@ -198,13 +223,17 @@ public class MainController implements ApplicationAwareController, Constants {
     @FXML
     private void initialize() {
         LogHandler.initialize(textArea);
+        ScriptManager.instance().setAlert((str) -> alert(str));
+        ScriptManager.instance().setConfirm((str) -> confirm(str));
+        ScriptManager.instance().setPrompt((str) -> prompt(str));
+        ScriptManager.instance().setSelect((str, options) -> select(str, options));
         model.initialize(() -> setupResolution(), () -> updateUI());
-        if (BuildInfo.instance().checkForUpdate() == null) {
-            versionLabel.setText(BuildInfo.instance().getFullName());
-            githubLink.setText(BuildInfo.instance().getRepositoryUrl());
-        } else {
+        if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
             versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
             githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
+        } else {
+            versionLabel.setText(BuildInfo.instance().getFullName());
+            githubLink.setText(BuildInfo.instance().getRepositoryUrl());
         }
         githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
@@ -220,17 +249,24 @@ public class MainController implements ApplicationAwareController, Constants {
         webView.getEngine().locationProperty().addListener((observable, oldLocation, newLocation) -> {
             if (BuildInfo.instance().getAdUrl().equals(oldLocation)) {
                 application.getHostServices().showDocument(newLocation);
-                Platform.runLater(() -> {
-                    webView.getEngine().reload();
-                });
             }
         });
+        final Thread reloadThread = new Thread(() -> {
+            while (true) {
+                try {
+                    Thread.sleep(60000);
+                    javafx.application.Platform.runLater(() -> {
+                        webView.getEngine().reload();
+                    });
+                } catch (final Exception e) {
+                    logger.log(Level.FINE, "Refresh failed", e);
+                }
+            }
+        }, "AdvReloader");
+        reloadThread.setDaemon(true);
+        reloadThread.start();
         initSettingsPane();
         updateUI();
-        final String timestamp = BuildInfo.instance().getTimestamp();
-        if (timestamp != null) {
-            logger.info("Running build " + timestamp);
-        }
     }
 
     private void initSettingsPane() {
@@ -247,7 +283,8 @@ public class MainController implements ApplicationAwareController, Constants {
         elixirField.textProperty().addListener(intFieldListener);
         deField.textProperty().addListener(intFieldListener);
         maxThField.textProperty().addListener(intFieldListener);
-        logLevelComboBox.getItems().addAll(Level.FINE, Level.INFO, Level.WARNING, Level.SEVERE);
+        logLevelComboBox.getItems().addAll(Level.FINEST, Level.FINER, Level.FINE, Level.CONFIG, Level.INFO,
+                Level.WARNING, Level.SEVERE);
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
         autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
@@ -261,7 +298,7 @@ public class MainController implements ApplicationAwareController, Constants {
         updateUI();
     }
 
-    private void platformRunNow(final Runnable runnable) throws InterruptedException {
+    private void platformRunNow(final Runnable runnable) {
         final boolean[] done = new boolean[1];
         final Runnable sync = new Runnable() {
 
@@ -276,14 +313,42 @@ public class MainController implements ApplicationAwareController, Constants {
                 }
             }
         };
-        Platform.runLater(sync);
+        javafx.application.Platform.runLater(sync);
         logger.fine("platformRunNow wait start");
         synchronized (sync) {
             while (!done[0]) {
-                sync.wait();
+                try {
+                    sync.wait();
+                } catch (final InterruptedException e) {
+                    logger.log(Level.WARNING, e.getMessage(), e);
+                }
             }
         }
         logger.fine("platformRunNow wait complete");
+    }
+
+    private String prompt(final String str) {
+        final String[] toReturn = new String[1];
+        platformRunNow(() -> {
+            final TextInputDialog dialog = new TextInputDialog("");
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<String> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() ? result.get() : null;
+        });
+        return toReturn[0];
+    }
+
+    private String select(final String str, final String[] options) {
+        final String[] toReturn = new String[1];
+        platformRunNow(() -> {
+            final ChoiceDialog<String> dialog = new ChoiceDialog<>(null, options);
+            dialog.initOwner(application.getPrimaryStage());
+            dialog.setHeaderText(str);
+            final Optional<String> result = dialog.showAndWait();
+            toReturn[0] = result.isPresent() ? result.get() : null;
+        });
+        return toReturn[0];
     }
 
     @Override
@@ -296,15 +361,16 @@ public class MainController implements ApplicationAwareController, Constants {
         final boolean[] ret = new boolean[1];
         try {
             platformRunNow(() -> {
-                final Alert alert = new Alert(AlertType.CONFIRMATION);
-                alert.initOwner(application.getPrimaryStage());
-                alert.setTitle("Resolution");
-                alert.setHeaderText("Confirm changing resolution");
-                alert.setContentText(String.format("Game must run in resolution %dx%d.\n"
-                        + "Click YES to change it automatically, NO to do it later.\n", os.getGameWidth(),
-                        os.getGameHeight()));
-                final Optional<ButtonType> result = alert.showAndWait();
-                ret[0] = result.get() == ButtonType.OK;
+                final Alert dialog = new Alert(AlertType.CONFIRMATION);
+                dialog.initOwner(application.getPrimaryStage());
+                dialog.setTitle("Resolution");
+                dialog.setHeaderText("Confirm changing resolution");
+                dialog.setContentText(String
+                        .format("Game must run in resolution %dx%d.\n"
+                                + "Click YES to change it automatically, NO to do it later.\n", Platform.WIDTH,
+                                Platform.HEIGHT));
+                final Optional<ButtonType> result = dialog.showAndWait();
+                ret[0] = result.isPresent() && result.get() == ButtonType.OK;
             });
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to setup resolution", e);
@@ -321,10 +387,6 @@ public class MainController implements ApplicationAwareController, Constants {
         final boolean running = model.isRunning();
         startButton.setDisable(running);
         stopButton.setDisable(!running);
-        final boolean setupDone = model.isSetupDone();
-        if (setupDone) {
-            screenshotButton.setDisable(false);
-        }
         final Settings settings = model.loadSettings();
         goldField.setText(settings.getGoldThreshold() + "");
         elixirField.setText(settings.getElixirThreshold() + "");

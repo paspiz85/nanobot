@@ -82,7 +82,7 @@
                      <children>
                         <Button mnemonicParsing="false" onAction="#handleSaveButtonAction" text="Save" />
                         <Button mnemonicParsing="false" onAction="#handleCancelButtonAction" text="Cancel" />
-                        <Button fx:id="screenshotButton" disable="true" mnemonicParsing="false" onAction="#handleScreenshotButtonAction" text="Screenshot" />
+                        <Button mnemonicParsing="false" onAction="#handleScriptsButtonAction" text="Scripts" />
                      </children>
                   </HBox>
                </children>

@@ -50,6 +50,8 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
+    private boolean checkUpdateOnStartup = true;
+
     private Attack attackStrategy = Attack.noStrategy();
 
     private final TroopButton[] availableTroops;
@@ -129,6 +131,10 @@ public final class Settings {
         return uuid;
     }
 
+    public boolean isCheckUpdateOnStartup() {
+        return checkUpdateOnStartup;
+    }
+
     public boolean isCollectResources() {
         return collectResources;
     }
@@ -151,6 +157,10 @@ public final class Settings {
 
     public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
+    }
+
+    public void setCheckUpdateOnStartup(final boolean checkVersionOnStartup) {
+        this.checkUpdateOnStartup = checkVersionOnStartup;
     }
 
     public void setCollectResources(final boolean collectResources) {

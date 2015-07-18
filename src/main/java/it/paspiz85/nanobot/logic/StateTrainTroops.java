@@ -1,10 +1,10 @@
 package it.paspiz85.nanobot.logic;
 
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.util.Utils;
 
 /**
  * Training state is when bot train troops.
@@ -35,25 +35,25 @@ public final class StateTrainTroops extends State<MainScreenParser> {
             for (int currRax = 0; currRax < raxInfo.length; currRax++) {
                 final TroopButton troop = raxInfo[currRax];
                 if (troop != TroopButton.NO_UNIT) {
-                    final int clicks = 10 + OS.RANDOM.nextInt(10);
+                    final int clicks = 10 + Utils.RANDOM.nextInt(10);
                     logger.fine("Try training " + clicks + " " + troop.getDescription());
                     for (int i = 0; i < clicks; i++) {
-                        os.leftClick(troop.getPoint(), true);
-                        os.sleepRandom(75);
+                        platform.leftClick(troop.getPoint(), true);
+                        platform.sleepRandom(75);
                     }
                 }
                 if (currRax < raxInfo.length - 1) {
                     logger.fine("Goto next barrack");
-                    os.leftClick(getParser().getButtonTrainNext(), true);
-                    os.sleepRandom(350);
+                    platform.leftClick(getParser().getButtonTrainNext(), true);
+                    platform.sleepRandom(350);
                 }
             }
         }
         logger.fine("Close Training Troops.");
-        os.leftClick(getParser().getButtonTrainClose(), true);
-        os.sleepRandom(250);
+        platform.leftClick(getParser().getButtonTrainClose(), true);
+        platform.sleepRandom(250);
         context.setState(StateMainMenu.instance());
         // waiting minimum time
-        os.sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
+        platform.sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
     }
 }

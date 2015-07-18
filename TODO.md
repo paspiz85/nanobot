@@ -8,14 +8,11 @@ donation page
 
 ## Bugfix
 
-rendere visibile build timestamp
 install on win
-verify proxy
 
 
 ## Improvments
 
-test raccolta risorse paspiz
 regina degli arcieri
 count trofei
 
@@ -23,7 +20,6 @@ count trofei
 ## Funzionalità
 
 specificare indirizzo mail interfaccia
-scripts engine
 pulizia territorio
 controlli remoti
 statistics

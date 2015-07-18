@@ -1,12 +1,12 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.logic.Looper;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.TroopButton;
-import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Locale;
+import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.logging.Logger;
@@ -21,9 +21,7 @@ import javafx.concurrent.Worker.State;
  * @author paspiz85
  *
  */
-public final class Model implements Constants {
-
-    private static final OS DEFAULT_OS = OS.instance();
+public final class Model {
 
     private static Model instance;
 
@@ -38,15 +36,21 @@ public final class Model implements Constants {
 
     private final Looper looper = Looper.instance();
 
-    private final OS os = DEFAULT_OS;
-
     private Service<Void> runningService;
+
+    private Service<Void> scriptService;
+
+    private String runningScript;
 
     private Model() {
     }
 
     public TroopButton[] getAvailableTroops() {
         return Settings.instance().getAvailableTroops();
+    }
+
+    public Set<String> getScripts() {
+        return ScriptManager.instance().getScripts();
     }
 
     public void initialize(final BooleanSupplier setupResolution, final Runnable updateUI) {
@@ -78,6 +82,35 @@ public final class Model implements Constants {
             runningService.reset();
             logger.warning("Running is failed.");
         });
+        scriptService = new Service<Void>() {
+
+            @Override
+            protected Task<Void> createTask() {
+                return new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        ScriptManager.instance().run(runningScript);
+                        return null;
+                    }
+                };
+            }
+        };
+        scriptService.setOnCancelled(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.warning("Script is cancelled.");
+        });
+        scriptService.setOnFailed(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.warning("Script is failed.");
+        });
+        scriptService.setOnSucceeded(event -> {
+            scriptService.reset();
+            runningScript = null;
+            logger.info("Script is succeeded.");
+        });
     }
 
     public boolean isRunning() {
@@ -92,8 +125,11 @@ public final class Model implements Constants {
         return Settings.instance();
     }
 
-    public void saveScreenshot() {
-        os.saveScreenshot("screen_" + System.currentTimeMillis());
+    public void runScript(final String script) {
+        this.runningScript = script;
+        if (scriptService.getState() == State.READY) {
+            scriptService.start();
+        }
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

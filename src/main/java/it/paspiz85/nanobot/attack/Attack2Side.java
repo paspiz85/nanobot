@@ -19,15 +19,15 @@ public final class Attack2Side extends Attack {
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit
-            os.leftClick(getButtonAttackUnit(unitIdx + 1), true);
-            os.sleepRandom(100);
+            platform.leftClick(getButtonAttackUnit(unitIdx + 1), true);
+            platform.sleepRandom(100);
             final Point[] topToRightPoints = pointsBetweenFromToInclusive(TOP, RIGHT, unitCount / 2 + unitCount % 2);
             final Point[] topToLeftPoints = pointsBetweenFromToInclusive(TOP, LEFT, unitCount / 2);
             // drop units
             for (final Point[] points : new Point[][] { topToRightPoints, topToLeftPoints }) {
                 for (final Point point : points) {
-                    os.leftClick(point, false);
-                    os.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
+                    platform.leftClick(point, false);
+                    platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
                 }
             }
         }

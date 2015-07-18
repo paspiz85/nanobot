@@ -1,10 +1,10 @@
-package it.paspiz85.nanobot.os.win32;
+package it.paspiz85.nanobot.platform.win32;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.os.AbstractOS;
-import it.paspiz85.nanobot.os.OS;
-import it.paspiz85.nanobot.util.Constants;
+import it.paspiz85.nanobot.platform.AbstractPlatform;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.AWTException;
 import java.awt.Color;
@@ -27,18 +27,14 @@ import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 /**
- * Implementation of {@link OS} for Windows.
+ * Implementation of {@link Platform} for Windows.
  *
  * @author paspiz85
  *
  */
-public final class Win32OS extends AbstractOS implements OS, Constants {
+public final class Win32Platform extends AbstractPlatform implements Platform {
 
-    private static final int BS_RES_X = 860;
-
-    private static final int BS_RES_Y = 720;
-
-    private static Win32OS instance;
+    private static Win32Platform instance;
 
     private static final int SWP_NOMOVE = 0x0002;
 
@@ -62,9 +58,9 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
-    public static Win32OS instance() {
+    public static Win32Platform instance() {
         if (instance == null) {
-            instance = new Win32OS();
+            instance = new Win32Platform();
         }
         return instance;
     }
@@ -73,7 +69,7 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
 
     private Robot robot;
 
-    private Win32OS() {
+    private Win32Platform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
@@ -93,16 +89,6 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
         return robot.getPixelColor(screenPoint.x(), screenPoint.y());
     }
 
-    @Override
-    public int getGameHeight() {
-        return BS_RES_Y;
-    }
-
-    @Override
-    public int getGameWidth() {
-        return BS_RES_X;
-    }
-
     private boolean isCtrlKeyDown() {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
     }
@@ -113,8 +99,8 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
         int x = point.x();
         int y = point.y();
         if (randomize) {
-            x += -1 + RANDOM.nextInt(3);
-            y += -1 + RANDOM.nextInt(3);
+            x += -1 + Utils.RANDOM.nextInt(3);
+            y += -1 + Utils.RANDOM.nextInt(3);
         }
         logger.fine("Clicking [" + x + " " + y + "].");
         final int lParam = y << 16 | x << 16 >>> 16;
@@ -169,16 +155,16 @@ public final class Win32OS extends AbstractOS implements OS, Constants {
             User32.INSTANCE.GetWindowRect(control, rect);
             final int bsX = rect[2] - rect[0];
             final int bsY = rect[3] - rect[1];
-            if (bsX != BS_RES_X || bsY != BS_RES_Y) {
+            if (bsX != WIDTH || bsY != HEIGHT) {
                 logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
-                if (w1 != BS_RES_X || h1 != BS_RES_Y || w2 != BS_RES_X || h2 != BS_RES_Y) {
+                if (w1 != WIDTH || h1 != HEIGHT || w2 != WIDTH || h2 != HEIGHT) {
                     if (!setupResolution.getAsBoolean()) {
                         throw new BotConfigurationException("Re-run when resolution is fixed.");
                     }
-                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", BS_RES_X);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", BS_RES_Y);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", BS_RES_X);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", BS_RES_Y);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", WIDTH);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", HEIGHT);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", WIDTH);
+                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", HEIGHT);
                     Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
                     throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
                 }

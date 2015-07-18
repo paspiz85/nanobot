@@ -1,28 +1,18 @@
 package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.os.AbstractOS;
+import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.function.BooleanSupplier;
 
-public abstract class AbstractOSMock extends AbstractOS {
+public abstract class AbstractOSMock extends AbstractPlatform {
 
     @Override
     protected Color getColor(final Point point) {
         throw new IllegalStateException("not implemented");
-    }
-
-    @Override
-    public int getGameHeight() {
-        return 720;
-    }
-
-    @Override
-    public int getGameWidth() {
-        return 860;
     }
 
     @Override

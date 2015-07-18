@@ -1,9 +1,9 @@
-package it.paspiz85.nanobot.os;
+package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
-import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -17,16 +17,16 @@ import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 /**
- * Abstract implementation of {@link OS}.
+ * Abstract implementation of {@link Platform}.
  *
  * @author paspiz85
  *
  */
-public abstract class AbstractOS implements OS, Constants {
+public abstract class AbstractPlatform implements Platform {
 
     private static final String IMG_FOLDER = "img";
 
-    private final Area fullscreenArea = new Area(0, 0, getGameWidth() - 1, getGameHeight() - 1);
+    private static final Area FULLSCREEN = new Area(0, 0, WIDTH - 1, HEIGHT - 1);
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -115,7 +115,7 @@ public abstract class AbstractOS implements OS, Constants {
     public final BufferedImage screenshot(final Area area) {
         BufferedImage result;
         if (area == null) {
-            result = screenshot(fullscreenArea.getP1(), fullscreenArea.getP2());
+            result = screenshot(FULLSCREEN.getP1(), FULLSCREEN.getP2());
         } else {
             result = screenshot(area.getP1(), area.getP2());
         }
@@ -126,7 +126,7 @@ public abstract class AbstractOS implements OS, Constants {
 
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
-        final int time = sleepInMs + RANDOM.nextInt(sleepInMs);
+        final int time = sleepInMs + Utils.RANDOM.nextInt(sleepInMs);
         logger.fine("Sleeping for " + time + " ms.");
         Thread.sleep(time);
     }

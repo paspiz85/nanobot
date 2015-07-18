@@ -2,11 +2,11 @@ package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.os.OS;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -63,10 +63,8 @@ public class StepDefinitions {
         }
     }
 
-    private static final OS DEFAULT_OS;
     static {
-        System.setProperty(OS.CLASS_PROPERTY, OSMock.class.getName());
-        DEFAULT_OS = OS.instance();
+        System.setProperty(Platform.CLASS_PROPERTY, OSMock.class.getName());
     }
 
     private Boolean check;
@@ -75,7 +73,7 @@ public class StepDefinitions {
 
     private Boolean isCollectorsFull;
 
-    protected final OS os = DEFAULT_OS;
+    protected final Platform platform = Platform.instance();
 
     private Point point;
 

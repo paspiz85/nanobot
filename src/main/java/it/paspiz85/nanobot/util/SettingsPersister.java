@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author paspiz85
  *
  */
-public final class SettingsPersister implements Constants {
+public final class SettingsPersister {
 
     private static final String PROPERTY_ATTACK_STRAT = "attack_strat";
 

@@ -7,7 +7,6 @@ import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
-import it.paspiz85.nanobot.util.Constants;
 import it.paspiz85.nanobot.util.Settings;
 
 import java.util.Arrays;
@@ -18,7 +17,7 @@ import java.util.Arrays;
  * @author paspiz85
  *
  */
-public final class StateAttack extends State<AttackScreenParser> implements Constants {
+public final class StateAttack extends State<AttackScreenParser> {
 
     private static StateAttack instance;
 
@@ -67,7 +66,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
             final long id = System.currentTimeMillis();
             logger.info("Found opponent " + id);
             // to avoid fog
-            os.sleepRandom(500);
+            platform.sleepRandom(500);
             EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
@@ -82,7 +81,7 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                     }
                 }
             } catch (final BotBadBaseException e) {
-                os.saveScreenshot("bad_base_" + id);
+                platform.saveScreenshot("bad_base_" + id);
                 throw e;
             }
             if (doAttack) {
@@ -97,12 +96,12 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                         logger.info("Troops count: " + Arrays.toString(troopsCount));
                         attackStrategy.attack(enemyInfo, troopsCount);
                     }
-                    os.leftClick(getParser().getButtonEndBattle(), true);
-                    os.sleepRandom(1200);
-                    os.leftClick(getParser().getButtonEndBattleQuestionOK(), true);
-                    os.sleepRandom(1200);
-                    os.leftClick(getParser().getButtonEndBattleReturnHome(), true);
-                    os.sleepRandom(1200);
+                    platform.leftClick(getParser().getButtonEndBattle(), true);
+                    platform.sleepRandom(1200);
+                    platform.leftClick(getParser().getButtonEndBattleQuestionOK(), true);
+                    platform.sleepRandom(1200);
+                    platform.leftClick(getParser().getButtonEndBattleReturnHome(), true);
+                    platform.sleepRandom(1200);
                 } else {
                     if (enemyInfo.equals(prevLoot)) {
                         logger.info("User is manually attacking/deciding.");
@@ -115,11 +114,11 @@ public final class StateAttack extends State<AttackScreenParser> implements Cons
                 // next
                 // make sure you dont immediately check for next button because
                 // you may see the original one
-                os.leftClick(getParser().getButtonNext(), true);
-                os.sleepRandom(666);
+                platform.leftClick(getParser().getButtonNext(), true);
+                platform.sleepRandom(666);
                 sleepUntilPointFound(() -> getParser().searchButtonNext());
                 // to avoid server/client sync from nexting too fast
-                os.sleepRandom(1000);
+                platform.sleepRandom(1000);
             }
         }
         context.setState(StateIdle.instance());

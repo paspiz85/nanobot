@@ -20,11 +20,11 @@ import org.kohsuke.github.GitHub;
  * @author paspiz85
  *
  */
-public final class BuildInfo implements Constants {
+public final class BuildInfo {
 
     private static final String AD_URL = "http://paspiz85.altervista.org/nanobot/ad.php";
 
-    private static final String DONATE_URL = "http://rawgit.com/paspiz85/nanobot/master/donate.html";
+    private static final String DONATE_URL = "https://cdn.rawgit.com/paspiz85/nanobot/master/donate.html";
 
     private static final String GITHUB_URL = "https://github.com/";
 
@@ -52,10 +52,13 @@ public final class BuildInfo implements Constants {
         try {
             final Enumeration<URL> resources = getClass().getClassLoader().getResources(JarFile.MANIFEST_NAME);
             while (resources.hasMoreElements()) {
-                try (InputStream in = resources.nextElement().openStream()) {
+                final URL url = resources.nextElement();
+                logger.finer("Searching manifest in " + url);
+                try (InputStream in = url.openStream()) {
                     final Manifest man = new Manifest(in);
                     if (NAME.toLowerCase().equals(man.getMainAttributes().getValue("Build-Name"))) {
                         manifest = man;
+                        logger.finer("Manifest found");
                         break;
                     }
                 }
@@ -67,16 +70,21 @@ public final class BuildInfo implements Constants {
     }
 
     public String checkForUpdate() {
+        logger.finer("checkForUpdate");
         String result = null;
         final String current = getVersion();
         final String release = getLatestVersion();
         if (current != null && release != null) {
+            logger.finer("Comparing current and release versions");
             final DefaultArtifactVersion currentVersion = new DefaultArtifactVersion(current);
             final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
-            if (currentVersion.compareTo(releaseVersion) < 0) {
+            final int compare = currentVersion.compareTo(releaseVersion);
+            logger.finer("Comparing result is " + compare);
+            if (compare < 0) {
                 result = release;
             }
         }
+        logger.finer("checkForUpdate result is " + result);
         return result;
     }
 

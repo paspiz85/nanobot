@@ -42,7 +42,7 @@ public class LogHandler extends Handler {
         }
     }
 
-    private static final long CLEAN_INTERVAL = 2 * 60 * 60 * 1000;
+    private static final long CLEAN_INTERVAL = 60 * 60 * 1000;
 
     static void initialize(final TextArea textArea) {
         for (final Handler h : Logger.getLogger("").getHandlers()) {
