@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.paspiz85</groupId>
 	<artifactId>nanobot</artifactId>
-	<version>1.1.1</version>
+	<version>1.1.2-SNAPSHOT</version>
 
 	<properties>
 		<mainClass>it.paspiz85.nanobot.Start</mainClass>
@@ -12,7 +12,7 @@
 		<connection>scm:git:git@github.com:paspiz85/nanobot.git</connection>
 		<url>scm:git:git@github.com:paspiz85/nanobot.git</url>
 		<developerConnection>scm:git:git@github.com:paspiz85/nanobot.git</developerConnection>
-		<tag>v1.1.1</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<repositories>
