@@ -91,7 +91,7 @@ public abstract class AbstractPlatform implements Platform {
         }
         logger.fine("Saving image at " + file.getAbsolutePath());
         ImageIO.write(img, "png", file);
-        logger.fine("Saved image at " + file.getAbsolutePath());
+        logger.info("Saved image at " + file.getAbsolutePath());
         return file;
     }
 
