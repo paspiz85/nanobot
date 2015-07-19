@@ -58,7 +58,7 @@ public final class ScriptManager {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    private Function<String, String> prompt;
+    private PromptFunction prompt;
 
     private SelectFunction select;
 
@@ -158,7 +158,7 @@ public final class ScriptManager {
         this.confirm = confirm;
     }
 
-    public void setPrompt(final Function<String, String> prompt) {
+    public void setPrompt(final PromptFunction prompt) {
         this.prompt = prompt;
     }
 

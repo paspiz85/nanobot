@@ -225,7 +225,7 @@ public class MainController implements ApplicationAwareController {
         LogHandler.initialize(textArea);
         ScriptManager.instance().setAlert((str) -> alert(str));
         ScriptManager.instance().setConfirm((str) -> confirm(str));
-        ScriptManager.instance().setPrompt((str) -> prompt(str));
+        ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
         ScriptManager.instance().setSelect((str, options) -> select(str, options));
         model.initialize(() -> setupResolution(), () -> updateUI());
         if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
@@ -327,12 +327,12 @@ public class MainController implements ApplicationAwareController {
         logger.fine("platformRunNow wait complete");
     }
 
-    private String prompt(final String str) {
+    private String prompt(final String msg, final String value) {
         final String[] toReturn = new String[1];
         platformRunNow(() -> {
-            final TextInputDialog dialog = new TextInputDialog("");
+            final TextInputDialog dialog = new TextInputDialog(value == null ? "" : value);
             dialog.initOwner(application.getPrimaryStage());
-            dialog.setHeaderText(str);
+            dialog.setHeaderText(msg);
             final Optional<String> result = dialog.showAndWait();
             toReturn[0] = result.isPresent() ? result.get() : null;
         });

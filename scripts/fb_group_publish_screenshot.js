@@ -1,14 +1,16 @@
 var IOUtils = Java.type("org.apache.commons.io.IOUtils");
-(function () {
-	
-	var HttpGet = Java.type("org.apache.http.client.methods.HttpGet");
-	var HttpPost = Java.type("org.apache.http.client.methods.HttpPost");
-	var ArrayList = Java.type("java.util.ArrayList");
-	var UrlEncodedFormEntity = Java.type("org.apache.http.client.entity.UrlEncodedFormEntity");
-	var BasicNameValuePair = Java.type("org.apache.http.message.BasicNameValuePair");
-	var MultipartEntityBuilder = Java.type("org.apache.http.entity.mime.MultipartEntityBuilder");
-	var File = Java.type("java.io.File");
+var HttpGet = Java.type("org.apache.http.client.methods.HttpGet");
+var HttpPost = Java.type("org.apache.http.client.methods.HttpPost");
+var ArrayList = Java.type("java.util.ArrayList");
+var UrlEncodedFormEntity = Java.type("org.apache.http.client.entity.UrlEncodedFormEntity");
+var BasicNameValuePair = Java.type("org.apache.http.message.BasicNameValuePair");
+var MultipartEntityBuilder = Java.type("org.apache.http.entity.mime.MultipartEntityBuilder");
+var File = Java.type("java.io.File");
+var FileInputStream = Java.type("java.io.FileInputStream");
+var FileOutputStream = Java.type("java.io.FileOutputStream");
+var System = Java.type("java.lang.System");
 
+(function () {
 	
 	function selectData(resJson, msg) {
 		var options = [];
@@ -27,24 +29,20 @@ var IOUtils = Java.type("org.apache.commons.io.IOUtils");
 	
 	var request, response, resData, selection;
 	
-	/*
-	request = new HttpGet("https://graph.facebook.com/v2.4/oauth/access_token?client_id=" + appId + "&client_secret=" + appSecret + "&grant_type=client_credentials");
-	response = httpClient.execute(request);
-	//alert(""+response.getStatusLine().getStatusCode());
-	if (response.getStatusLine().getStatusCode() != 200) {
-		alert(IOUtils.toString(response.getEntity().getContent()));
-		return;
+	var accessToken = "";
+	var tmpFile = new File(System.getProperty("java.io.tmpdir",".")+"/fb_token.tmp");
+	if (tmpFile.exists()) {
+		var inStream = new FileInputStream(tmpFile);
+		accessToken = IOUtils.toString(inStream);
+		inStream.close();
 	}
-	//alert(IOUtils.toString(response.getEntity().getContent()));
-	resData = JSON.parse(IOUtils.toString(response.getEntity().getContent()));
-	var accessToken = resData.access_token;
-	accessToken = accessToken.replace("|","%7C");
-	alert(accessToken);
-	*/
-	var accessToken = prompt("Paste here Access Token");
+	accessToken = prompt("Paste here Access Token (for example from https://developers.facebook.com/tools/explorer/)", accessToken);
 	if (accessToken == null) {
 		return;
 	}
+	var outStream = new FileOutputStream(tmpFile);
+	IOUtils.write(accessToken, outStream);
+	outStream.close();
 	request = new HttpGet("https://graph.facebook.com/v2.4/me/groups?access_token=" + accessToken);
 	response = httpClient.execute(request);
 	//alert(""+response.getStatusLine().getStatusCode());
@@ -70,7 +68,7 @@ var IOUtils = Java.type("org.apache.commons.io.IOUtils");
 	selection = selectData(resData, "Select an album");
 	var albumId = null;
 	if (selection == null) {
-		var albumName = prompt("Insert Album Name");
+		var albumName = prompt("Insert Album Name","");
 		if (albumName == null) {
 			return;
 		} else {
