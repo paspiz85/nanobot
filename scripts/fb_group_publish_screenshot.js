@@ -61,7 +61,7 @@ var IOUtils = Java.type("org.apache.commons.io.IOUtils");
 	//var groupId = "1556084751307517";
 	request = new HttpGet("https://graph.facebook.com/v2.4/" + groupId + "/albums?access_token=" + accessToken);
 	response = httpClient.execute(request);
-	alert(""+response.getStatusLine().getStatusCode());
+	//alert(""+response.getStatusLine().getStatusCode());
 	if (response.getStatusLine().getStatusCode() != 200) {
 		alert(IOUtils.toString(response.getEntity().getContent()));
 		return;
