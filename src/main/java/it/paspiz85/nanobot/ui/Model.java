@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Locale;
 import java.util.Set;
@@ -23,13 +24,8 @@ import javafx.concurrent.Worker.State;
  */
 public final class Model {
 
-    private static Model instance;
-
     public static Model instance() {
-        if (instance == null) {
-            instance = new Model();
-        }
-        return instance;
+        return Utils.singleton(Model.class, () -> new Model());
     }
 
     protected final Logger logger = Logger.getLogger(getClass().getName());

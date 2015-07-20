@@ -8,6 +8,7 @@ import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Arrays;
 
@@ -19,13 +20,8 @@ import java.util.Arrays;
  */
 public final class StateAttack extends State<AttackScreenParser> {
 
-    private static StateAttack instance;
-
     public static StateAttack instance() {
-        if (instance == null) {
-            instance = new StateAttack();
-        }
-        return instance;
+        return Utils.singleton(StateAttack.class, () -> new StateAttack());
     }
 
     private EnemyInfo prevLoot;

@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -15,15 +16,10 @@ import java.util.function.BooleanSupplier;
  */
 public final class UnknowPlatform extends AbstractPlatform {
 
-    private static UnknowPlatform instance;
-
-    private static final String MESSAGE = "OS platform not supported";
+    private static final String MESSAGE = "Platform not supported";
 
     public static UnknowPlatform instance() {
-        if (instance == null) {
-            instance = new UnknowPlatform();
-        }
-        return instance;
+        return Utils.singleton(UnknowPlatform.class, () -> new UnknowPlatform());
     }
 
     private UnknowPlatform() {

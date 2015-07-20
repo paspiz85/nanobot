@@ -6,6 +6,7 @@ import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Arrays;
 
@@ -23,13 +24,8 @@ public final class StateMainMenu extends State<MainScreenParser> {
 
     private static final int GOLD_MINE_MAX_NUMBER = 8;
 
-    private static StateMainMenu instance;
-
     public static StateMainMenu instance() {
-        if (instance == null) {
-            instance = new StateMainMenu();
-        }
-        return instance;
+        return Utils.singleton(StateMainMenu.class, () -> new StateMainMenu());
     }
 
     private StateMainMenu() {

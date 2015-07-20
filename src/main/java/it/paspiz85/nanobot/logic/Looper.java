@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
@@ -16,13 +17,8 @@ import java.util.logging.Logger;
  */
 public final class Looper {
 
-    private static Looper instance;
-
     public static Looper instance() {
-        if (instance == null) {
-            instance = new Looper();
-        }
-        return instance;
+        return Utils.singleton(Looper.class, () -> new Looper());
     }
 
     private final Logger logger = Logger.getLogger(getClass().getName());

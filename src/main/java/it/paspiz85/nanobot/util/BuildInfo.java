@@ -28,8 +28,6 @@ public final class BuildInfo {
 
     private static final String GITHUB_URL = "https://github.com/";
 
-    private static BuildInfo instance;
-
     private static final String RELEASES_LATEST_PATH = "/releases/latest";
 
     private static final String REPOSITORY_NAME = "paspiz85/nanobot";
@@ -37,10 +35,7 @@ public final class BuildInfo {
     private static final String NAME = "NanoBot";
 
     public static BuildInfo instance() {
-        if (instance == null) {
-            instance = new BuildInfo();
-        }
-        return instance;
+        return Utils.singleton(BuildInfo.class, () -> new BuildInfo());
     }
 
     private final Logger logger = Logger.getLogger(getClass().getName());

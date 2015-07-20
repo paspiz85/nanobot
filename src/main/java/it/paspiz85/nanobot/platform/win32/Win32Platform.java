@@ -34,8 +34,6 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  */
 public final class Win32Platform extends AbstractPlatform implements Platform {
 
-    private static Win32Platform instance;
-
     private static final int SWP_NOMOVE = 0x0002;
 
     private static final int SWP_NOSIZE = 0x0001;
@@ -59,10 +57,7 @@ public final class Win32Platform extends AbstractPlatform implements Platform {
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
     public static Win32Platform instance() {
-        if (instance == null) {
-            instance = new Win32Platform();
-        }
-        return instance;
+        return Utils.singleton(Win32Platform.class, () -> new Win32Platform());
     }
 
     private HWND handler;

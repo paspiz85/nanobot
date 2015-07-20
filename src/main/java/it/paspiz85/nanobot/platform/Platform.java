@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -23,7 +24,7 @@ public interface Platform {
     int HEIGHT = 720;
 
     static Platform instance() {
-        return PlatformFactory.instance().get();
+        return Utils.singleton(Platform.class, PlatformResolver.instance());
     }
 
     boolean compareColor(Color c1, Color c2, int var);

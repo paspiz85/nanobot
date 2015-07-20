@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
+import it.paspiz85.nanobot.util.Utils;
 
 /**
  * This state is when bot switch from training mode to attack mode.
@@ -13,13 +14,8 @@ import it.paspiz85.nanobot.util.Settings;
  */
 public final class StateFindAMatch extends State<AttackScreenParser> {
 
-    private static StateFindAMatch instance;
-
     public static StateFindAMatch instance() {
-        if (instance == null) {
-            instance = new StateFindAMatch();
-        }
-        return instance;
+        return Utils.singleton(StateFindAMatch.class, () -> new StateFindAMatch());
     }
 
     private StateFindAMatch() {

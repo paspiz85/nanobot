@@ -14,13 +14,8 @@ import it.paspiz85.nanobot.util.Utils;
  */
 public final class StateTrainTroops extends State<MainScreenParser> {
 
-    private static StateTrainTroops instance;
-
     public static StateTrainTroops instance() {
-        if (instance == null) {
-            instance = new StateTrainTroops();
-        }
-        return instance;
+        return Utils.singleton(StateTrainTroops.class, () -> new StateTrainTroops());
     }
 
     private StateTrainTroops() {

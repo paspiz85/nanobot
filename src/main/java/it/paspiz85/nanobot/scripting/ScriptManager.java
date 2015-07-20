@@ -39,13 +39,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
  */
 public final class ScriptManager {
 
-    private static ScriptManager instance;
-
     public static ScriptManager instance() {
-        if (instance == null) {
-            instance = new ScriptManager();
-        }
-        return instance;
+        return Utils.singleton(ScriptManager.class, () -> new ScriptManager());
     }
 
     private Consumer<String> alert;

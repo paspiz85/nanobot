@@ -9,8 +9,11 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,12 +29,24 @@ public final class Utils {
 
     private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
 
+    private static Map<Object, Object> singletons = new HashMap<>();
+
     public static URL getParentResource(final Class<?> c, final String resource) {
         String name = c.getName();
         name = name.substring(0, name.lastIndexOf("."));
         name = name.substring(0, name.lastIndexOf(".") + 1);
         name = name.replace(".", "/");
         return c.getClassLoader().getResource(name + resource);
+    }
+
+    public static <E> E singleton(final Class<E> c, final Supplier<E> supplier) {
+        @SuppressWarnings("unchecked")
+        E result = (E) singletons.get(c);
+        if (result == null) {
+            result = supplier.get();
+            singletons.put(c, result);
+        }
+        return result;
     }
 
     public static void withClasspathFolder(final URI uri, final Consumer<Path> pathConsumer) {

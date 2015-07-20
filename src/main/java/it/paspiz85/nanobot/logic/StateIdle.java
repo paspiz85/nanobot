@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.parsing.AttackScreenParser;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.util.Utils;
 
 /**
  * This state is when bot sleeps.
@@ -12,13 +13,8 @@ import it.paspiz85.nanobot.parsing.Parser;
  */
 public final class StateIdle extends State<Parser> {
 
-    private static StateIdle instance;
-
     public static StateIdle instance() {
-        if (instance == null) {
-            instance = new StateIdle();
-        }
-        return instance;
+        return Utils.singleton(StateIdle.class, () -> new StateIdle());
     }
 
     private final AttackScreenParser attackScreenParser;
