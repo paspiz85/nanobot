@@ -7,6 +7,7 @@ import it.paspiz85.nanobot.parsing.EnemyInfo;
 import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.platform.PlatformFactory;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -64,7 +65,7 @@ public class StepDefinitions {
     }
 
     static {
-        System.setProperty(Platform.CLASS_PROPERTY, OSMock.class.getName());
+        System.setProperty(PlatformFactory.CLASS_PROPERTY, OSMock.class.getName());
     }
 
     private Boolean check;

@@ -1,7 +1,6 @@
 package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.platform.win32.Win32Platform;
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.ColoredPoint;
 import it.paspiz85.nanobot.util.Point;
@@ -9,12 +8,10 @@ import it.paspiz85.nanobot.util.Point;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 /**
- * This wraps Operating System functionalities.
+ * This wraps Platform functionalities.
  *
  * @author paspiz85
  *
@@ -25,34 +22,8 @@ public interface Platform {
 
     int HEIGHT = 720;
 
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    Supplier<Class<?>> CLASS_FINDER = new Supplier() {
-
-        private Class<?> cache;
-
-        @Override
-        public Class<?> get() {
-            if (cache == null) {
-                try {
-                    final String className = System.getProperty(CLASS_PROPERTY, Win32Platform.class.getName());
-                    cache = Class.forName(className);
-                } catch (final ClassNotFoundException e) {
-                    throw new IllegalStateException("unable to initialize OS class", e);
-                }
-            }
-            return cache;
-        }
-    };
-
-    String CLASS_PROPERTY = Platform.class.getName();
-
     static Platform instance() {
-        try {
-            return (Platform) CLASS_FINDER.get().getMethod("instance").invoke(null);
-        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-                | SecurityException e) {
-            throw new IllegalStateException("unable to initialize OS", e);
-        }
+        return PlatformFactory.instance().get();
     }
 
     boolean compareColor(Color c1, Color c2, int var);

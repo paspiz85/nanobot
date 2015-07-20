@@ -121,6 +121,7 @@ public final class Win32Platform extends AbstractPlatform implements Platform {
 
     @Override
     public void setup() throws BotConfigurationException {
+        // TODO remove
         if (!SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
             throw new BotConfigurationException("Bot is only available for Windows OS.");
         }
