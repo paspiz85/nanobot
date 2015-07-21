@@ -47,9 +47,7 @@ public interface Platform {
 
     BufferedImage screenshot(Area area);
 
-    void setup() throws BotConfigurationException;
-
-    void setupResolution(BooleanSupplier setupResolution) throws BotConfigurationException;
+    void setup(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
 
     /**
      * Sleep random interval between sleepInMs and 2*sleepInMs.

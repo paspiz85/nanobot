@@ -144,6 +144,27 @@ public class MainController implements ApplicationAwareController {
         });
     }
 
+    private boolean autoAdjustResolution() {
+        final boolean[] ret = new boolean[1];
+        try {
+            platformRunNow(() -> {
+                final Alert dialog = new Alert(AlertType.CONFIRMATION);
+                dialog.initOwner(application.getPrimaryStage());
+                dialog.setTitle("Resolution");
+                dialog.setHeaderText("Confirm changing resolution");
+                dialog.setContentText(String
+                        .format("Game must run in resolution %dx%d.\n"
+                                + "Click YES to change it automatically, NO to do it later.\n", Platform.WIDTH,
+                                Platform.HEIGHT));
+                final Optional<ButtonType> result = dialog.showAndWait();
+                ret[0] = result.isPresent() && result.get() == ButtonType.OK;
+            });
+        } catch (final Exception e) {
+            logger.log(Level.SEVERE, "Unable to setup resolution", e);
+        }
+        return ret[0];
+    }
+
     private boolean confirm(final String str) {
         final boolean[] toReturn = new boolean[1];
         platformRunNow(() -> {
@@ -227,7 +248,7 @@ public class MainController implements ApplicationAwareController {
         ScriptManager.instance().setConfirm((str) -> confirm(str));
         ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
         ScriptManager.instance().setSelect((str, options) -> select(str, options));
-        model.initialize(() -> setupResolution(), () -> updateUI());
+        model.initialize(() -> autoAdjustResolution(), () -> updateUI());
         if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
             versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
             githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
@@ -355,27 +376,6 @@ public class MainController implements ApplicationAwareController {
     public void setApplication(final Application application) {
         this.application = application;
         showSettings(false);
-    }
-
-    private boolean setupResolution() {
-        final boolean[] ret = new boolean[1];
-        try {
-            platformRunNow(() -> {
-                final Alert dialog = new Alert(AlertType.CONFIRMATION);
-                dialog.initOwner(application.getPrimaryStage());
-                dialog.setTitle("Resolution");
-                dialog.setHeaderText("Confirm changing resolution");
-                dialog.setContentText(String
-                        .format("Game must run in resolution %dx%d.\n"
-                                + "Click YES to change it automatically, NO to do it later.\n", Platform.WIDTH,
-                                Platform.HEIGHT));
-                final Optional<ButtonType> result = dialog.showAndWait();
-                ret[0] = result.isPresent() && result.get() == ButtonType.OK;
-            });
-        } catch (final Exception e) {
-            logger.log(Level.SEVERE, "Unable to setup resolution", e);
-        }
-        return ret[0];
     }
 
     private void showSettings(final boolean value) {

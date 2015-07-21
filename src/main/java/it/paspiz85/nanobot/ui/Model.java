@@ -113,10 +113,6 @@ public final class Model {
         return looper.isRunning();
     }
 
-    public boolean isSetupDone() {
-        return looper.isSetupDone();
-    }
-
     public Settings loadSettings() {
         return Settings.instance();
     }

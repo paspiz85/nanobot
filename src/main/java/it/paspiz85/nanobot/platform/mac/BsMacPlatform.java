@@ -42,12 +42,7 @@ public class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    public void setup() throws BotConfigurationException {
-        throw new UnsupportedOperationException(MESSAGE);
-    }
-
-    @Override
-    public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
+    public void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         throw new UnsupportedOperationException(MESSAGE);
     }
 

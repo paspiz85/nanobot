@@ -115,7 +115,7 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
-    public void setup() throws BotConfigurationException {
+    public void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
         handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
         if (handler == null) {
@@ -130,10 +130,10 @@ public final class BsWin32Platform extends AbstractPlatform {
                 Arrays.toString(rect)));
         // set bs always on top
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
+        setupResolution(autoAdjustResolution);
     }
 
-    @Override
-    public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
+    private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info(String.format("Checking %s resolution...", BS_WINDOW_NAME));
         try {
             final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
@@ -150,7 +150,7 @@ public final class BsWin32Platform extends AbstractPlatform {
             if (bsX != WIDTH || bsY != HEIGHT) {
                 logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
                 if (w1 != WIDTH || h1 != HEIGHT || w2 != WIDTH || h2 != HEIGHT) {
-                    if (!setupResolution.getAsBoolean()) {
+                    if (!autoAdjustResolution.getAsBoolean()) {
                         throw new BotConfigurationException("Re-run when resolution is fixed.");
                     }
                     Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", WIDTH);

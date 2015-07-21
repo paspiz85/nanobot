@@ -27,8 +27,6 @@ public final class Looper {
 
     private boolean running;
 
-    private boolean setupDone;
-
     private boolean waitingForDcChecker;
 
     private Looper() {
@@ -36,10 +34,6 @@ public final class Looper {
 
     public boolean isRunning() {
         return running;
-    }
-
-    public boolean isSetupDone() {
-        return setupDone;
     }
 
     boolean isWaitingForDcChecker() {
@@ -94,14 +88,10 @@ public final class Looper {
         logger.info("Woken up. Launching again...");
     }
 
-    public void start(final BooleanSupplier setupResolution, final Runnable updateUI) throws Exception {
+    public void start(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) throws Exception {
         try {
             logger.info("Starting...");
-            if (!setupDone) {
-                platform.setup();
-                setupDone = true;
-            }
-            platform.setupResolution(setupResolution);
+            platform.setup(autoAdjustResolution);
             logger.info("Setup is successful.");
             final Context context = new Context();
             logger.fine("Starting disconnect detector...");
