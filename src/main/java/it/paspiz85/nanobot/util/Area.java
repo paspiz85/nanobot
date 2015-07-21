@@ -16,7 +16,7 @@ public class Area {
         this(new Point(x1, y1), new Point(x2, y2));
     }
 
-    public Area(final Point p1, final Point p2) {
+    private Area(final Point p1, final Point p2) {
         this.p1 = p1;
         this.p2 = p2;
     }

@@ -12,6 +12,7 @@ import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 
 import org.jnativehook.GlobalScreen;
@@ -89,14 +90,10 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
-    public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
+    protected void leftClick(final Point point) throws InterruptedException {
         // randomize coordinates little bit
-        int x = point.x();
-        int y = point.y();
-        if (randomize) {
-            x += -1 + Utils.RANDOM.nextInt(3);
-            y += -1 + Utils.RANDOM.nextInt(3);
-        }
+        final int x = point.x();
+        final int y = point.y();
         logger.fine("Clicking [" + x + " " + y + "].");
         final int lParam = y << 16 | x << 16 >>> 16;
         while (isCtrlKeyDown()) {
@@ -104,6 +101,39 @@ public final class BsWin32Platform extends AbstractPlatform {
         }
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
         User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
+    }
+
+    @Override
+    protected boolean registerForClick(final Consumer<Point> clickConsumer) {
+        boolean result;
+        try {
+            GlobalScreen.registerNativeHook();
+            GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
+
+                @Override
+                public void nativeMouseClicked(final NativeMouseEvent e) {
+                    final int x = e.getX();
+                    final int y = e.getY();
+                    logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
+                    final POINT screenPoint = new POINT(x, y);
+                    User32.INSTANCE.ScreenToClient(handler, screenPoint);
+                    clickConsumer.accept(new Point(screenPoint.x, screenPoint.y));
+                }
+
+                @Override
+                public void nativeMousePressed(final NativeMouseEvent e) {
+                }
+
+                @Override
+                public void nativeMouseReleased(final NativeMouseEvent e) {
+                }
+            });
+            result = true;
+        } catch (final Exception e) {
+            logger.log(Level.WARNING, "Unable to capture mouse movement.", e);
+            result = false;
+        }
+        return result;
     }
 
     @Override
@@ -166,51 +196,6 @@ public final class BsWin32Platform extends AbstractPlatform {
         } catch (final Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
         }
-    }
-
-    @Override
-    public Point waitForClick() {
-        Point result = null;
-        final int[] coords = new int[2];
-        final boolean[] done = new boolean[1];
-        try {
-            GlobalScreen.registerNativeHook();
-            GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
-
-                @Override
-                public void nativeMouseClicked(final NativeMouseEvent e) {
-                    final int x = e.getX();
-                    final int y = e.getY();
-                    logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
-                    final POINT screenPoint = new POINT(x, y);
-                    User32.INSTANCE.ScreenToClient(handler, screenPoint);
-                    coords[0] = screenPoint.x;
-                    coords[1] = screenPoint.y;
-                    done[0] = true;
-                    synchronized (GlobalScreen.getInstance()) {
-                        GlobalScreen.getInstance().notify();
-                    }
-                }
-
-                @Override
-                public void nativeMousePressed(final NativeMouseEvent e) {
-                }
-
-                @Override
-                public void nativeMouseReleased(final NativeMouseEvent e) {
-                }
-            });
-            logger.info("Waiting for user to click on first barracks.");
-            synchronized (GlobalScreen.getInstance()) {
-                while (!done[0]) {
-                    GlobalScreen.getInstance().wait();
-                }
-            }
-            result = new Point(coords[0], coords[1]);
-        } catch (final Exception e) {
-            logger.log(Level.WARNING, "Unable to capture mouse movement.", e);
-        }
-        return result;
     }
 
     @Override

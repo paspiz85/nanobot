@@ -50,6 +50,12 @@ public final class Model {
     }
 
     public void initialize(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) {
+        if (autoAdjustResolution == null) {
+            throw new NullPointerException("autoAdjustResolution not provided");
+        }
+        if (updateUI == null) {
+            throw new NullPointerException("updateUI not provided");
+        }
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);

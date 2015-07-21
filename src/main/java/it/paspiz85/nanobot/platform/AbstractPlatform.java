@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -27,6 +28,8 @@ public abstract class AbstractPlatform implements Platform {
     private static final Area FULLSCREEN = new Area(0, 0, WIDTH - 1, HEIGHT - 1);
 
     private static final String IMG_FOLDER = "img";
+
+    private static final Object WAIT_FOR_CLICK_SYNC = new Object();
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -45,6 +48,13 @@ public abstract class AbstractPlatform implements Platform {
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
 
+    /**
+     * Given a point return the color of pixel.
+     *
+     * @param point
+     *            coordinates of pixel.
+     * @return color of a pixel.
+     */
     protected abstract Color getColor(Point point);
 
     @Override
@@ -61,11 +71,45 @@ public abstract class AbstractPlatform implements Platform {
         return image.getSubimage(x1, y1, x2 - x1, y2 - y1);
     }
 
+    /**
+     * Do a left click in the game.
+     *
+     * @param point
+     *            coordinates of click.
+     * @throws InterruptedException
+     */
+    protected abstract void leftClick(final Point point) throws InterruptedException;
+
+    @Override
+    public final void leftClick(final Point point, final boolean randomize) throws InterruptedException {
+        if (point == null) {
+            throw new IllegalArgumentException("point not provided");
+        }
+        Point p = point;
+        // randomize coordinates little bit
+        if (randomize) {
+            p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.x() - 1 + Utils.RANDOM.nextInt(3));
+        }
+        leftClick(p);
+    }
+
     @Override
     public boolean matchColoredPoint(final ColoredPoint point) {
+        if (point == null) {
+            throw new IllegalArgumentException("point not provided");
+        }
         final Color actualColor = getColor(point);
         return compareColor(point.getColor(), actualColor, 5);
     }
+
+    /**
+     * Register for a click on the game.
+     *
+     * @param clickConsumer
+     *            listener that receive the click.
+     * @return true if registration is OK, false otherwise.
+     */
+    protected abstract boolean registerForClick(Consumer<Point> clickConsumer);
 
     @Override
     public File saveImage(final BufferedImage img, final String... filePathRest) {
@@ -130,5 +174,27 @@ public abstract class AbstractPlatform implements Platform {
         final int time = sleepInMs + Utils.RANDOM.nextInt(sleepInMs);
         logger.fine("Sleeping for " + time + " ms.");
         Thread.sleep(time);
+    }
+
+    @Override
+    public final Point waitForClick() throws InterruptedException {
+        final Point[] result = new Point[1];
+        final boolean[] done = new boolean[1];
+        final boolean registered = registerForClick((point) -> {
+            result[0] = point;
+            done[0] = true;
+            synchronized (WAIT_FOR_CLICK_SYNC) {
+                WAIT_FOR_CLICK_SYNC.notify();
+            }
+        });
+        if (registered) {
+            logger.info("Waiting for user to click.");
+            synchronized (WAIT_FOR_CLICK_SYNC) {
+                while (!done[0]) {
+                    WAIT_FOR_CLICK_SYNC.wait();
+                }
+            }
+        }
+        return result[0];
     }
 }

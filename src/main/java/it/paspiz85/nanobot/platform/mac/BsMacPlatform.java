@@ -8,6 +8,7 @@ import it.paspiz85.nanobot.util.Utils;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.function.BooleanSupplier;
+import java.util.function.Consumer;
 
 /**
  * TODO.
@@ -32,7 +33,12 @@ public class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    public void leftClick(final Point point, final boolean randomize) throws InterruptedException {
+    protected void leftClick(final Point point) throws InterruptedException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
+    protected boolean registerForClick(final Consumer<Point> clickConsumer) {
         throw new UnsupportedOperationException(MESSAGE);
     }
 
@@ -43,11 +49,6 @@ public class BsMacPlatform extends AbstractPlatform {
 
     @Override
     public void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        throw new UnsupportedOperationException(MESSAGE);
-    }
-
-    @Override
-    public Point waitForClick() {
         throw new UnsupportedOperationException(MESSAGE);
     }
 

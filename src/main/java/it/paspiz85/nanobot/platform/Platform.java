@@ -33,6 +33,14 @@ public interface Platform {
 
     BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
 
+    /**
+     * Do a left click on game.
+     *
+     * @param point
+     *            coordinates of click.
+     * @param randomize
+     * @throws InterruptedException
+     */
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
     boolean matchColoredPoint(ColoredPoint point);
@@ -59,7 +67,7 @@ public interface Platform {
      */
     void sleepRandom(int sleepInMs) throws InterruptedException;
 
-    Point waitForClick();
+    Point waitForClick() throws InterruptedException;
 
     void zoomUp() throws InterruptedException;
 }
