@@ -55,6 +55,13 @@ public interface Platform {
 
     BufferedImage screenshot(Area area);
 
+    /**
+     * Check emulator windows and setup the platform to working with that.
+     * 
+     * @param autoAdjustResolution
+     *            supplier to decide if auto adjust game resolution.
+     * @throws BotConfigurationException
+     */
     void setup(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
 
     /**
@@ -69,5 +76,10 @@ public interface Platform {
 
     Point waitForClick() throws InterruptedException;
 
+    /**
+     * Change game view to max zoom level.
+     * 
+     * @throws InterruptedException
+     */
     void zoomUp() throws InterruptedException;
 }

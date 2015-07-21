@@ -167,6 +167,15 @@ public abstract class AbstractPlatform implements Platform {
         return result;
     }
 
+    /**
+     * Pick a screenshot from game.
+     * 
+     * @param p1
+     *            top left corner of screenshot.
+     * @param p2
+     *            bottom right corner of screenshot.
+     * @return image containing the screenshot.
+     */
     protected abstract BufferedImage screenshot(Point p1, Point p2);
 
     @Override
