@@ -14,7 +14,7 @@ import java.util.function.BooleanSupplier;
  * @author paspiz85
  *
  */
-public final class UnknowPlatform extends AbstractPlatform {
+public class UnknowPlatform extends AbstractPlatform {
 
     private static final String MESSAGE = "Platform not supported";
 
@@ -22,7 +22,7 @@ public final class UnknowPlatform extends AbstractPlatform {
         return Utils.singleton(UnknowPlatform.class, () -> new UnknowPlatform());
     }
 
-    private UnknowPlatform() {
+    protected UnknowPlatform() {
     }
 
     @Override
@@ -47,6 +47,11 @@ public final class UnknowPlatform extends AbstractPlatform {
 
     @Override
     public void setupResolution(final BooleanSupplier setupResolution) throws BotConfigurationException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
+    public Point waitForClick() {
         throw new UnsupportedOperationException(MESSAGE);
     }
 

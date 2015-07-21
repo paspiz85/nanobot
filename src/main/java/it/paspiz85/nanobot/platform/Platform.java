@@ -19,9 +19,9 @@ import java.util.function.BooleanSupplier;
  */
 public interface Platform {
 
-    int WIDTH = 860;
-
     int HEIGHT = 720;
+
+    int WIDTH = 860;
 
     static Platform instance() {
         return Utils.singleton(Platform.class, PlatformResolver.instance());
@@ -60,6 +60,8 @@ public interface Platform {
      *             thread interrupted.
      */
     void sleepRandom(int sleepInMs) throws InterruptedException;
+
+    Point waitForClick();
 
     void zoomUp() throws InterruptedException;
 }

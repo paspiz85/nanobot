@@ -32,11 +32,11 @@ public final class Model {
 
     private final Looper looper = Looper.instance();
 
+    private String runningScript;
+
     private Service<Void> runningService;
 
     private Service<Void> scriptService;
-
-    private String runningScript;
 
     private Model() {
     }

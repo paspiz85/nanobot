@@ -64,9 +64,6 @@ public class MainController implements ApplicationAwareController {
     private Label donateLabel;
 
     @FXML
-    private WebView webView;
-
-    @FXML
     private Hyperlink donateLink;
 
     @FXML
@@ -134,6 +131,9 @@ public class MainController implements ApplicationAwareController {
 
     @FXML
     private Label versionLabel;
+
+    @FXML
+    private WebView webView;
 
     private void alert(final String str) {
         platformRunNow(() -> {

@@ -25,9 +25,9 @@ import java.util.logging.Logger;
  */
 public final class Utils {
 
-    public static final Random RANDOM = new Random();
-
     private static final Logger LOGGER = Logger.getLogger(Utils.class.getName());
+
+    public static final Random RANDOM = new Random();
 
     private static Map<Object, Object> singletons = new HashMap<>();
 

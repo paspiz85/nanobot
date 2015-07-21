@@ -17,7 +17,7 @@ public final class OS {
      *
      */
     public enum Category {
-        UNKNOW, WINDOWS, UNIX, MAC, SOLARIS
+        MAC, SOLARIS, UNIX, UNKNOW, WINDOWS
     }
 
     public static Category getCategory() {

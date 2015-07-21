@@ -24,9 +24,9 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractPlatform implements Platform {
 
-    private static final String IMG_FOLDER = "img";
-
     private static final Area FULLSCREEN = new Area(0, 0, WIDTH - 1, HEIGHT - 1);
+
+    private static final String IMG_FOLDER = "img";
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 

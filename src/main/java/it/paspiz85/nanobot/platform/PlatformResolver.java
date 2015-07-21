@@ -1,6 +1,6 @@
 package it.paspiz85.nanobot.platform;
 
-import it.paspiz85.nanobot.platform.win32.Win32Platform;
+import it.paspiz85.nanobot.platform.win32.BsWin32Platform;
 import it.paspiz85.nanobot.util.OS;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -28,7 +28,7 @@ public final class PlatformResolver implements Supplier<Platform> {
     private final Map<OS.Category, Class<? extends Platform>> platformClassMap = new HashMap<>();
 
     private PlatformResolver() {
-        platformClassMap.put(OS.Category.WINDOWS, Win32Platform.class);
+        platformClassMap.put(OS.Category.WINDOWS, BsWin32Platform.class);
     }
 
     @Override

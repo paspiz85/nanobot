@@ -50,11 +50,11 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    private boolean checkUpdateOnStartup = true;
-
     private Attack attackStrategy = Attack.noStrategy();
 
     private final TroopButton[] availableTroops;
+
+    private boolean checkUpdateOnStartup = true;
 
     private boolean collectResources = true;
 
@@ -70,10 +70,6 @@ public final class Settings {
 
     private boolean isInitialized;
 
-    private UUID uuid = UUID.randomUUID();
-
-    private String userMailAddress = "";
-
     private Level logLevel = Level.INFO;
 
     private boolean matchAllConditions;
@@ -84,6 +80,10 @@ public final class Settings {
             TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
 
     private boolean trainTroops = true;
+
+    private String userMailAddress = "";
+
+    private UUID uuid = UUID.randomUUID();
 
     private Settings() {
         availableTroops = new TroopButton[] { TroopButton.NO_UNIT, TroopButton.BARB, TroopButton.ARCHER,

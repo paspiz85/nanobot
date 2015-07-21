@@ -41,11 +41,11 @@ public final class SettingsPersister {
 
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
-    private static final String PROPERTY_UUID = "uuid";
+    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
 
     private static final String PROPERTY_USER_MAIL_ADDRESS = "user_mail_address";
 
-    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
+    private static final String PROPERTY_UUID = "uuid";
 
     private File configFile;
 

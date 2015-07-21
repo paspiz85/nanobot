@@ -12,9 +12,12 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.function.BooleanSupplier;
 import java.util.logging.Level;
+
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseListener;
 
 import com.sun.jna.platform.win32.Advapi32Util;
 import com.sun.jna.platform.win32.WinDef;
@@ -32,13 +35,13 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  * @author paspiz85
  *
  */
-public final class Win32Platform extends AbstractPlatform implements Platform {
+public final class BsWin32Platform extends AbstractPlatform {
+
+    private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
     private static final int SWP_NOMOVE = 0x0002;
 
     private static final int SWP_NOSIZE = 0x0001;
-
-    private static final String SYSTEM_OS = System.getProperty("os.name");
 
     private static final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
 
@@ -54,17 +57,15 @@ public final class Win32Platform extends AbstractPlatform implements Platform {
 
     private static final int WM_LBUTTONUP = 0x202;
 
-    private static final String BS_WINDOW_NAME = "BlueStacks App Player";
-
-    public static Win32Platform instance() {
-        return Utils.singleton(Win32Platform.class, () -> new Win32Platform());
+    public static BsWin32Platform instance() {
+        return Utils.singleton(BsWin32Platform.class, () -> new BsWin32Platform());
     }
 
     private HWND handler;
 
     private Robot robot;
 
-    private Win32Platform() {
+    private BsWin32Platform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
@@ -116,10 +117,6 @@ public final class Win32Platform extends AbstractPlatform implements Platform {
 
     @Override
     public void setup() throws BotConfigurationException {
-        // TODO remove
-        if (!SYSTEM_OS.toLowerCase(Locale.ROOT).contains("windows")) {
-            throw new BotConfigurationException("Bot is only available for Windows OS.");
-        }
         logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
         handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
         if (handler == null) {
@@ -170,6 +167,51 @@ public final class Win32Platform extends AbstractPlatform implements Platform {
         } catch (final Exception e) {
             throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
         }
+    }
+
+    @Override
+    public Point waitForClick() {
+        Point result = null;
+        final int[] coords = new int[2];
+        final boolean[] done = new boolean[1];
+        try {
+            GlobalScreen.registerNativeHook();
+            GlobalScreen.getInstance().addNativeMouseListener(new NativeMouseListener() {
+
+                @Override
+                public void nativeMouseClicked(final NativeMouseEvent e) {
+                    final int x = e.getX();
+                    final int y = e.getY();
+                    logger.finest(String.format("clicked %d %d", e.getX(), e.getY()));
+                    final POINT screenPoint = new POINT(x, y);
+                    User32.INSTANCE.ScreenToClient(handler, screenPoint);
+                    coords[0] = screenPoint.x;
+                    coords[1] = screenPoint.y;
+                    done[0] = true;
+                    synchronized (GlobalScreen.getInstance()) {
+                        GlobalScreen.getInstance().notify();
+                    }
+                }
+
+                @Override
+                public void nativeMousePressed(final NativeMouseEvent e) {
+                }
+
+                @Override
+                public void nativeMouseReleased(final NativeMouseEvent e) {
+                }
+            });
+            logger.info("Waiting for user to click on first barracks.");
+            synchronized (GlobalScreen.getInstance()) {
+                while (!done[0]) {
+                    GlobalScreen.getInstance().wait();
+                }
+            }
+            result = new Point(coords[0], coords[1]);
+        } catch (final Exception e) {
+            logger.log(Level.WARNING, "Unable to capture mouse movement.", e);
+        }
+        return result;
     }
 
     @Override

@@ -20,9 +20,9 @@ public abstract class State<P extends Parser> {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected final Platform platform = Platform.instance();
-
     private final P parser;
+
+    protected final Platform platform = Platform.instance();
 
     State(final P parser) {
         this.parser = parser;
