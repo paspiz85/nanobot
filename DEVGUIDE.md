@@ -18,16 +18,15 @@ Move into "nanobot" folder.
 mvn clean install
 ```
 
-Skipping tests and checkstyle:
+Skipping tests, checkstyle and install:
 ```
-mvn clean install -Dmaven.test.skip=true -Dcheckstyle.skip=true
+mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true
 ```
 
 ##### Running
-On Windows:
+On Windows (double % in .bat):
 ```
-$JARFILE=(ls target\*.jar).Name
-java -jar target\$JARFILE
+FOR %f in (target\nanobot*.jar) DO java -jar %f
 ```
 On other OS:
 ```
