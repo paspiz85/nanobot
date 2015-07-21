@@ -24,13 +24,14 @@ mvn clean install -Dmaven.test.skip=true -Dcheckstyle.skip=true
 ```
 
 ##### Running
+On Windows:
 ```
-java -jar target/nanobot.jar
+$JARFILE=(ls target\*.jar).Name
+java -jar target\$JARFILE
 ```
-
-Or:
+On other OS:
 ```
-java -jar $(ls -1rt target/*.jar)
+java -jar $(ls -1rt target/nanobot*.jar)
 ```
 
 ##### Running from source
