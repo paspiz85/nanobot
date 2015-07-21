@@ -2,7 +2,6 @@ package it.paspiz85.nanobot.platform.win32;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
-import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -30,7 +29,7 @@ import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 /**
- * Implementation of {@link Platform} for Windows.
+ * Implementation of platform for Windows.
  *
  * @author paspiz85
  *
