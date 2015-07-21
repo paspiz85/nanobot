@@ -49,7 +49,7 @@ public final class Model {
         return ScriptManager.instance().getScripts();
     }
 
-    public void initialize(final BooleanSupplier setupResolution, final Runnable updateUI) {
+    public void initialize(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
@@ -64,7 +64,7 @@ public final class Model {
 
                     @Override
                     protected Void call() throws Exception {
-                        looper.start(setupResolution, updateUI);
+                        looper.start(autoAdjustResolution, updateUI);
                         return null;
                     }
                 };
