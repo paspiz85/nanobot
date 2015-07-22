@@ -169,7 +169,7 @@ public abstract class AbstractPlatform implements Platform {
 
     /**
      * Pick a screenshot from game.
-     * 
+     *
      * @param p1
      *            top left corner of screenshot.
      * @param p2

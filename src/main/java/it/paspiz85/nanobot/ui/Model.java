@@ -62,6 +62,11 @@ public final class Model {
         // setup configUtils
         Settings.initialize();
         logger.info("Settings loaded.");
+        initRunningService(autoAdjustResolution, updateUI);
+        initScriptService();
+    }
+
+    private void initRunningService(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) {
         runningService = new Service<Void>() {
 
             @Override
@@ -84,6 +89,9 @@ public final class Model {
             runningService.reset();
             logger.warning("Running is failed.");
         });
+    }
+
+    private void initScriptService() {
         scriptService = new Service<Void>() {
 
             @Override

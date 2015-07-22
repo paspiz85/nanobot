@@ -166,12 +166,6 @@ public final class BsWin32Platform extends AbstractPlatform {
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info(String.format("Checking %s resolution...", BS_WINDOW_NAME));
         try {
-            final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
-                    "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
-            final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
-            final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
-            final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
-            final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
             final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
             final int[] rect = new int[4];
             User32.INSTANCE.GetWindowRect(control, rect);
@@ -179,6 +173,12 @@ public final class BsWin32Platform extends AbstractPlatform {
             final int bsY = rect[3] - rect[1];
             if (bsX != WIDTH || bsY != HEIGHT) {
                 logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
+                final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
+                        "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
+                final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
+                final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
+                final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
+                final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
                 if (w1 != WIDTH || h1 != HEIGHT || w2 != WIDTH || h2 != HEIGHT) {
                     if (!autoAdjustResolution.getAsBoolean()) {
                         throw new BotConfigurationException("Re-run when resolution is fixed.");
