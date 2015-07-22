@@ -39,7 +39,7 @@
 		</repository>
 		<repository>
 			<id>Local project repository</id>
-			<url>file:${project.basedir}/mvn_rep</url>
+			<url>file:${project.basedir}/lib</url>
 		</repository>
 	</repositories>
 	<build>
