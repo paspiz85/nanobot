@@ -111,8 +111,10 @@ public final class StateMainMenu extends State<MainScreenParser> {
             platform.leftClick(buttonTrainClose, true);
             platform.sleepRandom(500);
         }
+        logger.fine("Open troops");
         platform.leftClick(getParser().getButtonTroops(), true);
         platform.sleepRandom(500);
+        logger.fine("Open first barrack");
         platform.leftClick(getParser().getButtonTrainNext(), true);
         platform.sleepRandom(500);
     }

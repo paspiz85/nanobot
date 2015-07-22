@@ -88,7 +88,7 @@ public abstract class AbstractPlatform implements Platform {
         Point p = point;
         // randomize coordinates little bit
         if (randomize) {
-            p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.x() - 1 + Utils.RANDOM.nextInt(3));
+            p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.y() - 1 + Utils.RANDOM.nextInt(3));
         }
         leftClick(p);
     }
