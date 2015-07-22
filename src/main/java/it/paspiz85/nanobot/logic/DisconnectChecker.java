@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.platform.Platform;
-import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
@@ -16,7 +16,7 @@ import java.util.logging.Logger;
  */
 public class DisconnectChecker implements Runnable {
 
-    private static final ColoredPoint UNIT_BLUESTACKS_DC = new ColoredPoint(699, 343, new Color(0x282828));
+    private static final Pixel UNIT_BLUESTACKS_DC = new Pixel(699, 343, new Color(0x282828));
 
     private static final Point UNIT_RECONNECT = new Point(435, 400);
 

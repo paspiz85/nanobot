@@ -2,8 +2,9 @@ package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
@@ -19,9 +20,7 @@ import java.util.function.BooleanSupplier;
  */
 public interface Platform {
 
-    int HEIGHT = 720;
-
-    int WIDTH = 860;
+    Size RESOLUTION = new Size(860, 720);
 
     static Platform instance() {
         return Utils.singleton(Platform.class, PlatformResolver.instance());
@@ -43,7 +42,7 @@ public interface Platform {
      */
     void leftClick(Point point, boolean randomize) throws InterruptedException;
 
-    boolean matchColoredPoint(ColoredPoint point);
+    boolean matchColoredPoint(Pixel point);
 
     File saveImage(BufferedImage img, String... filePathRest);
 

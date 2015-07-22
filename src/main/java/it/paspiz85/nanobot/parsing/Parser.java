@@ -40,7 +40,7 @@ public abstract class Parser {
         final String value = Config.instance().getProperty(name);
         if (value != null) {
             final String[] split = value.split(",");
-            area = new Area(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()),
+            area = Area.byEdges(Integer.parseInt(split[0].trim()), Integer.parseInt(split[1].trim()),
                     Integer.parseInt(split[2].trim()), Integer.parseInt(split[3].trim()));
         }
         return area;

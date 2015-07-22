@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.parsing;
 
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -37,11 +37,11 @@ public final class MainScreenParser extends Parser {
 
     private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
 
-    private static final ColoredPoint BUTTON_WAS_ATTACKED_OKAY = new ColoredPoint(432, 507, new Color(0x5CAC10));
+    private static final Pixel BUTTON_WAS_ATTACKED_OKAY = new Pixel(432, 507, new Color(0x5CAC10));
 
-    private static final ColoredPoint POINT_CAMPS_FULL = new ColoredPoint(404, 162, new Color(0xE27F81));
+    private static final Pixel POINT_CAMPS_FULL = new Pixel(404, 162, new Color(0xE27F81));
 
-    private static final ColoredPoint POINT_WAS_ATTACKED_HEADLINE = new ColoredPoint(437, 158, new Color(0x585450));
+    private static final Pixel POINT_WAS_ATTACKED_HEADLINE = new Pixel(437, 158, new Color(0x585450));
 
     private Point buttonAttack;
 
@@ -81,11 +81,11 @@ public final class MainScreenParser extends Parser {
         return buttonTroops;
     }
 
-    public ColoredPoint getButtonWasAttackedOK() {
+    public Pixel getButtonWasAttackedOK() {
         return BUTTON_WAS_ATTACKED_OKAY;
     }
 
-    public ColoredPoint getPointWasAttackedHeadline() {
+    public Pixel getPointWasAttackedHeadline() {
         return POINT_WAS_ATTACKED_HEADLINE;
     }
 
@@ -120,19 +120,19 @@ public final class MainScreenParser extends Parser {
     public Point searchButtonAttack() {
         final BufferedImage image = platform.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
-                AREA_BUTTON_ATTACK.getP1());
+                AREA_BUTTON_ATTACK.getEdge1());
     }
 
     public Point searchButtonTrainClose() {
         final BufferedImage image = platform.screenshot(AREA_BUTTON_TRAIN_CLOSE);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
-                AREA_BUTTON_TRAIN_CLOSE.getP1());
+                AREA_BUTTON_TRAIN_CLOSE.getEdge1());
     }
 
     public Point searchButtonTroops() {
         final BufferedImage image = platform.screenshot(AREA_BUTTON_TROOPS);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_troops.png")),
-                AREA_BUTTON_TROOPS.getP1());
+                AREA_BUTTON_TROOPS.getEdge1());
     }
 
     private Point searchFullCollector(final URI uri) {

@@ -41,7 +41,7 @@ public final class PlatformResolver implements Supplier<Platform> {
                 platformClass = platformClassMap.get(OS.getCategory());
             }
             if (platformClass == null) {
-                platformClass = UnknowPlatform.class;
+                platformClass = UnsupportedPlatform.class;
             }
             platform = getInstance(platformClass);
         }

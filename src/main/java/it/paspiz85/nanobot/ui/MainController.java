@@ -152,10 +152,8 @@ public class MainController implements ApplicationAwareController {
                 dialog.initOwner(application.getPrimaryStage());
                 dialog.setTitle("Resolution");
                 dialog.setHeaderText("Confirm changing resolution");
-                dialog.setContentText(String
-                        .format("Game must run in resolution %dx%d.\n"
-                                + "Click YES to change it automatically, NO to do it later.\n", Platform.WIDTH,
-                                Platform.HEIGHT));
+                dialog.setContentText(String.format("Game must run in resolution %s.\n"
+                        + "Click YES to change it automatically, NO to do it later.\n", Platform.RESOLUTION.toString()));
                 final Optional<ButtonType> result = dialog.showAndWait();
                 ret[0] = result.isPresent() && result.get() == ButtonType.OK;
             });

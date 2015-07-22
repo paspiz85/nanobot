@@ -8,11 +8,11 @@ import java.awt.Color;
  * @author paspiz85
  *
  */
-public class ColoredPoint extends Point {
+public class Pixel extends Point {
 
     private final Color color;
 
-    public ColoredPoint(final int x, final int y, final Color color) {
+    public Pixel(final int x, final int y, final Color color) {
         super(x, y);
         if (color == null) {
             throw new NullPointerException("null color");

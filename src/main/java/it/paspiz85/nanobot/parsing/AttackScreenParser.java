@@ -3,7 +3,7 @@ package it.paspiz85.nanobot.parsing;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -36,7 +36,7 @@ import org.sikuli.core.search.algorithm.TemplateMatcher;
  */
 public class AttackScreenParser extends Parser {
 
-    private static final Area AREA_NEXT_BUTTON = new Area(692, 488, 739, 547);
+    private static final Area AREA_NEXT_BUTTON = Area.byEdges(692, 488, 739, 547);
 
     private static final Point BUTTON_END_BATTLE = getPoint("point.button.end_battle");
 
@@ -44,7 +44,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Point BUTTON_END_BATTLE_RETURN_HOME = getPoint("point.button.end_battle.return_home");
 
-    private static final ColoredPoint BUTTON_FIND_MATCH = new ColoredPoint(148, 529, new Color(0xD84B00));
+    private static final Pixel BUTTON_FIND_MATCH = new Pixel(148, 529, new Color(0xD84B00));
 
     private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
 
@@ -54,7 +54,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Point DARKCHECK_POINT = getPoint("darkcheck.point");
 
-    private static final Area ENEMY_BASE = new Area(31, 0, 831, 510);
+    private static final Area ENEMY_BASE = Area.byEdges(31, 0, 831, 510);
 
     private static final Point ENEMY_BASE_BOTTOM = new Point(400, 597);
 
@@ -66,7 +66,7 @@ public class AttackScreenParser extends Parser {
 
     private static final Point ENEMY_BASE_TOP = new Point(401, 16);
 
-    protected static final Area ENEMY_LOOT = new Area(17, 68, 138, 240);
+    protected static final Area ENEMY_LOOT = Area.byEdges(17, 68, 138, 240);
 
     private static final Point POINT_DARK_ELIXIR = new Point(33, 57 + 2);
 
@@ -163,7 +163,7 @@ public class AttackScreenParser extends Parser {
         return BUTTON_END_BATTLE;
     }
 
-    public ColoredPoint getButtonFindMatch() {
+    public Pixel getButtonFindMatch() {
         return BUTTON_FIND_MATCH;
     }
 
@@ -268,6 +268,6 @@ public class AttackScreenParser extends Parser {
     public Point searchButtonNext() {
         final BufferedImage image = platform.screenshot(AREA_NEXT_BUTTON);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_next.png")),
-                AREA_NEXT_BUTTON.getP1());
+                AREA_NEXT_BUTTON.getEdge1());
     }
 }

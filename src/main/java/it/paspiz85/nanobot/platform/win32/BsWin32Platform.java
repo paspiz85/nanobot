@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.platform.win32;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.AWTException;
@@ -11,7 +12,6 @@ import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -63,14 +63,34 @@ public final class BsWin32Platform extends AbstractPlatform {
 
     private HWND handler;
 
-    private Robot robot;
+    private final Robot robot;
 
     private BsWin32Platform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
-            logger.log(Level.SEVERE, "Unable to init robot", e);
+            throw new IllegalStateException("Unable to init robot", e);
         }
+    }
+
+    @Override
+    protected void applyResolution(final Size resolution) throws BotConfigurationException {
+        final int width = resolution.x();
+        final int height = resolution.y();
+        final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
+                "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
+        final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
+        final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
+        final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
+        final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
+        if (w1 != width || h1 != height || w2 != width || h2 != height) {
+            Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", width);
+            Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", height);
+            Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", width);
+            Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", height);
+            Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
+        }
+        throw new BotConfigurationException(String.format("Please restart %s to fix resolution", BS_WINDOW_NAME));
     }
 
     private Point clientToScreen(final Point clientPoint) {
@@ -85,16 +105,28 @@ public final class BsWin32Platform extends AbstractPlatform {
         return robot.getPixelColor(screenPoint.x(), screenPoint.y());
     }
 
+    @Override
+    protected Size getCurrentResolution() {
+        final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
+        final int[] rect = new int[4];
+        User32.INSTANCE.GetWindowRect(control, rect);
+        final Size bsSize = new Size(rect[2] - rect[0], rect[3] - rect[1]);
+        return bsSize;
+    }
+
+    @Override
+    protected String getName() {
+        return BS_WINDOW_NAME;
+    }
+
     private boolean isCtrlKeyDown() {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
     }
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
-        // randomize coordinates little bit
         final int x = point.x();
         final int y = point.y();
-        logger.fine("Clicking [" + x + " " + y + "].");
         final int lParam = y << 16 | x << 16 >>> 16;
         while (isCtrlKeyDown()) {
             Thread.sleep(100);
@@ -145,8 +177,7 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
-    public void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info(String.format("Setting up %s window...", BS_WINDOW_NAME));
+    protected void setup() throws BotConfigurationException {
         handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
         if (handler == null) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
@@ -156,66 +187,22 @@ public final class BsWin32Platform extends AbstractPlatform {
         if (result == 0) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
-        logger.finest(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
+        logger.fine(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
                 Arrays.toString(rect)));
         // set bs always on top
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
-        setupResolution(autoAdjustResolution);
-    }
-
-    private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info(String.format("Checking %s resolution...", BS_WINDOW_NAME));
-        try {
-            final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
-            final int[] rect = new int[4];
-            User32.INSTANCE.GetWindowRect(control, rect);
-            final int bsX = rect[2] - rect[0];
-            final int bsY = rect[3] - rect[1];
-            if (bsX != WIDTH || bsY != HEIGHT) {
-                logger.warning(String.format("%s resolution is <%d, %d>", BS_WINDOW_NAME, bsX, bsY));
-                final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
-                        "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
-                final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
-                final int h1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowHeight");
-                final int w2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestWidth");
-                final int h2 = Advapi32Util.registryGetIntValue(key.getValue(), "GuestHeight");
-                if (w1 != WIDTH || h1 != HEIGHT || w2 != WIDTH || h2 != HEIGHT) {
-                    if (!autoAdjustResolution.getAsBoolean()) {
-                        throw new BotConfigurationException("Re-run when resolution is fixed.");
-                    }
-                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowWidth", WIDTH);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "WindowHeight", HEIGHT);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestWidth", WIDTH);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "GuestHeight", HEIGHT);
-                    Advapi32Util.registrySetIntValue(key.getValue(), "FullScreen", 0);
-                    throw new BotConfigurationException("Please restart " + BS_WINDOW_NAME);
-                }
-            }
-        } catch (final BotConfigurationException e) {
-            throw e;
-        } catch (final Exception e) {
-            throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
-        }
     }
 
     @Override
-    public void zoomUp() throws InterruptedException {
-        zoomUp(14);
-    }
-
-    private void zoomUp(final int notch) throws InterruptedException {
-        logger.info("Zooming out...");
+    protected void singleZoomUp() throws InterruptedException {
+        while (isCtrlKeyDown()) {
+            Thread.sleep(100);
+        }
         final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
         final WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
         final LPARAM lparamDown = new WinDef.LPARAM(lParam);
         final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
-        for (int i = 0; i < notch; i++) {
-            while (isCtrlKeyDown()) {
-                Thread.sleep(100);
-            }
-            User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
-            User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
-            Thread.sleep(1000);
-        }
+        User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
+        User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
     }
 }

@@ -8,7 +8,7 @@ import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.platform.PlatformResolver;
-import it.paspiz85.nanobot.platform.UnknowPlatform;
+import it.paspiz85.nanobot.platform.UnsupportedPlatform;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -38,7 +38,7 @@ import cucumber.api.java.en.When;
  */
 public class StepDefinitions {
 
-    public static class PlatformMock extends UnknowPlatform {
+    public static class PlatformMock extends UnsupportedPlatform {
 
         public static PlatformMock instance() {
             return Utils.singleton(PlatformMock.class, () -> new PlatformMock());

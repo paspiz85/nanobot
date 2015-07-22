@@ -1,8 +1,10 @@
 package it.paspiz85.nanobot.platform;
 
+import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.ColoredPoint;
+import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
+import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
@@ -11,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,13 +28,15 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractPlatform implements Platform {
 
-    private static final Area FULLSCREEN = new Area(0, 0, WIDTH - 1, HEIGHT - 1);
+    private static final Area FULLSCREEN = Area.bySize(new Point(0, 0), RESOLUTION);
 
     private static final String IMG_FOLDER = "img";
 
     private static final Object WAIT_FOR_CLICK_SYNC = new Object();
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
+
+    protected abstract void applyResolution(Size resolution) throws BotConfigurationException;
 
     @Override
     public final boolean compareColor(final Color c1, final Color c2, final int var) {
@@ -57,9 +62,13 @@ public abstract class AbstractPlatform implements Platform {
      */
     protected abstract Color getColor(Point point);
 
+    protected abstract Size getCurrentResolution();
+
+    protected abstract String getName();
+
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
-        return getSubimage(image, area.getP1(), area.getP2());
+        return getSubimage(image, area.getEdge1(), area.getEdge2());
     }
 
     @Override
@@ -86,6 +95,7 @@ public abstract class AbstractPlatform implements Platform {
             throw new IllegalArgumentException("point not provided");
         }
         Point p = point;
+        logger.fine("Clicking " + p + ".");
         // randomize coordinates little bit
         if (randomize) {
             p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.y() - 1 + Utils.RANDOM.nextInt(3));
@@ -94,7 +104,7 @@ public abstract class AbstractPlatform implements Platform {
     }
 
     @Override
-    public boolean matchColoredPoint(final ColoredPoint point) {
+    public boolean matchColoredPoint(final Pixel point) {
         if (point == null) {
             throw new IllegalArgumentException("point not provided");
         }
@@ -160,9 +170,9 @@ public abstract class AbstractPlatform implements Platform {
     public final BufferedImage screenshot(final Area area) {
         BufferedImage result;
         if (area == null) {
-            result = screenshot(FULLSCREEN.getP1(), FULLSCREEN.getP2());
+            result = screenshot(FULLSCREEN.getEdge1(), FULLSCREEN.getEdge2());
         } else {
-            result = screenshot(area.getP1(), area.getP2());
+            result = screenshot(area.getEdge1(), area.getEdge2());
         }
         return result;
     }
@@ -177,6 +187,35 @@ public abstract class AbstractPlatform implements Platform {
      * @return image containing the screenshot.
      */
     protected abstract BufferedImage screenshot(Point p1, Point p2);
+
+    protected abstract void setup() throws BotConfigurationException;
+
+    @Override
+    public final void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
+        logger.info(String.format("Setting up %s window...", getName()));
+        setup();
+        setupResolution(autoAdjustResolution);
+    }
+
+    private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
+        logger.info(String.format("Checking %s resolution...", getName()));
+        try {
+            final Size bsSize = getCurrentResolution();
+            if (!RESOLUTION.equals(bsSize)) {
+                logger.warning(String.format("%s resolution is %s", getName(), bsSize.toString()));
+                if (!autoAdjustResolution.getAsBoolean()) {
+                    throw new BotConfigurationException("Re-run when resolution is fixed.");
+                }
+                applyResolution(RESOLUTION);
+            }
+        } catch (final BotConfigurationException e) {
+            throw e;
+        } catch (final Exception e) {
+            throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
+        }
+    }
+
+    protected abstract void singleZoomUp() throws InterruptedException;
 
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
@@ -205,5 +244,15 @@ public abstract class AbstractPlatform implements Platform {
             }
         }
         return result[0];
+    }
+
+    @Override
+    public final void zoomUp() throws InterruptedException {
+        logger.info("Zooming out...");
+        final int notch = 14;
+        for (int i = 0; i < notch; i++) {
+            singleZoomUp();
+            Thread.sleep(1000);
+        }
     }
 }
