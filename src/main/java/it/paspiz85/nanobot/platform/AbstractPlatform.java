@@ -192,7 +192,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info(String.format("Setting up %s window...", getName()));
+        logger.info("Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
     }
