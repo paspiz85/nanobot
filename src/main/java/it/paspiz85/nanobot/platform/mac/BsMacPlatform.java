@@ -2,6 +2,8 @@ package it.paspiz85.nanobot.platform.mac;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
+import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.platform.UnsupportedPlatform;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
@@ -43,7 +45,11 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
-    public static BsMacPlatform instance() {
+    public static UnsupportedPlatform instance() {
+        return Utils.singleton(UnsupportedPlatform.class, () -> UnsupportedPlatform.instance());
+    }
+
+    private static BsMacPlatform instanceNew() {
         return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
     }
 
@@ -51,10 +57,10 @@ public final class BsMacPlatform extends AbstractPlatform {
     public static void main(final String... args) throws Exception {
         // TODO remove this method
         Thread.sleep(3000);
-        // BsMacPlatform.instance().saveScreenshot("tmp");
-        // BsMacPlatform.instance().applyResolution(new Size(860, 720));
-        // BsMacPlatform.instance().leftClick(new Point(1, 1));
-        // BsMacPlatform.instance().zoomUp();
+        // BsMacPlatform.instanceNew().saveScreenshot("tmp");
+        // BsMacPlatform.instanceNew().applyResolution(new Size(860, 720));
+        // BsMacPlatform.instanceNew().leftClick(new Point(1, 1));
+        // BsMacPlatform.instanceNew().zoomUp();
         System.out.println("bye");
     }
 
