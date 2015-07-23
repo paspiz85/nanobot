@@ -74,9 +74,9 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
-    protected void applyResolution(final Size resolution) throws BotConfigurationException {
-        final int width = resolution.x();
-        final int height = resolution.y();
+    protected void applySize(final Size size) throws BotConfigurationException {
+        final int width = size.x();
+        final int height = size.y();
         final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
                 "SOFTWARE\\BlueStacks\\Guests\\Android\\FrameBuffer\\0", WinNT.KEY_READ | WinNT.KEY_WRITE);
         final int w1 = Advapi32Util.registryGetIntValue(key.getValue(), "WindowWidth");
@@ -106,17 +106,17 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
-    protected Size getCurrentResolution() {
+    protected String getName() {
+        return BS_WINDOW_NAME;
+    }
+
+    @Override
+    protected Size getSize() {
         final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
         final int[] rect = new int[4];
         User32.INSTANCE.GetWindowRect(control, rect);
         final Size bsSize = new Size(rect[2] - rect[0], rect[3] - rect[1]);
         return bsSize;
-    }
-
-    @Override
-    protected String getName() {
-        return BS_WINDOW_NAME;
     }
 
     private boolean isCtrlKeyDown() {

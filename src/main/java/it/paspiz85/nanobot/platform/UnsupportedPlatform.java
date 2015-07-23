@@ -27,7 +27,7 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected void applyResolution(final Size resolution) throws BotConfigurationException {
+    protected void applySize(final Size resolution) throws BotConfigurationException {
         throw new UnsupportedOperationException(NAME);
     }
 
@@ -37,13 +37,13 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected Size getCurrentResolution() {
-        throw new UnsupportedOperationException(NAME);
+    protected String getName() {
+        return NAME;
     }
 
     @Override
-    protected String getName() {
-        return NAME;
+    protected Size getSize() {
+        throw new UnsupportedOperationException(NAME);
     }
 
     @Override

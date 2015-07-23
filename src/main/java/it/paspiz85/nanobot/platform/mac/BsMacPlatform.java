@@ -3,7 +3,6 @@ package it.paspiz85.nanobot.platform.mac;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.platform.Platform;
-import it.paspiz85.nanobot.platform.UnsupportedPlatform;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
@@ -18,8 +17,13 @@ import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -45,26 +49,37 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
-    public static UnsupportedPlatform instance() {
-        return Utils.singleton(UnsupportedPlatform.class, () -> UnsupportedPlatform.instance());
+    public static Platform instance() {
+        // return Utils.singleton(UnsupportedPlatform.class, () ->
+        // UnsupportedPlatform.instance());
+        return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
     }
 
     private static BsMacPlatform instanceNew() {
         return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
     }
 
-    @Deprecated
     public static void main(final String... args) throws Exception {
         // TODO remove this method
+        // NSBundleClass=
+        // ClassLoader.getSystemClassLoader().loadClass("apple.applescript.AppleScriptEngineFactory");
         Thread.sleep(3000);
         // BsMacPlatform.instanceNew().saveScreenshot("tmp");
         // BsMacPlatform.instanceNew().applyResolution(new Size(860, 720));
         // BsMacPlatform.instanceNew().leftClick(new Point(1, 1));
         // BsMacPlatform.instanceNew().zoomUp();
+        // BsMacPlatform.instanceNew().bs_properties();
+        // BsMacPlatform.instanceNew().bs_position();
+        // BsMacPlatform.instanceNew().bs_size();
+        // BsMacPlatform.instanceNew().bounds3();
         System.out.println("bye");
     }
 
     private final Robot robot;
+
+    private final ScriptEngineManager scriptEngineManager;
+
+    private Point position;
 
     private BsMacPlatform() {
         try {
@@ -72,10 +87,11 @@ public final class BsMacPlatform extends AbstractPlatform {
         } catch (final AWTException e) {
             throw new IllegalStateException("Unable to init robot", e);
         }
+        scriptEngineManager = new ScriptEngineManager();
     }
 
     @Override
-    protected void applyResolution(final Size resolution) throws BotConfigurationException {
+    protected void applySize(final Size size) throws BotConfigurationException {
         try {
             final File plistFile = new File(System.getProperty("user.home")
                     + "/Library/Preferences/com.BlueStacks.AppPlayer.plist");
@@ -96,9 +112,9 @@ public final class BsMacPlatform extends AbstractPlatform {
                     frameBufferNode, XPathConstants.NODE);
             final Size current = new Size(Integer.parseInt(widthNode.getTextContent()), Integer.parseInt(heightNode
                     .getTextContent()));
-            if (!current.equals(resolution)) {
-                widthNode.setTextContent(Integer.toString(resolution.x()));
-                heightNode.setTextContent(Integer.toString(resolution.y()));
+            if (!current.equals(size)) {
+                widthNode.setTextContent(Integer.toString(size.x()));
+                heightNode.setTextContent(Integer.toString(size.y()));
                 final DocumentType documentType = document.getDoctype();
                 if (documentType != null) {
                     transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, documentType.getSystemId());
@@ -117,7 +133,7 @@ public final class BsMacPlatform extends AbstractPlatform {
     private Point clientToScreen(final Point point) {
         // TODO Auto-generated method stub
         // use saved position of BlueStacks windows (see setup)
-        Point result = new Point(point.x(), point.y() + 48);
+        final Point result = new Point(point.x(), point.y() + 48);
         return result;
     }
 
@@ -128,14 +144,41 @@ public final class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected Size getCurrentResolution() {
-        // TODO implement
-        return RESOLUTION;
+    protected String getName() {
+        return BS_WINDOW_NAME;
+    }
+
+    private Point getPosition() {
+        Point position = null;
+        try {
+            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
+            final String script = "tell application \"System Events\" to tell application process \"BlueStacks\"\n"
+                    + "get position of front window\n" + "end tell\n";
+            @SuppressWarnings("unchecked")
+            final List<? extends Number> result = (List<? extends Number>) engine.eval(script);
+            position = new Point(result.get(0).intValue(), result.get(1).intValue());
+        } catch (final ScriptException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            position = null;
+        }
+        return position;
     }
 
     @Override
-    protected String getName() {
-        return BS_WINDOW_NAME;
+    protected Size getSize() {
+        Size size = null;
+        try {
+            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
+            final String script = "tell application \"System Events\" to tell application process \"BlueStacks\"\n"
+                    + "get size of front window\n" + "end tell\n";
+            @SuppressWarnings("unchecked")
+            final List<? extends Number> result = (List<? extends Number>) engine.eval(script);
+            size = new Size(result.get(0).intValue(), result.get(1).intValue());
+        } catch (final ScriptException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            size = null;
+        }
+        return size;
     }
 
     @Override
@@ -156,7 +199,6 @@ public final class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    @Deprecated
     protected boolean registerForClick(final Consumer<Point> clickConsumer) {
         // TODO implement but not now (it's not used from main logic)
         throw new UnsupportedOperationException("Not implemented");
@@ -172,6 +214,7 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     @Override
     protected void setup() throws BotConfigurationException {
+        position = getPosition();
         // TODO implement
         // save current position of BlueStacks window in a variable
     }

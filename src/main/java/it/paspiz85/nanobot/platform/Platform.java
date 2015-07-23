@@ -20,7 +20,7 @@ import java.util.function.BooleanSupplier;
  */
 public interface Platform {
 
-    Size RESOLUTION = new Size(860, 720);
+    Size SIZE = new Size(860, 720);
 
     static Platform instance() {
         return Utils.singleton(Platform.class, PlatformResolver.instance());

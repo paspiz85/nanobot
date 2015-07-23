@@ -28,7 +28,7 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractPlatform implements Platform {
 
-    private static final Area FULLSCREEN = Area.bySize(new Point(0, 0), RESOLUTION);
+    private static final Area FULLSCREEN = Area.bySize(new Point(0, 0), SIZE);
 
     private static final String IMG_FOLDER = "img";
 
@@ -36,7 +36,7 @@ public abstract class AbstractPlatform implements Platform {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected abstract void applyResolution(Size resolution) throws BotConfigurationException;
+    protected abstract void applySize(Size size) throws BotConfigurationException;
 
     @Override
     public final boolean compareColor(final Color c1, final Color c2, final int var) {
@@ -62,9 +62,9 @@ public abstract class AbstractPlatform implements Platform {
      */
     protected abstract Color getColor(Point point);
 
-    protected abstract Size getCurrentResolution();
-
     protected abstract String getName();
+
+    protected abstract Size getSize();
 
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
@@ -200,13 +200,13 @@ public abstract class AbstractPlatform implements Platform {
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info(String.format("Checking %s resolution...", getName()));
         try {
-            final Size bsSize = getCurrentResolution();
-            if (!RESOLUTION.equals(bsSize)) {
+            final Size bsSize = getSize();
+            if (!SIZE.equals(bsSize)) {
                 logger.warning(String.format("%s resolution is %s", getName(), bsSize.toString()));
                 if (!autoAdjustResolution.getAsBoolean()) {
                     throw new BotConfigurationException("Re-run when resolution is fixed.");
                 }
-                applyResolution(RESOLUTION);
+                applySize(SIZE);
             }
         } catch (final BotConfigurationException e) {
             throw e;
