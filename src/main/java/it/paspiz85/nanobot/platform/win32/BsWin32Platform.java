@@ -30,7 +30,7 @@ import com.sun.jna.platform.win32.WinReg;
 import com.sun.jna.platform.win32.WinReg.HKEYByReference;
 
 /**
- * Implementation of platform for Windows.
+ * Platform implementation of BlueStacks for Windows.
  *
  * @author paspiz85
  *

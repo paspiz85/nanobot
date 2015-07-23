@@ -34,7 +34,7 @@ import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 
 /**
- * TODO.
+ * Platform implementation of BlueStacks for Mac.
  *
  * @author paspiz85
  *
@@ -43,20 +43,18 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
-    // TODO remove
-    private static final String NAME = "Platform not supported";
-
     public static BsMacPlatform instance() {
         return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
     }
 
-    // TODO remove main method
+    @Deprecated
     public static void main(final String... args) throws Exception {
+        // TODO remove this method
         Thread.sleep(3000);
         // BsMacPlatform.instance().saveScreenshot("tmp");
         // BsMacPlatform.instance().applyResolution(new Size(860, 720));
         // BsMacPlatform.instance().leftClick(new Point(1, 1));
-        BsMacPlatform.instance().zoomUp();
+        // BsMacPlatform.instance().zoomUp();
         System.out.println("bye");
     }
 
@@ -112,8 +110,9 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private Point clientToScreen(final Point point) {
         // TODO Auto-generated method stub
-        // use saved position of BS
-        return point;
+        // use saved position of BlueStacks windows (see setup)
+        Point result = new Point(point.x(), point.y() + 48);
+        return result;
     }
 
     @Override
@@ -125,7 +124,7 @@ public final class BsMacPlatform extends AbstractPlatform {
     @Override
     protected Size getCurrentResolution() {
         // TODO implement
-        throw new UnsupportedOperationException(NAME);
+        return RESOLUTION;
     }
 
     @Override
@@ -135,6 +134,7 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
+        // TODO non funziona
         final PointerInfo a = MouseInfo.getPointerInfo();
         final java.awt.Point b = a.getLocation();
         final int xOrig = (int) b.getX();
@@ -150,9 +150,10 @@ public final class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
+    @Deprecated
     protected boolean registerForClick(final Consumer<Point> clickConsumer) {
-        // TODO implement
-        throw new UnsupportedOperationException(NAME);
+        // TODO implement but not now (it's not used from main logic)
+        throw new UnsupportedOperationException("Not implemented");
     }
 
     @Override
@@ -166,15 +167,14 @@ public final class BsMacPlatform extends AbstractPlatform {
     @Override
     protected void setup() throws BotConfigurationException {
         // TODO implement
-        // save position of BS
-        throw new UnsupportedOperationException(NAME);
+        // save current position of BlueStacks window in a variable
     }
 
     @Override
     protected void singleZoomUp() throws InterruptedException {
-        // TODO set focus on BS
-        robot.keyPress(KeyEvent.VK_UP);
+        // TODO set focus on BlueStacks window
+        robot.keyPress(KeyEvent.VK_DOWN);
         Thread.sleep(100);
-        robot.keyRelease(KeyEvent.VK_UP);
+        robot.keyRelease(KeyEvent.VK_DOWN);
     }
 }
