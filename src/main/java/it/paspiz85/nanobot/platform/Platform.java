@@ -20,13 +20,15 @@ import java.util.function.BooleanSupplier;
  */
 public interface Platform {
 
-    Size SIZE = new Size(860, 720);
+    Size GAME_SIZE = new Size(860, 720 - 47);
 
     static Platform instance() {
         return Utils.singleton(Platform.class, PlatformResolver.instance());
     }
 
     boolean compareColor(Color c1, Color c2, int var);
+
+    Size getExpectedSize();
 
     BufferedImage getSubimage(BufferedImage image, Area area);
 

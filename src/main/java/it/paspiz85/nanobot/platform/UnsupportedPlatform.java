@@ -32,18 +32,23 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected Size getActualSize() {
+        throw new UnsupportedOperationException(NAME);
+    }
+
+    @Override
     protected Color getColor(final Point point) {
+        throw new UnsupportedOperationException(NAME);
+    }
+
+    @Override
+    public Size getExpectedSize() {
         throw new UnsupportedOperationException(NAME);
     }
 
     @Override
     protected String getName() {
         return NAME;
-    }
-
-    @Override
-    protected Size getSize() {
-        throw new UnsupportedOperationException(NAME);
     }
 
     @Override

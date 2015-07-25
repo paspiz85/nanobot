@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.platform.win32;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
@@ -36,6 +37,8 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  *
  */
 public final class BsWin32Platform extends AbstractPlatform {
+
+    public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
@@ -100,23 +103,28 @@ public final class BsWin32Platform extends AbstractPlatform {
     }
 
     @Override
+    protected Size getActualSize() {
+        final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
+        final int[] rect = new int[4];
+        User32.INSTANCE.GetWindowRect(control, rect);
+        final Size bsSize = new Size(rect[2] - rect[0], rect[3] - rect[1]);
+        return bsSize;
+    }
+
+    @Override
     protected Color getColor(final Point point) {
         final Point screenPoint = clientToScreen(point);
         return robot.getPixelColor(screenPoint.x(), screenPoint.y());
     }
 
     @Override
-    protected String getName() {
-        return BS_WINDOW_NAME;
+    public Size getExpectedSize() {
+        return BS_SIZE;
     }
 
     @Override
-    protected Size getSize() {
-        final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
-        final int[] rect = new int[4];
-        User32.INSTANCE.GetWindowRect(control, rect);
-        final Size bsSize = new Size(rect[2] - rect[0], rect[3] - rect[1]);
-        return bsSize;
+    protected String getName() {
+        return BS_WINDOW_NAME;
     }
 
     private boolean isCtrlKeyDown() {

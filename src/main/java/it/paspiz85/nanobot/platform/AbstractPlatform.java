@@ -28,7 +28,7 @@ import javax.imageio.ImageIO;
  */
 public abstract class AbstractPlatform implements Platform {
 
-    private static final Area FULLSCREEN = Area.bySize(new Point(0, 0), SIZE);
+    private static final Area FULLSCREEN = Area.bySize(new Point(0, 0), GAME_SIZE);
 
     private static final String IMG_FOLDER = "img";
 
@@ -53,6 +53,8 @@ public abstract class AbstractPlatform implements Platform {
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
 
+    protected abstract Size getActualSize();
+
     /**
      * Given a point return the color of pixel.
      *
@@ -63,8 +65,6 @@ public abstract class AbstractPlatform implements Platform {
     protected abstract Color getColor(Point point);
 
     protected abstract String getName();
-
-    protected abstract Size getSize();
 
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
@@ -200,13 +200,14 @@ public abstract class AbstractPlatform implements Platform {
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info(String.format("Checking %s resolution...", getName()));
         try {
-            final Size bsSize = getSize();
-            if (!SIZE.equals(bsSize)) {
-                logger.warning(String.format("%s resolution is %s", getName(), bsSize.toString()));
+            final Size bsActualSize = getActualSize();
+            final Size bsExpectedSize = getExpectedSize();
+            if (!bsExpectedSize.equals(bsActualSize)) {
+                logger.warning(String.format("%s resolution is %s", getName(), bsActualSize.toString()));
                 if (!autoAdjustResolution.getAsBoolean()) {
                     throw new BotConfigurationException("Re-run when resolution is fixed.");
                 }
-                applySize(SIZE);
+                applySize(bsExpectedSize);
             }
         } catch (final BotConfigurationException e) {
             throw e;

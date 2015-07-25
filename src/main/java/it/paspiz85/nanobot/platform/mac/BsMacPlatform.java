@@ -47,6 +47,8 @@ import org.w3c.dom.Element;
  */
 public final class BsMacPlatform extends AbstractPlatform {
 
+    public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
+
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
     public static Platform instance() {
@@ -138,9 +140,31 @@ public final class BsMacPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected Size getActualSize() {
+        Size size = null;
+        try {
+            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
+            final String script = "tell application \"System Events\" to tell application process \"BlueStacks\"\n"
+                    + "get size of front window\n" + "end tell\n";
+            @SuppressWarnings("unchecked")
+            final List<? extends Number> result = (List<? extends Number>) engine.eval(script);
+            size = new Size(result.get(0).intValue(), result.get(1).intValue());
+        } catch (final ScriptException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+            size = null;
+        }
+        return size;
+    }
+
+    @Override
     protected Color getColor(final Point point) {
         final Point screenPoint = clientToScreen(point);
         return robot.getPixelColor(screenPoint.x(), screenPoint.y());
+    }
+
+    @Override
+    public Size getExpectedSize() {
+        return BS_SIZE;
     }
 
     @Override
@@ -162,23 +186,6 @@ public final class BsMacPlatform extends AbstractPlatform {
             position = null;
         }
         return position;
-    }
-
-    @Override
-    protected Size getSize() {
-        Size size = null;
-        try {
-            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
-            final String script = "tell application \"System Events\" to tell application process \"BlueStacks\"\n"
-                    + "get size of front window\n" + "end tell\n";
-            @SuppressWarnings("unchecked")
-            final List<? extends Number> result = (List<? extends Number>) engine.eval(script);
-            size = new Size(result.get(0).intValue(), result.get(1).intValue());
-        } catch (final ScriptException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
-            size = null;
-        }
-        return size;
     }
 
     @Override
