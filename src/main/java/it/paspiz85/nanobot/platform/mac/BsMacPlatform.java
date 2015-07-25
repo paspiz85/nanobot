@@ -51,6 +51,8 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private static final String BS_WINDOW_NAME = "BlueStacks App Player";
 
+    private static final int TITLE_BAR_HEIGHT = 22;
+
     public static Platform instance() {
         // return Utils.singleton(UnsupportedPlatform.class, () ->
         // UnsupportedPlatform.instance());
@@ -133,10 +135,9 @@ public final class BsMacPlatform extends AbstractPlatform {
     }
 
     private Point clientToScreen(final Point point) {
-        // TODO Auto-generated method stub
-        // use saved position of BlueStacks windows (see setup)
-        final Point result = new Point(point.x(), point.y() + 48);
-        return result;
+        final int x = point.x() + position.x();
+        final int y = point.y() + position.y() + TITLE_BAR_HEIGHT + 3;
+        return new Point(x, y);
     }
 
     @Override
@@ -148,7 +149,7 @@ public final class BsMacPlatform extends AbstractPlatform {
                     + "get size of front window\n" + "end tell\n";
             @SuppressWarnings("unchecked")
             final List<? extends Number> result = (List<? extends Number>) engine.eval(script);
-            size = new Size(result.get(0).intValue(), result.get(1).intValue());
+            size = new Size(result.get(0).intValue(), result.get(1).intValue() - TITLE_BAR_HEIGHT);
         } catch (final ScriptException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
             size = null;
@@ -222,8 +223,6 @@ public final class BsMacPlatform extends AbstractPlatform {
     @Override
     protected void setup() throws BotConfigurationException {
         position = getPosition();
-        // TODO implement
-        // save current position of BlueStacks window in a variable
     }
 
     @Override
