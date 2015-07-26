@@ -75,15 +75,15 @@ public final class BsMacPlatform extends AbstractPlatform {
         // BsMacPlatform.instanceNew().bs_properties();
         // BsMacPlatform.instanceNew().bs_position();
         // BsMacPlatform.instanceNew().bs_size();
-        // BsMacPlatform.instanceNew().bounds3();
+        BsMacPlatform.instanceNew().activate();
         System.out.println("bye");
     }
+
+    private Point position;
 
     private final Robot robot;
 
     private final ScriptEngineManager scriptEngineManager;
-
-    private Point position;
 
     private BsMacPlatform() {
         try {
@@ -92,6 +92,16 @@ public final class BsMacPlatform extends AbstractPlatform {
             throw new IllegalStateException("Unable to init robot", e);
         }
         scriptEngineManager = new ScriptEngineManager();
+    }
+
+    private void activate() {
+        try {
+            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
+            final String script = "tell application \"BlueStacks\" to activate\n";
+            engine.eval(script);
+        } catch (final ScriptException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
     }
 
     @Override
@@ -191,6 +201,7 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
+        activate();
         // TODO non funziona
         final PointerInfo a = MouseInfo.getPointerInfo();
         final java.awt.Point b = a.getLocation();
@@ -214,6 +225,7 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     @Override
     protected BufferedImage screenshot(final Point p1, final Point p2) {
+        activate();
         final Point anchor = clientToScreen(p1);
         final int width = p2.x() - p1.x();
         final int height = p2.y() - p1.y();
@@ -222,12 +234,13 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     @Override
     protected void setup() throws BotConfigurationException {
+        activate();
         position = getPosition();
     }
 
     @Override
     protected void singleZoomUp() throws InterruptedException {
-        // TODO set focus on BlueStacks window
+        activate();
         robot.keyPress(KeyEvent.VK_DOWN);
         Thread.sleep(100);
         robot.keyRelease(KeyEvent.VK_DOWN);
