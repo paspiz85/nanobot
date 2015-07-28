@@ -256,13 +256,14 @@ public class MainController implements ApplicationAwareController {
         ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
         ScriptManager.instance().setSelect((str, options) -> select(str, options));
         model.initialize(() -> autoAdjustResolution(), () -> updateUI());
-        if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
-            versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
-            githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
-        } else {
-            versionLabel.setText(BuildInfo.instance().getFullName());
-            githubLink.setText(BuildInfo.instance().getRepositoryUrl());
-        }
+        versionLabel.setText(BuildInfo.instance().getFullName());
+        githubLink.setText(BuildInfo.instance().getRepositoryUrl());
+        model.checkForUpdate(() -> {
+            javafx.application.Platform.runLater(() -> {
+                versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
+                githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
+            });
+        });
         githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);

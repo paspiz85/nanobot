@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.apache.maven.artifact.versioning.DefaultArtifactVersion;
-import org.kohsuke.github.GHRelease;
 import org.kohsuke.github.GHRepository;
 import org.kohsuke.github.GitHub;
 
@@ -107,9 +106,9 @@ public final class BuildInfo {
         try {
             final GitHub github = GitHub.connectAnonymously();
             final GHRepository repository = github.getRepository(REPOSITORY_NAME);
-            for (final GHRelease r : repository.listReleases()) {
-                result = r.getName().substring(1);
-            }
+            result = repository.listReleases().asList().stream().map((r) -> r.getName().substring(1)).max((a, b) -> {
+                return new DefaultArtifactVersion(a).compareTo(new DefaultArtifactVersion(b));
+            }).orElse(null);
         } catch (final IOException e) {
             logger.log(Level.WARNING, "Unable to get latest version", e);
         }

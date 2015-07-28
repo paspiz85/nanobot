@@ -59,8 +59,6 @@ public final class Settings {
 
     private final TroopButton[] availableTroops;
 
-    private boolean checkUpdateOnStartup = true;
-
     private boolean collectResources = true;
 
     private final SettingsPersister configPersister = new SettingsPersister();
@@ -144,10 +142,6 @@ public final class Settings {
         return uuid;
     }
 
-    public boolean isCheckUpdateOnStartup() {
-        return checkUpdateOnStartup;
-    }
-
     public boolean isCollectResources() {
         return collectResources;
     }
@@ -166,10 +160,6 @@ public final class Settings {
 
     public void setAttackStrategy(final Attack attackStrategy) {
         this.attackStrategy = attackStrategy;
-    }
-
-    public void setCheckUpdateOnStartup(final boolean checkVersionOnStartup) {
-        this.checkUpdateOnStartup = checkVersionOnStartup;
     }
 
     public void setCollectResources(final boolean collectResources) {
