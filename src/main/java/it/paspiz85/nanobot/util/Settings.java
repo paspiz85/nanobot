@@ -17,6 +17,8 @@ public final class Settings {
 
     private static final Settings INSTANCE = new Settings();
 
+    public static final int MAX_TRAIN_TROOPS = 240;
+
     public static synchronized void close() {
         if (!INSTANCE.isInitialized) {
             throw new IllegalStateException("ConfigUtils is not initialized.");
@@ -82,7 +84,7 @@ public final class Settings {
     private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
             TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
 
-    private boolean trainTroops = true;
+    private int trainMaxTroops = MAX_TRAIN_TROOPS;
 
     private String userMailAddress = "";
 
@@ -130,6 +132,10 @@ public final class Settings {
         return raxInfo;
     }
 
+    public int getTrainMaxTroops() {
+        return trainMaxTroops;
+    }
+
     public String getUserMailAddress() {
         return userMailAddress;
     }
@@ -152,10 +158,6 @@ public final class Settings {
 
     public boolean isMatchAllConditions() {
         return matchAllConditions;
-    }
-
-    public boolean isTrainTroops() {
-        return trainTroops;
     }
 
     public void save() {
@@ -215,8 +217,8 @@ public final class Settings {
         }
     }
 
-    public void setTrainTroops(final boolean trainTroops) {
-        this.trainTroops = trainTroops;
+    public void setTrainMaxTroops(final int trainMaxTroops) {
+        this.trainMaxTroops = trainMaxTroops;
     }
 
     public void setUserMailAddress(final String userMailAddress) {

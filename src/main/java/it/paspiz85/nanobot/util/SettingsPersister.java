@@ -42,7 +42,7 @@ public final class SettingsPersister {
 
     private static final String PROPERTY_RAX_INFO = "rax_info";
 
-    private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
+    private static final String PROPERTY_TRAIN_MAX_TROOPS = "train_max_troops";
 
     private static final String PROPERTY_USER_MAIL_ADDRESS = "user_mail_address";
 
@@ -105,9 +105,9 @@ public final class SettingsPersister {
             if (collectResourcesProperty != null) {
                 settings.setCollectResources(Boolean.parseBoolean(collectResourcesProperty));
             }
-            final String trainTroopsProperty = configProperties.getProperty(PROPERTY_TRAIN_TROOPS);
-            if (trainTroopsProperty != null) {
-                settings.setTrainTroops(Boolean.parseBoolean(trainTroopsProperty));
+            final String trainMaxTroopsProperty = configProperties.getProperty(PROPERTY_TRAIN_MAX_TROOPS);
+            if (trainMaxTroopsProperty != null) {
+                settings.setTrainMaxTroops(Integer.parseInt(trainMaxTroopsProperty));
             }
             final String uuidProperty = configProperties.getProperty(PROPERTY_UUID);
             if (uuidProperty != null) {
@@ -166,7 +166,7 @@ public final class SettingsPersister {
             configProperties.setProperty(PROPERTY_DETECT_EMPTY_COLLECTORS,
                     String.valueOf(settings.isDetectEmptyCollectors()));
             configProperties.setProperty(PROPERTY_COLLECT_RESOURCES, String.valueOf(settings.isCollectResources()));
-            configProperties.setProperty(PROPERTY_TRAIN_TROOPS, String.valueOf(settings.isTrainTroops()));
+            configProperties.setProperty(PROPERTY_TRAIN_MAX_TROOPS, String.valueOf(settings.getTrainMaxTroops()));
             configProperties.setProperty(PROPERTY_UUID, settings.getUuid().toString());
             configProperties.setProperty(PROPERTY_USER_MAIL_ADDRESS, settings.getUserMailAddress());
             configProperties.setProperty(PROPERTY_ATTACK_STRAT,
