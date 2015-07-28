@@ -59,7 +59,7 @@ public final class Context {
         if (state instanceof StateIdle) {
             trainCount = 0;
         }
-        if (state instanceof StateTrainTroops) {
+        if (state instanceof StateManageTroops) {
             trainCount++;
             logger.fine("Train count is " + trainCount);
         }

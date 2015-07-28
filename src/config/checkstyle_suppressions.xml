@@ -15,4 +15,5 @@
   <suppress files="State.java" checks="VisibilityModifier" />
   <suppress files="AbstractParser.java" checks="VisibilityModifier" />
   <suppress files="Attack.java" checks="VisibilityModifier" />
+  <suppress files="BuildInfo.java" checks="ReturnCount" />
 </suppressions>

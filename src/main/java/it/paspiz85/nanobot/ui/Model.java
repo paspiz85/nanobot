@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.ui;
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.scripting.ScriptManager;
+import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -10,6 +11,7 @@ import java.util.Locale;
 import java.util.Set;
 import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.concurrent.Service;
@@ -39,6 +41,23 @@ public final class Model {
     private Service<Void> scriptService;
 
     private Model() {
+    }
+
+    public void checkForUpdate(final Runnable updateUI) {
+        final Thread checkForUpdateThread = new Thread(() -> {
+            while (true) {
+                try {
+                    if (BuildInfo.instance().checkForUpdate() != null) {
+                        updateUI.run();
+                    }
+                    Thread.sleep(6 * 60 * 60000);
+                } catch (final Exception e) {
+                    logger.log(Level.FINE, "checkForUpdate failed", e);
+                }
+            }
+        }, "checkForUpdateThread");
+        checkForUpdateThread.setDaemon(true);
+        checkForUpdateThread.start();
     }
 
     public TroopButton[] getAvailableTroops() {

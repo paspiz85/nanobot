@@ -23,6 +23,7 @@ import javafx.scene.control.ChoiceDialog;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextInputDialog;
@@ -39,6 +40,10 @@ import javafx.scene.web.WebView;
  *
  */
 public class MainController implements ApplicationAwareController {
+
+    private static int toInt(final double n) {
+        return (int) Math.round(n);
+    }
 
     private Application application;
 
@@ -112,6 +117,9 @@ public class MainController implements ApplicationAwareController {
     private ComboBox<TroopButton> rax6ComboBox;
 
     @FXML
+    private Label trainTroopsSliderPreview;
+
+    @FXML
     private Button settingsButton;
 
     @FXML
@@ -127,7 +135,7 @@ public class MainController implements ApplicationAwareController {
     private TextArea textArea;
 
     @FXML
-    private CheckBox trainTroopsCheckBox;
+    private Slider trainTroopsSlider;
 
     @FXML
     private Label versionLabel;
@@ -199,7 +207,7 @@ public class MainController implements ApplicationAwareController {
             settings.setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
             settings.setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
             settings.setCollectResources(collectResourcesCheckBox.isSelected());
-            settings.setTrainTroops(trainTroopsCheckBox.isSelected());
+            settings.setTrainMaxTroops(toInt(trainTroopsSlider.getValue()));
             settings.setLogLevel(logLevelComboBox.getValue());
             settings.setAttackStrategy(autoAttackComboBox.getValue());
             settings.getRaxInfo()[0] = rax1ComboBox.getValue();
@@ -248,13 +256,14 @@ public class MainController implements ApplicationAwareController {
         ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
         ScriptManager.instance().setSelect((str, options) -> select(str, options));
         model.initialize(() -> autoAdjustResolution(), () -> updateUI());
-        if (Settings.instance().isCheckUpdateOnStartup() && BuildInfo.instance().checkForUpdate() != null) {
-            versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
-            githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
-        } else {
-            versionLabel.setText(BuildInfo.instance().getFullName());
-            githubLink.setText(BuildInfo.instance().getRepositoryUrl());
-        }
+        versionLabel.setText(BuildInfo.instance().getFullName());
+        githubLink.setText(BuildInfo.instance().getRepositoryUrl());
+        model.checkForUpdate(() -> {
+            javafx.application.Platform.runLater(() -> {
+                versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
+                githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
+            });
+        });
         githubLink.setOnAction(event -> {
             application.getHostServices().showDocument(githubLink.getText());
             githubLink.setVisited(false);
@@ -290,6 +299,21 @@ public class MainController implements ApplicationAwareController {
     }
 
     private void initSettingsPane() {
+        trainTroopsSlider.setMin(0);
+        trainTroopsSlider.setMax(Settings.MAX_TRAIN_TROOPS);
+        trainTroopsSlider.setBlockIncrement(1);
+        trainTroopsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            trainTroopsSliderPreview.setText(String.format("%d", MainController.toInt(newValue.doubleValue())));
+        });
+        final TroopButton[] availableTroops = model.getAvailableTroops();
+        rax1ComboBox.getItems().addAll(availableTroops);
+        rax2ComboBox.getItems().addAll(availableTroops);
+        rax3ComboBox.getItems().addAll(availableTroops);
+        rax4ComboBox.getItems().addAll(availableTroops);
+        rax5ComboBox.getItems().addAll(availableTroops);
+        rax6ComboBox.getItems().addAll(availableTroops);
+        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
+        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {
                 if (!newValue.isEmpty()) {
@@ -306,15 +330,6 @@ public class MainController implements ApplicationAwareController {
         logLevelComboBox.getItems().addAll(Level.FINEST, Level.FINER, Level.FINE, Level.CONFIG, Level.INFO,
                 Level.WARNING, Level.SEVERE);
         logLevelComboBox.setValue(logLevelComboBox.getItems().get(1));
-        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
-        autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
-        final TroopButton[] availableTroops = model.getAvailableTroops();
-        rax1ComboBox.getItems().addAll(availableTroops);
-        rax2ComboBox.getItems().addAll(availableTroops);
-        rax3ComboBox.getItems().addAll(availableTroops);
-        rax4ComboBox.getItems().addAll(availableTroops);
-        rax5ComboBox.getItems().addAll(availableTroops);
-        rax6ComboBox.getItems().addAll(availableTroops);
         updateUI();
     }
 
@@ -394,7 +409,7 @@ public class MainController implements ApplicationAwareController {
         detectEmptyCollectorsCheckBox.setSelected(settings.isDetectEmptyCollectors());
         isMatchAllConditionsCheckBox.setSelected(settings.isMatchAllConditions());
         collectResourcesCheckBox.setSelected(settings.isCollectResources());
-        trainTroopsCheckBox.setSelected(settings.isTrainTroops());
+        trainTroopsSlider.setValue(settings.getTrainMaxTroops());
         logLevelComboBox.getSelectionModel().select(settings.getLogLevel());
         autoAttackComboBox.getSelectionModel().select(settings.getAttackStrategy());
         rax1ComboBox.getSelectionModel().select(settings.getRaxInfo()[0]);
