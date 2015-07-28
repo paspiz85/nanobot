@@ -62,7 +62,7 @@ public class StepDefinitions {
     }
 
     static {
-        System.setProperty(PlatformResolver.CLASS_PROPERTY, PlatformMock.class.getName());
+        PlatformResolver.instance().setPreferredPlatform(PlatformMock.class);
     }
 
     private Boolean check;

@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.platform.mac;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.util.OS;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
@@ -45,7 +46,7 @@ import org.w3c.dom.Element;
  * @author paspiz85
  *
  */
-public final class BsMacPlatform extends AbstractPlatform {
+public final class BlueStacksMacPlatform extends AbstractPlatform {
 
     public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
@@ -56,11 +57,15 @@ public final class BsMacPlatform extends AbstractPlatform {
     public static Platform instance() {
         // return Utils.singleton(UnsupportedPlatform.class, () ->
         // UnsupportedPlatform.instance());
-        return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
+        return Utils.singleton(BlueStacksMacPlatform.class, () -> new BlueStacksMacPlatform());
     }
 
-    private static BsMacPlatform instanceNew() {
-        return Utils.singleton(BsMacPlatform.class, () -> new BsMacPlatform());
+    private static BlueStacksMacPlatform instanceNew() {
+        return Utils.singleton(BlueStacksMacPlatform.class, () -> new BlueStacksMacPlatform());
+    }
+
+    public static boolean isSupported() {
+        return OS.getCategory() == OS.Category.MAC;
     }
 
     public static void main(final String... args) throws Exception {
@@ -75,7 +80,7 @@ public final class BsMacPlatform extends AbstractPlatform {
         // BsMacPlatform.instanceNew().bs_properties();
         // BsMacPlatform.instanceNew().bs_position();
         // BsMacPlatform.instanceNew().bs_size();
-        BsMacPlatform.instanceNew().activate();
+        BlueStacksMacPlatform.instanceNew().activate();
         System.out.println("bye");
     }
 
@@ -85,7 +90,7 @@ public final class BsMacPlatform extends AbstractPlatform {
 
     private final ScriptEngineManager scriptEngineManager;
 
-    private BsMacPlatform() {
+    private BlueStacksMacPlatform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
@@ -176,11 +181,6 @@ public final class BsMacPlatform extends AbstractPlatform {
     @Override
     public Size getExpectedSize() {
         return BS_SIZE;
-    }
-
-    @Override
-    protected String getName() {
-        return BS_WINDOW_NAME;
     }
 
     private Point getPosition() {

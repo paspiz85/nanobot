@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.platform.Platform;
 
 import java.util.UUID;
 import java.util.logging.Level;
@@ -49,6 +50,8 @@ public final class Settings {
     public static boolean isInitialized() {
         return INSTANCE.isInitialized;
     }
+
+    private Class<? extends Platform> preferredPlatform;
 
     private Attack attackStrategy = Attack.noStrategy();
 
@@ -117,6 +120,10 @@ public final class Settings {
 
     public int getMaxThThreshold() {
         return maxThThreshold;
+    }
+
+    public Class<? extends Platform> getPreferredPlatform() {
+        return preferredPlatform;
     }
 
     public TroopButton[] getRaxInfo() {
@@ -193,6 +200,10 @@ public final class Settings {
 
     public void setMaxThThreshold(final int maxThThreshold) {
         this.maxThThreshold = maxThThreshold;
+    }
+
+    public void setPreferredPlatform(final Class<? extends Platform> preferredPlatform) {
+        this.preferredPlatform = preferredPlatform;
     }
 
     public void setRaxInfo(final String raxInfoProperty) {

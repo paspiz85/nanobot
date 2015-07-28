@@ -64,8 +64,6 @@ public abstract class AbstractPlatform implements Platform {
      */
     protected abstract Color getColor(Point point);
 
-    protected abstract String getName();
-
     @Override
     public final BufferedImage getSubimage(final BufferedImage image, final Area area) {
         return getSubimage(image, area.getEdge1(), area.getEdge2());
@@ -198,12 +196,12 @@ public abstract class AbstractPlatform implements Platform {
     }
 
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info(String.format("Checking %s resolution...", getName()));
+        logger.info("Checking plaftorm resolution...");
         try {
             final Size bsActualSize = getActualSize();
             final Size bsExpectedSize = getExpectedSize();
             if (!bsExpectedSize.equals(bsActualSize)) {
-                logger.warning(String.format("%s resolution is %s", getName(), bsActualSize.toString()));
+                logger.warning(String.format("Platform resolution is %s", bsActualSize.toString()));
                 if (!autoAdjustResolution.getAsBoolean()) {
                     throw new BotConfigurationException("Re-run when resolution is fixed.");
                 }

@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.platform.win32;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.util.OS;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
 import it.paspiz85.nanobot.util.Utils;
@@ -36,7 +37,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  * @author paspiz85
  *
  */
-public final class BsWin32Platform extends AbstractPlatform {
+public final class BlueStacksWinPlatform extends AbstractPlatform {
 
     public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
@@ -60,15 +61,19 @@ public final class BsWin32Platform extends AbstractPlatform {
 
     private static final int WM_LBUTTONUP = 0x202;
 
-    public static BsWin32Platform instance() {
-        return Utils.singleton(BsWin32Platform.class, () -> new BsWin32Platform());
+    public static BlueStacksWinPlatform instance() {
+        return Utils.singleton(BlueStacksWinPlatform.class, () -> new BlueStacksWinPlatform());
+    }
+
+    public static boolean isSupported() {
+        return OS.getCategory() == OS.Category.WINDOWS;
     }
 
     private HWND handler;
 
     private final Robot robot;
 
-    private BsWin32Platform() {
+    private BlueStacksWinPlatform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
@@ -120,11 +125,6 @@ public final class BsWin32Platform extends AbstractPlatform {
     @Override
     public Size getExpectedSize() {
         return BS_SIZE;
-    }
-
-    @Override
-    protected String getName() {
-        return BS_WINDOW_NAME;
     }
 
     private boolean isCtrlKeyDown() {

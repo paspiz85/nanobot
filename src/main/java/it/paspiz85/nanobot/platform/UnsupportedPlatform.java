@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  */
 public class UnsupportedPlatform extends AbstractPlatform {
 
-    private static final String NAME = "Platform not supported";
+    private static final String MESSAGE = "Platform not supported";
 
     public static UnsupportedPlatform instance() {
         return Utils.singleton(UnsupportedPlatform.class, () -> new UnsupportedPlatform());
@@ -28,51 +28,46 @@ public class UnsupportedPlatform extends AbstractPlatform {
 
     @Override
     protected void applySize(final Size resolution) throws BotConfigurationException {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected Size getActualSize() {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected Color getColor(final Point point) {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     public Size getExpectedSize() {
-        throw new UnsupportedOperationException(NAME);
-    }
-
-    @Override
-    protected String getName() {
-        return NAME;
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected boolean registerForClick(final Consumer<Point> clickConsumer) {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected BufferedImage screenshot(final Point p1, final Point p2) {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected void setup() throws BotConfigurationException {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 
     @Override
     protected void singleZoomUp() throws InterruptedException {
-        throw new UnsupportedOperationException(NAME);
+        throw new UnsupportedOperationException(MESSAGE);
     }
 }

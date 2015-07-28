@@ -5,7 +5,6 @@ import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
-import it.paspiz85.nanobot.util.Utils;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
@@ -23,7 +22,7 @@ public interface Platform {
     Size GAME_SIZE = new Size(860, 720 - 47);
 
     static Platform instance() {
-        return Utils.singleton(Platform.class, PlatformResolver.instance());
+        return PlatformResolver.instance().get();
     }
 
     boolean compareColor(Color c1, Color c2, int var);

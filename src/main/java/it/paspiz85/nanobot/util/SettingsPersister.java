@@ -2,6 +2,7 @@ package it.paspiz85.nanobot.util;
 
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.platform.Platform;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -44,6 +45,8 @@ public final class SettingsPersister {
     private static final String PROPERTY_TRAIN_TROOPS = "train_troops";
 
     private static final String PROPERTY_USER_MAIL_ADDRESS = "user_mail_address";
+
+    private static final String PROPERTY_PREFERRED_PLATFORM = "preferred_platform";
 
     private static final String PROPERTY_UUID = "uuid";
 
@@ -114,6 +117,17 @@ public final class SettingsPersister {
             if (userMailAddressProperty != null) {
                 settings.setUserMailAddress(userMailAddressProperty);
             }
+            final String preferredPlatformProperty = configProperties.getProperty(PROPERTY_PREFERRED_PLATFORM);
+            if (preferredPlatformProperty != null && !preferredPlatformProperty.isEmpty()) {
+                try {
+                    @SuppressWarnings("unchecked")
+                    final Class<? extends Platform> preferredPlatform = (Class<? extends Platform>) Class
+                            .forName(preferredPlatformProperty);
+                    settings.setPreferredPlatform(preferredPlatform);
+                } catch (final ClassNotFoundException e1) {
+                    logger.log(Level.SEVERE, "Platform not found: " + preferredPlatformProperty);
+                }
+            }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
                 boolean found = false;
@@ -168,6 +182,10 @@ public final class SettingsPersister {
             }
             configProperties.setProperty(PROPERTY_RAX_INFO, raxProp.toString());
             configProperties.setProperty(PROPERTY_LOG_LEVEL, String.valueOf(settings.getLogLevel()));
+            final Class<? extends Platform> preferredPlatform = settings.getPreferredPlatform();
+            if (preferredPlatform != null) {
+                configProperties.setProperty(PROPERTY_PREFERRED_PLATFORM, preferredPlatform.getName());
+            }
             configProperties.store(fos, null);
             logger.info("Settings are saved.");
         } catch (final Exception e) {
