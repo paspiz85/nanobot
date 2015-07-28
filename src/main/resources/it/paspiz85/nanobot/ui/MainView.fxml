@@ -20,7 +20,7 @@
          <children>
             <AnchorPane fx:id="setupPane" prefHeight="200.0" prefWidth="200.0">
                <children>
-                  <GridPane fx:id="configGridPane" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="20.0">
+                  <GridPane fx:id="configGridPane" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.0" minWidth="10.0" prefWidth="159.0" />
                         <ColumnConstraints hgrow="SOMETIMES" maxWidth="274.0" minWidth="10.0" prefWidth="171.0" />
@@ -47,7 +47,11 @@
                         <Label text="Collect resources?" GridPane.rowIndex="0" />
                         <CheckBox fx:id="collectResourcesCheckBox" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="0" />
                         <Label text="Train troops?" GridPane.rowIndex="1" />
-                        <Slider fx:id="trainTroopsSlider" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <Slider fx:id="trainTroopsSlider" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                           <GridPane.margin>
+                              <Insets right="30.0" />
+                           </GridPane.margin></Slider>
+                        <Label text="100" fx:id="trainTroopsSliderPreview" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                         <Label text="Rax 1" GridPane.rowIndex="2" />
                         <Label text="Rax 2" GridPane.rowIndex="3" />
                         <Label text="Rax 3" GridPane.rowIndex="4" />

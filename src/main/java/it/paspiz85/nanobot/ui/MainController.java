@@ -41,6 +41,10 @@ import javafx.scene.web.WebView;
  */
 public class MainController implements ApplicationAwareController {
 
+    private static int toInt(final double n) {
+        return (int) Math.round(n);
+    }
+
     private Application application;
 
     @FXML
@@ -111,6 +115,9 @@ public class MainController implements ApplicationAwareController {
 
     @FXML
     private ComboBox<TroopButton> rax6ComboBox;
+
+    @FXML
+    private Label trainTroopsSliderPreview;
 
     @FXML
     private Button settingsButton;
@@ -200,7 +207,7 @@ public class MainController implements ApplicationAwareController {
             settings.setDetectEmptyCollectors(detectEmptyCollectorsCheckBox.isSelected());
             settings.setMatchAllConditions(isMatchAllConditionsCheckBox.isSelected());
             settings.setCollectResources(collectResourcesCheckBox.isSelected());
-            settings.setTrainMaxTroops((int) Math.round(trainTroopsSlider.getValue()));
+            settings.setTrainMaxTroops(toInt(trainTroopsSlider.getValue()));
             settings.setLogLevel(logLevelComboBox.getValue());
             settings.setAttackStrategy(autoAttackComboBox.getValue());
             settings.getRaxInfo()[0] = rax1ComboBox.getValue();
@@ -293,6 +300,10 @@ public class MainController implements ApplicationAwareController {
     private void initSettingsPane() {
         trainTroopsSlider.setMin(0);
         trainTroopsSlider.setMax(Settings.MAX_TRAIN_TROOPS);
+        trainTroopsSlider.setBlockIncrement(1);
+        trainTroopsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            trainTroopsSliderPreview.setText(String.format("%d", MainController.toInt(newValue.doubleValue())));
+        });
         final TroopButton[] availableTroops = model.getAvailableTroops();
         rax1ComboBox.getItems().addAll(availableTroops);
         rax2ComboBox.getItems().addAll(availableTroops);
