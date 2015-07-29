@@ -8,6 +8,7 @@ import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Arrays;
+import java.util.logging.Level;
 
 /**
  * This state is when training troops.
@@ -31,9 +32,9 @@ public final class StateManageTroops extends State<MainScreenParser> {
     public void handle(final Context context) throws InterruptedException {
         final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
         final int[] troopsCount = troopsInfo.getTroopsCount();
-        logger.info("Troops count: " + Arrays.toString(troopsCount));
+        logger.log(Level.CONFIG, "Troops count: " + Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
-        logger.fine("Open first barrack");
+        logger.log(Level.FINE, "Open first barrack");
         platform.leftClick(getParser().getButtonTrainNext(), true);
         platform.sleepRandom(500);
         int troopsCountSum = 0;
@@ -42,36 +43,36 @@ public final class StateManageTroops extends State<MainScreenParser> {
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         if (getParser().areCampsFull() || troopsCountSum >= trainMaxTroops) {
-            logger.info("Camp is full.");
-            logger.fine("Close barracks");
+            logger.log(Level.INFO, "Camp is full.");
+            logger.log(Level.FINE, "Close barracks");
             platform.leftClick(getParser().getButtonTrainClose(), true);
             platform.sleepRandom(200);
-            logger.fine("Press Attack.");
+            logger.log(Level.FINE, "Press Attack.");
             platform.leftClick(getParser().getButtonAttack(), true);
             platform.sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             if (trainMaxTroops > 0) {
-                logger.info("Training Troops.");
+                logger.log(Level.INFO, "Training Troops.");
                 final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
                 for (int currRax = 0; currRax < raxInfo.length; currRax++) {
                     final TroopButton troop = raxInfo[currRax];
                     if (troop != TroopButton.NO_UNIT) {
                         final int clicks = 10 + Utils.RANDOM.nextInt(10);
-                        logger.fine("Try training " + clicks + " " + troop.getDescription());
+                        logger.log(Level.FINE, "Try training " + clicks + " " + troop.getDescription());
                         for (int i = 0; i < clicks; i++) {
                             platform.leftClick(troop.getPoint(), true);
                             platform.sleepRandom(75);
                         }
                     }
                     if (currRax < raxInfo.length - 1) {
-                        logger.fine("Goto next barrack");
+                        logger.log(Level.FINE, "Goto next barrack");
                         platform.leftClick(getParser().getButtonTrainNext(), true);
                         platform.sleepRandom(350);
                     }
                 }
             }
-            logger.fine("Close Training Troops.");
+            logger.log(Level.FINE, "Close Training Troops.");
             platform.leftClick(getParser().getButtonTrainClose(), true);
             platform.sleepRandom(250);
             context.setState(StateMainMenu.instance());

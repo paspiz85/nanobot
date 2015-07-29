@@ -6,6 +6,8 @@ import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
+import java.util.logging.Level;
+
 /**
  * This state is when bot switch from training mode to attack mode.
  *
@@ -24,7 +26,7 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        logger.info("Start battle.");
+        logger.log(Level.INFO, "Start battle.");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }

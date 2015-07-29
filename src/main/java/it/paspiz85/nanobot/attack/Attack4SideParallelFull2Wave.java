@@ -2,6 +2,8 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.util.Point;
 
+import java.util.logging.Level;
+
 /**
  * Attack from 4 side parallel (top and bottom) in 2 wave of units.
  *
@@ -15,7 +17,7 @@ public final class Attack4SideParallelFull2Wave extends Attack {
 
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
-        logger.info("Dropping units from 4 sides in parallel in 2 full waves.");
+        logger.log(Level.INFO, "Dropping units from 4 sides in parallel in 2 full waves.");
         for (int wave = 0; wave < 2; wave++) {
             for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
                 int unitCount = attackGroup[unitIdx];

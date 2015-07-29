@@ -5,6 +5,8 @@ import it.paspiz85.nanobot.parsing.MainScreenParser;
 import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Utils;
 
+import java.util.logging.Level;
+
 /**
  * This state is when bot sleeps.
  *
@@ -32,20 +34,20 @@ public final class StateIdle extends State<Parser> {
     @Override
     public void handle(final Context context) throws InterruptedException {
         State<?> nextState = null;
+        logger.log(Level.INFO, "Idle");
         while (true) {
-            logger.info("Idle");
             if (Thread.interrupted()) {
                 throw new InterruptedException("StateIdle is interrupted.");
             }
             if (reloading) {
-                logger.info("reloading...");
+                logger.log(Level.INFO, "reloading...");
                 platform.zoomUp();
                 Thread.sleep(2000);
                 continue;
             }
             if (platform.matchColoredPoint(mainScreenParser.getPointWasAttackedHeadline())
                     || platform.matchColoredPoint(mainScreenParser.getButtonWasAttackedOK())) {
-                logger.info("Was attacked.");
+                logger.log(Level.INFO, "Was attacked.");
                 platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
                 platform.sleepRandom(250);
             } else if (mainScreenParser.searchButtonTrainClose() != null) {

@@ -195,8 +195,10 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
         if (result == 0) {
             throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
         }
-        logger.fine(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
-                Arrays.toString(rect)));
+        logger.log(
+                Level.FINE,
+                String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
+                        Arrays.toString(rect)));
         // set bs always on top
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
     }

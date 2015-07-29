@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.parsing.TroopsInfo;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -54,14 +55,14 @@ public final class Context {
     }
 
     public void setState(final State<?> state) {
-        logger.fine("Setting next state to: " + state.getClass().getSimpleName());
+        logger.log(Level.FINE, "Next state to " + state.getClass().getSimpleName());
         this.current = state;
         if (state instanceof StateIdle) {
             trainCount = 0;
         }
         if (state instanceof StateManageTroops) {
             trainCount++;
-            logger.fine("Train count is " + trainCount);
+            logger.log(Level.FINE, "Train count is " + trainCount);
         }
     }
 

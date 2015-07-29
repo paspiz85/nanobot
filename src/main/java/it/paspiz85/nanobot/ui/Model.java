@@ -90,7 +90,7 @@ public final class Model {
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
         Settings.initialize();
-        logger.info("Settings loaded.");
+        logger.log(Level.INFO, "Settings loaded.");
         initRunningService(autoAdjustResolution, updateUI);
         initScriptService();
     }
@@ -148,7 +148,7 @@ public final class Model {
         scriptService.setOnSucceeded(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.info("Script is succeeded.");
+            logger.log(Level.INFO, "Script is succeeded.");
         });
     }
 

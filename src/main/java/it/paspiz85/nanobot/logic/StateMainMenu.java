@@ -7,6 +7,9 @@ import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
+import java.util.function.Supplier;
+import java.util.logging.Level;
+
 /**
  * This state is when bot is in main menu.
  *
@@ -14,12 +17,6 @@ import it.paspiz85.nanobot.util.Utils;
  *
  */
 public final class StateMainMenu extends State<MainScreenParser> {
-
-    private static final int DARK_ELIXIR_DRILL_MAX_NUMBER = 4;
-
-    private static final int ELIXIR_COLLECTOR_MAX_NUMBER = 8;
-
-    private static final int GOLD_MINE_MAX_NUMBER = 8;
 
     public static StateMainMenu instance() {
         return Utils.singleton(StateMainMenu.class, () -> new StateMainMenu());
@@ -29,41 +26,40 @@ public final class StateMainMenu extends State<MainScreenParser> {
         super(Parser.getInstance(MainScreenParser.class));
     }
 
+    private int collect(final Supplier<Point> pointSearch) throws InterruptedException {
+        int count = 0;
+        while (true) {
+            final Point p = pointSearch.get();
+            if (p == null) {
+                return count;
+            }
+            platform.leftClick(p, false);
+            platform.sleepRandom(200);
+            count++;
+        }
+    }
+
     private void collecting(final Context context) throws InterruptedException {
-        if (context.getTrainCount() % 20 == 0) {
-            logger.info("Searching full collectors...");
-            int count = 0;
-            for (int i = 0; i < GOLD_MINE_MAX_NUMBER; i++) {
-                final Point p = getParser().searchFullGoldMine();
-                if (p != null) {
-                    platform.leftClick(p, false);
-                    platform.sleepRandom(200);
-                    count++;
-                }
-            }
-            for (int i = 0; i < ELIXIR_COLLECTOR_MAX_NUMBER; i++) {
-                final Point p = getParser().searchFullElixirCollector();
-                if (p != null) {
-                    platform.leftClick(p, false);
-                    platform.sleepRandom(200);
-                    count++;
-                }
-            }
-            for (int i = 0; i < DARK_ELIXIR_DRILL_MAX_NUMBER; i++) {
-                final Point p = getParser().searchFullDarkElixirDrill();
-                if (p != null) {
-                    platform.leftClick(p, false);
-                    platform.sleepRandom(200);
-                    count++;
-                }
-            }
-            logger.info(String.format("Found %d full collectors.", count));
+        if (context.getTrainCount() % 20 == 1) {
+            logger.log(Level.INFO, "Searching full collectors...");
+            final int count = collect(() -> getParser().searchFullGoldMine());
+            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
+        }
+        if (context.getTrainCount() % 20 == 2) {
+            logger.log(Level.INFO, "Searching full collectors...");
+            final int count = collect(() -> getParser().searchFullElixirCollector());
+            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
+        }
+        if (context.getTrainCount() % 20 == 3) {
+            logger.log(Level.INFO, "Searching full collectors...");
+            final int count = collect(() -> getParser().searchFullDarkElixirDrill());
+            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
         }
     }
 
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
-        logger.fine("Returned in main menu");
+        logger.log(Level.FINE, "Returned in main menu");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
@@ -74,11 +70,11 @@ public final class StateMainMenu extends State<MainScreenParser> {
         }
         final Point buttonTrainClose = getParser().searchButtonTrainClose();
         if (buttonTrainClose != null) {
-            logger.fine("Close previous train");
+            logger.log(Level.FINE, "Close previous train");
             platform.leftClick(buttonTrainClose, true);
             platform.sleepRandom(500);
         }
-        logger.fine("Open troops");
+        logger.log(Level.FINE, "Open troops");
         platform.leftClick(getParser().getButtonTroops(), true);
         platform.sleepRandom(500);
         context.setState(StateManageTroops.instance());

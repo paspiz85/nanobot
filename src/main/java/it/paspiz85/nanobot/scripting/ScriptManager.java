@@ -122,12 +122,12 @@ public final class ScriptManager {
         if (path == null) {
             throw new IllegalArgumentException("Script not found");
         }
-        logger.info(msg);
+        logger.log(Level.INFO, msg);
         final ScriptEngine engine = factory.getEngineByName("nashorn");
         final ScriptContext context = buildContext();
         try (InputStream in = path.toUri().toURL().openStream()) {
             engine.eval(new InputStreamReader(in), context);
-            logger.info(msg + " completed");
+            logger.log(Level.INFO, msg + " completed");
         } catch (final Exception e) {
             logger.log(Level.WARNING, msg + " failed: " + e.getMessage(), e);
         } finally {

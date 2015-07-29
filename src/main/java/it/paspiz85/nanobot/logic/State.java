@@ -6,6 +6,7 @@ import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -40,7 +41,7 @@ public abstract class State<P extends Parser> {
             if (point != null) {
                 return point;
             }
-            logger.fine("Point not found.");
+            logger.log(Level.FINE, "Point not found.");
             platform.sleepRandom(500);
         }
     }

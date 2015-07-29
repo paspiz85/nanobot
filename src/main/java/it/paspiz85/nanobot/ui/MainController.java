@@ -353,17 +353,17 @@ public class MainController implements ApplicationAwareController {
 
             @Override
             public void run() {
-                logger.fine("platformRunNow run start");
+                logger.log(Level.FINE, "platformRunNow run start");
                 runnable.run();
                 done[0] = true;
-                logger.fine("platformRunNow run complete");
+                logger.log(Level.FINE, "platformRunNow run complete");
                 synchronized (this) {
                     this.notify();
                 }
             }
         };
         javafx.application.Platform.runLater(sync);
-        logger.fine("platformRunNow wait start");
+        logger.log(Level.FINE, "platformRunNow wait start");
         synchronized (sync) {
             while (!done[0]) {
                 try {
@@ -373,7 +373,7 @@ public class MainController implements ApplicationAwareController {
                 }
             }
         }
-        logger.fine("platformRunNow wait complete");
+        logger.log(Level.FINE, "platformRunNow wait complete");
     }
 
     private String prompt(final String msg, final String value) {

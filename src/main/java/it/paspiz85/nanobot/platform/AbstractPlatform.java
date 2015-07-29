@@ -85,7 +85,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void init(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info("Setting up platform...");
+        logger.log(Level.INFO, "Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
     }
@@ -105,7 +105,7 @@ public abstract class AbstractPlatform implements Platform {
             throw new IllegalArgumentException("point not provided");
         }
         Point p = point;
-        logger.fine("Clicking " + p + ".");
+        logger.log(Level.FINER, "Clicking " + p + ".");
         // randomize coordinates little bit
         if (randomize) {
             p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.y() - 1 + Utils.RANDOM.nextInt(3));
@@ -153,9 +153,9 @@ public abstract class AbstractPlatform implements Platform {
         if (!file.getParentFile().isDirectory()) {
             file.getParentFile().mkdirs();
         }
-        logger.fine("Saving image at " + file.getAbsolutePath());
+        logger.log(Level.FINE, "Saving image at " + file.getAbsolutePath());
         ImageIO.write(img, "png", file);
-        logger.info("Saved image at " + file.getAbsolutePath());
+        logger.log(Level.INFO, "Saved image at " + file.getAbsolutePath());
         return file;
     }
 
@@ -201,7 +201,7 @@ public abstract class AbstractPlatform implements Platform {
     protected abstract void setup() throws BotConfigurationException;
 
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info("Checking plaftorm resolution...");
+        logger.log(Level.INFO, "Checking plaftorm resolution...");
         try {
             final Size bsActualSize = getActualSize();
             final Size bsExpectedSize = getExpectedSize();
@@ -224,7 +224,7 @@ public abstract class AbstractPlatform implements Platform {
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
         final int time = sleepInMs + Utils.RANDOM.nextInt(sleepInMs);
-        logger.fine("Sleeping for " + time + " ms.");
+        logger.log(Level.FINER, "Sleeping for " + time + " ms.");
         Thread.sleep(time);
     }
 
@@ -240,7 +240,7 @@ public abstract class AbstractPlatform implements Platform {
             }
         });
         if (registered) {
-            logger.info("Waiting for user to click.");
+            logger.log(Level.INFO, "Waiting for user to click.");
             synchronized (WAIT_FOR_CLICK_SYNC) {
                 while (!done[0]) {
                     WAIT_FOR_CLICK_SYNC.wait();
@@ -252,7 +252,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void zoomUp() throws InterruptedException {
-        logger.info("Zooming out...");
+        logger.log(Level.CONFIG, "Zooming out...");
         final int notch = 14;
         for (int i = 0; i < notch; i++) {
             singleZoomUp();

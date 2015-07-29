@@ -9,6 +9,7 @@ import it.paspiz85.nanobot.util.Point;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -88,11 +89,11 @@ public abstract class Attack {
     }
 
     public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
-        logger.info("Attacking...");
+        logger.log(Level.INFO, "Attacking...");
         platform.zoomUp();
         doDropUnits(attackGroup);
         sleepUntilLootDoesNotChange(loot);
-        logger.info("No more loot.");
+        logger.log(Level.INFO, "No more loot.");
     }
 
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
