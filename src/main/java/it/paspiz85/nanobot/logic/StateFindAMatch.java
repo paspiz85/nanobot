@@ -41,7 +41,7 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
                 sleepUntilPointFound(() -> getParser().searchButtonNext());
                 context.setState(StateAttack.instance());
                 return;
-            } catch(TimeoutException e) {
+            } catch (final TimeoutException e) {
                 logger.log(Level.WARNING, "Next button not found");
             }
         }

@@ -2,8 +2,6 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.util.Point;
 
-import java.util.logging.Level;
-
 /**
  * Attack from 2 side (top-right and top-left) using half units for each side.
  *
@@ -17,7 +15,6 @@ public final class Attack2Side extends Attack {
 
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
-        logger.log(Level.INFO, "Dropping units from 2 sides.");
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit
@@ -33,5 +30,10 @@ public final class Attack2Side extends Attack {
                 }
             }
         }
+    }
+
+    @Override
+    protected String getDescription() {
+        return "Dropping units from 2 sides";
     }
 }

@@ -2,8 +2,6 @@ package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.util.Point;
 
-import java.util.logging.Level;
-
 /**
  * {@link Attack4Side} variant that attack in parallel from top and from bottom.
  *
@@ -17,7 +15,6 @@ public final class Attack4SideParallel extends Attack {
 
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
-        logger.log(Level.INFO, "Dropping units from 4 sides in parallel.");
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit
@@ -49,5 +46,10 @@ public final class Attack4SideParallel extends Attack {
                 platform.sleepRandom(PAUSE_BETWEEN_UNIT_DROP);
             }
         }
+    }
+
+    @Override
+    protected String getDescription() {
+        return "Dropping units from 4 sides in parallel";
     }
 }

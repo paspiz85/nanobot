@@ -91,7 +91,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
                         final int[] troopsCount = troopsInfo.getTroopsCount();
-                        logger.log(Level.INFO, "Troops count: " + Arrays.toString(troopsCount));
+                        logger.log(Level.INFO, "Attacking with " + Arrays.toString(troopsCount));
                         attackStrategy.attack(enemyInfo, troopsCount);
                     }
                     platform.leftClick(getParser().getButtonEndBattle(), true);
@@ -116,7 +116,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                 platform.sleepRandom(666);
                 try {
                     sleepUntilPointFound(() -> getParser().searchButtonNext());
-                } catch(TimeoutException e) {
+                } catch (final TimeoutException e) {
                     logger.log(Level.WARNING, "Next button not found");
                     break;
                 }

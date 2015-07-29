@@ -89,14 +89,16 @@ public abstract class Attack {
     }
 
     public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
-        logger.log(Level.INFO, "Attacking...");
         platform.zoomUp();
+        logger.log(Level.CONFIG, getDescription());
         doDropUnits(attackGroup);
         sleepUntilLootDoesNotChange(loot);
-        logger.log(Level.INFO, "No more loot.");
+        logger.log(Level.INFO, "No more loot");
     }
 
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
+
+    protected abstract String getDescription();
 
     protected final Point[] pointsBetweenFromToInclusive(final Point from, final Point to, final int count) {
         Point[] result;

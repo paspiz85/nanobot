@@ -14,4 +14,9 @@ public final class ManualAttack extends Attack {
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
     }
+
+    @Override
+    protected String getDescription() {
+        return "Manually drop units";
+    }
 }
