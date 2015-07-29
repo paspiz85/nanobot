@@ -45,20 +45,20 @@ public final class Looper {
         try {
             while (true) {
                 if (Thread.interrupted()) {
-                    throw new InterruptedException(getClass().getName() + " is interrupted.");
+                    throw new InterruptedException(getClass().getName() + " is interrupted");
                 }
                 context.handle();
             }
         } catch (final InterruptedException e) {
             // either by dc checker
             if (context.isDisconnected()) {
-                logger.log(Level.INFO, "Interrupted by DisconnectChecker.");
+                logger.log(Level.INFO, "Interrupted by DisconnectChecker");
                 context.setDisconnected(false);
                 context.setWaitDone(false);
                 return;
                 // or by user
             } else {
-                logger.log(Level.INFO, "Interrupted by User.");
+                logger.log(Level.INFO, "Interrupted by User");
                 throw e;
             }
         } catch (final Exception e) {
@@ -79,7 +79,7 @@ public final class Looper {
                 // waitingForDcChecker is set to false
                 context.wait(timeout);
                 if (System.currentTimeMillis() - tBefore > timeout) {
-                    throw new BotException("Timed Out.", botException);
+                    throw new BotException("Timed Out", botException);
                 }
             }
             context.setWaitDone(false);
@@ -92,7 +92,7 @@ public final class Looper {
         try {
             logger.log(Level.INFO, "Starting...");
             platform.init(autoAdjustResolution);
-            logger.log(Level.INFO, "Setup is successful.");
+            logger.log(Level.INFO, "Setup is successful");
             final Context context = new Context();
             logger.log(Level.FINE, "Starting disconnect detector...");
             final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),

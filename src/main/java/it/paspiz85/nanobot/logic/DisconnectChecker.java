@@ -42,10 +42,10 @@ public class DisconnectChecker implements Runnable {
         try {
             while (true) {
                 if (Thread.interrupted()) {
-                    throw new InterruptedException("Disconnect detector is interrupted.");
+                    throw new InterruptedException("Disconnect detector is interrupted");
                 }
                 if (platform.matchColoredPoint(UNIT_BLUESTACKS_DC)) {
-                    logger.log(Level.INFO, "Detected disconnect.");
+                    logger.log(Level.INFO, "Detected disconnect");
                     synchronized (context) {
                         // case 1: launcher was running and it will be
                         // interrupted. It will go back to StateIdle start

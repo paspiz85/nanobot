@@ -85,7 +85,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void init(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.log(Level.INFO, "Setting up platform...");
+        logger.log(Level.CONFIG, "Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
     }
@@ -105,7 +105,7 @@ public abstract class AbstractPlatform implements Platform {
             throw new IllegalArgumentException("point not provided");
         }
         Point p = point;
-        logger.log(Level.FINER, "Clicking " + p + ".");
+        logger.log(Level.FINER, "Clicking " + p);
         // randomize coordinates little bit
         if (randomize) {
             p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.y() - 1 + Utils.RANDOM.nextInt(3));
@@ -208,14 +208,14 @@ public abstract class AbstractPlatform implements Platform {
             if (!bsExpectedSize.equals(bsActualSize)) {
                 logger.warning(String.format("Platform resolution is %s", bsActualSize.toString()));
                 if (!autoAdjustResolution.getAsBoolean()) {
-                    throw new BotConfigurationException("Re-run when resolution is fixed.");
+                    throw new BotConfigurationException("Re-run when resolution is fixed");
                 }
                 applySize(bsExpectedSize);
             }
         } catch (final BotConfigurationException e) {
             throw e;
         } catch (final Exception e) {
-            throw new BotConfigurationException("Unable to change resolution. Do it manually.", e);
+            throw new BotConfigurationException("Unable to change resolution. Do it manually", e);
         }
     }
 
@@ -224,7 +224,7 @@ public abstract class AbstractPlatform implements Platform {
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
         final int time = sleepInMs + Utils.RANDOM.nextInt(sleepInMs);
-        logger.log(Level.FINER, "Sleeping for " + time + " ms.");
+        logger.log(Level.FINER, "Sleeping for " + time + " ms");
         Thread.sleep(time);
     }
 
@@ -240,7 +240,7 @@ public abstract class AbstractPlatform implements Platform {
             }
         });
         if (registered) {
-            logger.log(Level.INFO, "Waiting for user to click.");
+            logger.log(Level.INFO, "Waiting for user to click");
             synchronized (WAIT_FOR_CLICK_SYNC) {
                 while (!done[0]) {
                     WAIT_FOR_CLICK_SYNC.wait();

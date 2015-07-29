@@ -37,7 +37,7 @@ public final class StateIdle extends State<Parser> {
         logger.log(Level.INFO, "Idle");
         while (true) {
             if (Thread.interrupted()) {
-                throw new InterruptedException("StateIdle is interrupted.");
+                throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
             }
             if (reloading) {
                 logger.log(Level.INFO, "reloading...");
@@ -47,7 +47,7 @@ public final class StateIdle extends State<Parser> {
             }
             if (platform.matchColoredPoint(mainScreenParser.getPointWasAttackedHeadline())
                     || platform.matchColoredPoint(mainScreenParser.getButtonWasAttackedOK())) {
-                logger.log(Level.INFO, "Was attacked.");
+                logger.log(Level.INFO, "Was attacked");
                 platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
                 platform.sleepRandom(250);
             } else if (mainScreenParser.searchButtonTrainClose() != null) {

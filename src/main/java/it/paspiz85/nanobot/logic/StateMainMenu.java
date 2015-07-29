@@ -61,7 +61,7 @@ public final class StateMainMenu extends State<MainScreenParser> {
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
         logger.log(Level.FINE, "Returned in main menu");
         if (Thread.interrupted()) {
-            throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
+            throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
         }
         platform.zoomUp();
         platform.sleepRandom(350);

@@ -30,6 +30,10 @@ public final class StateManageTroops extends State<MainScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
+        logger.log(Level.FINE, "Managing troops");
+        if (Thread.interrupted()) {
+            throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
+        }
         final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
         final int[] troopsCount = troopsInfo.getTroopsCount();
         logger.log(Level.CONFIG, "Troops count: " + Arrays.toString(troopsCount));
@@ -43,17 +47,17 @@ public final class StateManageTroops extends State<MainScreenParser> {
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         if (getParser().areCampsFull() || troopsCountSum >= trainMaxTroops) {
-            logger.log(Level.INFO, "Camp is full.");
+            logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
             platform.leftClick(getParser().getButtonTrainClose(), true);
             platform.sleepRandom(200);
-            logger.log(Level.FINE, "Press Attack.");
+            logger.log(Level.FINE, "Press Attack");
             platform.leftClick(getParser().getButtonAttack(), true);
             platform.sleepRandom(1000);
             context.setState(StateFindAMatch.instance());
         } else {
             if (trainMaxTroops > 0) {
-                logger.log(Level.INFO, "Training Troops.");
+                logger.log(Level.INFO, "Training Troops");
                 final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
                 for (int currRax = 0; currRax < raxInfo.length; currRax++) {
                     final TroopButton troop = raxInfo[currRax];
@@ -72,7 +76,7 @@ public final class StateManageTroops extends State<MainScreenParser> {
                     }
                 }
             }
-            logger.log(Level.FINE, "Close Training Troops.");
+            logger.log(Level.FINE, "Close Training Troops");
             platform.leftClick(getParser().getButtonTrainClose(), true);
             platform.sleepRandom(250);
             context.setState(StateMainMenu.instance());

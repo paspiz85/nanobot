@@ -27,9 +27,9 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        logger.log(Level.INFO, "Start battle");
+        logger.log(Level.INFO, "Starting battle");
         if (Thread.interrupted()) {
-            throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
+            throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
         }
         if (Settings.instance().getAttackStrategy() != Attack.noStrategy()
                 && platform.matchColoredPoint(getParser().getButtonFindMatch())) {

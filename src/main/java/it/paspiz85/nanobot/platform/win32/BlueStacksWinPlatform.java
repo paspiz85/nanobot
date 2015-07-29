@@ -170,7 +170,7 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
             });
             result = true;
         } catch (final Exception e) {
-            logger.log(Level.WARNING, "Unable to capture mouse movement.", e);
+            logger.log(Level.WARNING, "Unable to capture mouse movement", e);
             result = false;
         }
         return result;
@@ -188,12 +188,12 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
     protected void setup() throws BotConfigurationException {
         handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
         if (handler == null) {
-            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
+            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found");
         }
         final int[] rect = { 0, 0, 0, 0 };
         final int result = User32.INSTANCE.GetWindowRect(handler, rect);
         if (result == 0) {
-            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
+            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found");
         }
         logger.log(
                 Level.FINE,

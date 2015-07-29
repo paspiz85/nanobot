@@ -59,7 +59,7 @@ public final class StateAttack extends State<AttackScreenParser> {
     public void handle(final Context context) throws InterruptedException, BotException {
         while (true) {
             if (Thread.interrupted()) {
-                throw new InterruptedException("StateAttack is interrupted.");
+                throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
             }
             final long id = System.currentTimeMillis();
             logger.log(Level.INFO, "Found opponent " + id);
@@ -69,13 +69,13 @@ public final class StateAttack extends State<AttackScreenParser> {
             boolean doAttack = false;
             try {
                 enemyInfo = getParser().parseEnemyInfo();
-                logger.log(Level.INFO, String.format("Detected %s.", enemyInfo.toString()));
+                logger.log(Level.INFO, String.format("Detected %s", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
                     final Boolean isCollectorFullBase = getParser().isCollectorFullBase();
                     doAttack = isCollectorFullBase == null ? false : isCollectorFullBase;
                     if (!doAttack) {
-                        logger.log(Level.INFO, "Detected empty collectors.");
+                        logger.log(Level.INFO, "Detected empty collectors");
                     }
                 }
             } catch (final BotBadBaseException e) {
@@ -102,7 +102,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                     platform.sleepRandom(1200);
                 } else {
                     if (enemyInfo.equals(prevLoot)) {
-                        logger.log(Level.INFO, "User is manually attacking/deciding.");
+                        logger.log(Level.INFO, "User is manually attacking/deciding");
                     }
                     prevLoot = enemyInfo;
                     Thread.sleep(5000);

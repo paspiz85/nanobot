@@ -90,7 +90,7 @@ public final class Model {
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
         Settings.initialize();
-        logger.log(Level.INFO, "Settings loaded.");
+        logger.log(Level.INFO, "Settings loaded");
         initRunningService(autoAdjustResolution, updateUI);
         initScriptService();
     }
@@ -112,11 +112,11 @@ public final class Model {
         };
         runningService.setOnCancelled(event -> {
             runningService.reset();
-            logger.warning("Running is cancelled.");
+            logger.warning("Running is cancelled");
         });
         runningService.setOnFailed(event -> {
             runningService.reset();
-            logger.warning("Running is failed.");
+            logger.warning("Running is failed");
         });
     }
 
@@ -138,17 +138,17 @@ public final class Model {
         scriptService.setOnCancelled(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.warning("Script is cancelled.");
+            logger.warning("Script is cancelled");
         });
         scriptService.setOnFailed(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.warning("Script is failed.");
+            logger.warning("Script is failed");
         });
         scriptService.setOnSucceeded(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.log(Level.INFO, "Script is succeeded.");
+            logger.log(Level.INFO, "Script is succeeded");
         });
     }
 

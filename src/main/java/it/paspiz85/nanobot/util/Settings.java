@@ -21,7 +21,7 @@ public final class Settings {
 
     public static synchronized void close() {
         if (!INSTANCE.isInitialized) {
-            throw new IllegalStateException("ConfigUtils is not initialized.");
+            throw new IllegalStateException(Settings.class.getSimpleName() + " is not initialized");
         }
         INSTANCE.isInitialized = false;
     }
@@ -29,7 +29,7 @@ public final class Settings {
     public static synchronized void initialize() throws IllegalStateException {
         // Throw exception if called twice
         if (INSTANCE.isInitialized) {
-            throw new IllegalStateException("ConfigUtils is already initialized.");
+            throw new IllegalStateException(Settings.class.getSimpleName() + " is already initialized");
         }
         INSTANCE.configPersister.reload(INSTANCE);
         INSTANCE.isInitialized = true;
@@ -42,7 +42,7 @@ public final class Settings {
         if (!INSTANCE.isInitialized) {
             synchronized (Settings.class) {
                 if (!INSTANCE.isInitialized) {
-                    throw new IllegalStateException("ConfigUtils is not initialized.");
+                    throw new IllegalStateException(Settings.class.getSimpleName() + " is not initialized");
                 }
             }
         }
