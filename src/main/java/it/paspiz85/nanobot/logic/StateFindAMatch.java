@@ -6,6 +6,7 @@ import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 /**
@@ -26,7 +27,7 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        logger.log(Level.INFO, "Start battle.");
+        logger.log(Level.INFO, "Start battle");
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
@@ -36,10 +37,14 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
             platform.sleepRandom(300);
             platform.leftClick(getParser().getButtonShieldDisable(), true);
             platform.sleepRandom(100);
-            sleepUntilPointFound(() -> getParser().searchButtonNext());
-            context.setState(StateAttack.instance());
-        } else {
-            context.setState(StateIdle.instance());
+            try {
+                sleepUntilPointFound(() -> getParser().searchButtonNext());
+                context.setState(StateAttack.instance());
+                return;
+            } catch(TimeoutException e) {
+                logger.log(Level.WARNING, "Next button not found");
+            }
         }
+        context.setState(StateIdle.instance());
     }
 }

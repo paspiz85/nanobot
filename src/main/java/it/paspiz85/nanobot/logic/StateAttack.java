@@ -11,6 +11,7 @@ import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
 /**
@@ -113,7 +114,12 @@ public final class StateAttack extends State<AttackScreenParser> {
                 // you may see the original one
                 platform.leftClick(getParser().getButtonNext(), true);
                 platform.sleepRandom(666);
-                sleepUntilPointFound(() -> getParser().searchButtonNext());
+                try {
+                    sleepUntilPointFound(() -> getParser().searchButtonNext());
+                } catch(TimeoutException e) {
+                    logger.log(Level.WARNING, "Next button not found");
+                    break;
+                }
                 // to avoid server/client sync from nexting too fast
                 platform.sleepRandom(1000);
             }
