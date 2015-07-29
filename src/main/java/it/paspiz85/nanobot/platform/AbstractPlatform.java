@@ -78,6 +78,18 @@ public abstract class AbstractPlatform implements Platform {
         return image.getSubimage(x1, y1, x2 - x1, y2 - y1);
     }
 
+    @Override
+    public final void init() throws BotConfigurationException {
+        init(() -> false);
+    }
+
+    @Override
+    public final void init(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
+        logger.info("Setting up platform...");
+        setup();
+        setupResolution(autoAdjustResolution);
+    }
+
     /**
      * Do a left click in the game.
      *
@@ -187,13 +199,6 @@ public abstract class AbstractPlatform implements Platform {
     protected abstract BufferedImage screenshot(Point p1, Point p2);
 
     protected abstract void setup() throws BotConfigurationException;
-
-    @Override
-    public final void setup(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        logger.info("Setting up platform...");
-        setup();
-        setupResolution(autoAdjustResolution);
-    }
 
     private void setupResolution(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
         logger.info("Checking plaftorm resolution...");

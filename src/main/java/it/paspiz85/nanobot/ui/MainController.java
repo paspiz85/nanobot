@@ -227,9 +227,14 @@ public class MainController implements ApplicationAwareController {
         dialog.setTitle("Scripts");
         dialog.setHeaderText("Select script to run");
         dialog.setContentText("Script:");
+        dialog.setSelectedItem(model.getLastRunnedScript());
         final Optional<String> result = dialog.showAndWait();
         if (result.isPresent()) {
-            model.runScript(result.get());
+            try {
+                model.runScript(result.get());
+            } catch (final IllegalAccessException e) {
+                logger.warning(e.getMessage());
+            }
         }
     }
 
@@ -248,32 +253,7 @@ public class MainController implements ApplicationAwareController {
         model.stop();
     }
 
-    @FXML
-    private void initialize() {
-        LogHandler.initialize(textArea);
-        ScriptManager.instance().setAlert((str) -> alert(str));
-        ScriptManager.instance().setConfirm((str) -> confirm(str));
-        ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
-        ScriptManager.instance().setSelect((str, options) -> select(str, options));
-        model.initialize(() -> autoAdjustResolution(), () -> updateUI());
-        versionLabel.setText(BuildInfo.instance().getFullName());
-        githubLink.setText(BuildInfo.instance().getRepositoryUrl());
-        model.checkForUpdate(() -> {
-            javafx.application.Platform.runLater(() -> {
-                versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
-                githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
-            });
-        });
-        githubLink.setOnAction(event -> {
-            application.getHostServices().showDocument(githubLink.getText());
-            githubLink.setVisited(false);
-        });
-        final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
-        donateLink.setGraphic(new ImageView(heartIcon));
-        donateLink.setOnAction(event -> {
-            application.getHostServices().showDocument(BuildInfo.instance().getDonateUrl());
-            donateLink.setVisited(false);
-        });
+    private void initFooter() {
         webView.getEngine().load(BuildInfo.instance().getAdUrl());
         webView.getEngine().locationProperty().addListener((observable, oldLocation, newLocation) -> {
             if (BuildInfo.instance().getAdUrl().equals(oldLocation)) {
@@ -294,6 +274,40 @@ public class MainController implements ApplicationAwareController {
         }, "AdvReloader");
         reloadThread.setDaemon(true);
         reloadThread.start();
+    }
+
+    private void initHeader() {
+        versionLabel.setText(BuildInfo.instance().getFullName());
+        githubLink.setText(BuildInfo.instance().getRepositoryUrl());
+        model.checkForUpdate(() -> {
+            javafx.application.Platform.runLater(() -> {
+                versionLabel.setText(BuildInfo.instance().getFullName() + " (UPDATE AVAILABLE!)");
+                githubLink.setText(BuildInfo.instance().getLatestVersionUrl());
+            });
+        });
+        githubLink.setOnAction(event -> {
+            application.getHostServices().showDocument(githubLink.getText());
+            githubLink.setVisited(false);
+        });
+        final Image heartIcon = new Image(getClass().getResourceAsStream("heart.png"));
+        donateLink.setGraphic(new ImageView(heartIcon));
+        donateLink.setOnAction(event -> {
+            application.getHostServices().showDocument(BuildInfo.instance().getDonateUrl());
+            donateLink.setVisited(false);
+        });
+    }
+
+    @FXML
+    private void initialize() {
+        LogHandler.initialize(textArea);
+        ScriptManager.instance().setAlert((str) -> alert(str));
+        ScriptManager.instance().setConfirm((str) -> confirm(str));
+        ScriptManager.instance().setPrompt((str, defValue) -> prompt(str, defValue));
+        ScriptManager.instance().setSelect((str, options) -> select(str, options));
+        model.initialize(() -> autoAdjustResolution(), () -> updateUI());
+        initHeader();
+        initFooter();
+        startButton.requestFocus();
         initSettingsPane();
         updateUI();
     }

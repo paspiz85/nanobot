@@ -91,7 +91,7 @@ public final class Looper {
     public void start(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) throws Exception {
         try {
             logger.info("Starting...");
-            platform.setup(autoAdjustResolution);
+            platform.init(autoAdjustResolution);
             logger.info("Setup is successful.");
             final Context context = new Context();
             logger.fine("Starting disconnect detector...");

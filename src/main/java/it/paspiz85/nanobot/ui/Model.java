@@ -34,6 +34,8 @@ public final class Model {
 
     private final Looper looper = Looper.instance();
 
+    private String lastRunnedScript;
+
     private String runningScript;
 
     private Service<Void> runningService;
@@ -62,6 +64,14 @@ public final class Model {
 
     public TroopButton[] getAvailableTroops() {
         return Settings.instance().getAvailableTroops();
+    }
+
+    public String getLastRunnedScript() {
+        return lastRunnedScript;
+    }
+
+    public String getRunningScript() {
+        return runningScript;
     }
 
     public Set<String> getScripts() {
@@ -150,11 +160,15 @@ public final class Model {
         return Settings.instance();
     }
 
-    public void runScript(final String script) {
+    public void runScript(final String script) throws IllegalAccessException {
+        if (this.runningScript != null) {
+            throw new IllegalAccessException("Wait the previous script");
+        }
         this.runningScript = script;
         if (scriptService.getState() == State.READY) {
             scriptService.start();
         }
+        this.lastRunnedScript = script;
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

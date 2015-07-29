@@ -34,6 +34,22 @@ public interface Platform {
     BufferedImage getSubimage(BufferedImage image, Point p1, Point p2);
 
     /**
+     * Check emulator windows and setup the platform to working with that.
+     *
+     * @throws BotConfigurationException
+     */
+    void init() throws BotConfigurationException;
+
+    /**
+     * Check emulator windows and setup the platform to working with that.
+     *
+     * @param autoAdjustResolution
+     *            supplier to decide if auto adjust game resolution.
+     * @throws BotConfigurationException
+     */
+    void init(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
+
+    /**
      * Do a left click on game.
      *
      * @param point
@@ -54,15 +70,6 @@ public interface Platform {
     BufferedImage screenshot();
 
     BufferedImage screenshot(Area area);
-
-    /**
-     * Check emulator windows and setup the platform to working with that.
-     *
-     * @param autoAdjustResolution
-     *            supplier to decide if auto adjust game resolution.
-     * @throws BotConfigurationException
-     */
-    void setup(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
 
     /**
      * Sleep random interval between sleepInMs and 2*sleepInMs.
