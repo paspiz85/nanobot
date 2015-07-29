@@ -92,7 +92,6 @@ public final class Looper {
         try {
             logger.log(Level.INFO, "Starting...");
             platform.init(autoAdjustResolution);
-            logger.log(Level.INFO, "Setup is successful");
             final Context context = new Context();
             logger.log(Level.FINE, "Starting disconnect detector...");
             final Thread dcThread = new Thread(new DisconnectChecker(this, context, Thread.currentThread()),

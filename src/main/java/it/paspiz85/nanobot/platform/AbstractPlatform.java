@@ -88,6 +88,7 @@ public abstract class AbstractPlatform implements Platform {
         logger.log(Level.CONFIG, "Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
+        logger.log(Level.CONFIG, "Setup is successful");
     }
 
     /**
