@@ -26,12 +26,16 @@ public final class StateMainMenu extends State<MainScreenParser> {
         super(Parser.getInstance(MainScreenParser.class));
     }
 
-    private int collect(final Supplier<Point> pointSearch) throws InterruptedException {
+    private void collect(final String resource, final Supplier<Point> pointSearch) throws InterruptedException {
+        platform.zoomUp();
+        platform.sleepRandom(350);
+        logger.log(Level.INFO, String.format("Searching full collectors of %s...", resource));
         int count = 0;
         while (true) {
             final Point p = pointSearch.get();
             if (p == null) {
-                return count;
+                logger.log(Level.INFO, String.format("Found %d full collectors of %s", count, resource));
+                return;
             }
             platform.leftClick(p, false);
             platform.sleepRandom(200);
@@ -41,19 +45,13 @@ public final class StateMainMenu extends State<MainScreenParser> {
 
     private void collecting(final Context context) throws InterruptedException {
         if (context.getTrainCount() % 20 == 1) {
-            logger.log(Level.INFO, "Searching full collectors...");
-            final int count = collect(() -> getParser().searchFullGoldMine());
-            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
+            collect("gold", () -> getParser().searchFullGoldMine());
         }
         if (context.getTrainCount() % 20 == 2) {
-            logger.log(Level.INFO, "Searching full collectors...");
-            final int count = collect(() -> getParser().searchFullElixirCollector());
-            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
+            collect("elisir", () -> getParser().searchFullElixirCollector());
         }
         if (context.getTrainCount() % 20 == 3) {
-            logger.log(Level.INFO, "Searching full collectors...");
-            final int count = collect(() -> getParser().searchFullDarkElixirDrill());
-            logger.log(Level.INFO, String.format("Found %d full collectors.", count));
+            collect("dark elisir", () -> getParser().searchFullDarkElixirDrill());
         }
     }
 
@@ -63,8 +61,6 @@ public final class StateMainMenu extends State<MainScreenParser> {
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
         }
-        platform.zoomUp();
-        platform.sleepRandom(350);
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }

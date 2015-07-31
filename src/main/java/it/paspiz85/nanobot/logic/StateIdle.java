@@ -44,6 +44,9 @@ public final class StateIdle extends State<Parser> {
                 platform.zoomUp();
                 Thread.sleep(2000);
                 continue;
+            } else {
+                platform.zoomUp();
+                platform.sleepRandom(350);
             }
             if (platform.matchColoredPoint(mainScreenParser.getPointWasAttackedHeadline())
                     || platform.matchColoredPoint(mainScreenParser.getButtonWasAttackedOK())) {

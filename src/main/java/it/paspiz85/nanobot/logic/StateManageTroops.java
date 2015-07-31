@@ -46,6 +46,7 @@ public final class StateManageTroops extends State<MainScreenParser> {
             troopsCountSum += i;
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
+        logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
         if (getParser().areCampsFull() || troopsCountSum >= trainMaxTroops) {
             logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
