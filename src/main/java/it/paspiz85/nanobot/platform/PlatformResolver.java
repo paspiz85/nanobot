@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.platform;
 
 import it.paspiz85.nanobot.platform.mac.BlueStacksMacPlatform;
-import it.paspiz85.nanobot.platform.win32.BlueStacksWinPlatform;
+import it.paspiz85.nanobot.platform.win.BlueStacksWinPlatform;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.lang.reflect.InvocationTargetException;

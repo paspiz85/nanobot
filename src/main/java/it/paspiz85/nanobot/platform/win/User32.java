@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.platform.win32;
+package it.paspiz85.nanobot.platform.win;
 
 import com.sun.jna.Native;
 import com.sun.jna.win32.W32APIOptions;

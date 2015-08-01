@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.platform.win32;
+package it.paspiz85.nanobot.platform.win;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
@@ -37,7 +37,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  * @author paspiz85
  *
  */
-public final class BlueStacksWinPlatform extends AbstractPlatform {
+public class BlueStacksWinPlatform extends AbstractPlatform {
 
     public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
@@ -66,14 +66,15 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     public static boolean isSupported() {
-        return OS.getCategory() == OS.Category.WINDOWS;
+        final OS os = OS.getCurrent();
+        return os.getFamily() == OS.Family.WINDOWS && os.getVersion().getMajor() < 10;
     }
 
     private HWND handler;
 
     private final Robot robot;
 
-    private BlueStacksWinPlatform() {
+    protected BlueStacksWinPlatform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
