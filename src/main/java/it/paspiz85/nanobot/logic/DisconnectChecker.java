@@ -38,14 +38,14 @@ public class DisconnectChecker implements Runnable {
 
     @Override
     public void run() {
-        logger.fine("Running disconnect detector...");
+        logger.log(Level.FINE, "Running disconnect detector...");
         try {
             while (true) {
                 if (Thread.interrupted()) {
-                    throw new InterruptedException("Disconnect detector is interrupted.");
+                    throw new InterruptedException("Disconnect detector is interrupted");
                 }
                 if (platform.matchColoredPoint(UNIT_BLUESTACKS_DC)) {
-                    logger.info("Detected disconnect.");
+                    logger.log(Level.INFO, "Detected disconnect");
                     synchronized (context) {
                         // case 1: launcher was running and it will be
                         // interrupted. It will go back to StateIdle start
@@ -79,7 +79,7 @@ public class DisconnectChecker implements Runnable {
                 Thread.sleep(30000);
             }
         } catch (final InterruptedException e) {
-            logger.log(Level.INFO, "DisconnectChecker interrupted");
+            logger.log(Level.CONFIG, "DisconnectChecker interrupted");
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "dc checker: " + e.getMessage(), e);
         }

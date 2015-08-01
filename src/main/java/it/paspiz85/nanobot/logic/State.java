@@ -5,7 +5,9 @@ import it.paspiz85.nanobot.parsing.Parser;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
+import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -34,14 +36,17 @@ public abstract class State<P extends Parser> {
 
     public abstract void handle(Context context) throws BotException, InterruptedException;
 
-    protected final Point sleepUntilPointFound(final Supplier<Point> supplier) throws InterruptedException {
-        while (true) {
+    protected final Point sleepUntilPointFound(final Supplier<Point> supplier) throws InterruptedException,
+            TimeoutException {
+        logger.log(Level.FINER, "Waiting for point");
+        for (int i = 0; i < 100; i++) {
             final Point point = supplier.get();
             if (point != null) {
                 return point;
             }
-            logger.fine("Point not found.");
+            logger.log(Level.FINER, "Point not found");
             platform.sleepRandom(500);
         }
+        throw new TimeoutException("Point not found");
     }
 }

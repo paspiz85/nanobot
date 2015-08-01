@@ -15,7 +15,6 @@ public final class Attack4SideParallelFull2Wave extends Attack {
 
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
-        logger.info("Dropping units from 4 sides in parallel in 2 full waves.");
         for (int wave = 0; wave < 2; wave++) {
             for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
                 int unitCount = attackGroup[unitIdx];
@@ -53,5 +52,10 @@ public final class Attack4SideParallelFull2Wave extends Attack {
                 }
             }
         }
+    }
+
+    @Override
+    protected String getDescription() {
+        return "Dropping units from 4 sides in parallel in 2 full waves";
     }
 }

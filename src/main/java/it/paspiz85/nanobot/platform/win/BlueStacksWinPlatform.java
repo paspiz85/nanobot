@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.platform.win32;
+package it.paspiz85.nanobot.platform.win;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
@@ -37,7 +37,7 @@ import com.sun.jna.platform.win32.WinReg.HKEYByReference;
  * @author paspiz85
  *
  */
-public final class BlueStacksWinPlatform extends AbstractPlatform {
+public class BlueStacksWinPlatform extends AbstractPlatform {
 
     public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
@@ -66,14 +66,15 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     public static boolean isSupported() {
-        return OS.getCategory() == OS.Category.WINDOWS;
+        final OS os = OS.getCurrent();
+        return os.getFamily() == OS.Family.WINDOWS && os.getVersion().getMajor() < 10;
     }
 
     private HWND handler;
 
     private final Robot robot;
 
-    private BlueStacksWinPlatform() {
+    protected BlueStacksWinPlatform() {
         try {
             robot = new Robot();
         } catch (final AWTException e) {
@@ -170,7 +171,7 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
             });
             result = true;
         } catch (final Exception e) {
-            logger.log(Level.WARNING, "Unable to capture mouse movement.", e);
+            logger.log(Level.WARNING, "Unable to capture mouse movement", e);
             result = false;
         }
         return result;
@@ -188,15 +189,17 @@ public final class BlueStacksWinPlatform extends AbstractPlatform {
     protected void setup() throws BotConfigurationException {
         handler = User32.INSTANCE.FindWindow(null, BS_WINDOW_NAME);
         if (handler == null) {
-            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
+            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found");
         }
         final int[] rect = { 0, 0, 0, 0 };
         final int result = User32.INSTANCE.GetWindowRect(handler, rect);
         if (result == 0) {
-            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found.");
+            throw new BotConfigurationException(BS_WINDOW_NAME + " is not found");
         }
-        logger.fine(String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
-                Arrays.toString(rect)));
+        logger.log(
+                Level.FINE,
+                String.format("The corner locations for the window \"%s\" are %s", BS_WINDOW_NAME,
+                        Arrays.toString(rect)));
         // set bs always on top
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
     }

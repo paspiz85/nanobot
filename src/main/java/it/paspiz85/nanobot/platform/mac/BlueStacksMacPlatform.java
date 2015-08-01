@@ -65,7 +65,7 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     public static boolean isSupported() {
-        return OS.getCategory() == OS.Category.MAC;
+        return OS.getCurrent().getFamily() == OS.Family.MAC;
     }
 
     public static void main(final String... args) throws Exception {

@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.scripting;
 
+import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Utils;
@@ -76,6 +77,11 @@ public final class ScriptManager {
         context.setAttribute("prompt", prompt, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("select", select, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("buildInfo", BuildInfo.instance(), ScriptContext.ENGINE_SCOPE);
+        try {
+            Platform.instance().init();
+        } catch (final BotConfigurationException e) {
+            logger.log(Level.WARNING, e.getMessage(), e);
+        }
         context.setAttribute("platform", Platform.instance(), ScriptContext.ENGINE_SCOPE);
         final HttpClient httpClient = HttpClientBuilder.create().build();
         context.setAttribute("httpClient", httpClient, ScriptContext.ENGINE_SCOPE);
@@ -116,12 +122,12 @@ public final class ScriptManager {
         if (path == null) {
             throw new IllegalArgumentException("Script not found");
         }
-        logger.info(msg);
+        logger.log(Level.INFO, msg);
         final ScriptEngine engine = factory.getEngineByName("nashorn");
         final ScriptContext context = buildContext();
         try (InputStream in = path.toUri().toURL().openStream()) {
             engine.eval(new InputStreamReader(in), context);
-            logger.info(msg + " completed");
+            logger.log(Level.INFO, msg + " completed");
         } catch (final Exception e) {
             logger.log(Level.WARNING, msg + " failed: " + e.getMessage(), e);
         } finally {

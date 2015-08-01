@@ -66,7 +66,7 @@ public final class SettingsPersister {
                 try {
                     configFile.createNewFile();
                 } catch (final IOException e) {
-                    logger.log(Level.SEVERE, "Unable to create configuration file.", e);
+                    logger.log(Level.SEVERE, "Unable to create configuration file", e);
                 }
             }
         }
@@ -122,7 +122,7 @@ public final class SettingsPersister {
                 try {
                     @SuppressWarnings("unchecked")
                     final Class<? extends Platform> preferredPlatform = (Class<? extends Platform>) Class
-                            .forName(preferredPlatformProperty);
+                    .forName(preferredPlatformProperty);
                     settings.setPreferredPlatform(preferredPlatform);
                 } catch (final ClassNotFoundException e1) {
                     logger.log(Level.SEVERE, "Platform not found: " + preferredPlatformProperty);
@@ -151,7 +151,7 @@ public final class SettingsPersister {
                 settings.setLogLevel(Level.parse(logLevel));
             }
         } catch (final Exception e) {
-            logger.log(Level.SEVERE, "Unable to read configuration file.", e);
+            logger.log(Level.SEVERE, "Unable to read configuration file", e);
         }
     }
 
@@ -187,9 +187,9 @@ public final class SettingsPersister {
                 configProperties.setProperty(PROPERTY_PREFERRED_PLATFORM, preferredPlatform.getName());
             }
             configProperties.store(fos, null);
-            logger.info("Settings are saved.");
+            logger.log(Level.INFO, "Settings are saved");
         } catch (final Exception e) {
-            logger.log(Level.SEVERE, "Unable to save configuration file.", e);
+            logger.log(Level.SEVERE, "Unable to save configuration file", e);
         }
     }
 }

@@ -11,6 +11,8 @@ import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.Arrays;
+import java.util.concurrent.TimeoutException;
+import java.util.logging.Level;
 
 /**
  * Attack state is when bot find and attack an opponent.
@@ -57,23 +59,23 @@ public final class StateAttack extends State<AttackScreenParser> {
     public void handle(final Context context) throws InterruptedException, BotException {
         while (true) {
             if (Thread.interrupted()) {
-                throw new InterruptedException("StateAttack is interrupted.");
+                throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
             }
             final long id = System.currentTimeMillis();
-            logger.info("Found opponent " + id);
+            logger.log(Level.INFO, "Found opponent " + id);
             // to avoid fog
             platform.sleepRandom(500);
             EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
                 enemyInfo = getParser().parseEnemyInfo();
-                logger.info(String.format("Detected %s.", enemyInfo.toString()));
+                logger.log(Level.INFO, String.format("Detected %s", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
                     final Boolean isCollectorFullBase = getParser().isCollectorFullBase();
                     doAttack = isCollectorFullBase == null ? false : isCollectorFullBase;
                     if (!doAttack) {
-                        logger.info("Detected empty collectors.");
+                        logger.log(Level.INFO, "Detected empty collectors");
                     }
                 }
             } catch (final BotBadBaseException e) {
@@ -89,7 +91,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
                         final int[] troopsCount = troopsInfo.getTroopsCount();
-                        logger.info("Troops count: " + Arrays.toString(troopsCount));
+                        logger.log(Level.INFO, "Attacking with " + Arrays.toString(troopsCount));
                         attackStrategy.attack(enemyInfo, troopsCount);
                     }
                     platform.leftClick(getParser().getButtonEndBattle(), true);
@@ -100,7 +102,7 @@ public final class StateAttack extends State<AttackScreenParser> {
                     platform.sleepRandom(1200);
                 } else {
                     if (enemyInfo.equals(prevLoot)) {
-                        logger.info("User is manually attacking/deciding.");
+                        logger.log(Level.INFO, "User is manually attacking/deciding");
                     }
                     prevLoot = enemyInfo;
                     Thread.sleep(5000);
@@ -112,7 +114,12 @@ public final class StateAttack extends State<AttackScreenParser> {
                 // you may see the original one
                 platform.leftClick(getParser().getButtonNext(), true);
                 platform.sleepRandom(666);
-                sleepUntilPointFound(() -> getParser().searchButtonNext());
+                try {
+                    sleepUntilPointFound(() -> getParser().searchButtonNext());
+                } catch (final TimeoutException e) {
+                    logger.log(Level.WARNING, "Next button not found");
+                    break;
+                }
                 // to avoid server/client sync from nexting too fast
                 platform.sleepRandom(1000);
             }

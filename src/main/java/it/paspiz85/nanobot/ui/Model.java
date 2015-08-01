@@ -34,6 +34,8 @@ public final class Model {
 
     private final Looper looper = Looper.instance();
 
+    private String lastRunnedScript;
+
     private String runningScript;
 
     private Service<Void> runningService;
@@ -64,6 +66,14 @@ public final class Model {
         return Settings.instance().getAvailableTroops();
     }
 
+    public String getLastRunnedScript() {
+        return lastRunnedScript;
+    }
+
+    public String getRunningScript() {
+        return runningScript;
+    }
+
     public Set<String> getScripts() {
         return ScriptManager.instance().getScripts();
     }
@@ -80,7 +90,7 @@ public final class Model {
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
         Settings.initialize();
-        logger.info("Settings loaded.");
+        logger.log(Level.INFO, "Settings loaded");
         initRunningService(autoAdjustResolution, updateUI);
         initScriptService();
     }
@@ -102,11 +112,11 @@ public final class Model {
         };
         runningService.setOnCancelled(event -> {
             runningService.reset();
-            logger.warning("Running is cancelled.");
+            logger.warning("Running is cancelled");
         });
         runningService.setOnFailed(event -> {
             runningService.reset();
-            logger.warning("Running is failed.");
+            logger.warning("Running is failed");
         });
     }
 
@@ -128,17 +138,17 @@ public final class Model {
         scriptService.setOnCancelled(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.warning("Script is cancelled.");
+            logger.warning("Script is cancelled");
         });
         scriptService.setOnFailed(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.warning("Script is failed.");
+            logger.warning("Script is failed");
         });
         scriptService.setOnSucceeded(event -> {
             scriptService.reset();
             runningScript = null;
-            logger.info("Script is succeeded.");
+            logger.log(Level.INFO, "Script is succeeded");
         });
     }
 
@@ -150,11 +160,15 @@ public final class Model {
         return Settings.instance();
     }
 
-    public void runScript(final String script) {
+    public void runScript(final String script) throws IllegalAccessException {
+        if (this.runningScript != null) {
+            throw new IllegalAccessException("Wait the previous script");
+        }
         this.runningScript = script;
         if (scriptService.getState() == State.READY) {
             scriptService.start();
         }
+        this.lastRunnedScript = script;
     }
 
     public void saveSettings(final Consumer<Settings> consumer) {

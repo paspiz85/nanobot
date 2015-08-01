@@ -14,4 +14,9 @@ public final class NoAttack extends Attack {
     @Override
     protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
     }
+
+    @Override
+    protected String getDescription() {
+        return "No drop units";
+    }
 }
