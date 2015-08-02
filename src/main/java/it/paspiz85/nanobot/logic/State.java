@@ -37,7 +37,7 @@ public abstract class State<P extends Parser> {
     public abstract void handle(Context context) throws BotException, InterruptedException;
 
     protected final Point sleepUntilPointFound(final Supplier<Point> supplier) throws InterruptedException,
-            TimeoutException {
+    TimeoutException {
         logger.log(Level.FINER, "Waiting for point");
         for (int i = 0; i < 100; i++) {
             final Point point = supplier.get();

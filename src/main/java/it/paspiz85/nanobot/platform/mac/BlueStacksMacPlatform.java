@@ -68,22 +68,6 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
         return OS.getCurrent().getFamily() == OS.Family.MAC;
     }
 
-    public static void main(final String... args) throws Exception {
-        // TODO remove this method
-        // NSBundleClass=
-        // ClassLoader.getSystemClassLoader().loadClass("apple.applescript.AppleScriptEngineFactory");
-        Thread.sleep(3000);
-        // BsMacPlatform.instanceNew().saveScreenshot("tmp");
-        // BsMacPlatform.instanceNew().applyResolution(new Size(860, 720));
-        // BsMacPlatform.instanceNew().leftClick(new Point(1, 1));
-        // BsMacPlatform.instanceNew().zoomUp();
-        // BsMacPlatform.instanceNew().bs_properties();
-        // BsMacPlatform.instanceNew().bs_position();
-        // BsMacPlatform.instanceNew().bs_size();
-        BlueStacksMacPlatform.instanceNew().activate();
-        System.out.println("bye");
-    }
-
     private Point position;
 
     private final Robot robot;
@@ -99,7 +83,8 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
         scriptEngineManager = new ScriptEngineManager();
     }
 
-    private void activate() {
+    @Override
+    protected void activate() {
         try {
             final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
             final String script = "tell application \"BlueStacks\" to activate\n";
@@ -201,7 +186,6 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
-        activate();
         // TODO non funziona
         final PointerInfo a = MouseInfo.getPointerInfo();
         final java.awt.Point b = a.getLocation();
@@ -225,7 +209,6 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
 
     @Override
     protected BufferedImage screenshot(final Point p1, final Point p2) {
-        activate();
         final Point anchor = clientToScreen(p1);
         final int width = p2.x() - p1.x();
         final int height = p2.y() - p1.y();
@@ -234,13 +217,11 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
 
     @Override
     protected void setup() throws BotConfigurationException {
-        activate();
         position = getPosition();
     }
 
     @Override
     protected void singleZoomUp() throws InterruptedException {
-        activate();
         robot.keyPress(KeyEvent.VK_DOWN);
         Thread.sleep(100);
         robot.keyRelease(KeyEvent.VK_DOWN);

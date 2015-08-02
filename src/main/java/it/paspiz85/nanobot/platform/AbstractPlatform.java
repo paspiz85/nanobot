@@ -36,6 +36,9 @@ public abstract class AbstractPlatform implements Platform {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
+    protected void activate() {
+    }
+
     protected abstract void applySize(Size size) throws BotConfigurationException;
 
     @Override
@@ -85,6 +88,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void init(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
+        activate();
         logger.log(Level.CONFIG, "Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
@@ -105,6 +109,7 @@ public abstract class AbstractPlatform implements Platform {
         if (point == null) {
             throw new IllegalArgumentException("point not provided");
         }
+        activate();
         Point p = point;
         logger.log(Level.FINER, "Clicking " + p);
         // randomize coordinates little bit
@@ -179,6 +184,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final BufferedImage screenshot(final Area area) {
+        activate();
         BufferedImage result;
         if (area == null) {
             result = screenshot(FULLSCREEN.getEdge1(), FULLSCREEN.getEdge2());
@@ -253,6 +259,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void zoomUp() throws InterruptedException {
+        activate();
         logger.log(Level.CONFIG, "Zooming out...");
         final int notch = 14;
         for (int i = 0; i < notch; i++) {
