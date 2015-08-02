@@ -53,6 +53,9 @@ public final class StateIdle extends State<Parser> {
                 logger.log(Level.INFO, "Was attacked");
                 platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
                 platform.sleepRandom(250);
+            } else if (attackScreenParser.searchButtonEndBattleReturnHome() != null) {
+                platform.leftClick(attackScreenParser.getButtonEndBattleReturnHome(), true);
+                platform.sleepRandom(250);
             } else if (mainScreenParser.searchButtonTrainClose() != null) {
                 platform.leftClick(mainScreenParser.getButtonTrainClose(), true);
                 platform.sleepRandom(250);

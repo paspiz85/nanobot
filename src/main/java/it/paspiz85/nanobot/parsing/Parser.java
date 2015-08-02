@@ -72,7 +72,7 @@ public abstract class Parser {
         return parser;
     }
 
-    private static int[][] getOffset(final String name) {
+    protected static final int[][] getOffset(final String name) {
         int[][] result = null;
         final String value = Config.instance().getProperty(name);
         if (value != null) {
@@ -121,7 +121,7 @@ public abstract class Parser {
         return color;
     }
 
-    private static int[] getRGBs(final String name) {
+    protected static final int[] getRGBs(final String name) {
         int[] colors = null;
         final String value = Config.instance().getProperty(name);
         if (value != null) {

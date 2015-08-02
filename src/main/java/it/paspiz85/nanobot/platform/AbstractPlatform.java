@@ -125,7 +125,8 @@ public abstract class AbstractPlatform implements Platform {
             throw new IllegalArgumentException("point not provided");
         }
         final Color actualColor = getColor(point);
-        return compareColor(point.getColor(), actualColor, 5);
+        final boolean result = compareColor(point.getColor(), actualColor, 5);
+        return result;
     }
 
     /**

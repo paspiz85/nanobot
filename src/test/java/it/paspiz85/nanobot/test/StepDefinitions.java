@@ -278,6 +278,12 @@ public class StepDefinitions {
         point = Parser.getInstance(AttackScreenParser.class).searchButtonNext();
     }
 
+    @When("^searching end battle return home button point$")
+    public void whenSearchingEndButtonReturnHomeButtonPoint() throws BotBadBaseException {
+        PlatformMock.instance().setScreenshot(screenshot);
+        point = Parser.getInstance(AttackScreenParser.class).searchButtonEndBattleReturnHome();
+    }
+
     @When("^searching troops button point$")
     public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);

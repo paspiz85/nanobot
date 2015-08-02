@@ -4,11 +4,13 @@
 Feature: scenarios for Test-Driven-Development
 
 
-  Scenario Outline: search full dark elixir drill
+  Scenario Outline: search end battle button
     Given screenshot saved as <imagefile>
-    When searching full dark elixir drill points
-    Then points found are <pointset>
+    When searching end battle return home button point
+    Then point found at <coords>
 
     Examples:
-      | imagefile                                      | pointset  |
-      | classpath:/features/img/screen_1436831885504.png | [552,283] |
+      | imagefile                                           | coords    |
+      | classpath:/features/img/endbattle_1438533159747.png | [437,532] |
+      | classpath:/features/img/base_1435356695457.png      | null      |
+      
