@@ -47,6 +47,19 @@ import org.w3c.dom.Element;
  *
  */
 public final class BlueStacksMacPlatform extends AbstractPlatform {
+    
+    public static void main(String... args) throws Exception {
+        BlueStacksMacPlatform.instance().init();
+        //BlueStacksMacPlatform.instance().leftClick(new Point(52, 610), false);
+        for (int i=10; i<720; i+=10) {
+
+            Point point = new Point(i,i);
+       
+            BlueStacksMacPlatform.instance().leftClick(point, false);
+            System.out.println(point);
+            Thread.sleep(2000);
+        }
+    }
 
     public static final Size BS_SIZE = new Size(Platform.GAME_SIZE.x(), Platform.GAME_SIZE.y() + 47);
 
@@ -55,12 +68,6 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     private static final int TITLE_BAR_HEIGHT = 22;
 
     public static Platform instance() {
-        // return Utils.singleton(UnsupportedPlatform.class, () ->
-        // UnsupportedPlatform.instance());
-        return Utils.singleton(BlueStacksMacPlatform.class, () -> new BlueStacksMacPlatform());
-    }
-
-    private static BlueStacksMacPlatform instanceNew() {
         return Utils.singleton(BlueStacksMacPlatform.class, () -> new BlueStacksMacPlatform());
     }
 
@@ -186,7 +193,27 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
 
     @Override
     protected void leftClick(final Point point) throws InterruptedException {
+
+        try {
+            final Point screenPoint = clientToScreen(point);
+            final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
+
+            //final String script = "tell application \"System Events\" to tell application process \"BlueStacks\"\n"
+            //        + "click at {%d, %d}\n" +  "end tell\n";
+            final String script = "tell application \"System Events\"\n"
+                    + "click at {%d, %d}\n" +  "end tell\n";
+            Object i = engine.eval(String.format(script, screenPoint.x(), screenPoint.y()));
+            System.out.println(i);
+        } catch (final ScriptException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
+        }
+        
         // TODO non funziona
+        /*
+         * 
+         * key code 53
+        delay 1
+         * 
         final PointerInfo a = MouseInfo.getPointerInfo();
         final java.awt.Point b = a.getLocation();
         final int xOrig = (int) b.getX();
@@ -199,6 +226,7 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
         } finally {
             robot.mouseMove(xOrig, yOrig);
         }
+        */
     }
 
     @Override
