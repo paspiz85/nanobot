@@ -156,7 +156,7 @@ public class AttackScreenParser extends Parser {
     }
 
     public Point getButtonEndBattle() {
-        return BUTTON_END_BATTLE_RETURN_HOME;
+        return BUTTON_END_BATTLE;
     }
 
     public Point getButtonEndBattleQuestionOK() {
@@ -164,7 +164,7 @@ public class AttackScreenParser extends Parser {
     }
 
     public Point getButtonEndBattleReturnHome() {
-        return BUTTON_END_BATTLE;
+        return BUTTON_END_BATTLE_RETURN_HOME;
     }
 
     public Pixel getButtonFindMatch() {
