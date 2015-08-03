@@ -2,10 +2,12 @@ package it.paspiz85.nanobot.test;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.EnemyInfo;
-import it.paspiz85.nanobot.parsing.MainScreenParser;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.AttackScreen;
+import it.paspiz85.nanobot.game.BattleEndScreen;
+import it.paspiz85.nanobot.game.EnemyInfo;
+import it.paspiz85.nanobot.game.MainScreen;
+import it.paspiz85.nanobot.game.ManageTroopsScreen;
+import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.platform.PlatformResolver;
 import it.paspiz85.nanobot.platform.UnsupportedPlatform;
@@ -197,37 +199,43 @@ public class StepDefinitions {
     @When("^checking collectors$")
     public void whenCheckingCollectors() throws BotException {
         PlatformMock.instance().setScreenshot(screenshot);
-        isCollectorsFull = Parser.getInstance(AttackScreenParser.class).isCollectorFullBase();
+        isCollectorsFull = Screen.getInstance(AttackScreen.class).isCollectorFullBase();
     }
 
     @When("^checking if camps are full$")
     public void whenCheckingIfCampsAreFull() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        check = Parser.getInstance(MainScreenParser.class).areCampsFull();
+        check = Screen.getInstance(ManageTroopsScreen.class).areCampsFull();
     }
 
     @When("^counting troops$")
     public void whenCountingTroops() throws BotException {
         PlatformMock.instance().setScreenshot(screenshot);
-        troopsCount = Parser.getInstance(MainScreenParser.class).parseTroopsInfo().getTroopsCount();
+        troopsCount = Screen.getInstance(ManageTroopsScreen.class).parseTroopsInfo().getTroopsCount();
     }
 
     @When("^parsing enemy info$")
     public void whenParsingEnemyInfo() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        enemyInfo = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
+        enemyInfo = Screen.getInstance(AttackScreen.class).parseEnemyInfo();
     }
 
     @When("^searching attack button point$")
     public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchButtonAttack();
+        point = Screen.getInstance(MainScreen.class).searchButtonAttack();
     }
 
     @When("^searching close troops button point$")
     public void whenSearchingCloseTroopsButtonPoint() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchButtonTrainClose();
+        point = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
+    }
+
+    @When("^searching end battle return home button point$")
+    public void whenSearchingEndButtonReturnHomeButtonPoint() throws BotBadBaseException {
+        PlatformMock.instance().setScreenshot(screenshot);
+        point = Screen.getInstance(BattleEndScreen.class).searchButtonReturnHome();
     }
 
     @When("^searching full dark elixir drill points$")
@@ -235,7 +243,7 @@ public class StepDefinitions {
         PlatformMock.instance().setScreenshot(screenshot);
         pointset = new TreeSet<>();
         while (true) {
-            final Point point = Parser.getInstance(MainScreenParser.class).searchFullDarkElixirDrill();
+            final Point point = Screen.getInstance(MainScreen.class).searchFullDarkElixirDrill();
             if (point == null) {
                 break;
             }
@@ -249,7 +257,7 @@ public class StepDefinitions {
         PlatformMock.instance().setScreenshot(screenshot);
         pointset = new TreeSet<>();
         while (true) {
-            final Point point = Parser.getInstance(MainScreenParser.class).searchFullElixirCollector();
+            final Point point = Screen.getInstance(MainScreen.class).searchFullElixirCollector();
             if (point == null) {
                 break;
             }
@@ -263,7 +271,7 @@ public class StepDefinitions {
         PlatformMock.instance().setScreenshot(screenshot);
         pointset = new TreeSet<>();
         while (true) {
-            final Point point = Parser.getInstance(MainScreenParser.class).searchFullGoldMine();
+            final Point point = Screen.getInstance(MainScreen.class).searchFullGoldMine();
             if (point == null) {
                 break;
             }
@@ -275,18 +283,12 @@ public class StepDefinitions {
     @When("^searching next button point$")
     public void whenSearchingNexButtonPoint() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        point = Parser.getInstance(AttackScreenParser.class).searchButtonNext();
-    }
-
-    @When("^searching end battle return home button point$")
-    public void whenSearchingEndButtonReturnHomeButtonPoint() throws BotBadBaseException {
-        PlatformMock.instance().setScreenshot(screenshot);
-        point = Parser.getInstance(AttackScreenParser.class).searchButtonEndBattleReturnHome();
+        point = Screen.getInstance(AttackScreen.class).searchButtonNext();
     }
 
     @When("^searching troops button point$")
     public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
         PlatformMock.instance().setScreenshot(screenshot);
-        point = Parser.getInstance(MainScreenParser.class).searchButtonTroops();
+        point = Screen.getInstance(MainScreen.class).searchButtonTroops();
     }
 }

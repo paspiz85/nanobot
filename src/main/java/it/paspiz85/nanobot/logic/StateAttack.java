@@ -3,10 +3,10 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.EnemyInfo;
-import it.paspiz85.nanobot.parsing.Parser;
-import it.paspiz85.nanobot.parsing.TroopsInfo;
+import it.paspiz85.nanobot.game.AttackScreen;
+import it.paspiz85.nanobot.game.EnemyInfo;
+import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.game.TroopsInfo;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -20,7 +20,7 @@ import java.util.logging.Level;
  * @author paspiz85
  *
  */
-public final class StateAttack extends State<AttackScreenParser> {
+public final class StateAttack extends State<AttackScreen> {
 
     public static StateAttack instance() {
         return Utils.singleton(StateAttack.class, () -> new StateAttack());
@@ -29,7 +29,7 @@ public final class StateAttack extends State<AttackScreenParser> {
     private EnemyInfo prevLoot;
 
     private StateAttack() {
-        super(Parser.getInstance(AttackScreenParser.class));
+        super(Screen.getInstance(AttackScreen.class));
     }
 
     public boolean doConditionsMatch(final EnemyInfo loot) {
@@ -57,6 +57,7 @@ public final class StateAttack extends State<AttackScreenParser> {
 
     @Override
     public void handle(final Context context) throws InterruptedException, BotException {
+        State<?> nextState = StateIdle.instance();
         while (true) {
             if (Thread.interrupted()) {
                 throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
@@ -68,11 +69,11 @@ public final class StateAttack extends State<AttackScreenParser> {
             EnemyInfo enemyInfo;
             boolean doAttack = false;
             try {
-                enemyInfo = getParser().parseEnemyInfo();
+                enemyInfo = getScreen().parseEnemyInfo();
                 logger.log(Level.INFO, String.format("Detected %s", enemyInfo.toString()));
                 doAttack = doConditionsMatch(enemyInfo);
                 if (doAttack && Settings.instance().isDetectEmptyCollectors()) {
-                    final Boolean isCollectorFullBase = getParser().isCollectorFullBase();
+                    final Boolean isCollectorFullBase = getScreen().isCollectorFullBase();
                     doAttack = isCollectorFullBase == null ? false : isCollectorFullBase;
                     if (!doAttack) {
                         logger.log(Level.INFO, "Detected empty collectors");
@@ -82,48 +83,41 @@ public final class StateAttack extends State<AttackScreenParser> {
                 platform.saveScreenshot("bad_base_" + id);
                 throw e;
             }
-            if (doAttack) {
-                // // debug
-                // if (true) {
-                // attack or let user manually attack
-                final Attack attackStrategy = Settings.instance().getAttackStrategy();
-                if (attackStrategy != Attack.manualStrategy()) {
-                    final TroopsInfo troopsInfo = context.getTroopsInfo();
-                    if (troopsInfo != null) {
-                        final int[] troopsCount = troopsInfo.getTroopsCount();
-                        logger.log(Level.INFO, "Attacking with " + Arrays.toString(troopsCount));
-                        attackStrategy.attack(enemyInfo, troopsCount);
-                    }
-                    platform.leftClick(getParser().getButtonEndBattle(), true);
-                    platform.sleepRandom(1200);
-                    platform.leftClick(getParser().getButtonEndBattleQuestionOK(), true);
-                    platform.sleepRandom(1200);
-                    platform.leftClick(getParser().getButtonEndBattleReturnHome(), true);
-                    platform.sleepRandom(1200);
-                } else {
-                    if (enemyInfo.equals(prevLoot)) {
-                        logger.log(Level.INFO, "User is manually attacking/deciding");
-                    }
-                    prevLoot = enemyInfo;
-                    Thread.sleep(5000);
-                }
-                break;
-            } else {
-                // next
-                // make sure you dont immediately check for next button because
-                // you may see the original one
-                platform.leftClick(getParser().getButtonNext(), true);
+            if (!doAttack) {
+                platform.leftClick(getScreen().getButtonNext(), true);
                 platform.sleepRandom(666);
                 try {
-                    sleepUntilPointFound(() -> getParser().searchButtonNext());
+                    sleepUntilPointFound(() -> getScreen().searchButtonNext());
                 } catch (final TimeoutException e) {
                     logger.log(Level.WARNING, "Next button not found");
                     break;
                 }
                 // to avoid server/client sync from nexting too fast
                 platform.sleepRandom(1000);
+            } else {
+                final Attack attackStrategy = Settings.instance().getAttackStrategy();
+                if (attackStrategy == Attack.manualStrategy()) {
+                    if (enemyInfo.equals(prevLoot)) {
+                        logger.log(Level.INFO, "User is manually attacking/deciding");
+                    }
+                    prevLoot = enemyInfo;
+                    Thread.sleep(5000);
+                } else {
+                    final TroopsInfo troopsInfo = context.getTroopsInfo();
+                    if (troopsInfo != null) {
+                        final int[] troopsCount = troopsInfo.getTroopsCount();
+                        logger.log(Level.INFO, "Attacking with " + Arrays.toString(troopsCount));
+                        attackStrategy.attack(enemyInfo, troopsCount);
+                    }
+                    platform.leftClick(getScreen().getButtonEndBattle(), true);
+                    platform.sleepRandom(1200);
+                    platform.leftClick(getScreen().getButtonEndBattleQuestionOK(), true);
+                    platform.sleepRandom(1200);
+                    nextState = StateBattleEnd.instance();
+                }
+                break;
             }
         }
-        context.setState(StateIdle.instance());
+        context.setState(nextState);
     }
 }

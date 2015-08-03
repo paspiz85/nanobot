@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.parsing;
+package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.util.Area;
 import it.paspiz85.nanobot.util.Pixel;
@@ -12,48 +12,31 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
 /**
- * Parser for main mode screen.
+ * Main mode screen.
  *
  * @author paspiz85
  *
  */
-public final class MainScreenParser extends Parser {
+public final class MainScreen extends Screen {
 
     private static final Area AREA_BUTTON_ATTACK = getArea("area.button.attack");
 
-    private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
-
     private static final Area AREA_BUTTON_TROOPS = getArea("area.button.troops");
 
-    private static final Area AREA_EROES = getArea("area.eroes");
-
-    private static final Area AREA_TROOPS = getArea("area.troops");
-
-    private static final Point BUTTON_TRAIN_NEXT = getPoint("point.button.train.next");
-
     private static final Pixel BUTTON_WAS_ATTACKED_OKAY = new Pixel(432, 507, new Color(0x5CAC10));
-
-    private static final Pixel POINT_CAMPS_FULL = new Pixel(404, 162, new Color(0xE27F81));
 
     private static final Pixel POINT_WAS_ATTACKED_HEADLINE = new Pixel(437, 158, new Color(0x585450));
 
     private Point buttonAttack;
 
-    private Point buttonTrainClose;
-
     private Point buttonTroops;
 
-    MainScreenParser() {
-    }
-
-    public Boolean areCampsFull() {
-        return platform.matchColoredPoint(POINT_CAMPS_FULL);
+    MainScreen() {
     }
 
     public Point getButtonAttack() {
@@ -61,17 +44,6 @@ public final class MainScreenParser extends Parser {
             buttonAttack = searchButtonAttack();
         }
         return buttonAttack;
-    }
-
-    public Point getButtonTrainClose() {
-        if (buttonTrainClose == null) {
-            buttonTrainClose = searchButtonTrainClose();
-        }
-        return buttonTrainClose;
-    }
-
-    public Point getButtonTrainNext() {
-        return BUTTON_TRAIN_NEXT;
     }
 
     public Point getButtonTroops() {
@@ -89,44 +61,15 @@ public final class MainScreenParser extends Parser {
         return POINT_WAS_ATTACKED_HEADLINE;
     }
 
-    public TroopsInfo parseTroopsInfo() {
-        final BufferedImage image = platform.screenshot();
-        final BufferedImage imageTroops = platform.getSubimage(image, AREA_TROOPS);
-        Point start = new Point(9, 4);
-        // start = new Point(28, 4);
-        // start = new Point(28+63, 4);
-        // start = new Point(28+63+62, 4);
-        final int[] result = new int[9];
-        int len = 0;
-        while (len < result.length) {
-            final Integer n = parseNumber(imageTroops, 3, start, 46);
-            if (n == null) {
-                break;
-            }
-            result[len++] = n;
-            start = new Point(start.x() + 62, start.y());
-        }
-        final BufferedImage imageEroes = platform.getSubimage(image, AREA_EROES);
-        if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
-            result[len++] = 1;
-        }
-        // TODO implement queen
-        // if (searchImage(imageEroes, "queen.png") != null) {
-        // result[len++] = 1;
-        // }
-        return new TroopsInfo(Arrays.copyOf(result, len));
+    @Override
+    public boolean isDisplayed() {
+        return searchButtonAttack() != null;
     }
 
     public Point searchButtonAttack() {
         final BufferedImage image = platform.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
                 AREA_BUTTON_ATTACK.getEdge1());
-    }
-
-    public Point searchButtonTrainClose() {
-        final BufferedImage image = platform.screenshot(AREA_BUTTON_TRAIN_CLOSE);
-        return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
-                AREA_BUTTON_TRAIN_CLOSE.getEdge1());
     }
 
     public Point searchButtonTroops() {

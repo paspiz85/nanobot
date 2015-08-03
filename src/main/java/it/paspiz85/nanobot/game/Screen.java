@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.parsing;
+package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Area;
@@ -24,14 +24,14 @@ import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
 /**
- * Abstract screen parse.
+ * Abstract screen.
  *
  * @author paspiz85
  *
  */
-public abstract class Parser {
+public abstract class Screen {
 
-    private static final Map<String, Parser> INSTANCES = new HashMap<>();
+    private static final Map<String, Screen> INSTANCES = new HashMap<>();
 
     private static final int THRESHOLD_DEFAULT = 5;
 
@@ -56,7 +56,7 @@ public abstract class Parser {
     }
 
     @SuppressWarnings("unchecked")
-    public static <P extends Parser> P getInstance(final Class<P> c) {
+    public static <P extends Screen> P getInstance(final Class<P> c) {
         P parser = null;
         if (c != null) {
             parser = (P) INSTANCES.get(c.getName());
@@ -190,7 +190,7 @@ public abstract class Parser {
 
     private final int[][] widths;
 
-    Parser() {
+    Screen() {
         offsets = new int[10][][][];
         colors = new int[10][][];
         thresholds = new int[10];
@@ -224,6 +224,8 @@ public abstract class Parser {
         }
         return result;
     }
+
+    public abstract boolean isDisplayed();
 
     private Integer parseDigit(final BufferedImage image, final Point start, final int type) {
         Integer result = null;
