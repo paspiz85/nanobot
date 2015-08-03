@@ -270,6 +270,7 @@ public class AttackScreenParser extends Parser {
     }
 
     public Point searchButtonEndBattleReturnHome() {
+        logger.log(Level.FINE, "search button EndBattle-ReturnHome");
         Point result = BUTTON_END_BATTLE_RETURN_HOME;
         for (int i = 0; i < BUTTON_END_BATTLE_RETURN_HOME_OFFSET.length; i++) {
             final int[] coords = BUTTON_END_BATTLE_RETURN_HOME_OFFSET[i];
