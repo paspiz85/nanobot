@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotException;
-import it.paspiz85.nanobot.parsing.TroopsInfo;
+import it.paspiz85.nanobot.game.TroopsInfo;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

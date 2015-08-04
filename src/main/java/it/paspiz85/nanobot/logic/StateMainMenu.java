@@ -1,8 +1,9 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
-import it.paspiz85.nanobot.parsing.MainScreenParser;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.MainScreen;
+import it.paspiz85.nanobot.game.ManageTroopsScreen;
+import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
@@ -16,14 +17,14 @@ import java.util.logging.Level;
  * @author paspiz85
  *
  */
-public final class StateMainMenu extends State<MainScreenParser> {
+public final class StateMainMenu extends State<MainScreen> {
 
     public static StateMainMenu instance() {
         return Utils.singleton(StateMainMenu.class, () -> new StateMainMenu());
     }
 
     private StateMainMenu() {
-        super(Parser.getInstance(MainScreenParser.class));
+        super(Screen.getInstance(MainScreen.class));
     }
 
     private void collect(final String resource, final Supplier<Point> pointSearch) throws InterruptedException {
@@ -45,13 +46,13 @@ public final class StateMainMenu extends State<MainScreenParser> {
 
     private void collecting(final Context context) throws InterruptedException {
         if (context.getTrainCount() % 20 == 1) {
-            collect("gold", () -> getParser().searchFullGoldMine());
+            collect("gold", () -> getScreen().searchFullGoldMine());
         }
         if (context.getTrainCount() % 20 == 2) {
-            collect("elisir", () -> getParser().searchFullElixirCollector());
+            collect("elisir", () -> getScreen().searchFullElixirCollector());
         }
         if (context.getTrainCount() % 20 == 3) {
-            collect("dark elisir", () -> getParser().searchFullDarkElixirDrill());
+            collect("dark elisir", () -> getScreen().searchFullDarkElixirDrill());
         }
     }
 
@@ -64,15 +65,22 @@ public final class StateMainMenu extends State<MainScreenParser> {
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }
-        final Point buttonTrainClose = getParser().searchButtonTrainClose();
+        final Point buttonTrainClose = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
         if (buttonTrainClose != null) {
             logger.log(Level.FINE, "Close previous train");
             platform.leftClick(buttonTrainClose, true);
             platform.sleepRandom(500);
         }
         logger.log(Level.FINE, "Open troops");
-        platform.leftClick(getParser().getButtonTroops(), true);
+        platform.leftClick(getScreen().getButtonTroops(), true);
         platform.sleepRandom(500);
         context.setState(StateManageTroops.instance());
+    }
+
+    public void handleAttack(final Context context) throws InterruptedException {
+        logger.log(Level.FINE, "Press Attack");
+        platform.leftClick(getScreen().getButtonAttack(), true);
+        platform.sleepRandom(1000);
+        context.setState(StateBattleBegin.instance());
     }
 }

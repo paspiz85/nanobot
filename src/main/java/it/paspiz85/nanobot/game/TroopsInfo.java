@@ -1,4 +1,4 @@
-package it.paspiz85.nanobot.parsing;
+package it.paspiz85.nanobot.game;
 
 /**
  * Troops info.

@@ -1,8 +1,9 @@
 package it.paspiz85.nanobot.logic;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.AttackScreen;
+import it.paspiz85.nanobot.game.BattleBeginScreen;
+import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -15,14 +16,14 @@ import java.util.logging.Level;
  * @author paspiz85
  *
  */
-public final class StateFindAMatch extends State<AttackScreenParser> {
+public final class StateBattleBegin extends State<BattleBeginScreen> {
 
-    public static StateFindAMatch instance() {
-        return Utils.singleton(StateFindAMatch.class, () -> new StateFindAMatch());
+    public static StateBattleBegin instance() {
+        return Utils.singleton(StateBattleBegin.class, () -> new StateBattleBegin());
     }
 
-    private StateFindAMatch() {
-        super(Parser.getInstance(AttackScreenParser.class));
+    private StateBattleBegin() {
+        super(Screen.getInstance(BattleBeginScreen.class));
     }
 
     @Override
@@ -32,13 +33,13 @@ public final class StateFindAMatch extends State<AttackScreenParser> {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
         }
         if (Settings.instance().getAttackStrategy() != Attack.noStrategy()
-                && platform.matchColoredPoint(getParser().getButtonFindMatch())) {
-            platform.leftClick(getParser().getButtonFindMatch(), true);
+                && platform.matchColoredPoint(getScreen().getButtonFindMatch())) {
+            platform.leftClick(getScreen().getButtonFindMatch(), true);
             platform.sleepRandom(300);
-            platform.leftClick(getParser().getButtonShieldDisable(), true);
+            platform.leftClick(getScreen().getButtonShieldDisable(), true);
             platform.sleepRandom(100);
             try {
-                sleepUntilPointFound(() -> getParser().searchButtonNext());
+                sleepUntilPointFound(() -> Screen.getInstance(AttackScreen.class).searchButtonNext());
                 context.setState(StateAttack.instance());
                 return;
             } catch (final TimeoutException e) {

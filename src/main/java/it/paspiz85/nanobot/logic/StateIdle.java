@@ -1,8 +1,11 @@
 package it.paspiz85.nanobot.logic;
 
-import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.MainScreenParser;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.AttackScreen;
+import it.paspiz85.nanobot.game.BattleBeginScreen;
+import it.paspiz85.nanobot.game.BattleEndScreen;
+import it.paspiz85.nanobot.game.MainScreen;
+import it.paspiz85.nanobot.game.ManageTroopsScreen;
+import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.logging.Level;
@@ -13,22 +16,19 @@ import java.util.logging.Level;
  * @author paspiz85
  *
  */
-public final class StateIdle extends State<Parser> {
+public final class StateIdle extends State<Screen> {
 
     public static StateIdle instance() {
         return Utils.singleton(StateIdle.class, () -> new StateIdle());
     }
 
-    private final AttackScreenParser attackScreenParser;
-
-    private final MainScreenParser mainScreenParser;
+    private final MainScreen mainScreenParser;
 
     private boolean reloading;
 
     private StateIdle() {
-        super(Parser.getInstance(null));
-        mainScreenParser = Parser.getInstance(MainScreenParser.class);
-        attackScreenParser = Parser.getInstance(AttackScreenParser.class);
+        super(Screen.getInstance(null));
+        mainScreenParser = Screen.getInstance(MainScreen.class);
     }
 
     @Override
@@ -53,23 +53,20 @@ public final class StateIdle extends State<Parser> {
                 logger.log(Level.INFO, "Was attacked");
                 platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
                 platform.sleepRandom(250);
-            } else if (attackScreenParser.searchButtonEndBattleReturnHome() != null) {
-                logger.log(Level.INFO, "Battle end");
-                platform.leftClick(attackScreenParser.getButtonEndBattleReturnHome(), true);
-                platform.sleepRandom(250);
-            } else if (mainScreenParser.searchButtonTrainClose() != null) {
-                platform.leftClick(mainScreenParser.getButtonTrainClose(), true);
-                platform.sleepRandom(250);
+            } else if (Screen.getInstance(BattleEndScreen.class).isDisplayed()) {
+                nextState = StateBattleEnd.instance();
+                break;
+            } else if (Screen.getInstance(ManageTroopsScreen.class).isDisplayed()) {
+                nextState = StateManageTroopsEnd.instance();
+                break;
+            } else if (Screen.getInstance(MainScreen.class).isDisplayed()) {
                 nextState = StateMainMenu.instance();
                 break;
-            } else if (mainScreenParser.searchButtonAttack() != null) {
-                nextState = StateMainMenu.instance();
-                break;
-            } else if (attackScreenParser.searchButtonNext() != null) {
+            } else if (Screen.getInstance(AttackScreen.class).isDisplayed()) {
                 nextState = StateAttack.instance();
                 break;
-            } else if (platform.matchColoredPoint(attackScreenParser.getButtonFindMatch())) {
-                nextState = StateFindAMatch.instance();
+            } else if (Screen.getInstance(BattleBeginScreen.class).isDisplayed()) {
+                nextState = StateBattleBegin.instance();
                 break;
             }
             Thread.sleep(1000);

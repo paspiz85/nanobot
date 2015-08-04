@@ -1,9 +1,8 @@
-package it.paspiz85.nanobot.parsing;
+package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -29,28 +28,18 @@ import org.sikuli.core.search.RegionMatch;
 import org.sikuli.core.search.algorithm.TemplateMatcher;
 
 /**
- * Parser for attack mode screen.
+ * Attack mode screen.
  *
  * @author paspiz85
  *
  */
-public class AttackScreenParser extends Parser {
+public class AttackScreen extends Screen {
 
     private static final Area AREA_NEXT_BUTTON = Area.byEdges(692, 488, 739, 547);
 
     private static final Point BUTTON_END_BATTLE = getPoint("point.button.end_battle");
 
     private static final Point BUTTON_END_BATTLE_QUESTION_OK = getPoint("point.button.end_battle.question_ok");
-
-    private static final Point BUTTON_END_BATTLE_RETURN_HOME = getPoint("point.button.end_battle.return_home");
-
-    private static final int[] BUTTON_END_BATTLE_RETURN_HOME_COLORS = getRGBs("point.button.end_battle.return_home.color");
-
-    private static final int[][] BUTTON_END_BATTLE_RETURN_HOME_OFFSET = getOffset("point.button.end_battle.return_home.offset");
-
-    private static final Pixel BUTTON_FIND_MATCH = new Pixel(148, 529, new Color(0xD84B00));
-
-    private static final Point BUTTON_SHIELD_DISABLE = getPoint("point.button.shield_disable");
 
     private static final Color DARKCHECK_COLOR_NO = getColor("darkcheck.color.no");
 
@@ -88,7 +77,7 @@ public class AttackScreenParser extends Parser {
 
     private Point buttonNext;
 
-    AttackScreenParser() {
+    AttackScreen() {
         ENEMY_BASE_POLY.addPoint(ENEMY_BASE_LEFT.x(), ENEMY_BASE_LEFT.y());
         ENEMY_BASE_POLY.addPoint(ENEMY_BASE_TOP.x(), ENEMY_BASE_TOP.y());
         ENEMY_BASE_POLY.addPoint(ENEMY_BASE_RIGHT.x(), ENEMY_BASE_RIGHT.y());
@@ -163,23 +152,11 @@ public class AttackScreenParser extends Parser {
         return BUTTON_END_BATTLE_QUESTION_OK;
     }
 
-    public Point getButtonEndBattleReturnHome() {
-        return BUTTON_END_BATTLE_RETURN_HOME;
-    }
-
-    public Pixel getButtonFindMatch() {
-        return BUTTON_FIND_MATCH;
-    }
-
     public Point getButtonNext() {
         if (buttonNext == null) {
             buttonNext = searchButtonNext();
         }
         return buttonNext;
-    }
-
-    public Point getButtonShieldDisable() {
-        return BUTTON_SHIELD_DISABLE;
     }
 
     private boolean hasDE(final BufferedImage image) throws BotBadBaseException {
@@ -227,6 +204,11 @@ public class AttackScreenParser extends Parser {
         return attackableElixirs[0] >= 0;
     }
 
+    @Override
+    public boolean isDisplayed() {
+        return searchButtonNext() != null;
+    }
+
     protected final Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
         Integer result = null;
         if (hasDE(image)) {
@@ -267,21 +249,6 @@ public class AttackScreenParser extends Parser {
          * return parseNumber(image, 3, hasDE(image) ? POINT_TROPHY_WIN_HAS_DARK
          * : POINT_TROPHY_WIN_HASNT_DARK, image.getWidth() - 43);
          */
-    }
-
-    public Point searchButtonEndBattleReturnHome() {
-        logger.log(Level.FINE, "search button EndBattle-ReturnHome");
-        Point result = BUTTON_END_BATTLE_RETURN_HOME;
-        for (int i = 0; i < BUTTON_END_BATTLE_RETURN_HOME_OFFSET.length; i++) {
-            final int[] coords = BUTTON_END_BATTLE_RETURN_HOME_OFFSET[i];
-            final int rgb = BUTTON_END_BATTLE_RETURN_HOME_COLORS[i];
-            final Pixel point = new Pixel(coords[0], coords[1], new Color(rgb));
-            if (!platform.matchColoredPoint(point)) {
-                result = null;
-                break;
-            }
-        }
-        return result;
     }
 
     public Point searchButtonNext() {

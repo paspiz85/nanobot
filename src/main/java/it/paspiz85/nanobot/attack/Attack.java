@@ -1,9 +1,9 @@
 package it.paspiz85.nanobot.attack;
 
 import it.paspiz85.nanobot.exception.BotBadBaseException;
-import it.paspiz85.nanobot.parsing.AttackScreenParser;
-import it.paspiz85.nanobot.parsing.EnemyInfo;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.AttackScreen;
+import it.paspiz85.nanobot.game.EnemyInfo;
+import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
  */
 public abstract class Attack {
 
-    private static AttackScreenParser attackScreenParser = Parser.getInstance(AttackScreenParser.class);
+    private static AttackScreen attackScreenParser = Screen.getInstance(AttackScreen.class);
 
     private static Attack[] availableStrategies;
 
@@ -126,7 +126,7 @@ public abstract class Attack {
             Thread.sleep(15000);
             EnemyInfo currLoot;
             try {
-                currLoot = Parser.getInstance(AttackScreenParser.class).parseEnemyInfo();
+                currLoot = Screen.getInstance(AttackScreen.class).parseEnemyInfo();
             } catch (final BotBadBaseException e) {
                 Thread.sleep(2000);
                 // in case of 100% win/no troops left, attack screen will end

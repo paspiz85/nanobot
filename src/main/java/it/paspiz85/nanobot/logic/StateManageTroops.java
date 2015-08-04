@@ -1,9 +1,9 @@
 package it.paspiz85.nanobot.logic;
 
-import it.paspiz85.nanobot.parsing.MainScreenParser;
-import it.paspiz85.nanobot.parsing.Parser;
+import it.paspiz85.nanobot.game.ManageTroopsScreen;
+import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.game.TroopsInfo;
 import it.paspiz85.nanobot.parsing.TroopButton;
-import it.paspiz85.nanobot.parsing.TroopsInfo;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -16,7 +16,7 @@ import java.util.logging.Level;
  * @author paspiz85
  *
  */
-public final class StateManageTroops extends State<MainScreenParser> {
+public final class StateManageTroops extends State<ManageTroopsScreen> {
 
     public static StateManageTroops instance() {
         return Utils.singleton(StateManageTroops.class, () -> new StateManageTroops());
@@ -25,7 +25,7 @@ public final class StateManageTroops extends State<MainScreenParser> {
     private boolean reloading;
 
     private StateManageTroops() {
-        super(Parser.getInstance(MainScreenParser.class));
+        super(Screen.getInstance(ManageTroopsScreen.class));
     }
 
     @Override
@@ -34,12 +34,12 @@ public final class StateManageTroops extends State<MainScreenParser> {
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
-        final TroopsInfo troopsInfo = getParser().parseTroopsInfo();
+        final TroopsInfo troopsInfo = getScreen().parseTroopsInfo();
         final int[] troopsCount = troopsInfo.getTroopsCount();
         logger.log(Level.CONFIG, "Troops count: " + Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
         logger.log(Level.FINE, "Open first barrack");
-        platform.leftClick(getParser().getButtonTrainNext(), true);
+        platform.leftClick(getScreen().getButtonTrainNext(), true);
         platform.sleepRandom(500);
         int troopsCountSum = 0;
         for (final int i : troopsCount) {
@@ -47,15 +47,12 @@ public final class StateManageTroops extends State<MainScreenParser> {
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
-        if (getParser().areCampsFull() || troopsCountSum >= trainMaxTroops) {
+        if (getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops) {
             logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
-            platform.leftClick(getParser().getButtonTrainClose(), true);
+            platform.leftClick(getScreen().getButtonTrainClose(), true);
             platform.sleepRandom(200);
-            logger.log(Level.FINE, "Press Attack");
-            platform.leftClick(getParser().getButtonAttack(), true);
-            platform.sleepRandom(1000);
-            context.setState(StateFindAMatch.instance());
+            StateMainMenu.instance().handleAttack(context);
         } else {
             if (trainMaxTroops > 0) {
                 logger.log(Level.INFO, "Training Troops");
@@ -72,15 +69,12 @@ public final class StateManageTroops extends State<MainScreenParser> {
                     }
                     if (currRax < raxInfo.length - 1) {
                         logger.log(Level.FINE, "Goto next barrack");
-                        platform.leftClick(getParser().getButtonTrainNext(), true);
+                        platform.leftClick(getScreen().getButtonTrainNext(), true);
                         platform.sleepRandom(350);
                     }
                 }
             }
-            logger.log(Level.FINE, "Close Training Troops");
-            platform.leftClick(getParser().getButtonTrainClose(), true);
-            platform.sleepRandom(250);
-            context.setState(StateMainMenu.instance());
+            StateManageTroopsEnd.instance().handle(context);
             // waiting minimum time
             platform.sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
         }
