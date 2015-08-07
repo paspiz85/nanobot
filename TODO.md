@@ -15,6 +15,7 @@ install on win
 
 regina degli arcieri
 count trofei
+attachi su miniere
 
 
 ## Funzionalità
