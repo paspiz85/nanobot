@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.paspiz85</groupId>
 	<artifactId>nanobot</artifactId>
-	<version>1.1.8-SNAPSHOT</version>
+	<version>1.1.6-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -179,6 +179,24 @@
 				<artifactId>maven-install-plugin</artifactId>
 				<version>${maven-install-plugin.version}</version>
 			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-release-plugin</artifactId>
+				<version>${maven-release-plugin.version}</version>
+				<configuration>
+					<tagNameFormat>v@{project.version}</tagNameFormat>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>de.jutzig</groupId>
+				<artifactId>github-release-plugin</artifactId>
+				<version>1.1.1</version>
+				<configuration>
+					<releaseName>v1.1.6</releaseName>
+					<tag>v1.1.6</tag>
+					<artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 
@@ -335,43 +353,6 @@
 								<goals>
 									<goal>jar</goal>
 								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-release-plugin</artifactId>
-						<version>${maven-release-plugin.version}</version>
-						<configuration>
-							<tagNameFormat>v@{project.version}</tagNameFormat>
-						</configuration>
-						<executions>
-							<execution>
-								<phase>install</phase>
-								<goals>
-									<goal>prepare</goal>
-									<goal>clean</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>de.jutzig</groupId>
-						<artifactId>github-release-plugin</artifactId>
-						<version>1.1.1</version>
-						<executions>
-							<execution>
-								<id>github-upload</id>
-								<phase>install</phase>
-								<goals>
-									<goal>release</goal>
-								</goals>
-								<inherited>false</inherited>
-								<configuration>
-									<releaseName>v@{project.version}</releaseName>
-									<tag>v@{project.version}</tag>
-									<artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
-								</configuration>
 							</execution>
 						</executions>
 					</plugin>
