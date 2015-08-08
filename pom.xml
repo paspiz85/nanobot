@@ -5,6 +5,21 @@
 	<version>1.1.6-SNAPSHOT</version>
 
 	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
+		<maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
+		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
+		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+		<maven-jar-plugin.version>2.6</maven-jar-plugin.version>
+		<maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
+		<maven-checkstyle-plugin.version>2.16</maven-checkstyle-plugin.version>
+		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+		<maven-source-plugin.version>2.4</maven-source-plugin.version>
+		<maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
+		<maven-release-plugin.version>2.5.2</maven-release-plugin.version>
+		<maven.test.skip>false</maven.test.skip>
+		<checkstyle.skip>false</checkstyle.skip>
 		<mainClass>it.paspiz85.nanobot.Start</mainClass>
 	</properties>
 
@@ -17,31 +32,24 @@
 
 	<repositories>
 		<repository>
-			<id>sikuliRep</id>
+			<id>nanobotLocalRepo</id>
+			<url>file:${project.basedir}/lib/local-repo</url>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>sikuliRepo</id>
 			<url>http://oss.sonatype.org/content/groups/public</url>
 			<releases>
 				<enabled>true</enabled>
 			</releases>
 			<snapshots>
-				<enabled>true</enabled>
+				<enabled>false</enabled>
 			</snapshots>
-		</repository>
-
-		<repository>
-			<id>com-sikulix</id>
-			<name>com-sikulix</name>
-			<url>https://oss.sonatype.org/content/groups/public</url>
-			<layout>default</layout>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Local project repository</id>
-			<url>file:${project.basedir}/lib</url>
 		</repository>
 	</repositories>
+	
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -73,37 +81,46 @@
 		</pluginManagement>
 		<plugins>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<version>${maven-clean-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>${maven-resources-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
+				<version>${maven-compiler-plugin.version}</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>2.15</version>
-				<inherited>true</inherited>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
-					<failsOnError>true</failsOnError>
-					<configLocation>${project.basedir}/src/config/checkstyle_rules.xml</configLocation>
-					<propertyExpansion>samedir=${project.basedir}/src/config</propertyExpansion>
-					<suppressionsLocation>${project.basedir}/src/config/checkstyle_suppressions.xml</suppressionsLocation>
-					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
-					<excludes>config/sun_checks.xml</excludes>
-					<consoleOutput>true</consoleOutput>
+					<excludes>
+						<exclude>**/Wip*Test.java</exclude>
+						<exclude>**/Wip*IT.java</exclude>
+						<exclude>**/Extra*Test.java</exclude>
+						<exclude>**/Extra*IT.java</exclude>
+					</excludes>
 				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<version>${maven-jar-plugin.version}</version>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-assembly-plugin</artifactId>
+				<version>${maven-assembly-plugin.version}</version>
 				<executions>
 					<execution>
 						<phase>package</phase>
@@ -136,37 +153,57 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-checkstyle-plugin</artifactId>
+				<version>${maven-checkstyle-plugin.version}</version>
+				<inherited>true</inherited>
 				<configuration>
-					<executable>java</executable>
-					<arguments>
-						<argument>-classpath</argument>
-						<classpath />
-						<argument>${mainClass}</argument>
-					</arguments>
+					<failsOnError>true</failsOnError>
+					<configLocation>${project.basedir}/src/config/checkstyle_rules.xml</configLocation>
+					<propertyExpansion>samedir=${project.basedir}/src/config</propertyExpansion>
+					<suppressionsLocation>${project.basedir}/src/config/checkstyle_suppressions.xml</suppressionsLocation>
+					<suppressionsFileExpression>checkstyle.suppressions.file</suppressionsFileExpression>
+					<excludes>config/sun_checks.xml</excludes>
+					<consoleOutput>true</consoleOutput>
 				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<version>2.5.2</version>
-				<configuration>
-					<tagNameFormat>v@{project.version}</tagNameFormat>
-				</configuration>
+				<artifactId>maven-install-plugin</artifactId>
+				<version>${maven-install-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
+
 	<dependencies>
+		<!-- local repo -->
 		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna</artifactId>
-			<version>4.1.0</version>
+			<groupId>jnativehook</groupId>
+			<artifactId>jnativehook</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<!-- remote repo -->
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.3</version>
 		</dependency>
 		<dependency>
-			<groupId>net.java.dev.jna</groupId>
-			<artifactId>jna-platform</artifactId>
-			<version>4.1.0</version>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>4.5</version>
 		</dependency>
 		<dependency>
 			<groupId>org.sikuli</groupId>
@@ -178,6 +215,16 @@
 					<artifactId>looks</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna</artifactId>
+			<version>4.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>net.java.dev.jna</groupId>
+			<artifactId>jna-platform</artifactId>
+			<version>4.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.maven</groupId>
@@ -213,27 +260,6 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.3</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpclient</artifactId>
-			<version>4.5</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.httpcomponents</groupId>
-			<artifactId>httpmime</artifactId>
-			<version>4.5</version>
-		</dependency>
-		<!-- local rep -->
-		<dependency>
-			<groupId>jnativehook</groupId>
-			<artifactId>jnativehook</artifactId>
-			<version>1.0</version>
-		</dependency>
 		<!-- test -->
 		<dependency>
 			<groupId>junit</groupId>
@@ -256,41 +282,12 @@
 	</dependencies>
 
 	<profiles>
-		<profile>
-			<id>defaultProfile</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-surefire-plugin</artifactId>
-						<configuration>
-							<excludes>
-								<exclude>**/Wip*Test.java</exclude>
-								<exclude>**/Wip*IT.java</exclude>
-								<exclude>**/Extra*Test.java</exclude>
-								<exclude>**/Extra*IT.java</exclude>
-							</excludes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
 
 		<profile>
 			<id>extraFeatures</id>
-			<activation>
-				<property>
-					<name>extraFeatures</name>
-					<value>true</value>
-				</property>
-			</activation>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
 							<excludes>
@@ -304,30 +301,83 @@
 		</profile>
 
 		<profile>
-			<id>debugMode</id>
-			<activation>
-				<property>
-					<name>debug</name>
-					<value>true</value>
-				</property>
-			</activation>
+			<id>noChecks</id>
+			<properties>
+				<maven.test.skip>true</maven.test.skip>
+				<checkstyle.skip>true</checkstyle.skip>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>release</id>
 			<build>
 				<plugins>
 					<plugin>
-						<groupId>org.codehaus.mojo</groupId>
-						<artifactId>exec-maven-plugin</artifactId>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>${maven-source-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-javadoc-plugin</artifactId>
+						<version>${maven-javadoc-plugin.version}</version>
+						<executions>
+							<execution>
+								<id>attach-javadocs</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-release-plugin</artifactId>
+						<version>${maven-release-plugin.version}</version>
 						<configuration>
-							<executable>java</executable>
-							<arguments>
-								<argument>-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000</argument>
-								<argument>-classpath</argument>
-								<classpath />
-								<argument>${mainClass}</argument>
-							</arguments>
+							<tagNameFormat>v@{project.version}</tagNameFormat>
 						</configuration>
+						<executions>
+							<execution>
+								<phase>install</phase>
+								<goals>
+									<goal>prepare</goal>
+									<goal>clean</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>de.jutzig</groupId>
+						<artifactId>github-release-plugin</artifactId>
+						<version>1.1.1</version>
+						<executions>
+							<execution>
+								<id>github-upload</id>
+								<phase>install</phase>
+								<goals>
+									<goal>release</goal>
+								</goals>
+								<inherited>false</inherited>
+								<configuration>
+									<releaseName>v@{project.version}</releaseName>
+									<tag>v@{project.version}</tag>
+									<artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
+								</configuration>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
 		</profile>
+		
 	</profiles>
 </project>

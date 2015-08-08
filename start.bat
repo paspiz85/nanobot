@@ -1,3 +1,3 @@
 git pull
-call mvn clean package -Dmaven.test.skip=true -Dcheckstyle.skip=true
+call mvn clean package -PnoChecks
 FOR %%f in (target\nanobot*.jar) DO java -jar %%f
