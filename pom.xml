@@ -18,6 +18,7 @@
 		<maven-source-plugin.version>2.4</maven-source-plugin.version>
 		<maven-javadoc-plugin.version>2.10.3</maven-javadoc-plugin.version>
 		<maven-release-plugin.version>2.5.2</maven-release-plugin.version>
+		<github-release-plugin.version>1.1.1</github-release-plugin.version>
 		<maven.test.skip>false</maven.test.skip>
 		<checkstyle.skip>false</checkstyle.skip>
 		<mainClass>it.paspiz85.nanobot.Start</mainClass>
@@ -190,12 +191,7 @@
 			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
-				<version>1.1.1</version>
-				<configuration>
-					<releaseName>v1.1.6</releaseName>
-					<tag>v1.1.6</tag>
-					<artifact>${project.build.directory}/${project.groupId}.${project.artifactId}-${project.version}.jar</artifact>
-				</configuration>
+				<version>${github-release-plugin.version}</version>
 			</plugin>
 		</plugins>
 	</build>
