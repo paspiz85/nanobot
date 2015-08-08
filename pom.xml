@@ -194,7 +194,7 @@
 				<artifactId>github-release-plugin</artifactId>
 				<version>${github-release-plugin.version}</version>
 				<configuration>
-					<tag>v@{project.version}</tag>
+					<tag>v${project.version}</tag>
 				</configuration>
 			</plugin>
 		</plugins>
