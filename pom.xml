@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.paspiz85</groupId>
 	<artifactId>nanobot</artifactId>
-	<version>1.1.12-SNAPSHOT</version>
+	<version>1.1.12</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -28,7 +28,7 @@
 		<connection>scm:git:git@github.com:paspiz85/nanobot.git</connection>
 		<url>scm:git:git@github.com:paspiz85/nanobot.git</url>
 		<developerConnection>scm:git:git@github.com:paspiz85/nanobot.git</developerConnection>
-		<tag>HEAD</tag>
+		<tag>v1.1.12</tag>
 	</scm>
 
 	<repositories>
@@ -193,6 +193,9 @@
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
 				<version>${github-release-plugin.version}</version>
+				<configuration>
+					<tag>v@{project.version}</tag>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
