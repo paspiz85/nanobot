@@ -51,11 +51,11 @@ git tag -l
 
 To prepare a release (POM changes and tag create):
 ```
-mvn release:clean release:prepare
+mvn release:clean release:prepare && \
+mvn github-release:release -D$(grep scm.tag= release.properties) && \
+mvn release:clean
 ```
 
-Then continue release on [GitHub] (https://github.com/paspiz85/nanobot/releases) and edit tag adding description and executable jar.
-ATTENTION: name resease with v prefix. For example 1.1.0 must be v1.1.0
 
 ##### Rollback Release
 To delete a tag:
