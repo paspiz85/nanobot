@@ -194,6 +194,7 @@
 				<version>${github-release-plugin.version}</version>
 				<configuration>
 					<tag>${scm.tag}</tag>
+<!-- 					<artifact>${project.build.directory}/${project.artifactId}-1.1.6.jar</artifact> -->
 				</configuration>
 			</plugin>
 		</plugins>
