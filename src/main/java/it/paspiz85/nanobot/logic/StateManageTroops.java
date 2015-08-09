@@ -55,7 +55,7 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
             StateMainMenu.instance().handleAttack(context);
         } else {
             if (trainMaxTroops > 0) {
-                logger.log(Level.INFO, "Training Troops");
+                logger.log(Level.CONFIG, "Training Troops");
                 final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
                 for (int currRax = 0; currRax < raxInfo.length; currRax++) {
                     final TroopButton troop = raxInfo[currRax];
