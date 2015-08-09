@@ -113,7 +113,7 @@ public final class StateAttack extends State<AttackScreen> {
                     platform.sleepRandom(1200);
                     platform.leftClick(getScreen().getButtonEndBattleQuestionOK(), true);
                     platform.sleepRandom(1200);
-                    nextState = StateBattleEnd.instance();
+                    nextState = StateIdle.instance();
                 }
                 break;
             }

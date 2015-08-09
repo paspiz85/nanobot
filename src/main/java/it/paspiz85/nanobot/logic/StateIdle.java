@@ -53,18 +53,23 @@ public final class StateIdle extends State<Screen> {
                 platform.leftClick(mainScreenParser.getButtonWasAttackedOK(), true);
                 platform.sleepRandom(250);
             } else if (Screen.getInstance(BattleEndScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected BattleEndScreen");
                 nextState = StateBattleEnd.instance();
                 break;
             } else if (Screen.getInstance(ManageTroopsScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected ManageTroopsScreen");
                 nextState = StateManageTroopsEnd.instance();
                 break;
             } else if (Screen.getInstance(MainScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected MainScreen");
                 nextState = StateMainMenu.instance();
                 break;
             } else if (Screen.getInstance(AttackScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected AttackScreen");
                 nextState = StateAttack.instance();
                 break;
             } else if (Screen.getInstance(BattleBeginScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected BattleBeginScreen");
                 nextState = StateBattleBegin.instance();
                 break;
             }
