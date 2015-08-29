@@ -72,10 +72,9 @@ public final class ManageTroopsScreen extends Screen {
         if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
             result[len++] = 1;
         }
-        // TODO implement queen
-        // if (searchImage(imageEroes, "queen.png") != null) {
-        // result[len++] = 1;
-        // }
+        if (searchImage(imageEroes, getClass().getResource("queen.png")) != null) {
+            result[len++] = 1;
+        }
         return new TroopsInfo(Arrays.copyOf(result, len));
     }
 

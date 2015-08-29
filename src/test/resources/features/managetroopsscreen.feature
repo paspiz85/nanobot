@@ -39,6 +39,7 @@ Feature: parsing attack screen
       | classpath:/features/img/screen_1436082938601.png  | [65,58,8,1]   |
       | classpath:/features/img/screen_1436210992377.png  | [40,99,56,1]  |
       | classpath:/features/img/screen_1436215222084.png  | [53,100,42,1] |
+      | classpath:/features/img/screen_1440826147835.png  | [40,58,27,1]  |
 
 
   Scenario Outline: search close troops button
