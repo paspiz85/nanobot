@@ -1,8 +1,5 @@
 @unit-test
-@wip
-@tdd
-Feature: scenarios for Test-Driven-Development
-
+Feature: parsing attack screen
 
   Scenario Outline: search play game button
     Given screenshot saved as <imagefile>
@@ -13,4 +10,3 @@ Feature: scenarios for Test-Driven-Development
       | imagefile                                           | coords    |
       | classpath:/features/img/base_1435356695457.png      | null      |
       | classpath:/features/img/screen_1440835521897.png    | [303,138] |
-      

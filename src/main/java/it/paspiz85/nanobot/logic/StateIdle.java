@@ -5,7 +5,9 @@ import it.paspiz85.nanobot.game.BattleBeginScreen;
 import it.paspiz85.nanobot.game.BattleEndScreen;
 import it.paspiz85.nanobot.game.MainScreen;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
+import it.paspiz85.nanobot.game.PlatformScreen;
 import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.logging.Level;
@@ -72,6 +74,12 @@ public final class StateIdle extends State<Screen> {
                 logger.log(Level.INFO, "Detected BattleBeginScreen");
                 nextState = StateBattleBegin.instance();
                 break;
+            } else if (Screen.getInstance(PlatformScreen.class).isDisplayed()) {
+                logger.log(Level.INFO, "Detected PlatformScreen");
+                Point point = Screen.getInstance(PlatformScreen.class).searchButtonPlayGame();
+                if (point != null) {
+                    platform.leftClick(point, true);
+                }
             }
             Thread.sleep(1000);
         }
