@@ -52,7 +52,7 @@ git tag -l
 To prepare a release (POM changes and tag create):
 ```
 mvn release:clean release:prepare && \
-mvn github-release:release -D$(grep scm.tag= release.properties) && \
+mvn github-release:release -D$(grep scm.tag=v release.properties) && \
 mvn release:clean
 ```
 
