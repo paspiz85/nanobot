@@ -33,6 +33,7 @@ Feature: parsing attack screen
       | classpath:/features/img/base_1435906232991.png | 226031 | 2123   | 45          | null         | null            |
       | classpath:/features/img/base_1435906237740.png | 17451  | 10686  | 25          | null         | null            |
       | classpath:/features/img/base_1435906242449.png | 62835  | 31118  | 128         | null         | null            |
+      | classpath:/features/img/base_1441386064440.png | 280157 | 403095 | 2817        | null         | null            |
 
 
   Scenario Outline: check collectors
