@@ -103,8 +103,7 @@ var System = Java.type("java.lang.System");
 			alert(IOUtils.toString(response.getEntity().getContent()));
 			return;
 		}
-		alert(IOUtils.toString(response.getEntity().getContent()));
-		if (!confirm("Do you want update another screenshot?")) {
+		if (!confirm("Publish success. Do you want update another screenshot?")) {
 			return;
 		}
 	}
