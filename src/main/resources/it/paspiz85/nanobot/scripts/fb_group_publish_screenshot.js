@@ -90,17 +90,22 @@ var System = Java.type("java.lang.System");
 		albumId = selection.id;
 	}
 	
-	request = new HttpPost("https://graph.facebook.com/v2.4/" + albumId + "/photos");
-	var entityBuilder = MultipartEntityBuilder.create();
-	entityBuilder.addTextBody("access_token", accessToken);
-	entityBuilder.addBinaryBody("source", platform.saveScreenshot("screen_" + new Date().getTime()));
-	//entityBuilder.addBinaryBody("source", new File("/Users/v-ppizzuti/workspace/nanobot/target/test-classes/features/img/train_1435772811358.png"));
-	request.setEntity(entityBuilder.build());
-	response = httpClient.execute(request);
-	//alert(""+response.getStatusLine().getStatusCode());
-	if (response.getStatusLine().getStatusCode() != 200) {
+	while (true) {
+		request = new HttpPost("https://graph.facebook.com/v2.4/" + albumId + "/photos");
+		var entityBuilder = MultipartEntityBuilder.create();
+		entityBuilder.addTextBody("access_token", accessToken);
+		entityBuilder.addBinaryBody("source", platform.saveScreenshot("screen_" + new Date().getTime()));
+		//entityBuilder.addBinaryBody("source", new File("/Users/v-ppizzuti/workspace/nanobot/target/test-classes/features/img/train_1435772811358.png"));
+		request.setEntity(entityBuilder.build());
+		response = httpClient.execute(request);
+		//alert(""+response.getStatusLine().getStatusCode());
+		if (response.getStatusLine().getStatusCode() != 200) {
+			alert(IOUtils.toString(response.getEntity().getContent()));
+			return;
+		}
 		alert(IOUtils.toString(response.getEntity().getContent()));
-		return;
+		if (!confirm("Do you want update another screenshot?")) {
+			return;
+		}
 	}
-	alert(IOUtils.toString(response.getEntity().getContent()));
 })();
