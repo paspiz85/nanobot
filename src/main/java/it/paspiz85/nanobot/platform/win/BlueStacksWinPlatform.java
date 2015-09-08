@@ -20,8 +20,6 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
-import javax.swing.KeyStroke;
-
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
@@ -65,7 +63,6 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     private static final Map<Character, Integer> KEY_MAP = new HashMap<>();
 
     private static final Map<Character, Integer> KEY_MAP_SHIFTED = new HashMap<>();
-
     static {
         KEY_MAP.put(' ', KeyEvent.VK_SPACE);
         KEY_MAP.put(',', KeyEvent.VK_COMMA);

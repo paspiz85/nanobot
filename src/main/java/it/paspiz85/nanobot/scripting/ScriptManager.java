@@ -133,7 +133,7 @@ public final class ScriptManager {
             engine.eval(new InputStreamReader(in), context);
             logger.log(Level.CONFIG, msg + " completed");
         } catch (final RuntimeException ex) {
-            Throwable cause = ex.getCause();
+            final Throwable cause = ex.getCause();
             if (cause != null && cause instanceof InterruptedException) {
                 throw (InterruptedException) cause;
             }
