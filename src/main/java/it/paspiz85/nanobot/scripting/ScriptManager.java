@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.scripting;
 
-import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Utils;
@@ -79,11 +78,6 @@ public final class ScriptManager {
         context.setAttribute("select", select, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("logger", logger, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("buildInfo", BuildInfo.instance(), ScriptContext.ENGINE_SCOPE);
-        try {
-            Platform.instance().init();
-        } catch (final BotConfigurationException e) {
-            logger.log(Level.WARNING, e.getMessage(), e);
-        }
         context.setAttribute("platform", Platform.instance(), ScriptContext.ENGINE_SCOPE);
         final HttpClient httpClient = HttpClientBuilder.create().build();
         context.setAttribute("httpClient", httpClient, ScriptContext.ENGINE_SCOPE);

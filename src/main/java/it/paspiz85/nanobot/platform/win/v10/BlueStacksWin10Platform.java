@@ -23,15 +23,15 @@ public final class BlueStacksWin10Platform extends BlueStacksWinPlatform {
     }
 
     @Override
-    protected void activate() {
+    protected void doActivate() {
         // TODO Auto-generated method stub
-        super.activate();
+        super.doActivate();
     }
 
     @Override
-    protected void leftClick(final Point point) throws InterruptedException {
+    protected void doLeftClick(final Point point) throws InterruptedException {
         // TODO Auto-generated method stub
-        super.leftClick(point);
+        super.doLeftClick(point);
     }
 
     @Override

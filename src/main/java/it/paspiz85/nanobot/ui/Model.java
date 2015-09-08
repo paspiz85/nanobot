@@ -1,7 +1,9 @@
 package it.paspiz85.nanobot.ui;
 
+import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.logic.Looper;
 import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Settings;
@@ -129,6 +131,11 @@ public final class Model {
 
                     @Override
                     protected Void call() throws Exception {
+                        try {
+                            Platform.instance().init();
+                        } catch (final BotConfigurationException e) {
+                            logger.log(Level.WARNING, e.getMessage(), e);
+                        }
                         ScriptManager.instance().run(runningScript);
                         return null;
                     }

@@ -82,8 +82,14 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
         }
     }
 
+    private Point clientToScreen(final Point clientPoint) {
+        final POINT point = new POINT(clientPoint.x(), clientPoint.y());
+        User32.INSTANCE.ClientToScreen(handler, point);
+        return new Point(point.x, point.y);
+    }
+
     @Override
-    protected void applySize(final Size size) throws BotConfigurationException {
+    protected void doApplySize(final Size size) throws BotConfigurationException {
         final int width = size.x();
         final int height = size.y();
         final HKEYByReference key = Advapi32Util.registryGetKey(WinReg.HKEY_LOCAL_MACHINE,
@@ -102,10 +108,24 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
         throw new BotConfigurationException(String.format("Please restart %s to fix resolution", BS_WINDOW_NAME));
     }
 
-    private Point clientToScreen(final Point clientPoint) {
-        final POINT point = new POINT(clientPoint.x(), clientPoint.y());
-        User32.INSTANCE.ClientToScreen(handler, point);
-        return new Point(point.x, point.y);
+    @Override
+    protected void doLeftClick(final Point point) throws InterruptedException {
+        final int x = point.x();
+        final int y = point.y();
+        final int lParam = y << 16 | x << 16 >>> 16;
+        while (isCtrlKeyDown()) {
+            Thread.sleep(100);
+        }
+        User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
+        User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
+    }
+
+    @Override
+    protected BufferedImage doScreenshot(final Point p1, final Point p2) {
+        final Point anchor = clientToScreen(p1);
+        final int width = p2.x() - p1.x();
+        final int height = p2.y() - p1.y();
+        return robot.createScreenCapture(new Rectangle(anchor.x(), anchor.y(), width, height));
     }
 
     @Override
@@ -130,18 +150,6 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
 
     private boolean isCtrlKeyDown() {
         return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
-    }
-
-    @Override
-    protected void leftClick(final Point point) throws InterruptedException {
-        final int x = point.x();
-        final int y = point.y();
-        final int lParam = y << 16 | x << 16 >>> 16;
-        while (isCtrlKeyDown()) {
-            Thread.sleep(100);
-        }
-        User32.INSTANCE.SendMessage(handler, WM_LBUTTONDOWN, 0x00000001, lParam);
-        User32.INSTANCE.SendMessage(handler, WM_LBUTTONUP, 0x00000000, lParam);
     }
 
     @Override
@@ -175,14 +183,6 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
             result = false;
         }
         return result;
-    }
-
-    @Override
-    protected BufferedImage screenshot(final Point p1, final Point p2) {
-        final Point anchor = clientToScreen(p1);
-        final int width = p2.x() - p1.x();
-        final int height = p2.y() - p1.y();
-        return robot.createScreenCapture(new Rectangle(anchor.x(), anchor.y(), width, height));
     }
 
     @Override

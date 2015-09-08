@@ -57,6 +57,16 @@ public final class StateMainMenu extends State<MainScreen> {
         }
     }
 
+    private void extra(final Context context) {
+        try {
+            ScriptManager.instance().run("_loop.js");
+        } catch (final IllegalArgumentException ex) {
+            logger.log(Level.FINE, ex.getMessage());
+        } catch (final Exception ex) {
+            logger.log(Level.WARNING, "Error in extra script execution", ex);
+        }
+    }
+
     @Override
     public void handle(final Context context) throws BotConfigurationException, InterruptedException {
         logger.log(Level.FINE, "Returned in main menu");
@@ -77,10 +87,6 @@ public final class StateMainMenu extends State<MainScreen> {
         platform.leftClick(getScreen().getButtonTroops(), true);
         platform.sleepRandom(500);
         context.setState(StateManageTroops.instance());
-    }
-
-    private void extra(Context context) {
-        ScriptManager.instance().run("_loop.js");
     }
 
     public void handleAttack(final Context context) throws InterruptedException {

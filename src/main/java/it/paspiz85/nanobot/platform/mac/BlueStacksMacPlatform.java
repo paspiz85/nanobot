@@ -83,8 +83,14 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
         scriptEngineManager = new ScriptEngineManager();
     }
 
+    private Point clientToScreen(final Point point) {
+        final int x = point.x() + position.x();
+        final int y = point.y() + position.y() + TITLE_BAR_HEIGHT + 3;
+        return new Point(x, y);
+    }
+
     @Override
-    protected void activate() {
+    protected void doActivate() {
         try {
             final ScriptEngine engine = scriptEngineManager.getEngineByName("AppleScript");
             final String script = "tell application \"BlueStacks\" to activate\n";
@@ -95,7 +101,7 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected void applySize(final Size size) throws BotConfigurationException {
+    protected void doApplySize(final Size size) throws BotConfigurationException {
         try {
             final File plistFile = new File(System.getProperty("user.home")
                     + "/Library/Preferences/com.BlueStacks.AppPlayer.plist");
@@ -134,10 +140,29 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
         }
     }
 
-    private Point clientToScreen(final Point point) {
-        final int x = point.x() + position.x();
-        final int y = point.y() + position.y() + TITLE_BAR_HEIGHT + 3;
-        return new Point(x, y);
+    @Override
+    protected void doLeftClick(final Point point) throws InterruptedException {
+        // TODO non funziona
+        final PointerInfo a = MouseInfo.getPointerInfo();
+        final java.awt.Point b = a.getLocation();
+        final int xOrig = (int) b.getX();
+        final int yOrig = (int) b.getY();
+        try {
+            final Point p = clientToScreen(point);
+            robot.mouseMove(p.x(), p.y());
+            robot.mousePress(InputEvent.BUTTON1_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+        } finally {
+            robot.mouseMove(xOrig, yOrig);
+        }
+    }
+
+    @Override
+    protected BufferedImage doScreenshot(final Point p1, final Point p2) {
+        final Point anchor = clientToScreen(p1);
+        final int width = p2.x() - p1.x();
+        final int height = p2.y() - p1.y();
+        return robot.createScreenCapture(new Rectangle(anchor.x(), anchor.y(), width, height));
     }
 
     @Override
@@ -185,34 +210,9 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected void leftClick(final Point point) throws InterruptedException {
-        // TODO non funziona
-        final PointerInfo a = MouseInfo.getPointerInfo();
-        final java.awt.Point b = a.getLocation();
-        final int xOrig = (int) b.getX();
-        final int yOrig = (int) b.getY();
-        try {
-            final Point p = clientToScreen(point);
-            robot.mouseMove(p.x(), p.y());
-            robot.mousePress(InputEvent.BUTTON1_MASK);
-            robot.mouseRelease(InputEvent.BUTTON1_MASK);
-        } finally {
-            robot.mouseMove(xOrig, yOrig);
-        }
-    }
-
-    @Override
     protected boolean registerForClick(final Consumer<Point> clickConsumer) {
         // TODO implement but not now (it's not used from main logic)
         throw new UnsupportedOperationException("Not implemented");
-    }
-
-    @Override
-    protected BufferedImage screenshot(final Point p1, final Point p2) {
-        final Point anchor = clientToScreen(p1);
-        final int width = p2.x() - p1.x();
-        final int height = p2.y() - p1.y();
-        return robot.createScreenCapture(new Rectangle(anchor.x(), anchor.y(), width, height));
     }
 
     @Override

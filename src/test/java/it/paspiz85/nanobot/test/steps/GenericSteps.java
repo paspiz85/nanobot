@@ -41,7 +41,7 @@ public class GenericSteps {
         }
 
         @Override
-        protected BufferedImage screenshot(final Point p1, final Point p2) {
+        protected BufferedImage doScreenshot(final Point p1, final Point p2) {
             return getSubimage(screenshot, p1, p2);
         }
 

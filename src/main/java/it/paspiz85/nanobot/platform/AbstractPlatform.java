@@ -36,11 +36,6 @@ public abstract class AbstractPlatform implements Platform {
 
     protected final Logger logger = Logger.getLogger(getClass().getName());
 
-    protected void activate() {
-    }
-
-    protected abstract void applySize(Size size) throws BotConfigurationException;
-
     @Override
     public final boolean compareColor(final Color c1, final Color c2, final int var) {
         return compareColor(c1.getRGB(), c2.getRGB(), var);
@@ -55,6 +50,31 @@ public abstract class AbstractPlatform implements Platform {
         final int b2 = c2 >> 0 & 0xFF;
         return !(Math.abs(r1 - r2) > var || Math.abs(g1 - g2) > var || Math.abs(b1 - b2) > var);
     }
+
+    protected void doActivate() {
+    }
+
+    protected abstract void doApplySize(Size size) throws BotConfigurationException;
+
+    /**
+     * Do a left click in the game.
+     *
+     * @param point
+     *            coordinates of click.
+     * @throws InterruptedException
+     */
+    protected abstract void doLeftClick(final Point point) throws InterruptedException;
+
+    /**
+     * Pick a screenshot from game.
+     *
+     * @param p1
+     *            top left corner of screenshot.
+     * @param p2
+     *            bottom right corner of screenshot.
+     * @return image containing the screenshot.
+     */
+    protected abstract BufferedImage doScreenshot(Point p1, Point p2);
 
     protected abstract Size getActualSize();
 
@@ -88,35 +108,31 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void init(final BooleanSupplier autoAdjustResolution) throws BotConfigurationException {
-        activate();
+        doActivate();
         logger.log(Level.CONFIG, "Setting up platform...");
         setup();
         setupResolution(autoAdjustResolution);
         logger.log(Level.CONFIG, "Setup is successful");
     }
 
-    /**
-     * Do a left click in the game.
-     *
-     * @param point
-     *            coordinates of click.
-     * @throws InterruptedException
-     */
-    protected abstract void leftClick(final Point point) throws InterruptedException;
+    @Override
+    public final void leftClick(final Point point) throws InterruptedException {
+        leftClick(point, true);
+    }
 
     @Override
     public final void leftClick(final Point point, final boolean randomize) throws InterruptedException {
         if (point == null) {
             throw new IllegalArgumentException("point not provided");
         }
-        activate();
+        doActivate();
         Point p = point;
         logger.log(Level.FINER, "Clicking " + p);
         // randomize coordinates little bit
         if (randomize) {
             p = new Point(p.x() - 1 + Utils.RANDOM.nextInt(3), p.y() - 1 + Utils.RANDOM.nextInt(3));
         }
-        leftClick(p);
+        doLeftClick(p);
     }
 
     @Override
@@ -185,26 +201,15 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final BufferedImage screenshot(final Area area) {
-        activate();
+        doActivate();
         BufferedImage result;
         if (area == null) {
-            result = screenshot(FULLSCREEN.getEdge1(), FULLSCREEN.getEdge2());
+            result = doScreenshot(FULLSCREEN.getEdge1(), FULLSCREEN.getEdge2());
         } else {
-            result = screenshot(area.getEdge1(), area.getEdge2());
+            result = doScreenshot(area.getEdge1(), area.getEdge2());
         }
         return result;
     }
-
-    /**
-     * Pick a screenshot from game.
-     *
-     * @param p1
-     *            top left corner of screenshot.
-     * @param p2
-     *            bottom right corner of screenshot.
-     * @return image containing the screenshot.
-     */
-    protected abstract BufferedImage screenshot(Point p1, Point p2);
 
     protected abstract void setup() throws BotConfigurationException;
 
@@ -218,7 +223,7 @@ public abstract class AbstractPlatform implements Platform {
                 if (!autoAdjustResolution.getAsBoolean()) {
                     throw new BotConfigurationException("Re-run when resolution is fixed");
                 }
-                applySize(bsExpectedSize);
+                doApplySize(bsExpectedSize);
             }
         } catch (final BotConfigurationException e) {
             throw e;
@@ -260,7 +265,7 @@ public abstract class AbstractPlatform implements Platform {
 
     @Override
     public final void zoomUp() throws InterruptedException {
-        activate();
+        doActivate();
         logger.log(Level.CONFIG, "Zooming out...");
         final int notch = 14;
         for (int i = 0; i < notch; i++) {

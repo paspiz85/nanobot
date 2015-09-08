@@ -27,7 +27,17 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected void applySize(final Size resolution) throws BotConfigurationException {
+    protected void doApplySize(final Size resolution) throws BotConfigurationException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
+    protected void doLeftClick(final Point point) throws InterruptedException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
+    protected BufferedImage doScreenshot(final Point p1, final Point p2) {
         throw new UnsupportedOperationException(MESSAGE);
     }
 
@@ -47,17 +57,7 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
-    protected void leftClick(final Point point) throws InterruptedException {
-        throw new UnsupportedOperationException(MESSAGE);
-    }
-
-    @Override
     protected boolean registerForClick(final Consumer<Point> clickConsumer) {
-        throw new UnsupportedOperationException(MESSAGE);
-    }
-
-    @Override
-    protected BufferedImage screenshot(final Point p1, final Point p2) {
         throw new UnsupportedOperationException(MESSAGE);
     }
 

@@ -50,6 +50,15 @@ public interface Platform {
     void init(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
 
     /**
+     * Do a left click on game. Randomize is true.
+     *
+     * @param point
+     *            coordinates of click.
+     * @throws InterruptedException
+     */
+    void leftClick(Point point) throws InterruptedException;
+
+    /**
      * Do a left click on game.
      *
      * @param point
