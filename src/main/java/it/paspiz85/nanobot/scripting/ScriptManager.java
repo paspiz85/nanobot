@@ -116,11 +116,11 @@ public final class ScriptManager {
         return scripts;
     }
 
-    public void run(final String script) {
+    public void run(final String script) throws InterruptedException {
         run(script, Collections.emptyMap());
     }
 
-    public void run(final String script, final Map<String, Object> params) {
+    public void run(final String script, final Map<String, Object> params) throws InterruptedException {
         final String msg = "Running script " + script;
         final Path path = getScriptsMap().get(script);
         if (path == null) {
@@ -132,8 +132,14 @@ public final class ScriptManager {
         try (InputStream in = path.toUri().toURL().openStream()) {
             engine.eval(new InputStreamReader(in), context);
             logger.log(Level.CONFIG, msg + " completed");
-        } catch (final Exception e) {
-            logger.log(Level.WARNING, msg + " failed: " + e.getMessage(), e);
+        } catch (final RuntimeException ex) {
+            Throwable cause = ex.getCause();
+            if (cause != null && cause instanceof InterruptedException) {
+                throw (InterruptedException) cause;
+            }
+            logger.log(Level.WARNING, msg + " failed: " + ex.getMessage(), ex);
+        } catch (final Exception ex) {
+            logger.log(Level.WARNING, msg + " failed: " + ex.getMessage(), ex);
         } finally {
             closeContext(context);
         }

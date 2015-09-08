@@ -58,9 +58,11 @@ public final class StateMainMenu extends State<MainScreen> {
         }
     }
 
-    private void extra(final Context context) {
+    private void extra(final Context context) throws InterruptedException {
         try {
             ScriptManager.instance().run("_loop.js", Collections.singletonMap("context", context));
+        } catch (final InterruptedException ex) {
+            throw ex;
         } catch (final IllegalArgumentException ex) {
             logger.log(Level.FINE, ex.getMessage());
         } catch (final Exception ex) {
