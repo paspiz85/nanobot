@@ -77,6 +77,7 @@ public final class ScriptManager {
         context.setAttribute("confirm", confirm, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("prompt", prompt, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("select", select, ScriptContext.ENGINE_SCOPE);
+        context.setAttribute("logger", logger, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("buildInfo", BuildInfo.instance(), ScriptContext.ENGINE_SCOPE);
         try {
             Platform.instance().init();
