@@ -78,6 +78,8 @@ public abstract class AbstractPlatform implements Platform {
 
     protected abstract void doSingleZoomUp() throws InterruptedException;
 
+    protected abstract void doWrite(String s) throws InterruptedException;
+
     protected abstract Size getActualSize();
 
     /**
@@ -261,6 +263,12 @@ public abstract class AbstractPlatform implements Platform {
             }
         }
         return result[0];
+    }
+
+    @Override
+    public final void write(final String s) throws InterruptedException {
+        doActivate();
+        doWrite(s);
     }
 
     @Override

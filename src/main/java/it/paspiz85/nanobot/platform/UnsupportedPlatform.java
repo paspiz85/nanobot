@@ -47,6 +47,11 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doWrite(final String s) throws InterruptedException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
     protected Size getActualSize() {
         throw new UnsupportedOperationException(MESSAGE);
     }

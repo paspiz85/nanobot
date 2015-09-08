@@ -173,6 +173,12 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doWrite(final String s) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
     protected Size getActualSize() {
         Size size = null;
         try {

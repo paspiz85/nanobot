@@ -12,8 +12,11 @@ import java.awt.AWTException;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -49,10 +52,6 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
 
     private static final int TOPMOST_FLAGS = SWP_NOMOVE | SWP_NOSIZE;
 
-    private static final int VK_CONTROL = 0x11;
-
-    private static final int VK_DOWN = 0x28;
-
     private static final int WM_KEYDOWN = 0x100;
 
     private static final int WM_KEYUP = 0x101;
@@ -60,6 +59,14 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     private static final int WM_LBUTTONDOWN = 0x201;
 
     private static final int WM_LBUTTONUP = 0x202;
+
+    private static final Map<Character, Integer> KEY_MAP = new HashMap<>();
+
+    private static final Map<Character, Integer> KEY_MAP_SHIFTED = new HashMap<>();
+    static {
+        KEY_MAP.put('.', KeyEvent.VK_PERIOD);
+        KEY_MAP.put(',', KeyEvent.VK_COMMA);
+    }
 
     public static BlueStacksWinPlatform instance() {
         return Utils.singleton(BlueStacksWinPlatform.class, () -> new BlueStacksWinPlatform());
@@ -108,6 +115,25 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
         throw new BotConfigurationException(String.format("Please restart %s to fix resolution", BS_WINDOW_NAME));
     }
 
+    protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        while (isCtrlKeyDown()) {
+            Thread.sleep(100);
+        }
+        final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
+        final WPARAM wparam = new WinDef.WPARAM(keyCode);
+        final WPARAM wparamShift = new WinDef.WPARAM(KeyEvent.VK_SHIFT);
+        final LPARAM lparamDown = new WinDef.LPARAM(lParam);
+        final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
+        if (shifted) {
+            User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparamShift, lparamDown);
+        }
+        User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
+        User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
+        if (shifted) {
+            User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparamShift, lparamUp);
+        }
+    }
+
     @Override
     protected void doLeftClick(final Point point) throws InterruptedException {
         final int x = point.x();
@@ -130,15 +156,24 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
 
     @Override
     protected void doSingleZoomUp() throws InterruptedException {
-        while (isCtrlKeyDown()) {
-            Thread.sleep(100);
+        doKeyPress(KeyEvent.VK_DOWN, false);
+    }
+
+    @Override
+    protected void doWrite(final String s) throws InterruptedException {
+        for (final char ch : s.toCharArray()) {
+            if (Character.isLetter(ch)) {
+                doKeyPress(ch, Character.isUpperCase(ch));
+            } else if (Character.isDigit(ch)) {
+                doKeyPress(ch, false);
+            } else if (KEY_MAP.containsKey(ch)) {
+                doKeyPress(KEY_MAP.get(ch), false);
+            } else if (KEY_MAP_SHIFTED.containsKey(ch)) {
+                doKeyPress(KEY_MAP_SHIFTED.get(ch), true);
+            } else {
+                logger.log(Level.WARNING, "Unable to write character '" + ch + "'");
+            }
         }
-        final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
-        final WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
-        final LPARAM lparamDown = new WinDef.LPARAM(lParam);
-        final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
-        User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
-        User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
     }
 
     @Override
@@ -162,7 +197,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     private boolean isCtrlKeyDown() {
-        return User32.INSTANCE.GetKeyState(VK_CONTROL) < 0;
+        return User32.INSTANCE.GetKeyState(KeyEvent.VK_CONTROL) < 0;
     }
 
     @Override

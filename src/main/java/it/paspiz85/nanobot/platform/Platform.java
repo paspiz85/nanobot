@@ -92,6 +92,8 @@ public interface Platform {
 
     Point waitForClick() throws InterruptedException;
 
+    void write(String str) throws InterruptedException;
+
     /**
      * Change game view to max zoom level.
      *
