@@ -76,6 +76,8 @@ public abstract class AbstractPlatform implements Platform {
      */
     protected abstract BufferedImage doScreenshot(Point p1, Point p2);
 
+    protected abstract void doSingleZoomUp() throws InterruptedException;
+
     protected abstract Size getActualSize();
 
     /**
@@ -232,8 +234,6 @@ public abstract class AbstractPlatform implements Platform {
         }
     }
 
-    protected abstract void singleZoomUp() throws InterruptedException;
-
     @Override
     public final void sleepRandom(final int sleepInMs) throws InterruptedException {
         final int time = sleepInMs + Utils.RANDOM.nextInt(sleepInMs);
@@ -269,7 +269,7 @@ public abstract class AbstractPlatform implements Platform {
         logger.log(Level.CONFIG, "Zooming out...");
         final int notch = 14;
         for (int i = 0; i < notch; i++) {
-            singleZoomUp();
+            doSingleZoomUp();
             Thread.sleep(1000);
         }
     }

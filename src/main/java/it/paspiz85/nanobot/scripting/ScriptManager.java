@@ -15,6 +15,7 @@ import java.nio.file.Paths;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Consumer;
@@ -70,8 +71,11 @@ public final class ScriptManager {
         }
     }
 
-    protected ScriptContext buildContext() {
+    protected ScriptContext buildContext(final Map<String, Object> params) {
         final SimpleScriptContext context = new SimpleScriptContext();
+        for (final Entry<String, Object> e : params.entrySet()) {
+            context.setAttribute(e.getKey(), e.getValue(), ScriptContext.ENGINE_SCOPE);
+        }
         context.setAttribute("alert", alert, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("confirm", confirm, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("prompt", prompt, ScriptContext.ENGINE_SCOPE);
@@ -113,6 +117,10 @@ public final class ScriptManager {
     }
 
     public void run(final String script) {
+        run(script, Collections.emptyMap());
+    }
+
+    public void run(final String script, final Map<String, Object> params) {
         final String msg = "Running script " + script;
         final Path path = getScriptsMap().get(script);
         if (path == null) {
@@ -120,7 +128,7 @@ public final class ScriptManager {
         }
         logger.log(Level.CONFIG, msg);
         final ScriptEngine engine = factory.getEngineByName("nashorn");
-        final ScriptContext context = buildContext();
+        final ScriptContext context = buildContext(params);
         try (InputStream in = path.toUri().toURL().openStream()) {
             engine.eval(new InputStreamReader(in), context);
             logger.log(Level.CONFIG, msg + " completed");

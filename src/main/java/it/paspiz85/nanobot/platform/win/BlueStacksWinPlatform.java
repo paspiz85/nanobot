@@ -129,6 +129,19 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doSingleZoomUp() throws InterruptedException {
+        while (isCtrlKeyDown()) {
+            Thread.sleep(100);
+        }
+        final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
+        final WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
+        final LPARAM lparamDown = new WinDef.LPARAM(lParam);
+        final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
+        User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
+        User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
+    }
+
+    @Override
     protected Size getActualSize() {
         final HWND control = User32.INSTANCE.GetDlgItem(handler, 0);
         final int[] rect = new int[4];
@@ -202,18 +215,5 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
                         Arrays.toString(rect)));
         // set bs always on top
         User32.INSTANCE.SetWindowPos(handler, -1, 0, 0, 0, 0, TOPMOST_FLAGS);
-    }
-
-    @Override
-    protected void singleZoomUp() throws InterruptedException {
-        while (isCtrlKeyDown()) {
-            Thread.sleep(100);
-        }
-        final int lParam = 0x00000001 | 0x50 /* scancode */<< 16 | 0x01000000 /* extended */;
-        final WPARAM wparam = new WinDef.WPARAM(VK_DOWN);
-        final LPARAM lparamDown = new WinDef.LPARAM(lParam);
-        final LPARAM lparamUp = new WinDef.LPARAM(lParam | 1 << 30 | 1 << 31);
-        User32.INSTANCE.PostMessage(handler, WM_KEYDOWN, wparam, lparamDown);
-        User32.INSTANCE.PostMessage(handler, WM_KEYUP, wparam, lparamUp);
     }
 }

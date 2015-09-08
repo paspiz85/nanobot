@@ -35,8 +35,8 @@ public final class BlueStacksWin10Platform extends BlueStacksWinPlatform {
     }
 
     @Override
-    protected void singleZoomUp() throws InterruptedException {
+    protected void doSingleZoomUp() throws InterruptedException {
         // TODO Auto-generated method stub
-        super.singleZoomUp();
+        super.doSingleZoomUp();
     }
 }

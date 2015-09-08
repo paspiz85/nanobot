@@ -42,6 +42,11 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doSingleZoomUp() throws InterruptedException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
     protected Size getActualSize() {
         throw new UnsupportedOperationException(MESSAGE);
     }
@@ -63,11 +68,6 @@ public class UnsupportedPlatform extends AbstractPlatform {
 
     @Override
     protected void setup() throws BotConfigurationException {
-        throw new UnsupportedOperationException(MESSAGE);
-    }
-
-    @Override
-    protected void singleZoomUp() throws InterruptedException {
         throw new UnsupportedOperationException(MESSAGE);
     }
 }

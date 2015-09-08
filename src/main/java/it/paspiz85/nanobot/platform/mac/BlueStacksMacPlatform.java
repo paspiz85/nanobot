@@ -166,6 +166,13 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doSingleZoomUp() throws InterruptedException {
+        robot.keyPress(KeyEvent.VK_DOWN);
+        Thread.sleep(100);
+        robot.keyRelease(KeyEvent.VK_DOWN);
+    }
+
+    @Override
     protected Size getActualSize() {
         Size size = null;
         try {
@@ -218,12 +225,5 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     @Override
     protected void setup() throws BotConfigurationException {
         position = getPosition();
-    }
-
-    @Override
-    protected void singleZoomUp() throws InterruptedException {
-        robot.keyPress(KeyEvent.VK_DOWN);
-        Thread.sleep(100);
-        robot.keyRelease(KeyEvent.VK_DOWN);
     }
 }

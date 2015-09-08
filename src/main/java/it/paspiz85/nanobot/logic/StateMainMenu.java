@@ -9,6 +9,7 @@ import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
+import java.util.Collections;
 import java.util.function.Supplier;
 import java.util.logging.Level;
 
@@ -59,7 +60,7 @@ public final class StateMainMenu extends State<MainScreen> {
 
     private void extra(final Context context) {
         try {
-            ScriptManager.instance().run("_loop.js");
+            ScriptManager.instance().run("_loop.js", Collections.singletonMap("context", context));
         } catch (final IllegalArgumentException ex) {
             logger.log(Level.FINE, ex.getMessage());
         } catch (final Exception ex) {
