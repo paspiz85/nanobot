@@ -22,6 +22,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.script.ScriptContext;
@@ -101,7 +102,7 @@ public final class ScriptManager {
     }
 
     public Set<String> getScripts() {
-        return getScriptsMap().keySet();
+        return getScriptsMap().keySet().stream().filter((s) -> !s.startsWith("_")).collect(Collectors.toSet());
     }
 
     private Map<String, Path> getScriptsMap() {

@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.game.MainScreen;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
 import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
@@ -65,6 +66,7 @@ public final class StateMainMenu extends State<MainScreen> {
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }
+        extra(context);
         final Point buttonTrainClose = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
         if (buttonTrainClose != null) {
             logger.log(Level.FINE, "Close previous train");
@@ -75,6 +77,10 @@ public final class StateMainMenu extends State<MainScreen> {
         platform.leftClick(getScreen().getButtonTroops(), true);
         platform.sleepRandom(500);
         context.setState(StateManageTroops.instance());
+    }
+
+    private void extra(Context context) {
+        ScriptManager.instance().run("_loop.js");
     }
 
     public void handleAttack(final Context context) throws InterruptedException {

@@ -1,3 +1,3 @@
 git pull
-mvn clean package -PnoChecks
+mvn -o clean package -PnoChecks
 java -jar $(ls -1rt target/nanobot*.jar)

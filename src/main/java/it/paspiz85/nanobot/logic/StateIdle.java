@@ -76,7 +76,7 @@ public final class StateIdle extends State<Screen> {
                 break;
             } else if (Screen.getInstance(PlatformScreen.class).isDisplayed()) {
                 logger.log(Level.INFO, "Detected PlatformScreen");
-                Point point = Screen.getInstance(PlatformScreen.class).searchButtonPlayGame();
+                final Point point = Screen.getInstance(PlatformScreen.class).searchButtonPlayGame();
                 if (point != null) {
                     platform.leftClick(point, true);
                 }
