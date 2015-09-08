@@ -20,6 +20,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
+import javax.swing.KeyStroke;
+
 import org.jnativehook.GlobalScreen;
 import org.jnativehook.mouse.NativeMouseEvent;
 import org.jnativehook.mouse.NativeMouseListener;
@@ -64,8 +66,13 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
 
     private static final Map<Character, Integer> KEY_MAP_SHIFTED = new HashMap<>();
     static {
+        KEY_MAP.put(' ', KeyEvent.VK_SPACE);
         KEY_MAP.put('.', KeyEvent.VK_PERIOD);
         KEY_MAP.put(',', KeyEvent.VK_COMMA);
+        KEY_MAP.put(':', KeyEvent.VK_COLON);
+        KEY_MAP.put(';', KeyEvent.VK_SEMICOLON);
+        KEY_MAP.put('!', KeyEvent.VK_EXCLAMATION_MARK);
+        KEY_MAP.put('_', KeyEvent.VK_UNDERSCORE);
     }
 
     public static BlueStacksWinPlatform instance() {
@@ -162,6 +169,12 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     @Override
     protected void doWrite(final String s) throws InterruptedException {
         for (final char ch : s.toCharArray()) {
+            
+
+            KeyStroke ks = KeyStroke.getKeyStroke(ch);
+            logger.info(ks.getKeyCode() + "_" + ks.getModifiers());
+            /*
+            ks.getModifiers()
             if (Character.isLetter(ch)) {
                 doKeyPress(ch, Character.isUpperCase(ch));
             } else if (Character.isDigit(ch)) {
@@ -173,6 +186,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
             } else {
                 logger.log(Level.WARNING, "Unable to write character '" + ch + "'");
             }
+            */
         }
     }
 
