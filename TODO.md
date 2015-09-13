@@ -13,8 +13,9 @@ install on win
 
 ## Improvments
 
-regina degli arcieri
+opzione per autostart dopo 30s
 count trofei
+abbassare il delta delle risorse prima di fine guerra
 attachi su miniere
 
 

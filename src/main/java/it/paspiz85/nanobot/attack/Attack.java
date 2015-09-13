@@ -121,7 +121,7 @@ public abstract class Attack {
         Thread.sleep(10000);
         EnemyInfo prevLoot = loot;
         int diff = Integer.MAX_VALUE;
-        final int delta = 500;
+        final int delta = 5;
         while (diff > delta) {
             Thread.sleep(15000);
             EnemyInfo currLoot;
