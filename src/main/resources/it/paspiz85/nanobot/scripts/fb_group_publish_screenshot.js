@@ -1,4 +1,5 @@
 var IOUtils = Java.type("org.apache.commons.io.IOUtils");
+var HttpClientBuilder = Java.type("org.apache.http.impl.client.HttpClientBuilder");
 var HttpGet = Java.type("org.apache.http.client.methods.HttpGet");
 var HttpPost = Java.type("org.apache.http.client.methods.HttpPost");
 var ArrayList = Java.type("java.util.ArrayList");
@@ -25,7 +26,13 @@ var System = Java.type("java.lang.System");
 			return null;
 		}
 		return optionsResolver[selection];
-	}	
+	}
+
+	function send(request) {
+		var httpClient = HttpClientBuilder.create().build();
+		var response = httpClient.execute(request);
+		return response;
+	}
 	
 	var request, response, resData, selection;
 	
@@ -44,7 +51,7 @@ var System = Java.type("java.lang.System");
 	IOUtils.write(accessToken, outStream);
 	outStream.close();
 	request = new HttpGet("https://graph.facebook.com/v2.4/me/groups?access_token=" + accessToken);
-	response = httpClient.execute(request);
+	response = send(request);
 	//alert(""+response.getStatusLine().getStatusCode());
 	if (response.getStatusLine().getStatusCode() != 200) {
 		alert(IOUtils.toString(response.getEntity().getContent()));
@@ -58,7 +65,7 @@ var System = Java.type("java.lang.System");
 	var groupId = selection.id;
 	//var groupId = "1556084751307517";
 	request = new HttpGet("https://graph.facebook.com/v2.4/" + groupId + "/albums?access_token=" + accessToken);
-	response = httpClient.execute(request);
+	response = send(request);
 	//alert(""+response.getStatusLine().getStatusCode());
 	if (response.getStatusLine().getStatusCode() != 200) {
 		alert(IOUtils.toString(response.getEntity().getContent()));
@@ -77,7 +84,7 @@ var System = Java.type("java.lang.System");
 			params.add(new BasicNameValuePair("access_token", accessToken));
 			params.add(new BasicNameValuePair("name", albumName));
 	        request.setEntity(new UrlEncodedFormEntity(params));
-			response = httpClient.execute(request);
+			response = send(request);
 			//alert(""+response.getStatusLine().getStatusCode());
 			if (response.getStatusLine().getStatusCode() != 200) {
 				alert(IOUtils.toString(response.getEntity().getContent()));
@@ -97,7 +104,7 @@ var System = Java.type("java.lang.System");
 		entityBuilder.addBinaryBody("source", platform.saveScreenshot("screen_" + new Date().getTime()));
 		//entityBuilder.addBinaryBody("source", new File("/Users/v-ppizzuti/workspace/nanobot/target/test-classes/features/img/train_1435772811358.png"));
 		request.setEntity(entityBuilder.build());
-		response = httpClient.execute(request);
+		response = send(request);
 		//alert(""+response.getStatusLine().getStatusCode());
 		if (response.getStatusLine().getStatusCode() != 200) {
 			alert(IOUtils.toString(response.getEntity().getContent()));

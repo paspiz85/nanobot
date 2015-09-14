@@ -30,9 +30,6 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.SimpleScriptContext;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-
 /**
  * Script Manager.
  *
@@ -83,8 +80,6 @@ public final class ScriptManager {
         context.setAttribute("logger", logger, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("buildInfo", BuildInfo.instance(), ScriptContext.ENGINE_SCOPE);
         context.setAttribute("platform", Platform.instance(), ScriptContext.ENGINE_SCOPE);
-        final HttpClient httpClient = HttpClientBuilder.create().build();
-        context.setAttribute("httpClient", httpClient, ScriptContext.ENGINE_SCOPE);
         return context;
     }
 

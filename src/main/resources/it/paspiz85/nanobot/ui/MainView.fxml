@@ -98,7 +98,7 @@
                         <Button fx:id="settingsButton" mnemonicParsing="false" onAction="#handleSettingsButtonAction" text="Settings" />
                         <Button fx:id="startButton" mnemonicParsing="false" onAction="#handleStartButtonAction" text="Start" />
                         <Button fx:id="stopButton" mnemonicParsing="false" onAction="#handleStopButtonAction" text="Stop" />
-                        <Button mnemonicParsing="false" onAction="#handleScriptsButtonAction" text="Scripts" />
+                        <Button fx:id="scriptsButton" mnemonicParsing="false" onAction="#handleScriptsButtonAction" text="Scripts" />
                      </children>
                   </HBox>
                </children>

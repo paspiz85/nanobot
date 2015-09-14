@@ -129,6 +129,9 @@ public class MainController implements ApplicationAwareController {
     private Button startButton;
 
     @FXML
+    private Button scriptsButton;
+
+    @FXML
     private Button stopButton;
 
     @FXML
@@ -413,8 +416,10 @@ public class MainController implements ApplicationAwareController {
 
     private void updateUI() {
         final boolean running = model.isRunning();
-        startButton.setDisable(running);
-        stopButton.setDisable(!running);
+        final boolean scriptRunning = model.isScriptRunning();
+        startButton.setDisable(running || scriptRunning);
+        stopButton.setDisable(!running && !scriptRunning);
+        scriptsButton.setDisable(running || scriptRunning);
         final Settings settings = model.loadSettings();
         goldField.setText(settings.getGoldThreshold() + "");
         elixirField.setText(settings.getElixirThreshold() + "");

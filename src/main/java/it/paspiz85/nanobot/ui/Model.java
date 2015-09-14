@@ -94,7 +94,7 @@ public final class Model {
         Settings.initialize();
         logger.log(Level.INFO, "Settings loaded");
         initRunningService(autoAdjustResolution, updateUI);
-        initScriptService();
+        initScriptService(updateUI);
     }
 
     private void initRunningService(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) {
@@ -122,7 +122,7 @@ public final class Model {
         });
     }
 
-    private void initScriptService() {
+    private void initScriptService(final Runnable updateUI) {
         scriptService = new Service<Void>() {
 
             @Override
@@ -131,6 +131,7 @@ public final class Model {
 
                     @Override
                     protected Void call() throws Exception {
+                        updateUI.run();
                         try {
                             Platform.instance().init();
                         } catch (final BotConfigurationException e) {
@@ -145,22 +146,29 @@ public final class Model {
         scriptService.setOnCancelled(event -> {
             scriptService.reset();
             runningScript = null;
+            updateUI.run();
             logger.warning("Script is cancelled");
         });
         scriptService.setOnFailed(event -> {
             scriptService.reset();
             runningScript = null;
+            updateUI.run();
             logger.warning("Script is failed");
         });
         scriptService.setOnSucceeded(event -> {
             scriptService.reset();
             runningScript = null;
+            updateUI.run();
             logger.log(Level.INFO, "Script is succeeded");
         });
     }
 
     public boolean isRunning() {
         return looper.isRunning();
+    }
+
+    public boolean isScriptRunning() {
+        return this.runningScript != null;
     }
 
     public Settings loadSettings() {
@@ -194,6 +202,10 @@ public final class Model {
         if (runningService.isRunning()) {
             runningService.cancel();
             runningService.reset();
+        }
+        if (scriptService.isRunning()) {
+            scriptService.cancel();
+            scriptService.reset();
         }
     }
 }
