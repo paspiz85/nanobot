@@ -40,7 +40,7 @@ public final class StateBattleBegin extends State<BattleBeginScreen> {
             platform.sleepRandom(100);
             try {
                 sleepUntilPointFound(() -> Screen.getInstance(AttackScreen.class).searchButtonNext());
-                platform.zoomUp();
+                //platform.zoomUp();
                 context.setState(StateAttack.instance());
                 return;
             } catch (final TimeoutException e) {
