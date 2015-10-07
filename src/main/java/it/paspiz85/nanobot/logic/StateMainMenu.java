@@ -99,4 +99,19 @@ public final class StateMainMenu extends State<MainScreen> {
         platform.sleepRandom(1000);
         context.setState(StateBattleBegin.instance());
     }
+
+    public void postMessage(final String message) throws InterruptedException {
+        platform.leftClick(new Point(18, 348), true);
+        platform.sleepRandom(1000);
+        platform.leftClick(new Point(76, 23), true);
+        platform.sleepRandom(200);
+        platform.leftClick(new Point(18, 63), true);
+        platform.sleepRandom(200);
+        platform.write(message);
+        logger.info("Posted message '" + message + "'");
+        platform.leftClick(new Point(282, 62), true);
+        platform.sleepRandom(200);
+        platform.leftClick(new Point(332, 353), true);
+        platform.sleepRandom(1000);
+    }
 }

@@ -3,6 +3,7 @@ package it.paspiz85.nanobot.platform.win;
 import it.paspiz85.nanobot.exception.BotConfigurationException;
 import it.paspiz85.nanobot.platform.AbstractPlatform;
 import it.paspiz85.nanobot.platform.Platform;
+import it.paspiz85.nanobot.platform.win.KeyboardMapping.Key;
 import it.paspiz85.nanobot.util.OS;
 import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Size;
@@ -13,10 +14,9 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.event.KeyEvent;
+import java.awt.im.InputContext;
 import java.awt.image.BufferedImage;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 
@@ -59,24 +59,6 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     private static final int WM_LBUTTONDOWN = 0x201;
 
     private static final int WM_LBUTTONUP = 0x202;
-
-    private static final Map<Character, Integer> KEY_MAP = new HashMap<>();
-
-    private static final Map<Character, Integer> KEY_MAP_SHIFTED = new HashMap<>();
-    static {
-        KEY_MAP.put(' ', KeyEvent.VK_SPACE);
-        KEY_MAP.put(',', KeyEvent.VK_COMMA);
-        KEY_MAP.put('-', KeyEvent.VK_MINUS);
-        KEY_MAP.put('.', KeyEvent.VK_PERIOD);
-        KEY_MAP.put('/', KeyEvent.VK_SLASH);
-        KEY_MAP.put(';', KeyEvent.VK_SEMICOLON);
-        KEY_MAP.put('=', KeyEvent.VK_EQUALS);
-        KEY_MAP.put('\\', KeyEvent.VK_BACK_SLASH);
-        KEY_MAP.put('*', KeyEvent.VK_ASTERISK);
-        KEY_MAP.put(':', KeyEvent.VK_COLON);
-        KEY_MAP.put('!', KeyEvent.VK_EXCLAMATION_MARK);
-        KEY_MAP.put('_', KeyEvent.VK_UNDERSCORE);
-    }
 
     public static BlueStacksWinPlatform instance() {
         return Utils.singleton(BlueStacksWinPlatform.class, () -> new BlueStacksWinPlatform());
@@ -126,6 +108,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        logger.log(Level.FINER, "doKeyPress " + keyCode + " " + shifted);
         while (isCtrlKeyDown()) {
             Thread.sleep(100);
         }
@@ -173,16 +156,26 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     protected void doWrite(final String s) throws InterruptedException {
         for (final char ch : s.toCharArray()) {
             if (Character.isLetter(ch)) {
-                doKeyPress(ch, Character.isUpperCase(ch));
+                if (Character.isUpperCase(ch)) {
+                    doKeyPress(ch, true);
+                } else {
+                    doKeyPress(Character.toUpperCase(ch), false);
+                }
             } else if (Character.isDigit(ch)) {
                 doKeyPress(ch, false);
-            } else if (KEY_MAP.containsKey(ch)) {
-                doKeyPress(KEY_MAP.get(ch), false);
-            } else if (KEY_MAP_SHIFTED.containsKey(ch)) {
-                doKeyPress(KEY_MAP_SHIFTED.get(ch), true);
             } else {
-                logger.log(Level.WARNING, "Unable to write character '" + ch + "'");
+                Key key = null;
+                final KeyboardMapping mapping = KeyboardMapping.get(InputContext.getInstance().getLocale());
+                if (mapping != null) {
+                    key = mapping.getKey(ch);
+                }
+                if (key != null) {
+                    doKeyPress(key.getCode(), key.isShifted());
+                } else {
+                    logger.log(Level.WARNING, "Unable to write character '" + ch + "'");
+                }
             }
+            sleepRandom(60);
         }
     }
 
