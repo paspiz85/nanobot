@@ -40,11 +40,26 @@ public class KeyboardMapping {
         it.putChar(')', KeyEvent.VK_9, true);
         it.putChar('=', KeyEvent.VK_0, true);
         it.putChar(' ', KeyEvent.VK_SPACE);
-        it.putChar('.', KeyEvent.VK_PERIOD);
-        it.putChar('+', KeyEvent.VK_ADD);
-        it.putChar('-', KeyEvent.VK_SUBTRACT);
-        
+        //it.putChar('.', KeyEvent.VK_PERIOD);
+        //it.putChar('+', KeyEvent.VK_ADD);
+        //it.putChar('-', KeyEvent.VK_SUBTRACT);
+
+        it.putChar('\\', 0xE2);
+        it.putChar('|', 0xE2, true);
+        it.putChar('\'', 0xDE);
+        it.putChar('?', 0xDE, true);
+        it.putChar('\'', 0xDE);
+        it.putChar('?', 0xDE, true);
+        it.putChar('+', 0xBB);
+        it.putChar('*', 0xBB, true);
+        it.putChar('-', 0xBD);
+        it.putChar('_', 0xBD, true);
+        it.putChar('.', 0xBE);
+        it.putChar(':', 0xBE, true);
         it.putChar(',', 0xBC);
+        it.putChar(';', 0xBC, true);
+        it.putChar('<', 0xBC);
+        it.putChar('>', 0xBC, true);
 
         /*
         it.putChar('\'', KeyEvent.VK_QUOTE);
@@ -56,11 +71,11 @@ public class KeyboardMapping {
         it.putChar('_', KeyEvent.VK_MINUS, true);
         */
         //it.putChar(',', KeyEvent.VK_COMMA); // screenshot
-        it.putChar(';', KeyEvent.VK_SEMICOLON);
+        //it.putChar(';', KeyEvent.VK_SEMICOLON);
         //it.putChar('\\', KeyEvent.VK_BACK_SLASH); // back
-        it.putChar('*', KeyEvent.VK_ASTERISK);
-        it.putChar(':', KeyEvent.VK_COLON);
-        it.putChar('_', KeyEvent.VK_UNDERSCORE);
+        //it.putChar('*', KeyEvent.VK_ASTERISK);
+        //it.putChar(':', KeyEvent.VK_COLON);
+        //it.putChar('_', KeyEvent.VK_UNDERSCORE);
         mappings.put(Locale.ITALY, it);
     }
     
