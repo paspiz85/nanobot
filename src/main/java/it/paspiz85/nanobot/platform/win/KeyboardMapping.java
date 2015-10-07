@@ -11,8 +11,14 @@ import java.util.Map;
  * @author paspiz85
  *
  */
-public class KeyboardMapping {
+public final class KeyboardMapping {
 
+    /**
+     * Single key mapping.
+     *
+     * @author paspiz85
+     *
+     */
     public static class Key {
 
         private final int code;
