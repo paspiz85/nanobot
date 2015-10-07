@@ -275,10 +275,10 @@ public abstract class AbstractPlatform implements Platform {
     public final void zoomUp() throws InterruptedException {
         doActivate();
         logger.log(Level.CONFIG, "Zooming out...");
-        final int notch = 10;
+        final int notch = 14;
         for (int i = 0; i < notch; i++) {
             doSingleZoomUp();
-            Thread.sleep(1400);
+            Thread.sleep(1000);
         }
     }
 }
