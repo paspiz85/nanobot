@@ -174,7 +174,11 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     protected void doWrite(final String s) throws InterruptedException {
         for (final char ch : s.toCharArray()) {
             if (Character.isLetter(ch)) {
-                doKeyPress(ch, Character.isUpperCase(ch));
+                if (Character.isUpperCase(ch)) {
+                    doKeyPress(ch, true);
+                } else {
+                    doKeyPress(Character.toUpperCase(ch), false);
+                }
             } else if (Character.isDigit(ch)) {
                 doKeyPress(ch, false);
             } else if (KEY_MAP.containsKey(ch)) {
