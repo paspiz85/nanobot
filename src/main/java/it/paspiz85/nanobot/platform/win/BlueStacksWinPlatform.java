@@ -126,6 +126,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     }
 
     protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        logger.log(Level.FINER, "doKeyPress " + keyCode + " " + shifted);
         while (isCtrlKeyDown()) {
             Thread.sleep(100);
         }
