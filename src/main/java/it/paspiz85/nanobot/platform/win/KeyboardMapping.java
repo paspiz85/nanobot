@@ -31,6 +31,8 @@ public class KeyboardMapping {
 
     static {
         KeyboardMapping it = new KeyboardMapping();
+        it.putChar('\\', 0xDC);
+        it.putChar('|', 0xDC, true);
         it.putChar('!', KeyEvent.VK_1, true);
         it.putChar('"', KeyEvent.VK_2, true);
         it.putChar('%', KeyEvent.VK_5, true);
@@ -39,6 +41,8 @@ public class KeyboardMapping {
         it.putChar('(', KeyEvent.VK_8, true);
         it.putChar(')', KeyEvent.VK_9, true);
         it.putChar('=', KeyEvent.VK_0, true);
+        it.putChar('\'', 0xDB);
+        it.putChar('?', 0xDB,true);
         it.putChar('+', 0xBB);
         it.putChar('*', 0xBB, true);
         it.putChar('-', 0xBD);
@@ -52,13 +56,15 @@ public class KeyboardMapping {
         it.putChar('>', 0xE2, true);
         it.putChar('à', 0xDE);
         it.putChar('°', 0xDE, true);
+        it.putChar('ì', 0xDD);
+        it.putChar('^', 0xDD, true);
         it.putChar('ù', 0xBF);
 
-        it.putChar('\'', 0xDF);
-        it.putChar('?', 0xDF, true);
-        it.putChar('£', 0xDB);
-        it.putChar('$', 0xDC);
-        it.putChar('^', 0xDD);
+        it.putChar('£', 0xBA);
+        it.putChar('$', 0xC0);
+        
+
+        
         mappings.put(Locale.ITALY, it);
     }
     
