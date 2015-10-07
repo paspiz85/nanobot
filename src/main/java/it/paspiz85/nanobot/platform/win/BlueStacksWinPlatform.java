@@ -165,7 +165,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
                 doKeyPress(ch, false);
             } else {
                 Key key = null;
-                KeyboardMapping mapping = KeyboardMapping.get(InputContext.getInstance().getLocale());
+                final KeyboardMapping mapping = KeyboardMapping.get(InputContext.getInstance().getLocale());
                 if (mapping != null) {
                     key = mapping.getKey(ch);
                 }

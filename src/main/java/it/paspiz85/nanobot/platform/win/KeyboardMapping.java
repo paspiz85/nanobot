@@ -15,11 +15,11 @@ public class KeyboardMapping {
 
     public static class Key {
 
-        private int code;
+        private final int code;
 
-        private boolean shifted;
+        private final boolean shifted;
 
-        public Key(int code, boolean shifted) {
+        public Key(final int code, final boolean shifted) {
             this.code = code;
             this.shifted = shifted;
         }
@@ -35,7 +35,7 @@ public class KeyboardMapping {
 
     private static Map<Locale, KeyboardMapping> mappings = new HashMap<>();
     static {
-        KeyboardMapping it = new KeyboardMapping();
+        final KeyboardMapping it = new KeyboardMapping();
         it.putChar('\\', 0xDC);
         it.putChar('|', 0xDC, true);
         it.putChar('!', KeyEvent.VK_1, true);
@@ -70,26 +70,26 @@ public class KeyboardMapping {
         mappings.put(Locale.ITALY, it);
     }
 
-    private final Map<Character, Key> mapping;
-
-    public static KeyboardMapping get(Locale locale) {
+    public static KeyboardMapping get(final Locale locale) {
         return mappings.get(locale);
     }
+
+    private final Map<Character, Key> mapping;
 
     private KeyboardMapping() {
         mapping = new HashMap<>();
     }
 
-    public Key getKey(char ch) {
+    public Key getKey(final char ch) {
         return mapping.get(ch);
     }
 
-    private void putChar(char ch, int code) {
+    private void putChar(final char ch, final int code) {
         putChar(ch, code, false);
     }
 
-    private void putChar(char ch, int code, boolean shifted) {
-        Key key = new Key(code, shifted);
+    private void putChar(final char ch, final int code, final boolean shifted) {
+        final Key key = new Key(code, shifted);
         mapping.put(ch, key);
     }
 }
