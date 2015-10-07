@@ -5,6 +5,12 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Keyboard mapping layout.
+ *
+ * @author paspiz85
+ *
+ */
 public class KeyboardMapping {
 
     public static class Key {
@@ -28,7 +34,6 @@ public class KeyboardMapping {
     }
 
     private static Map<Locale, KeyboardMapping> mappings = new HashMap<>();
-
     static {
         KeyboardMapping it = new KeyboardMapping();
         it.putChar('\\', 0xDC);
@@ -42,7 +47,7 @@ public class KeyboardMapping {
         it.putChar(')', KeyEvent.VK_9, true);
         it.putChar('=', KeyEvent.VK_0, true);
         it.putChar('\'', 0xDB);
-        it.putChar('?', 0xDB,true);
+        it.putChar('?', 0xDB, true);
         it.putChar('+', 0xBB);
         it.putChar('*', 0xBB, true);
         it.putChar('-', 0xBD);
@@ -56,18 +61,15 @@ public class KeyboardMapping {
         it.putChar('>', 0xE2, true);
         it.putChar('à', 0xDE);
         it.putChar('°', 0xDE, true);
+        it.putChar('è', 0xBA);
+        it.putChar('é', 0xBA, true);
         it.putChar('ì', 0xDD);
         it.putChar('^', 0xDD, true);
+        it.putChar('ò', 0xC0);
         it.putChar('ù', 0xBF);
-
-        it.putChar('£', 0xBA);
-        it.putChar('$', 0xC0);
-        
-
-        
         mappings.put(Locale.ITALY, it);
     }
-    
+
     private final Map<Character, Key> mapping;
 
     public static KeyboardMapping get(Locale locale) {
