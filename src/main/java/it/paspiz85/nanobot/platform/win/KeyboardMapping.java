@@ -32,6 +32,9 @@ public class KeyboardMapping {
     static {
         KeyboardMapping it = new KeyboardMapping();
         it.putChar('!', KeyEvent.VK_1, true);
+        it.putChar('"', KeyEvent.VK_2, true);
+        it.putChar('%', KeyEvent.VK_5, true);
+        it.putChar('&', KeyEvent.VK_6, true);
         it.putChar('/', KeyEvent.VK_7, true);
         it.putChar('(', KeyEvent.VK_8, true);
         it.putChar(')', KeyEvent.VK_9, true);
@@ -41,9 +44,7 @@ public class KeyboardMapping {
         it.putChar('+', KeyEvent.VK_ADD);
         it.putChar('-', KeyEvent.VK_SUBTRACT);
         
-
-        it.putChar('"', KeyEvent.VK_2, true);
-        it.putChar('&', KeyEvent.VK_6, true);
+        it.putChar(',', 0xBC);
 
         /*
         it.putChar('\'', KeyEvent.VK_QUOTE);
