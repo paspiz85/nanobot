@@ -51,6 +51,7 @@ git tag -l
 
 To prepare a release (POM changes and tag create):
 ```
+git checkout master && git pull && \
 mvn release:clean release:prepare && \
 mvn github-release:release -D$(grep scm.tag=v release.properties) && \
 mvn release:clean
