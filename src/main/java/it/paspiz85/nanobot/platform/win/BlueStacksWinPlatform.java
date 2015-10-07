@@ -184,6 +184,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
             } else {
                 logger.log(Level.WARNING, "Unable to write character '" + ch + "'");
             }
+            sleepRandom(200);
         }
     }
 
