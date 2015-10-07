@@ -50,15 +50,15 @@ public class KeyboardMapping {
         it.putChar(';', 0xBC, true);
         it.putChar('<', 0xE2);
         it.putChar('>', 0xE2, true);
-
-        it.putChar('\'', 0xBF);
-        it.putChar('?', 0xBF, true);
         it.putChar('à', 0xDE);
         it.putChar('°', 0xDE, true);
-        it.putChar('è', 0xDB);
-        it.putChar('è', 0xDC);
-        it.putChar('ò', 0xDD);
-        it.putChar('ù', 0xDF);
+        it.putChar('ù', 0xBF);
+
+        it.putChar('\'', 0xDF);
+        it.putChar('?', 0xDF, true);
+        it.putChar('£', 0xDB);
+        it.putChar('$', 0xDC);
+        it.putChar('^', 0xDD);
         mappings.put(Locale.ITALY, it);
     }
     
