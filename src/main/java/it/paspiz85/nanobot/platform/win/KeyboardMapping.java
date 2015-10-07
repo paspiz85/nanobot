@@ -31,8 +31,10 @@ public class KeyboardMapping {
 
     static {
         KeyboardMapping it = new KeyboardMapping();
-        it.putChar(' ', KeyEvent.VK_SPACE, false);
+        it.putChar(' ', KeyEvent.VK_SPACE);
         it.putChar('.', KeyEvent.VK_PERIOD);
+        it.putChar(':', KeyEvent.VK_PERIOD, true);
+        
         it.putChar(',', KeyEvent.VK_COMMA); // screenshot
         it.putChar('-', KeyEvent.VK_MINUS);
         it.putChar('/', KeyEvent.VK_SLASH);
