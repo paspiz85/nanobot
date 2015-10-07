@@ -93,6 +93,7 @@ public final class StateMainMenu extends State<MainScreen> {
     }
 
     public void handleAttack(final Context context) throws InterruptedException {
+        platform.zoomUp();
         logger.log(Level.FINE, "Press Attack");
         platform.leftClick(getScreen().getButtonAttack(), true);
         platform.sleepRandom(1000);
