@@ -34,16 +34,19 @@ public class KeyboardMapping {
         it.putChar(' ', KeyEvent.VK_SPACE);
         it.putChar('.', KeyEvent.VK_PERIOD);
         it.putChar(':', KeyEvent.VK_PERIOD, true);
+
+        it.putChar('!', KeyEvent.VK_1, true);
+        it.putChar('/', KeyEvent.VK_7, true);
         
         it.putChar(',', KeyEvent.VK_COMMA); // screenshot
         it.putChar('-', KeyEvent.VK_MINUS);
-        it.putChar('/', KeyEvent.VK_SLASH);
+        //it.putChar('/', KeyEvent.VK_SLASH);
         it.putChar(';', KeyEvent.VK_SEMICOLON);
         it.putChar('=', KeyEvent.VK_EQUALS);
         it.putChar('\\', KeyEvent.VK_BACK_SLASH); // back
         it.putChar('*', KeyEvent.VK_ASTERISK);
-        it.putChar(':', KeyEvent.VK_COLON);
-        it.putChar('!', KeyEvent.VK_EXCLAMATION_MARK);
+        //it.putChar(':', KeyEvent.VK_COLON);
+        //it.putChar('!', KeyEvent.VK_EXCLAMATION_MARK);
         it.putChar('_', KeyEvent.VK_UNDERSCORE);
         mappings.put(Locale.ITALY, it);
     }
