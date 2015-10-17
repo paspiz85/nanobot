@@ -79,7 +79,9 @@ public final class StateMainMenu extends State<MainScreen> {
         if (Settings.instance().isCollectResources()) {
             collecting(context);
         }
-        extra(context);
+        if (Settings.instance().isExtraFunctions()) {
+            extra(context);
+        }
         final Point buttonTrainClose = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
         if (buttonTrainClose != null) {
             logger.log(Level.FINE, "Close previous train");
@@ -101,10 +103,19 @@ public final class StateMainMenu extends State<MainScreen> {
     }
 
     public void postMessage(final String message) throws InterruptedException {
+        postMessage(message, false);
+    }
+
+    public void postMessage(final String message, final boolean clan) throws InterruptedException {
         platform.leftClick(new Point(18, 348), true);
         platform.sleepRandom(1000);
-        platform.leftClick(new Point(76, 23), true);
-        platform.sleepRandom(200);
+        if (clan) {
+            platform.leftClick(new Point(223, 23), true);
+            platform.sleepRandom(200);
+        } else {
+            platform.leftClick(new Point(76, 23), true);
+            platform.sleepRandom(200);
+        }
         platform.leftClick(new Point(18, 63), true);
         platform.sleepRandom(200);
         platform.write(message);

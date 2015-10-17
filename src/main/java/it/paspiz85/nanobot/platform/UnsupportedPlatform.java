@@ -32,6 +32,11 @@ public class UnsupportedPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        throw new UnsupportedOperationException(MESSAGE);
+    }
+
+    @Override
     protected void doLeftClick(final Point point) throws InterruptedException {
         throw new UnsupportedOperationException(MESSAGE);
     }

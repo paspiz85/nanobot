@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.scripting;
 
+import it.paspiz85.nanobot.logic.StateMainMenu;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.BuildInfo;
 import it.paspiz85.nanobot.util.Utils;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Level;
@@ -78,6 +80,17 @@ public final class ScriptManager {
         context.setAttribute("prompt", prompt, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("select", select, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("logger", logger, ScriptContext.ENGINE_SCOPE);
+        context.setAttribute("postMessage", new BiConsumer<String, Boolean>() {
+
+            @Override
+            public void accept(String message, Boolean clan) {
+                try {
+                    StateMainMenu.instance().postMessage(message, clan);
+                } catch (InterruptedException e) {
+                    logger.log(Level.SEVERE, e.getMessage(), e);
+                }
+            }
+        }, ScriptContext.ENGINE_SCOPE);
         context.setAttribute("buildInfo", BuildInfo.instance(), ScriptContext.ENGINE_SCOPE);
         context.setAttribute("platform", Platform.instance(), ScriptContext.ENGINE_SCOPE);
         return context;
