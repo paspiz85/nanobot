@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.logic;
 
+import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
 import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.game.TroopsInfo;
@@ -47,7 +48,7 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
-        if (getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops) {
+        if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops) && Settings.instance().getAttackStrategy() != Attack.noStrategy()) {
             logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
             platform.leftClick(getScreen().getButtonTrainClose(), true);
