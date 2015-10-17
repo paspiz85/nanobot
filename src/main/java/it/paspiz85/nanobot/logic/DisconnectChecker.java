@@ -71,10 +71,13 @@ public class DisconnectChecker implements Runnable {
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
                     StateIdle.instance().setReloading(true);
-                    platform.leftClick(UNIT_RECONNECT, true);
-                    platform.sleepRandom(5000);
-                    Thread.sleep(2000);
-                    StateIdle.instance().setReloading(false);
+                    try {
+                        platform.leftClick(UNIT_RECONNECT, true);
+                        platform.sleepRandom(5000);
+                        Thread.sleep(2000);
+                    } finally {
+                        StateIdle.instance().setReloading(false);
+                    }
                 }
                 Thread.sleep(30000);
             }
