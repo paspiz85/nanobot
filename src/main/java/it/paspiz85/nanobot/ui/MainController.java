@@ -75,6 +75,9 @@ public class MainController implements ApplicationAwareController {
     private TextField elixirField;
 
     @FXML
+    private CheckBox extraFuncCheckBox;
+
+    @FXML
     private Hyperlink githubLink;
 
     @FXML
@@ -219,6 +222,7 @@ public class MainController implements ApplicationAwareController {
             settings.getRaxInfo()[3] = rax4ComboBox.getValue();
             settings.getRaxInfo()[4] = rax5ComboBox.getValue();
             settings.getRaxInfo()[5] = rax6ComboBox.getValue();
+            settings.setExtraFunctions(extraFuncCheckBox.isSelected());
         });
         showSettings(false);
     }
@@ -437,5 +441,6 @@ public class MainController implements ApplicationAwareController {
         rax4ComboBox.getSelectionModel().select(settings.getRaxInfo()[3]);
         rax5ComboBox.getSelectionModel().select(settings.getRaxInfo()[4]);
         rax6ComboBox.getSelectionModel().select(settings.getRaxInfo()[5]);
+        extraFuncCheckBox.setSelected(settings.isExtraFunctions());
     }
 }

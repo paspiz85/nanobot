@@ -49,6 +49,8 @@ public interface Platform {
      */
     void init(BooleanSupplier autoAdjustResolution) throws BotConfigurationException;
 
+    void keyPress(int keyCode, boolean shifted) throws InterruptedException;
+
     /**
      * Do a left click on game. Randomize is true.
      *

@@ -141,6 +141,12 @@ public final class BlueStacksMacPlatform extends AbstractPlatform {
     }
 
     @Override
+    protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("not implemented");
+    }
+
+    @Override
     protected void doLeftClick(final Point point) throws InterruptedException {
         // TODO non funziona
         final PointerInfo a = MouseInfo.getPointerInfo();

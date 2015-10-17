@@ -107,6 +107,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
         throw new BotConfigurationException(String.format("Please restart %s to fix resolution", BS_WINDOW_NAME));
     }
 
+    @Override
     protected void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException {
         logger.log(Level.FINER, "doKeyPress " + keyCode + " " + shifted);
         while (isCtrlKeyDown()) {
@@ -154,7 +155,9 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
 
     @Override
     protected void doWrite(final String s) throws InterruptedException {
-        for (final char ch : s.toCharArray()) {
+        final char[] chars = s.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            final char ch = chars[i];
             if (Character.isLetter(ch)) {
                 if (Character.isUpperCase(ch)) {
                     doKeyPress(ch, true);

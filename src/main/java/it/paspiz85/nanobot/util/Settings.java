@@ -53,8 +53,6 @@ public final class Settings {
         return INSTANCE.isInitialized;
     }
 
-    private Class<? extends Platform> preferredPlatform;
-
     private Attack attackStrategy = Attack.noStrategy();
 
     private final TroopButton[] availableTroops;
@@ -69,6 +67,8 @@ public final class Settings {
 
     private int elixirThreshold = 100000;
 
+    private boolean extraFunctions;
+
     private int goldThreshold = 100000;
 
     private boolean isInitialized;
@@ -78,6 +78,8 @@ public final class Settings {
     private boolean matchAllConditions;
 
     private int maxThThreshold;
+
+    private Class<? extends Platform> preferredPlatform;
 
     private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
             TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
@@ -150,6 +152,10 @@ public final class Settings {
         return detectEmptyCollectors;
     }
 
+    public boolean isExtraFunctions() {
+        return extraFunctions;
+    }
+
     public boolean isMatchAllConditions() {
         return matchAllConditions;
     }
@@ -176,6 +182,10 @@ public final class Settings {
 
     public void setElixirThreshold(final int elixirThreshold) {
         this.elixirThreshold = elixirThreshold;
+    }
+
+    public void setExtraFunctions(final boolean extraFunctions) {
+        this.extraFunctions = extraFunctions;
     }
 
     public void setGoldThreshold(final int goldThreshold) {

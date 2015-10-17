@@ -56,6 +56,8 @@ public abstract class AbstractPlatform implements Platform {
 
     protected abstract void doApplySize(Size size) throws BotConfigurationException;
 
+    protected abstract void doKeyPress(final int keyCode, final boolean shifted) throws InterruptedException;
+
     /**
      * Do a left click in the game.
      *
@@ -117,6 +119,12 @@ public abstract class AbstractPlatform implements Platform {
         setup();
         setupResolution(autoAdjustResolution);
         logger.log(Level.CONFIG, "Setup is successful");
+    }
+
+    @Override
+    public final void keyPress(final int keyCode, final boolean shifted) throws InterruptedException {
+        doActivate();
+        doKeyPress(keyCode, shifted);
     }
 
     @Override

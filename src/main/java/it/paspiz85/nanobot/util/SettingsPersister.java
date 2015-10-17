@@ -32,6 +32,8 @@ public final class SettingsPersister {
 
     private static final String PROPERTY_ELIXIR = "elixir";
 
+    private static final String PROPERTY_EXTRA_FUNCTIONS = "extra_functions";
+
     private static final String PROPERTY_GOLD = "gold";
 
     private static final String PROPERTY_IS_MATCH_ALL_CONDS = "match_all";
@@ -122,7 +124,7 @@ public final class SettingsPersister {
                 try {
                     @SuppressWarnings("unchecked")
                     final Class<? extends Platform> preferredPlatform = (Class<? extends Platform>) Class
-                    .forName(preferredPlatformProperty);
+                            .forName(preferredPlatformProperty);
                     settings.setPreferredPlatform(preferredPlatform);
                 } catch (final ClassNotFoundException e1) {
                     logger.log(Level.SEVERE, "Platform not found: " + preferredPlatformProperty);
@@ -149,6 +151,10 @@ public final class SettingsPersister {
             final String logLevel = configProperties.getProperty(PROPERTY_LOG_LEVEL);
             if (logLevel != null) {
                 settings.setLogLevel(Level.parse(logLevel));
+            }
+            final String extraFunctionsProperty = configProperties.getProperty(PROPERTY_EXTRA_FUNCTIONS);
+            if (extraFunctionsProperty != null) {
+                settings.setExtraFunctions(Boolean.parseBoolean(extraFunctionsProperty));
             }
         } catch (final Exception e) {
             logger.log(Level.SEVERE, "Unable to read configuration file", e);
@@ -186,6 +192,7 @@ public final class SettingsPersister {
             if (preferredPlatform != null) {
                 configProperties.setProperty(PROPERTY_PREFERRED_PLATFORM, preferredPlatform.getName());
             }
+            configProperties.setProperty(PROPERTY_EXTRA_FUNCTIONS, String.valueOf(settings.isExtraFunctions()));
             configProperties.store(fos, null);
             logger.log(Level.INFO, "Settings are saved");
         } catch (final Exception e) {

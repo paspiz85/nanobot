@@ -36,13 +36,13 @@ public class GenericSteps {
         private BufferedImage screenshot;
 
         @Override
-        protected Color getColor(final Point point) {
-            return new Color(screenshot.getRGB(point.x(), point.y()));
+        protected BufferedImage doScreenshot(final Point p1, final Point p2) {
+            return getSubimage(screenshot, p1, p2);
         }
 
         @Override
-        protected BufferedImage doScreenshot(final Point p1, final Point p2) {
-            return getSubimage(screenshot, p1, p2);
+        protected Color getColor(final Point point) {
+            return new Color(screenshot.getRGB(point.x(), point.y()));
         }
 
         public void setScreenshot(final BufferedImage screenshot) {
