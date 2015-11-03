@@ -91,7 +91,7 @@ public final class Model {
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
         // setup configUtils
-        Settings.initialize();
+        //Settings.initialize();
         logger.log(Level.INFO, "Settings loaded");
         initRunningService(autoAdjustResolution, updateUI);
         initScriptService(updateUI);

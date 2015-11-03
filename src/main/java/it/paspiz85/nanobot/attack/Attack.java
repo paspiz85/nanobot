@@ -22,7 +22,7 @@ public abstract class Attack {
 
     private static AttackScreen attackScreenParser = Screen.getInstance(AttackScreen.class);
 
-    private static Attack[] availableStrategies;
+    private static List<Attack> availableStrategies;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
@@ -44,7 +44,7 @@ public abstract class Attack {
         return zeroIfNull(prevLoot) > zeroIfNull(currLoot) ? zeroIfNull(prevLoot) - zeroIfNull(currLoot) : 0;
     }
 
-    public static Attack[] getAvailableStrategies() {
+    public static List<Attack> getAvailableStrategies() {
         if (availableStrategies == null) {
             final List<Attack> list = new ArrayList<>();
             list.add(noStrategy());
@@ -54,9 +54,22 @@ public abstract class Attack {
             list.add(new Attack4SideParallel());
             list.add(new Attack4SideParallelHalf2Wave());
             list.add(new Attack4SideParallelFull2Wave());
-            availableStrategies = list.toArray(new Attack[0]);
+            availableStrategies = list;
         }
         return availableStrategies;
+    }
+    
+    public static final Attack getByName(String name) {
+        for (final Attack attack : Attack.getAvailableStrategies()) {
+            if (attack.getName().equals(name)) {
+                return attack;
+            }
+        }
+        throw new IllegalArgumentException(name);
+    }
+    
+    public final String getName() {
+        return getClass().getSimpleName();
     }
 
     protected static Point getButtonAttackUnit(final int x) {
