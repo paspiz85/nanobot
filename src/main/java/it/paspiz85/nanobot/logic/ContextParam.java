@@ -18,7 +18,7 @@ public enum ContextParam {
     }
 
     public void check(Object value) {
-        if (type.isInstance(value)) {
+        if (!type.isInstance(value)) {
             throw new IllegalArgumentException("value '" + value + "' is not of type '" + type + "'");
         }
     }
