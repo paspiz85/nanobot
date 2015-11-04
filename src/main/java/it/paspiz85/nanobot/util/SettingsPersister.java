@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.util;
 
-import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.platform.Platform;
 
@@ -124,7 +123,7 @@ public final class SettingsPersister {
                 try {
                     @SuppressWarnings("unchecked")
                     final Class<? extends Platform> preferredPlatform = (Class<? extends Platform>) Class
-                            .forName(preferredPlatformProperty);
+                    .forName(preferredPlatformProperty);
                     settings.setPreferredPlatform(preferredPlatform);
                 } catch (final ClassNotFoundException e1) {
                     logger.log(Level.SEVERE, "Platform not found: " + preferredPlatformProperty);
@@ -132,17 +131,7 @@ public final class SettingsPersister {
             }
             final String attackStratProperty = configProperties.getProperty(PROPERTY_ATTACK_STRAT);
             if (attackStratProperty != null) {
-                boolean found = false;
-                for (final Attack attack : Attack.getAvailableStrategies()) {
-                    if (attack.getClass().getSimpleName().equals(attackStratProperty)) {
-                        settings.setAttackStrategy(attack);
-                        found = true;
-                        break;
-                    }
-                }
-                if (!found) {
-                    throw new IllegalArgumentException(attackStratProperty);
-                }
+                settings.setAttackStrategy(attackStratProperty);
             }
             final String raxInfoProperty = configProperties.getProperty(PROPERTY_RAX_INFO);
             if (raxInfoProperty != null) {
@@ -175,8 +164,7 @@ public final class SettingsPersister {
             configProperties.setProperty(PROPERTY_TRAIN_MAX_TROOPS, String.valueOf(settings.getTrainMaxTroops()));
             configProperties.setProperty(PROPERTY_UUID, settings.getUuid().toString());
             configProperties.setProperty(PROPERTY_USER_MAIL_ADDRESS, settings.getUserMailAddress());
-            configProperties.setProperty(PROPERTY_ATTACK_STRAT,
-                    String.valueOf(settings.getAttackStrategy().getClass().getSimpleName()));
+            configProperties.setProperty(PROPERTY_ATTACK_STRAT, settings.getAttackStrategy());
             final TroopButton[] raxInfo = settings.getRaxInfo();
             final StringBuilder raxProp = new StringBuilder();
             for (int i = 0; i < raxInfo.length; i++) {

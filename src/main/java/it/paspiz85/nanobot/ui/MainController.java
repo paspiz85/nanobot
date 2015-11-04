@@ -10,6 +10,7 @@ import it.paspiz85.nanobot.util.Settings;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
@@ -48,7 +49,7 @@ public class MainController implements ApplicationAwareController {
     private Application application;
 
     @FXML
-    private ComboBox<Attack> autoAttackComboBox;
+    private ComboBox<String> autoAttackComboBox;
 
     @FXML
     private CheckBox collectResourcesCheckBox;
@@ -333,7 +334,9 @@ public class MainController implements ApplicationAwareController {
         rax4ComboBox.getItems().addAll(availableTroops);
         rax5ComboBox.getItems().addAll(availableTroops);
         rax6ComboBox.getItems().addAll(availableTroops);
-        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies());
+        autoAttackComboBox.getItems().addAll(Attack.getAvailableStrategies().stream().map((e) -> {
+            return e.getName();
+        }).collect(Collectors.toList()));
         autoAttackComboBox.setValue(autoAttackComboBox.getItems().get(0));
         final ChangeListener<String> intFieldListener = (observable, oldValue, newValue) -> {
             try {

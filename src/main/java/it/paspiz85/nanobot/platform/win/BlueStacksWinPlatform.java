@@ -156,8 +156,7 @@ public class BlueStacksWinPlatform extends AbstractPlatform {
     @Override
     protected void doWrite(final String s) throws InterruptedException {
         final char[] chars = s.toCharArray();
-        for (int i = 0; i < chars.length; i++) {
-            final char ch = chars[i];
+        for (final char ch : chars) {
             if (Character.isLetter(ch)) {
                 if (Character.isUpperCase(ch)) {
                     doKeyPress(ch, true);

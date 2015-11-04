@@ -95,7 +95,7 @@ public final class StateAttack extends State<AttackScreen> {
                 // to avoid server/client sync from nexting too fast
                 platform.sleepRandom(1000);
             } else {
-                final Attack attackStrategy = Settings.instance().getAttackStrategy();
+                final Attack attackStrategy = Attack.getByName(Settings.instance().getAttackStrategy());
                 if (attackStrategy == Attack.manualStrategy()) {
                     if (enemyInfo.equals(prevLoot)) {
                         logger.log(Level.INFO, "User is manually attacking/deciding");

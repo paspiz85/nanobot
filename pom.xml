@@ -2,17 +2,22 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>it.paspiz85</groupId>
 	<artifactId>nanobot</artifactId>
-	<version>1.1.26-SNAPSHOT</version>
+	<version>0.3.0-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>1.8</java.version>
+		<maven.version>3.0.4</maven.version>
 		<maven-clean-plugin.version>2.6.1</maven-clean-plugin.version>
 		<maven-resources-plugin.version>2.7</maven-resources-plugin.version>
 		<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 		<maven-surefire-plugin.version>2.18.1</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>2.13</maven-failsafe-plugin.version>
 		<maven-jar-plugin.version>2.6</maven-jar-plugin.version>
 		<maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
+		<maven-dependency-plugin.version>2.10</maven-dependency-plugin.version>
+		<maven-duplicate-finder-plugin.version>1.2.1</maven-duplicate-finder-plugin.version>
+		<maven-enforcer-plugin.version>1.3.1</maven-enforcer-plugin.version>
 		<maven-checkstyle-plugin.version>2.16</maven-checkstyle-plugin.version>
 		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
 		<maven-source-plugin.version>2.4</maven-source-plugin.version>
@@ -24,12 +29,24 @@
 		<mainClass>it.paspiz85.nanobot.Start</mainClass>
 	</properties>
 
+    <prerequisites>
+        <maven>${maven.version}</maven>
+    </prerequisites>
+
 	<scm>
 		<connection>scm:git:git@github.com:paspiz85/nanobot.git</connection>
 		<url>scm:git:git@github.com:paspiz85/nanobot.git</url>
 		<developerConnection>scm:git:git@github.com:paspiz85/nanobot.git</developerConnection>
 		<tag>HEAD</tag>
 	</scm>
+
+	<developers>
+        <developer>
+            <name>Pizzuti Pasquale</name>
+            <email>paspiz85@gmail.com</email>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
 	<repositories>
 		<repository>
@@ -106,13 +123,34 @@
 				<version>${maven-surefire-plugin.version}</version>
 				<configuration>
 					<excludes>
+						<exclude>**/*IT.java</exclude>
 						<exclude>**/Wip*Test.java</exclude>
-						<exclude>**/Wip*IT.java</exclude>
 						<exclude>**/Extra*Test.java</exclude>
-						<exclude>**/Extra*IT.java</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>${maven-failsafe-plugin.version}</version>
+                <configuration>
+                    <includes>
+                        <include>**/*IT.java</include>
+                    </includes>
+					<excludes>
+						<exclude>**/Extra*IT.java</exclude>
+					</excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>failsafe-integration-tests</id>
+                        <phase>integration-test</phase>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-jar-plugin</artifactId>
@@ -153,6 +191,74 @@
 					</archive>
 				</configuration>
 			</plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+				<version>${maven-dependency-plugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.basepom.maven</groupId>
+                <artifactId>duplicate-finder-maven-plugin</artifactId>
+				<version>${maven-duplicate-finder-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <checkTestClasspath>false</checkTestClasspath>
+                    <failBuildInCaseOfDifferentContentConflict>true</failBuildInCaseOfDifferentContentConflict>
+                    <useDefaultResourceIgnoreList>true</useDefaultResourceIgnoreList>
+                    <exceptions>
+                        <exception>
+                            <conflictingDependencies>
+                                <dependency>
+                                    <groupId>commons-logging</groupId>
+                                    <artifactId>commons-logging</artifactId>
+                                </dependency>
+                                <dependency>
+                                    <groupId>org.slf4j</groupId>
+                                    <artifactId>jcl-over-slf4j</artifactId>
+                                </dependency>
+                            </conflictingDependencies>
+                            <classes>
+                                <class>org.apache.commons.logging.Log</class>
+                                <class>org.apache.commons.logging.LogConfigurationException</class>
+                                <class>org.apache.commons.logging.LogFactory</class>
+                                <class>org.apache.commons.logging.impl.NoOpLog</class>
+                                <class>org.apache.commons.logging.impl.SimpleLog</class>
+                            </classes>
+                        </exception>
+                    </exceptions>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-enforcer-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireJavaVersion>
+                                    <version>${java.version}</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>${maven.version}</version>
+                                </requireMavenVersion>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>

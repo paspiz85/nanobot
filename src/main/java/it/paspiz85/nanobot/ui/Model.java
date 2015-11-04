@@ -90,9 +90,6 @@ public final class Model {
         // set system locale to ROOT, Turkish clients will break because
         // jnativehook dependency has Turkish I bug
         Locale.setDefault(Locale.ROOT);
-        // setup configUtils
-        Settings.initialize();
-        logger.log(Level.INFO, "Settings loaded");
         initRunningService(autoAdjustResolution, updateUI);
         initScriptService(updateUI);
     }

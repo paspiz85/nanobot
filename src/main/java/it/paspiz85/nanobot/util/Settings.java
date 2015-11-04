@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.util;
 
-import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.platform.Platform;
 
@@ -26,34 +25,18 @@ public final class Settings {
         INSTANCE.isInitialized = false;
     }
 
-    public static synchronized void initialize() throws IllegalStateException {
-        // Throw exception if called twice
-        if (INSTANCE.isInitialized) {
-            throw new IllegalStateException(Settings.class.getSimpleName() + " is already initialized");
-        }
-        INSTANCE.configPersister.reload(INSTANCE);
-        INSTANCE.isInitialized = true;
-    }
-
     /**
      * Singleton accessor method.
      */
-    public static Settings instance() {
+    public static synchronized Settings instance() {
         if (!INSTANCE.isInitialized) {
-            synchronized (Settings.class) {
-                if (!INSTANCE.isInitialized) {
-                    throw new IllegalStateException(Settings.class.getSimpleName() + " is not initialized");
-                }
-            }
+            INSTANCE.configPersister.reload(INSTANCE);
+            INSTANCE.isInitialized = true;
         }
         return INSTANCE;
     }
 
-    public static boolean isInitialized() {
-        return INSTANCE.isInitialized;
-    }
-
-    private Attack attackStrategy = Attack.noStrategy();
+    private String attackStrategy = "NoAttack";
 
     private final TroopButton[] availableTroops;
 
@@ -96,7 +79,7 @@ public final class Settings {
                 TroopButton.HEALER, TroopButton.DRAGON, TroopButton.PEKKA, TroopButton.MINION, TroopButton.HOGRIDER };
     }
 
-    public Attack getAttackStrategy() {
+    public String getAttackStrategy() {
         return this.attackStrategy;
     }
 
@@ -164,7 +147,7 @@ public final class Settings {
         configPersister.save(this);
     }
 
-    public void setAttackStrategy(final Attack attackStrategy) {
+    public void setAttackStrategy(final String attackStrategy) {
         this.attackStrategy = attackStrategy;
     }
 
