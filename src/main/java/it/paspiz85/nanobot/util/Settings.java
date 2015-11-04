@@ -25,31 +25,15 @@ public final class Settings {
         INSTANCE.isInitialized = false;
     }
 
-    public static synchronized void initialize() throws IllegalStateException {
-        // Throw exception if called twice
-        if (INSTANCE.isInitialized) {
-            throw new IllegalStateException(Settings.class.getSimpleName() + " is already initialized");
-        }
-        INSTANCE.configPersister.reload(INSTANCE);
-        INSTANCE.isInitialized = true;
-    }
-
     /**
      * Singleton accessor method.
      */
-    public static Settings instance() {
+    public static synchronized Settings instance() {
         if (!INSTANCE.isInitialized) {
-            synchronized (Settings.class) {
-                if (!INSTANCE.isInitialized) {
-                    throw new IllegalStateException(Settings.class.getSimpleName() + " is not initialized");
-                }
-            }
+            INSTANCE.configPersister.reload(INSTANCE);
+            INSTANCE.isInitialized = true;
         }
         return INSTANCE;
-    }
-
-    public static boolean isInitialized() {
-        return INSTANCE.isInitialized;
     }
 
     private String attackStrategy = "NoAttack";

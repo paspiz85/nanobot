@@ -58,22 +58,18 @@ public abstract class Attack {
         }
         return availableStrategies;
     }
-    
-    public static final Attack getByName(String name) {
+
+    protected static Point getButtonAttackUnit(final int x) {
+        return attackScreenParser.getButtonAttackUnit(x);
+    }
+
+    public static final Attack getByName(final String name) {
         for (final Attack attack : Attack.getAvailableStrategies()) {
             if (attack.getName().equals(name)) {
                 return attack;
             }
         }
         throw new IllegalArgumentException(name);
-    }
-    
-    public final String getName() {
-        return getClass().getSimpleName();
-    }
-
-    protected static Point getButtonAttackUnit(final int x) {
-        return attackScreenParser.getButtonAttackUnit(x);
     }
 
     public static Attack manualStrategy() {
@@ -112,6 +108,10 @@ public abstract class Attack {
     protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
 
     protected abstract String getDescription();
+
+    public final String getName() {
+        return getClass().getSimpleName();
+    }
 
     protected final Point[] pointsBetweenFromToInclusive(final Point from, final Point to, final int count) {
         Point[] result;

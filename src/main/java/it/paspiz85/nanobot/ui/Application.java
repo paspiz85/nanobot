@@ -24,10 +24,10 @@ public class Application extends javafx.application.Application {
     public static void main(final String[] args) {
         Logging.initialize();
         try {
-            Settings.initialize();
             String user = Settings.instance().getUserMailAddress();
             if (user == null || user.isEmpty()) {
-                user = JOptionPane.showInputDialog(null, "Please, provide your email address", "Login", JOptionPane.QUESTION_MESSAGE);
+                user = JOptionPane.showInputDialog(null, "Please, provide your email address", "Login",
+                        JOptionPane.QUESTION_MESSAGE);
                 if (user == null || user.isEmpty()) {
                     throw new IllegalArgumentException("Cannot proceed without an user mail address");
                 }

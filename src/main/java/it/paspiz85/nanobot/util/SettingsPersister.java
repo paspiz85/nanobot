@@ -1,6 +1,5 @@
 package it.paspiz85.nanobot.util;
 
-import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.platform.Platform;
 
@@ -124,7 +123,7 @@ public final class SettingsPersister {
                 try {
                     @SuppressWarnings("unchecked")
                     final Class<? extends Platform> preferredPlatform = (Class<? extends Platform>) Class
-                            .forName(preferredPlatformProperty);
+                    .forName(preferredPlatformProperty);
                     settings.setPreferredPlatform(preferredPlatform);
                 } catch (final ClassNotFoundException e1) {
                     logger.log(Level.SEVERE, "Platform not found: " + preferredPlatformProperty);

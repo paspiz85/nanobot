@@ -60,12 +60,14 @@ public final class Context {
     }
 
     public Object put(final String key, final Object value) {
+        Object result;
         try {
             final ContextParam param = Enum.valueOf(ContextParam.class, key);
-            return put(param, value);
+            result = put(param, value);
         } catch (final IllegalArgumentException ex) {
-            return attributes.put(key, value);
+            result = attributes.put(key, value);
         }
+        return result;
     }
 
     public void setDisconnected(final boolean disconnected) {

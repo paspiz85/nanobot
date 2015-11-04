@@ -13,11 +13,11 @@ public enum ContextParam {
 
     private final Class<?> type;
 
-    private ContextParam(Class<?> type) {
+    private ContextParam(final Class<?> type) {
         this.type = type;
     }
 
-    public void check(Object value) {
+    public void check(final Object value) {
         if (!type.isInstance(value)) {
             throw new IllegalArgumentException("value '" + value + "' is not of type '" + type + "'");
         }

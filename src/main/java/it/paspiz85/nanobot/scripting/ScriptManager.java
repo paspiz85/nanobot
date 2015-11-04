@@ -83,10 +83,10 @@ public final class ScriptManager {
         context.setAttribute("postMessage", new BiConsumer<String, Boolean>() {
 
             @Override
-            public void accept(String message, Boolean clan) {
+            public void accept(final String message, final Boolean clan) {
                 try {
                     StateMainMenu.instance().postMessage(message, clan);
-                } catch (InterruptedException e) {
+                } catch (final InterruptedException e) {
                     logger.log(Level.SEVERE, e.getMessage(), e);
                 }
             }

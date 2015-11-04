@@ -48,7 +48,8 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
-        if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops) && Settings.instance().getAttackStrategy() != Attack.noStrategy().getName()) {
+        if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops)
+                && Settings.instance().getAttackStrategy() != Attack.noStrategy().getName()) {
             logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
             platform.leftClick(getScreen().getButtonTrainClose(), true);
