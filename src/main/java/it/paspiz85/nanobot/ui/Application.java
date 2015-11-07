@@ -66,5 +66,8 @@ public class Application extends javafx.application.Application {
         }
         primaryStage.setScene(new Scene(parent));
         primaryStage.show();
+        if (controller instanceof ApplicationAwareController) {
+            ((ApplicationAwareController) controller).afterShow();
+        }
     }
 }

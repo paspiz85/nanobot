@@ -7,5 +7,7 @@ package it.paspiz85.nanobot.ui;
  */
 public interface ApplicationAwareController {
 
+    void afterShow();
+
     void setApplication(Application application);
 }

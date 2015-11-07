@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -150,6 +151,38 @@ public class MainController implements ApplicationAwareController {
     @FXML
     private WebView webView;
 
+    @Override
+    public void afterShow() {
+        final boolean autostart = Boolean.parseBoolean(application.getParameters().getNamed().get("autostart"));
+        if (autostart) {
+            javafx.application.Platform.runLater(() -> {
+                final Alert dialog = new Alert(AlertType.INFORMATION);
+                dialog.initOwner(application.getPrimaryStage());
+                dialog.setHeaderText("Autostart in 10 seconds. Close this dialog to cancel");
+                dialog.show();
+                final Task<Void> sleeper = new Task<Void>() {
+
+                    @Override
+                    protected Void call() throws Exception {
+                        try {
+                            Thread.sleep(10000);
+                        } catch (final Exception e) {
+                            logger.log(Level.SEVERE, e.getMessage(), e);
+                        }
+                        return null;
+                    }
+                };
+                sleeper.setOnSucceeded(event -> {
+                    if (dialog.isShowing()) {
+                        dialog.close();
+                        startButton.fire();
+                    }
+                });
+                new Thread(sleeper, "autostartThread").start();
+            });
+        }
+    }
+
     private void alert(final String str) {
         platformRunNow(() -> {
             final Alert dialog = new Alert(AlertType.INFORMATION);
@@ -259,6 +292,7 @@ public class MainController implements ApplicationAwareController {
     @FXML
     public void handleStopButtonAction() {
         model.stop();
+        startButton.requestFocus();
     }
 
     private void initFooter() {
@@ -315,9 +349,9 @@ public class MainController implements ApplicationAwareController {
         model.initialize(() -> autoAdjustResolution(), () -> updateUI());
         initHeader();
         initFooter();
-        startButton.requestFocus();
         initSettingsPane();
         updateUI();
+        startButton.requestFocus();
     }
 
     private void initSettingsPane() {

@@ -29,7 +29,13 @@ public final class Looper {
 
     private boolean waitingForDcChecker;
 
+    private boolean reloading;
+
     private Looper() {
+    }
+
+    public boolean isReloading() {
+        return reloading;
     }
 
     public boolean isRunning() {
@@ -88,6 +94,10 @@ public final class Looper {
         logger.log(Level.INFO, "Woken up. Launching again...");
     }
 
+    public void setReloading(final boolean reloading) {
+        this.reloading = reloading;
+    }
+
     public void start(final BooleanSupplier autoAdjustResolution, final Runnable updateUI) throws Exception {
         try {
             logger.log(Level.INFO, "Starting...");
@@ -98,6 +108,7 @@ public final class Looper {
                     "DisconnectCheckerThread");
             dcThread.setDaemon(true);
             dcThread.start();
+            StateIdle.instance().setLooper(this);
             try {
                 running = true;
                 logger.log(Level.FINE, "looper running");

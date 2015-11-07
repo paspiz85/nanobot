@@ -70,13 +70,13 @@ public class DisconnectChecker implements Runnable {
                     // when you click reload, screen would look like it is
                     // loaded for a second, before
                     // loading actually starts and next state would be executed.
-                    StateIdle.instance().setReloading(true);
+                    Looper.instance().setReloading(true);
                     try {
                         platform.leftClick(UNIT_RECONNECT, true);
                         platform.sleepRandom(5000);
                         Thread.sleep(2000);
                     } finally {
-                        StateIdle.instance().setReloading(false);
+                        Looper.instance().setReloading(false);
                     }
                 }
                 Thread.sleep(30000);

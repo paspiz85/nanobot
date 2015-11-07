@@ -26,7 +26,7 @@ public final class StateIdle extends State<Screen> {
 
     private final MainScreen mainScreenParser;
 
-    private boolean reloading;
+    private Looper looper;
 
     private StateIdle() {
         super(Screen.getInstance(null));
@@ -35,13 +35,13 @@ public final class StateIdle extends State<Screen> {
 
     @Override
     public void handle(final Context context) throws InterruptedException {
-        State<?> nextState = null;
+        State<?> nextState = this;
         logger.log(Level.INFO, "Idle");
-        while (true) {
+        while (looper.isRunning()) {
             if (Thread.interrupted()) {
                 throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
             }
-            if (reloading) {
+            if (looper.isReloading()) {
                 logger.log(Level.INFO, "reloading...");
                 platform.zoomUp();
                 Thread.sleep(2000);
@@ -86,11 +86,7 @@ public final class StateIdle extends State<Screen> {
         context.setState(nextState);
     }
 
-    public boolean isReloading() {
-        return reloading;
-    }
-
-    public void setReloading(final boolean reloading) {
-        this.reloading = reloading;
+    public void setLooper(final Looper looper) {
+        this.looper = looper;
     }
 }

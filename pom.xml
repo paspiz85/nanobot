@@ -436,6 +436,7 @@
 			<properties>
 				<maven.test.skip>true</maven.test.skip>
 				<checkstyle.skip>true</checkstyle.skip>
+				<enforcer.skip>true</enforcer.skip>
 			</properties>
 		</profile>
 
