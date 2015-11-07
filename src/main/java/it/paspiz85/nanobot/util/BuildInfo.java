@@ -74,7 +74,7 @@ public final class BuildInfo {
             final DefaultArtifactVersion releaseVersion = new DefaultArtifactVersion(release);
             final int compare = currentVersion.compareTo(releaseVersion);
             logger.finer("Comparing result is " + compare);
-            if (compare < 0) {
+            if (compare != 0) {
                 result = release;
             }
         }

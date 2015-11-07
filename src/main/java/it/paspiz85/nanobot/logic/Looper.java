@@ -102,7 +102,7 @@ public final class Looper {
                 running = true;
                 logger.log(Level.FINE, "looper running");
                 updateUI.run();
-                while (true) {
+                while (running) {
                     context.setState(StateIdle.instance());
                     loop(context);
                 }
@@ -124,5 +124,9 @@ public final class Looper {
             logger.log(Level.SEVERE, "Got exception: " + e.getMessage(), e);
             throw e;
         }
+    }
+
+    public void stop() {
+        running = false;
     }
 }

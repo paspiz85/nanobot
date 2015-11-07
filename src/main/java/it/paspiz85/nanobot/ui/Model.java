@@ -196,13 +196,14 @@ public final class Model {
     }
 
     public void stop() {
+        looper.stop();
         if (runningService.isRunning()) {
             runningService.cancel();
-            runningService.reset();
         }
+        runningService.reset();
         if (scriptService.isRunning()) {
             scriptService.cancel();
-            scriptService.reset();
         }
+        scriptService.reset();
     }
 }
