@@ -1,6 +1,6 @@
 package it.paspiz85.nanobot.util;
 
-import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.game.Troop;
 import it.paspiz85.nanobot.platform.Platform;
 
 import java.io.File;
@@ -165,10 +165,10 @@ public final class SettingsPersister {
             configProperties.setProperty(PROPERTY_UUID, settings.getUuid().toString());
             configProperties.setProperty(PROPERTY_USER_MAIL_ADDRESS, settings.getUserMailAddress());
             configProperties.setProperty(PROPERTY_ATTACK_STRAT, settings.getAttackStrategy());
-            final TroopButton[] raxInfo = settings.getRaxInfo();
+            final Troop[] raxInfo = settings.getRaxInfo();
             final StringBuilder raxProp = new StringBuilder();
             for (int i = 0; i < raxInfo.length; i++) {
-                final TroopButton unit = raxInfo[i];
+                final Troop unit = raxInfo[i];
                 if (i > 0) {
                     raxProp.append(", ");
                 }

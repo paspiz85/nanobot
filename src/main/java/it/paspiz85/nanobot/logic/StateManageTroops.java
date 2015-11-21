@@ -3,8 +3,8 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.attack.Attack;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
 import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.game.Troop;
 import it.paspiz85.nanobot.game.TroopsInfo;
-import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
@@ -53,14 +53,14 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         } else {
             if (trainMaxTroops > 0) {
                 logger.log(Level.CONFIG, "Training Troops");
-                final TroopButton[] raxInfo = Settings.instance().getRaxInfo();
+                final Troop[] raxInfo = Settings.instance().getRaxInfo();
                 for (int currRax = 0; currRax < raxInfo.length; currRax++) {
-                    final TroopButton troop = raxInfo[currRax];
-                    if (troop != TroopButton.NO_UNIT) {
+                    final Troop troop = raxInfo[currRax];
+                    if (troop != Troop.NO_UNIT) {
                         final int clicks = 10 + Utils.RANDOM.nextInt(10);
                         logger.log(Level.FINE, "Try training " + clicks + " " + troop.getDescription());
                         for (int i = 0; i < clicks; i++) {
-                            platform.leftClick(troop.getPoint(), true);
+                            platform.leftClick(troop.getTrainButton(), true);
                             platform.sleepRandom(75);
                         }
                     }

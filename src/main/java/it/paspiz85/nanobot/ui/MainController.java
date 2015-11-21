@@ -1,7 +1,7 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.attack.Attack;
-import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.game.Troop;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.BuildInfo;
@@ -104,22 +104,22 @@ public class MainController implements ApplicationAwareController {
     private final Platform platform = Platform.instance();
 
     @FXML
-    private ComboBox<TroopButton> rax1ComboBox;
+    private ComboBox<Troop> rax1ComboBox;
 
     @FXML
-    private ComboBox<TroopButton> rax2ComboBox;
+    private ComboBox<Troop> rax2ComboBox;
 
     @FXML
-    private ComboBox<TroopButton> rax3ComboBox;
+    private ComboBox<Troop> rax3ComboBox;
 
     @FXML
-    private ComboBox<TroopButton> rax4ComboBox;
+    private ComboBox<Troop> rax4ComboBox;
 
     @FXML
-    private ComboBox<TroopButton> rax5ComboBox;
+    private ComboBox<Troop> rax5ComboBox;
 
     @FXML
-    private ComboBox<TroopButton> rax6ComboBox;
+    private ComboBox<Troop> rax6ComboBox;
 
     @FXML
     private Label trainTroopsSliderPreview;
@@ -361,7 +361,7 @@ public class MainController implements ApplicationAwareController {
         trainTroopsSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             trainTroopsSliderPreview.setText(String.format("%d", MainController.toInt(newValue.doubleValue())));
         });
-        final TroopButton[] availableTroops = model.getAvailableTroops();
+        final Troop[] availableTroops = model.getAvailableTroops();
         rax1ComboBox.getItems().addAll(availableTroops);
         rax2ComboBox.getItems().addAll(availableTroops);
         rax3ComboBox.getItems().addAll(availableTroops);

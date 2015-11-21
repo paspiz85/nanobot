@@ -12,6 +12,14 @@ public final class TroopsInfo {
 
     private final int[] troopsCount;
 
+    /**
+     * Constructor.
+     *
+     * @param troopsCount
+     *            input.
+     * @deprecated this class must contain also troop type.
+     */
+    @Deprecated
     public TroopsInfo(final int[] troopsCount) {
         this.troopsCount = troopsCount;
     }

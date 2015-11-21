@@ -1,8 +1,9 @@
 package it.paspiz85.nanobot.util;
 
-import it.paspiz85.nanobot.parsing.TroopButton;
+import it.paspiz85.nanobot.game.Troop;
 import it.paspiz85.nanobot.platform.Platform;
 
+import java.util.Arrays;
 import java.util.UUID;
 import java.util.logging.Level;
 
@@ -38,7 +39,7 @@ public final class Settings {
 
     private String attackStrategy = "NoAttack";
 
-    private final TroopButton[] availableTroops;
+    private final Troop[] availableTroops;
 
     private boolean collectResources = true;
 
@@ -64,8 +65,8 @@ public final class Settings {
 
     private Class<? extends Platform> preferredPlatform;
 
-    private final TroopButton[] raxInfo = new TroopButton[] { TroopButton.BARB, TroopButton.BARB, TroopButton.ARCHER,
-            TroopButton.ARCHER, TroopButton.NO_UNIT, TroopButton.NO_UNIT };
+    private final Troop[] raxInfo = new Troop[] { Troop.BARB, Troop.BARB, Troop.ARCHER,
+            Troop.ARCHER, Troop.NO_UNIT, Troop.NO_UNIT };
 
     private int trainMaxTroops = MAX_TRAIN_TROOPS;
 
@@ -74,16 +75,14 @@ public final class Settings {
     private UUID uuid = UUID.randomUUID();
 
     private Settings() {
-        availableTroops = new TroopButton[] { TroopButton.NO_UNIT, TroopButton.BARB, TroopButton.ARCHER,
-                TroopButton.GIANT, TroopButton.GOBLIN, TroopButton.WB, TroopButton.BALLOON, TroopButton.WIZARD,
-                TroopButton.HEALER, TroopButton.DRAGON, TroopButton.PEKKA, TroopButton.MINION, TroopButton.HOGRIDER };
+        availableTroops = Arrays.stream(Troop.values()).filter((t) -> t.getTrainButton() != null || t == Troop.NO_UNIT).toArray(Troop[]::new);
     }
 
     public String getAttackStrategy() {
         return this.attackStrategy;
     }
 
-    public TroopButton[] getAvailableTroops() {
+    public Troop[] getAvailableTroops() {
         return availableTroops;
     }
 
@@ -111,7 +110,7 @@ public final class Settings {
         return preferredPlatform;
     }
 
-    public TroopButton[] getRaxInfo() {
+    public Troop[] getRaxInfo() {
         return raxInfo;
     }
 
@@ -196,7 +195,7 @@ public final class Settings {
         final String[] splits = raxInfoProperty.split("\\s*,\\s*");
         for (int i = 0; i < splits.length && i < raxCount; i++) {
             final String split = splits[i];
-            raxInfo[i] = TroopButton.fromDescription(split);
+            raxInfo[i] = Troop.fromDescription(split);
         }
     }
 

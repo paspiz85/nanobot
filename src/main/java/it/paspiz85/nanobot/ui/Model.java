@@ -1,8 +1,8 @@
 package it.paspiz85.nanobot.ui;
 
 import it.paspiz85.nanobot.exception.BotConfigurationException;
+import it.paspiz85.nanobot.game.Troop;
 import it.paspiz85.nanobot.logic.Looper;
-import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.scripting.ScriptManager;
 import it.paspiz85.nanobot.util.BuildInfo;
@@ -64,7 +64,7 @@ public final class Model {
         checkForUpdateThread.start();
     }
 
-    public TroopButton[] getAvailableTroops() {
+    public Troop[] getAvailableTroops() {
         return Settings.instance().getAvailableTroops();
     }
 
