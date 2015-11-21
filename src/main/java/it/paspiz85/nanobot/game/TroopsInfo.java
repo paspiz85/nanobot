@@ -1,5 +1,7 @@
 package it.paspiz85.nanobot.game;
 
+import java.util.Arrays;
+
 /**
  * Troops info.
  *
@@ -16,5 +18,9 @@ public final class TroopsInfo {
 
     public int[] getTroopsCount() {
         return troopsCount;
+    }
+
+    public int getTroopsCountSum() {
+        return Arrays.stream(troopsCount).sum();
     }
 }

@@ -8,7 +8,6 @@ import it.paspiz85.nanobot.parsing.TroopButton;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
-import java.util.Arrays;
 import java.util.logging.Level;
 
 /**
@@ -36,16 +35,12 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted.");
         }
         final TroopsInfo troopsInfo = getScreen().parseTroopsInfo();
-        final int[] troopsCount = troopsInfo.getTroopsCount();
-        logger.log(Level.CONFIG, "Troops count: " + Arrays.toString(troopsCount));
         context.setTroopsInfo(troopsInfo);
+        int troopsCountSum = troopsInfo.getTroopsCountSum();
+        logger.log(Level.CONFIG, "Troops count: " + troopsCountSum);
         logger.log(Level.FINE, "Open first barrack");
         platform.leftClick(getScreen().getButtonTrainNext(), true);
         platform.sleepRandom(500);
-        int troopsCountSum = 0;
-        for (final int i : troopsCount) {
-            troopsCountSum += i;
-        }
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
         if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops)
