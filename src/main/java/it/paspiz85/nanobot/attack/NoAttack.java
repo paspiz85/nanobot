@@ -1,5 +1,7 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.game.TroopsInfo;
+
 /**
  * No attack, no bot actions.
  *
@@ -12,7 +14,7 @@ public final class NoAttack extends Attack {
     }
 
     @Override
-    protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
+    protected void doDropUnits(final TroopsInfo troopsInfo) throws InterruptedException {
     }
 
     @Override

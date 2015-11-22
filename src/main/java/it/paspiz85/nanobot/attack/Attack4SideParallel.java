@@ -1,5 +1,6 @@
 package it.paspiz85.nanobot.attack;
 
+import it.paspiz85.nanobot.game.TroopsInfo;
 import it.paspiz85.nanobot.util.Point;
 
 /**
@@ -14,7 +15,8 @@ public final class Attack4SideParallel extends Attack {
     }
 
     @Override
-    protected void doDropUnits(final int[] attackGroup) throws InterruptedException {
+    protected void doDropUnits(final TroopsInfo troopsInfo) throws InterruptedException {
+        int[] attackGroup = troopsInfo.getTroopsCount();
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit

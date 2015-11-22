@@ -10,7 +10,6 @@ import it.paspiz85.nanobot.game.TroopsInfo;
 import it.paspiz85.nanobot.util.Settings;
 import it.paspiz85.nanobot.util.Utils;
 
-import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 import java.util.logging.Level;
 
@@ -105,9 +104,8 @@ public final class StateAttack extends State<AttackScreen> {
                 } else {
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
-                        final int[] troopsCount = troopsInfo.getTroopsCount();
-                        logger.log(Level.INFO, "Attacking with " + Arrays.toString(troopsCount));
-                        attackStrategy.attack(enemyInfo, troopsCount);
+                        logger.log(Level.INFO, "Attacking with " + troopsInfo);
+                        attackStrategy.attack(enemyInfo, troopsInfo);
                     }
                     platform.leftClick(getScreen().getButtonEndBattle(), true);
                     platform.sleepRandom(1200);

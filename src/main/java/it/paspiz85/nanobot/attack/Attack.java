@@ -4,6 +4,7 @@ import it.paspiz85.nanobot.exception.BotBadBaseException;
 import it.paspiz85.nanobot.game.AttackScreen;
 import it.paspiz85.nanobot.game.EnemyInfo;
 import it.paspiz85.nanobot.game.Screen;
+import it.paspiz85.nanobot.game.TroopsInfo;
 import it.paspiz85.nanobot.platform.Platform;
 import it.paspiz85.nanobot.util.Point;
 
@@ -97,15 +98,15 @@ public abstract class Attack {
     Attack() {
     }
 
-    public final void attack(final EnemyInfo loot, final int[] attackGroup) throws InterruptedException {
+    public final void attack(final EnemyInfo loot, final TroopsInfo troopsInfo) throws InterruptedException {
         platform.zoomUp();
         logger.log(Level.CONFIG, getDescription());
-        doDropUnits(attackGroup);
+        doDropUnits(troopsInfo);
         sleepUntilLootDoesNotChange(loot);
         logger.log(Level.INFO, "No more loot");
     }
 
-    protected abstract void doDropUnits(int[] attackGroup) throws InterruptedException;
+    protected abstract void doDropUnits(TroopsInfo troopsInfo) throws InterruptedException;
 
     protected abstract String getDescription();
 
