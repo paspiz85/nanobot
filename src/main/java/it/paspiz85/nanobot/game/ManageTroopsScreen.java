@@ -6,7 +6,10 @@ import it.paspiz85.nanobot.util.Point;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Main mode screen.
@@ -58,24 +61,23 @@ public final class ManageTroopsScreen extends Screen {
         // start = new Point(28, 4);
         // start = new Point(28+63, 4);
         // start = new Point(28+63+62, 4);
-        final int[] result = new int[9];
-        int len = 0;
-        while (len < result.length) {
+        final List<Entry<Troop, Integer>> result = new ArrayList<>();
+        while (true) {
             final Integer n = parseNumber(imageTroops, 3, start, 46);
             if (n == null) {
                 break;
             }
-            result[len++] = n;
+            result.add(new SimpleEntry<Troop, Integer>(Troop.BARB, n));
             start = new Point(start.x() + 62, start.y());
         }
         final BufferedImage imageEroes = platform.getSubimage(image, AREA_EROES);
         if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
-            result[len++] = 1;
+            result.add(new SimpleEntry<Troop, Integer>(Troop.BARBARIAN_KING, 1));
         }
         if (searchImage(imageEroes, getClass().getResource("queen.png")) != null) {
-            result[len++] = 1;
+            result.add(new SimpleEntry<Troop, Integer>(Troop.ARCHER_QUEEN, 1));
         }
-        return new TroopsInfo(Arrays.copyOf(result, len));
+        return new TroopsInfo(result);
     }
 
     public Point searchButtonTrainClose() {

@@ -1,6 +1,7 @@
 package it.paspiz85.nanobot.game;
 
-import java.util.Arrays;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * Troops info.
@@ -10,25 +11,18 @@ import java.util.Arrays;
  */
 public final class TroopsInfo {
 
-    private final int[] troopsCount;
+    private final List<Entry<Troop, Integer>> troopsCount;
 
-    /**
-     * Constructor.
-     *
-     * @param troopsCount
-     *            input.
-     * @deprecated this class must contain also troop type.
-     */
-    @Deprecated
-    public TroopsInfo(final int[] troopsCount) {
+    public TroopsInfo(final List<Entry<Troop, Integer>> troopsCount) {
         this.troopsCount = troopsCount;
     }
 
     public int[] getTroopsCount() {
-        return troopsCount;
+        return troopsCount.stream().mapToInt((e) -> e.getValue()).toArray();
     }
 
+    // TODO weighted sum
     public int getTroopsCountSum() {
-        return Arrays.stream(troopsCount).sum();
+        return troopsCount.stream().mapToInt((e) -> e.getValue()).sum();
     }
 }
