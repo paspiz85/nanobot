@@ -297,9 +297,9 @@ public class MainController implements ApplicationAwareController {
 
     private void initFooter() {
         webView.getEngine().load(BuildInfo.instance().getAdUrl());
-        webView.getEngine().locationProperty().addListener((observable, oldLocation, newLocation) -> {
-            if (BuildInfo.instance().getAdUrl().equals(oldLocation)) {
-                application.getHostServices().showDocument(newLocation);
+        webView.getEngine().locationProperty().addListener((observable, oldValue, newValue) -> {
+            if (BuildInfo.instance().getAdUrl().equals(oldValue)) {
+                application.getHostServices().showDocument(newValue);
             }
         });
         final Thread reloadThread = new Thread(() -> {

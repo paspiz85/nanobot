@@ -8,9 +8,13 @@ import java.io.IOException;
 
 import javax.swing.JOptionPane;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 /**
@@ -65,6 +69,21 @@ public class Application extends javafx.application.Application {
             ((ApplicationAwareController) controller).setApplication(this);
         }
         primaryStage.setScene(new Scene(parent));
+        final boolean topright = Boolean.parseBoolean(getParameters().getNamed().get("topright"));
+        if (topright) {
+            primaryStage.widthProperty().addListener(new ChangeListener<Number>() {
+
+                @Override
+                public void changed(final ObservableValue<? extends Number> observable, final Number oldValue,
+                        final Number newValue) {
+                    final Rectangle2D screen = Screen.getPrimary().getVisualBounds();
+                    final double x = screen.getWidth() - newValue.doubleValue();
+                    primaryStage.setX(x);
+                    primaryStage.setY(0);
+                    primaryStage.widthProperty().removeListener(this);
+                }
+            });
+        }
         primaryStage.show();
         if (controller instanceof ApplicationAwareController) {
             ((ApplicationAwareController) controller).afterShow();
