@@ -32,7 +32,7 @@ public final class StateBattleBegin extends State<BattleBeginScreen> {
         if (Thread.interrupted()) {
             throw new InterruptedException(getClass().getSimpleName() + " is interrupted");
         }
-        if (Settings.instance().getAttackStrategy() != Attack.noStrategy().getName()
+        if (!Attack.noStrategy().equals(Settings.instance().getAttackStrategy())
                 && platform.matchColoredPoint(getScreen().getButtonFindMatch())) {
             platform.leftClick(getScreen().getButtonFindMatch(), true);
             platform.sleepRandom(300);

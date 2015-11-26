@@ -22,8 +22,6 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         return Utils.singleton(StateManageTroops.class, () -> new StateManageTroops());
     }
 
-    private boolean reloading;
-
     private StateManageTroops() {
         super(Screen.getInstance(ManageTroopsScreen.class));
     }
@@ -44,7 +42,7 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
         int troopsCountSum = troopsInfo.getTroopsCountSum();
         if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops)
-                && Settings.instance().getAttackStrategy() != Attack.noStrategy().getName()) {
+                && !Attack.noStrategy().equals(Settings.instance().getAttackStrategy())) {
             logger.log(Level.INFO, "Camp is full");
             logger.log(Level.FINE, "Close barracks");
             platform.leftClick(getScreen().getButtonTrainClose(), true);
@@ -76,13 +74,5 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
             platform.sleepRandom(Math.max(5000, 40000 - 5000 * context.getTrainCount()));
         }
         platform.sleepRandom(500);
-    }
-
-    public boolean isReloading() {
-        return reloading;
-    }
-
-    public void setReloading(final boolean reloading) {
-        this.reloading = reloading;
     }
 }

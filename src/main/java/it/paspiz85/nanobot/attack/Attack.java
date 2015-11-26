@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Base attack strategy.
@@ -23,7 +24,7 @@ public abstract class Attack {
 
     private static AttackScreen attackScreenParser = Screen.getInstance(AttackScreen.class);
 
-    private static List<Attack> availableStrategies;
+    private static List<Attack> attacks;
 
     protected static final Point BOTTOM_LEFT = new Point(300, 536);
 
@@ -31,9 +32,7 @@ public abstract class Attack {
 
     protected static final Point LEFT = new Point(19, 307);
 
-    private static ManualAttack manualStrategy;
-
-    private static NoAttack noStrategy;
+    private static ManualAttack manualAttack;
 
     protected static final int PAUSE_BETWEEN_UNIT_DROP = 61;
 
@@ -45,19 +44,22 @@ public abstract class Attack {
         return zeroIfNull(prevLoot) > zeroIfNull(currLoot) ? zeroIfNull(prevLoot) - zeroIfNull(currLoot) : 0;
     }
 
-    public static List<Attack> getAvailableStrategies() {
-        if (availableStrategies == null) {
+    public static List<String> getAvailableStrategies() {
+        return getAttacks().stream().map(Attack::getName).collect(Collectors.toList());
+    }
+
+    private static List<Attack> getAttacks() {
+        if (attacks == null) {
             final List<Attack> list = new ArrayList<>();
-            list.add(noStrategy());
-            list.add(manualStrategy());
+            list.add(manualAttack());
             list.add(new Attack2Side());
             list.add(new Attack4Side());
             list.add(new Attack4SideParallel());
             list.add(new Attack4SideParallelHalf2Wave());
             list.add(new Attack4SideParallelFull2Wave());
-            availableStrategies = list;
+            attacks = list;
         }
-        return availableStrategies;
+        return attacks;
     }
 
     protected static Point getButtonAttackUnit(final int x) {
@@ -65,7 +67,7 @@ public abstract class Attack {
     }
 
     public static final Attack getByName(final String name) {
-        for (final Attack attack : Attack.getAvailableStrategies()) {
+        for (final Attack attack : Attack.getAttacks()) {
             if (attack.getName().equals(name)) {
                 return attack;
             }
@@ -73,18 +75,19 @@ public abstract class Attack {
         throw new IllegalArgumentException(name);
     }
 
-    public static Attack manualStrategy() {
-        if (manualStrategy == null) {
-            manualStrategy = new ManualAttack();
+    private static Attack manualAttack() {
+        if (manualAttack == null) {
+            manualAttack = new ManualAttack();
         }
-        return manualStrategy;
+        return manualAttack;
     }
 
-    public static Attack noStrategy() {
-        if (noStrategy == null) {
-            noStrategy = new NoAttack();
-        }
-        return noStrategy;
+    public static String manualStrategy() {
+        return manualAttack().getName();
+    }
+
+    public static String noStrategy() {
+        return "NoAttack";
     }
 
     private static int zeroIfNull(final Integer n) {

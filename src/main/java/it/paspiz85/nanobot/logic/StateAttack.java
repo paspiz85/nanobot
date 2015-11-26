@@ -94,8 +94,8 @@ public final class StateAttack extends State<AttackScreen> {
                 // to avoid server/client sync from nexting too fast
                 platform.sleepRandom(1000);
             } else {
-                final Attack attackStrategy = Attack.getByName(Settings.instance().getAttackStrategy());
-                if (attackStrategy == Attack.manualStrategy()) {
+                final String attackStrategy = Settings.instance().getAttackStrategy();
+                if (Attack.manualStrategy().equals(attackStrategy)) {
                     if (enemyInfo.equals(prevLoot)) {
                         logger.log(Level.INFO, "User is manually attacking/deciding");
                     }
@@ -105,7 +105,7 @@ public final class StateAttack extends State<AttackScreen> {
                     final TroopsInfo troopsInfo = context.getTroopsInfo();
                     if (troopsInfo != null) {
                         logger.log(Level.INFO, "Attacking with " + troopsInfo);
-                        attackStrategy.attack(enemyInfo, troopsInfo);
+                        Attack.getByName(attackStrategy).attack(enemyInfo, troopsInfo);
                     }
                     platform.leftClick(getScreen().getButtonEndBattle(), true);
                     platform.sleepRandom(1200);
