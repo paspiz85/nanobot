@@ -44,10 +44,6 @@ public abstract class Attack {
         return zeroIfNull(prevLoot) > zeroIfNull(currLoot) ? zeroIfNull(prevLoot) - zeroIfNull(currLoot) : 0;
     }
 
-    public static List<String> getAvailableStrategies() {
-        return getAttacks().stream().map(Attack::getName).collect(Collectors.toList());
-    }
-
     private static List<Attack> getAttacks() {
         if (attacks == null) {
             final List<Attack> list = new ArrayList<>();
@@ -60,6 +56,10 @@ public abstract class Attack {
             attacks = list;
         }
         return attacks;
+    }
+
+    public static List<String> getAvailableStrategies() {
+        return getAttacks().stream().map(Attack::getName).collect(Collectors.toList());
     }
 
     protected static Point getButtonAttackUnit(final int x) {

@@ -65,8 +65,8 @@ public final class Settings {
 
     private Class<? extends Platform> preferredPlatform;
 
-    private final Troop[] raxInfo = new Troop[] { Troop.BARB, Troop.BARB, Troop.ARCHER,
-            Troop.ARCHER, Troop.NO_UNIT, Troop.NO_UNIT };
+    private final Troop[] raxInfo = new Troop[] { Troop.BARB, Troop.BARB, Troop.ARCHER, Troop.ARCHER, Troop.NO_UNIT,
+            Troop.NO_UNIT };
 
     private int trainMaxTroops = MAX_TRAIN_TROOPS;
 
@@ -75,7 +75,8 @@ public final class Settings {
     private UUID uuid = UUID.randomUUID();
 
     private Settings() {
-        availableTroops = Arrays.stream(Troop.values()).filter((t) -> t.getTrainButton() != null || t == Troop.NO_UNIT).toArray(Troop[]::new);
+        availableTroops = Arrays.stream(Troop.values()).filter((t) -> t.getTrainButton() != null || t == Troop.NO_UNIT)
+                .toArray(Troop[]::new);
     }
 
     public String getAttackStrategy() {

@@ -8,8 +8,8 @@ Feature: parsing attack screen
 
     Examples:
       | imagefile                                       | check |
-      | classpath:/features/img/train_1435769837116.png | false |
-      | classpath:/features/img/train_1435772811358.png | true  |
+#      | classpath:/features/img/train_1435769837116.png | false |
+#      | classpath:/features/img/train_1435772811358.png | true  |
 
 
   Scenario Outline: parse troops
@@ -49,5 +49,5 @@ Feature: parsing attack screen
 
     Examples:
       | imagefile                                       | coords    |
-      | classpath:/features/img/main_1436034229185.png  | null      |
-      | classpath:/features/img/train_1435772811358.png | [731,115] |
+#      | classpath:/features/img/main_1436034229185.png  | null      |
+#      | classpath:/features/img/train_1435772811358.png | [731,115] |

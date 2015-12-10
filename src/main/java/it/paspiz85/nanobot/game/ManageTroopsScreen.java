@@ -1,10 +1,8 @@
 package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -76,15 +74,15 @@ public final class ManageTroopsScreen extends Screen {
         return troopsInfo;
     }
 
-    private Point searchIconCampFull() {
-        final BufferedImage image = platform.screenshot(AREA_ICON_CAMP_FULL);
-        return relativePoint(searchImageCenter(image, getClass().getResource("icon_camp_full.png")),
-                AREA_ICON_CAMP_FULL.getEdge1());
-    }
-
     public Point searchButtonTrainClose() {
         final BufferedImage image = platform.screenshot(AREA_BUTTON_TRAIN_CLOSE);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
                 AREA_BUTTON_TRAIN_CLOSE.getEdge1());
+    }
+
+    private Point searchIconCampFull() {
+        final BufferedImage image = platform.screenshot(AREA_ICON_CAMP_FULL);
+        return relativePoint(searchImageCenter(image, getClass().getResource("icon_camp_full.png")),
+                AREA_ICON_CAMP_FULL.getEdge1());
     }
 }

@@ -16,7 +16,7 @@ public final class Attack2Side extends Attack {
 
     @Override
     protected void doDropUnits(final TroopsInfo troopsInfo) throws InterruptedException {
-        int[] attackGroup = troopsInfo.getTroopsCount();
+        final int[] attackGroup = troopsInfo.getTroopsCount();
         for (int unitIdx = 0; unitIdx < attackGroup.length; unitIdx++) {
             final int unitCount = attackGroup[unitIdx];
             // select unit

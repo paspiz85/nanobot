@@ -86,6 +86,6 @@ public final class TroopsInfo {
     public String toString() {
         return "["
                 + troopsCount.stream().map((e) -> e.getValue() + TROOP_DELIMITER + e.getKey().getDescription())
-                        .collect(Collectors.joining(TO_STRING_DELIMITER)) + "]";
+                .collect(Collectors.joining(TO_STRING_DELIMITER)) + "]";
     }
 }

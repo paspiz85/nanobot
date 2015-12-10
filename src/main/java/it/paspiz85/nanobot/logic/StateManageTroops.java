@@ -40,7 +40,7 @@ public final class StateManageTroops extends State<ManageTroopsScreen> {
         platform.sleepRandom(500);
         final int trainMaxTroops = Settings.instance().getTrainMaxTroops();
         logger.log(Level.FINE, "Train Max Troops is " + trainMaxTroops);
-        int troopsCountSum = troopsInfo.getTroopsCountSum();
+        final int troopsCountSum = troopsInfo.getTroopsCountSum();
         if ((getScreen().areCampsFull() || troopsCountSum >= trainMaxTroops)
                 && !Attack.noStrategy().equals(Settings.instance().getAttackStrategy())) {
             logger.log(Level.INFO, "Camp is full");

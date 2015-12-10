@@ -1,10 +1,8 @@
 package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.util.Area;
-import it.paspiz85.nanobot.util.Pixel;
 import it.paspiz85.nanobot.util.Point;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
@@ -24,12 +22,6 @@ public class BattleBeginScreen extends Screen {
     BattleBeginScreen() {
     }
 
-    public Point searchButtonFindMatch() {
-        final BufferedImage image = platform.screenshot(AREA_BUTTON_FIND_MATCH);
-        return relativePoint(searchImageCenter(image, getClass().getResource("button_find_match.png")),
-                AREA_BUTTON_FIND_MATCH.getEdge1());
-    }
-
     public Point getButtonFindMatch() {
         if (buttonFindMatch == null) {
             buttonFindMatch = searchButtonFindMatch();
@@ -44,5 +36,11 @@ public class BattleBeginScreen extends Screen {
     @Override
     public boolean isDisplayed() {
         return searchButtonFindMatch() != null;
+    }
+
+    public Point searchButtonFindMatch() {
+        final BufferedImage image = platform.screenshot(AREA_BUTTON_FIND_MATCH);
+        return relativePoint(searchImageCenter(image, getClass().getResource("button_find_match.png")),
+                AREA_BUTTON_FIND_MATCH.getEdge1());
     }
 }
