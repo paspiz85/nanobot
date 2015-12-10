@@ -67,12 +67,14 @@ public final class MainScreen extends Screen {
     }
 
     public Point searchButtonAttack() {
+        logger.log(Level.FINE, "search button Attack");
         final BufferedImage image = platform.screenshot(AREA_BUTTON_ATTACK);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_attack.png")),
                 AREA_BUTTON_ATTACK.getEdge1());
     }
 
     public Point searchButtonTroops() {
+        logger.log(Level.FINE, "search button Troops");
         final BufferedImage image = platform.screenshot(AREA_BUTTON_TROOPS);
         return relativePoint(searchImageCenter(image, getClass().getResource("button_troops.png")),
                 AREA_BUTTON_TROOPS.getEdge1());
