@@ -15,8 +15,6 @@ import java.awt.image.BufferedImage;
  */
 public final class ManageTroopsScreen extends Screen {
 
-    private static final Pixel POINT_CAMPS_FULL = new Pixel(404, 162, new Color(0xE27F81));
-
     private static final Area AREA_EROES = getArea("area.eroes");
 
     private static final Area AREA_TROOPS = getArea("area.troops");
@@ -25,13 +23,15 @@ public final class ManageTroopsScreen extends Screen {
 
     private static final Area AREA_BUTTON_TRAIN_CLOSE = getArea("area.button.train.close");
 
+    private static final Area AREA_ICON_CAMP_FULL = getArea("area.icon.camp.full");
+
     private Point buttonTrainClose;
 
     ManageTroopsScreen() {
     }
 
     public Boolean areCampsFull() {
-        return platform.matchColoredPoint(POINT_CAMPS_FULL);
+        return searchIconCampFull() != null;
     }
 
     public Point getButtonTrainClose() {
@@ -74,6 +74,12 @@ public final class ManageTroopsScreen extends Screen {
             troopsInfo.add(Troop.ARCHER_QUEEN, 1);
         }
         return troopsInfo;
+    }
+
+    private Point searchIconCampFull() {
+        final BufferedImage image = platform.screenshot(AREA_ICON_CAMP_FULL);
+        return relativePoint(searchImageCenter(image, getClass().getResource("icon_camp_full.png")),
+                AREA_ICON_CAMP_FULL.getEdge1());
     }
 
     public Point searchButtonTrainClose() {
