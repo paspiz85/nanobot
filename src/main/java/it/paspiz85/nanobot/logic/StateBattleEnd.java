@@ -26,7 +26,7 @@ public final class StateBattleEnd extends State<BattleEndScreen> {
     public void handle(final Context context) throws InterruptedException {
         logger.log(Level.FINE, "Battle end");
         platform.leftClick(getScreen().getButtonReturnHome(), true);
-        platform.sleepRandom(1200);
+        platform.sleepRandom(3000);
         context.setState(StateIdle.instance());
     }
 }
