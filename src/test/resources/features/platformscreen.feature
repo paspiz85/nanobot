@@ -1,4 +1,5 @@
 @unit-test
+@deprecated
 Feature: parsing attack screen
 
   Scenario Outline: search play game button

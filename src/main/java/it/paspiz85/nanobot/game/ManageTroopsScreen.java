@@ -29,12 +29,12 @@ public final class ManageTroopsScreen extends Screen {
     }
 
     public Boolean areCampsFull() {
-        return searchIconCampFull() != null;
+        return isDisplayedByImageSearch(this::searchIconCampFull);
     }
 
     public Point getButtonTrainClose() {
         if (buttonTrainClose == null) {
-            buttonTrainClose = searchButtonTrainClose();
+            searchButtonTrainClose();
         }
         return buttonTrainClose;
     }
@@ -45,7 +45,7 @@ public final class ManageTroopsScreen extends Screen {
 
     @Override
     public boolean isDisplayed() {
-        return searchButtonTrainClose() != null;
+        return isDisplayedByImageSearch(this::searchButtonTrainClose);
     }
 
     public TroopsInfo parseTroopsInfo() {
@@ -65,24 +65,20 @@ public final class ManageTroopsScreen extends Screen {
             start = new Point(start.x() + 62, start.y());
         }
         final BufferedImage imageEroes = platform.getSubimage(image, AREA_EROES);
-        if (searchImage(imageEroes, getClass().getResource("king.png")) != null) {
+        if (searchImageCenter(imageEroes, getClass().getResource("king.png")) != null) {
             troopsInfo.add(Troop.BARBARIAN_KING, 1);
         }
-        if (searchImage(imageEroes, getClass().getResource("queen.png")) != null) {
+        if (searchImageCenter(imageEroes, getClass().getResource("queen.png")) != null) {
             troopsInfo.add(Troop.ARCHER_QUEEN, 1);
         }
         return troopsInfo;
     }
 
-    public Point searchButtonTrainClose() {
-        final BufferedImage image = platform.screenshot(AREA_BUTTON_TRAIN_CLOSE);
-        return relativePoint(searchImageCenter(image, getClass().getResource("button_train_close.png")),
-                AREA_BUTTON_TRAIN_CLOSE.getEdge1());
+    private void searchButtonTrainClose() {
+        buttonTrainClose = searchImage(getClass().getResource("button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE);
     }
 
-    private Point searchIconCampFull() {
-        final BufferedImage image = platform.screenshot(AREA_ICON_CAMP_FULL);
-        return relativePoint(searchImageCenter(image, getClass().getResource("icon_camp_full.png")),
-                AREA_ICON_CAMP_FULL.getEdge1());
+    private void searchIconCampFull() {
+        searchImage(getClass().getResource("icon_camp_full.png"), AREA_ICON_CAMP_FULL);
     }
 }

@@ -1,6 +1,7 @@
 @unit-test
 @wip
 @tdd
+@deprecated
 Feature: scenarios for Test-Driven-Development
 
 

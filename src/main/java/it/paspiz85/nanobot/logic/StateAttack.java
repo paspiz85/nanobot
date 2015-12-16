@@ -86,7 +86,7 @@ public final class StateAttack extends State<AttackScreen> {
                 platform.leftClick(getScreen().getButtonNext(), true);
                 platform.sleepRandom(666);
                 try {
-                    sleepUntilPointFound(() -> getScreen().searchButtonNext());
+                    sleepUntil(() -> getScreen().isDisplayed());
                 } catch (final TimeoutException e) {
                     logger.log(Level.WARNING, "Next button not found");
                     break;

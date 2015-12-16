@@ -61,7 +61,11 @@ public class AttackScreenSteps {
     @When("^searching next button point$")
     public void whenSearchingNexButtonPoint() throws BotBadBaseException {
         GenericSteps.initScreenshotMock();
-        final Point point = Screen.getInstance(AttackScreen.class).searchButtonNext();
+        Point point = null;
+        // TODO review
+        if (Screen.getInstance(AttackScreen.class).isDisplayed()) {
+            point = Screen.getInstance(AttackScreen.class).getButtonNext();
+        }
         ScenarioContext.put("point", point);
     }
 }

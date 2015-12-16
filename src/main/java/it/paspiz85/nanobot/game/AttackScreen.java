@@ -154,7 +154,7 @@ public class AttackScreen extends Screen {
 
     public Point getButtonNext() {
         if (buttonNext == null) {
-            buttonNext = searchButtonNext();
+            searchButtonNext();
         }
         return buttonNext;
     }
@@ -206,7 +206,7 @@ public class AttackScreen extends Screen {
 
     @Override
     public boolean isDisplayed() {
-        return searchButtonNext() != null;
+        return isDisplayedByImageSearch(this::searchButtonNext);
     }
 
     protected final Integer parseDarkElixir(final BufferedImage image) throws BotBadBaseException {
@@ -251,9 +251,7 @@ public class AttackScreen extends Screen {
          */
     }
 
-    public Point searchButtonNext() {
-        final BufferedImage image = platform.screenshot(AREA_NEXT_BUTTON);
-        return relativePoint(searchImageCenter(image, getClass().getResource("button_next.png")),
-                AREA_NEXT_BUTTON.getEdge1());
+    private void searchButtonNext() {
+        buttonNext = searchImage(getClass().getResource("button_next.png"), AREA_NEXT_BUTTON);
     }
 }

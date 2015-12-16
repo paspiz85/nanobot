@@ -227,6 +227,17 @@ public abstract class Screen {
 
     public abstract boolean isDisplayed();
 
+    protected final boolean isDisplayedByImageSearch(final Runnable runnable) {
+        boolean result = false;
+        try {
+            runnable.run();
+            result = true;
+        } catch (final Exception ex) {
+            logger.log(Level.FINE, getClass().getSimpleName() + " not found");
+        }
+        return result;
+    }
+
     private Integer parseDigit(final BufferedImage image, final Point start, final int type) {
         Integer result = null;
         for (int i = 0; i < 10; i++) {
@@ -306,26 +317,17 @@ public abstract class Screen {
         return result;
     }
 
-    protected final Point searchImage(final BufferedImage image, final URL resource) {
-        Point result = null;
-        final Rectangle rectangle = findArea(image, resource);
-        if (rectangle != null) {
-            final int x = rectangle.getLocation().x;
-            final int y = rectangle.getLocation().y;
-            result = new Point(x, y);
+    protected final Point searchImage(final URL resource, final Area area) {
+        final BufferedImage image = platform.screenshot(area);
+        Point point = searchImageCenter(image, resource);
+        if (point == null) {
+            final File f = platform.saveImage(image, "error_" + System.currentTimeMillis());
+            throw new IllegalArgumentException("unable to find " + resource.getFile() + " in " + f.getAbsolutePath());
         }
-        return result;
-    }
-
-    protected final Point searchImageCenter(final BufferedImage image, final String resource) {
-        Point result = null;
-        final Rectangle rectangle = findArea(image, getClass().getResource(resource));
-        if (rectangle != null) {
-            final int x = rectangle.getLocation().x + (int) (rectangle.getWidth() / 2);
-            final int y = rectangle.getLocation().y + (int) (rectangle.getHeight() / 2);
-            result = new Point(x, y);
+        if (area != null) {
+            point = relativePoint(point, area.getEdge1());
         }
-        return result;
+        return point;
     }
 
     protected final Point searchImageCenter(final BufferedImage image, final URL resource) {

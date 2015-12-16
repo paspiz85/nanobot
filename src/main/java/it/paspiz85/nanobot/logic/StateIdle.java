@@ -7,7 +7,6 @@ import it.paspiz85.nanobot.game.MainScreen;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
 import it.paspiz85.nanobot.game.PlatformScreen;
 import it.paspiz85.nanobot.game.Screen;
-import it.paspiz85.nanobot.util.Point;
 import it.paspiz85.nanobot.util.Utils;
 
 import java.util.logging.Level;
@@ -76,10 +75,7 @@ public final class StateIdle extends State<Screen> {
                 break;
             } else if (Screen.getInstance(PlatformScreen.class).isDisplayed()) {
                 logger.log(Level.INFO, "Detected PlatformScreen");
-                final Point point = Screen.getInstance(PlatformScreen.class).searchButtonPlayGame();
-                if (point != null) {
-                    platform.leftClick(point, true);
-                }
+                platform.leftClick(Screen.getInstance(PlatformScreen.class).getButtonPlayGame(), true);
             }
             Thread.sleep(1000);
         }

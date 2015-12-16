@@ -3,7 +3,6 @@ package it.paspiz85.nanobot.logic;
 import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.platform.Platform;
-import it.paspiz85.nanobot.util.Point;
 
 import java.util.concurrent.TimeoutException;
 import java.util.function.Supplier;
@@ -36,13 +35,11 @@ public abstract class State<S extends Screen> {
 
     public abstract void handle(Context context) throws BotException, InterruptedException;
 
-    protected final Point sleepUntilPointFound(final Supplier<Point> supplier) throws InterruptedException,
-    TimeoutException {
+    protected final void sleepUntil(final Supplier<Boolean> supplier) throws InterruptedException, TimeoutException {
         logger.log(Level.FINER, "Waiting for point");
         for (int i = 0; i < 100; i++) {
-            final Point point = supplier.get();
-            if (point != null) {
-                return point;
+            if (supplier.get()) {
+                return;
             }
             logger.log(Level.FINER, "Point not found");
             platform.sleepRandom(500);

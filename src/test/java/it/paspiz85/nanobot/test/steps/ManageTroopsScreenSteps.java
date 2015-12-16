@@ -5,7 +5,6 @@ import it.paspiz85.nanobot.exception.BotException;
 import it.paspiz85.nanobot.game.ManageTroopsScreen;
 import it.paspiz85.nanobot.game.Screen;
 import it.paspiz85.nanobot.game.TroopsInfo;
-import it.paspiz85.nanobot.util.Point;
 import junit.framework.AssertionFailedError;
 
 import org.junit.Assert;
@@ -44,7 +43,9 @@ public class ManageTroopsScreenSteps {
     @When("^searching close troops button point$")
     public void whenSearchingCloseTroopsButtonPoint() throws BotBadBaseException {
         GenericSteps.initScreenshotMock();
-        final Point point = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
-        ScenarioContext.put("point", point);
+        // TODO
+        // final Point point =
+        // Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
+        // ScenarioContext.put("point", point);
     }
 }

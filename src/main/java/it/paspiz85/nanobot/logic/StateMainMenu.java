@@ -82,10 +82,9 @@ public final class StateMainMenu extends State<MainScreen> {
         if (Settings.instance().isExtraFunctions()) {
             extra(context);
         }
-        final Point buttonTrainClose = Screen.getInstance(ManageTroopsScreen.class).searchButtonTrainClose();
-        if (buttonTrainClose != null) {
+        if (Screen.getInstance(ManageTroopsScreen.class).isDisplayed()) {
             logger.log(Level.FINE, "Close previous train");
-            platform.leftClick(buttonTrainClose, true);
+            platform.leftClick(Screen.getInstance(ManageTroopsScreen.class).getButtonTrainClose(), true);
             platform.sleepRandom(500);
         }
         logger.log(Level.FINE, "Open troops");

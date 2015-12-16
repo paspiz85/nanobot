@@ -40,8 +40,10 @@ public class MainScreenSteps {
     @When("^searching attack button point$")
     public void whenSearchingAttackButtonPoint() throws BotBadBaseException {
         GenericSteps.initScreenshotMock();
-        final Point point = Screen.getInstance(MainScreen.class).searchButtonAttack();
-        ScenarioContext.put("point", point);
+        // TODO
+        // final Point point =
+        // Screen.getInstance(MainScreen.class).searchButtonAttack();
+        // ScenarioContext.put("point", point);
     }
 
     @When("^searching full dark elixir drill points$")
@@ -71,7 +73,9 @@ public class MainScreenSteps {
     @When("^searching troops button point$")
     public void whenSearchingTroopsButtonPoint() throws BotBadBaseException {
         GenericSteps.initScreenshotMock();
-        final Point point = Screen.getInstance(MainScreen.class).searchButtonTroops();
-        ScenarioContext.put("point", point);
+        // TODO
+        // final Point point =
+        // Screen.getInstance(MainScreen.class).searchButtonTroops();
+        // ScenarioContext.put("point", point);
     }
 }

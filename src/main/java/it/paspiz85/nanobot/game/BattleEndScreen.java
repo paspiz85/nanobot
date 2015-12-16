@@ -29,10 +29,10 @@ public class BattleEndScreen extends Screen {
 
     @Override
     public boolean isDisplayed() {
-        return searchButtonReturnHome() != null;
+        return isDisplayedByImageSearch(this::searchButtonReturnHome);
     }
 
-    public Point searchButtonReturnHome() {
+    private Point searchButtonReturnHome() {
         logger.log(Level.FINE, "search button EndBattle-ReturnHome");
         Point result = BUTTON_RETURN_HOME;
         for (int i = 0; i < BUTTON_RETURN_HOME_OFFSET.length; i++) {

@@ -2,8 +2,6 @@ package it.paspiz85.nanobot.game;
 
 import it.paspiz85.nanobot.util.Point;
 
-import java.awt.image.BufferedImage;
-
 /**
  * Platform mode screen.
  *
@@ -21,11 +19,10 @@ public class PlatformScreen extends Screen {
 
     @Override
     public boolean isDisplayed() {
-        return searchButtonPlayGame() != null;
+        return isDisplayedByImageSearch(this::searchButtonPlayGame);
     }
 
-    public Point searchButtonPlayGame() {
-        final BufferedImage image = platform.screenshot();
-        return searchImageCenter(image, getClass().getResource("coc.png"));
+    private Point searchButtonPlayGame() {
+        return searchImage(getClass().getResource("coc.png"), null);
     }
 }

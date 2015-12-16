@@ -11,7 +11,10 @@ public class BattleEndScreenSteps {
     @When("^searching end battle return home button point$")
     public void whenSearchingEndButtonReturnHomeButtonPoint() throws BotBadBaseException {
         GenericSteps.initScreenshotMock();
-        final Point point = Screen.getInstance(BattleEndScreen.class).searchButtonReturnHome();
+        Point point = null;
+        if (Screen.getInstance(BattleEndScreen.class).isDisplayed()) {
+            point = Screen.getInstance(BattleEndScreen.class).getButtonReturnHome();
+        }
         ScenarioContext.put("point", point);
     }
 }

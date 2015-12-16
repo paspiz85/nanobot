@@ -38,7 +38,7 @@ public final class StateBattleBegin extends State<BattleBeginScreen> {
             platform.leftClick(getScreen().getButtonShieldDisable(), true);
             platform.sleepRandom(100);
             try {
-                sleepUntilPointFound(() -> Screen.getInstance(AttackScreen.class).searchButtonNext());
+                sleepUntil(() -> Screen.getInstance(AttackScreen.class).isDisplayed());
                 // platform.zoomUp();
                 context.setState(StateAttack.instance());
                 return;

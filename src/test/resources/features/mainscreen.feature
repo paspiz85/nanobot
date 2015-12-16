@@ -1,4 +1,5 @@
 @unit-test
+@deprecated
 Feature: parsing main screen
 
 
