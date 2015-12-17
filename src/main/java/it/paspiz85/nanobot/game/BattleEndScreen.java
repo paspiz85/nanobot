@@ -29,7 +29,7 @@ public class BattleEndScreen extends Screen {
 
     @Override
     public boolean isDisplayed() {
-        return isDisplayedByImageSearch(this::searchButtonReturnHome);
+        return searchButtonReturnHome() != null;
     }
 
     private Point searchButtonReturnHome() {
