@@ -41,14 +41,14 @@ public final class MainScreen extends Screen {
 
     public Point getButtonAttack() {
         if (buttonAttack == null) {
-            searchButtonAttack();
+            searchButtonAttack(true);
         }
         return buttonAttack;
     }
 
     public Point getButtonTroops() {
         if (buttonTroops == null) {
-            searchButtonTroops();
+            searchButtonTroops(true);
         }
         return buttonTroops;
     }
@@ -66,12 +66,12 @@ public final class MainScreen extends Screen {
         return isDisplayedByImageSearch(this::searchButtonAttack);
     }
 
-    private void searchButtonAttack() {
-        buttonAttack = searchImage(getClass().getResource("button_attack.png"), AREA_BUTTON_ATTACK);
+    private void searchButtonAttack(boolean debug) {
+        buttonAttack = searchImage(getClass().getResource("button_attack.png"), AREA_BUTTON_ATTACK, debug);
     }
 
-    private void searchButtonTroops() {
-        buttonTroops = searchImage(getClass().getResource("button_troops.png"), AREA_BUTTON_TROOPS);
+    private void searchButtonTroops(boolean debug) {
+        buttonTroops = searchImage(getClass().getResource("button_troops.png"), AREA_BUTTON_TROOPS, debug);
     }
 
     private Point searchFullCollector(final URI uri) {

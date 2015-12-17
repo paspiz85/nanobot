@@ -15,6 +15,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -227,10 +228,10 @@ public abstract class Screen {
 
     public abstract boolean isDisplayed();
 
-    protected final boolean isDisplayedByImageSearch(final Runnable runnable) {
+    protected final boolean isDisplayedByImageSearch(final Consumer<Boolean> imageSearch) {
         boolean result = false;
         try {
-            runnable.run();
+            imageSearch.accept(false);
             result = true;
         } catch (final Exception ex) {
             logger.log(Level.FINE, getClass().getSimpleName() + " not found");
@@ -317,12 +318,16 @@ public abstract class Screen {
         return result;
     }
 
-    protected final Point searchImage(final URL resource, final Area area) {
+    protected final Point searchImage(final URL resource, final Area area, final boolean debug) {
         final BufferedImage image = platform.screenshot(area);
         Point point = searchImageCenter(image, resource);
         if (point == null) {
-            final File f = platform.saveImage(image, "error_" + System.currentTimeMillis());
-            throw new IllegalArgumentException("unable to find " + resource.getFile() + " in " + f.getAbsolutePath());
+            String message = "unable to find " + resource.getFile();
+            if (debug) {
+                final File f = platform.saveImage(image, "error_" + System.currentTimeMillis());
+                message += " in " + f.getAbsolutePath();
+            }
+            throw new IllegalArgumentException(message);
         }
         if (area != null) {
             point = relativePoint(point, area.getEdge1());

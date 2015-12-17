@@ -22,7 +22,7 @@ public class BattleBeginScreen extends Screen {
 
     public Point getButtonFindMatch() {
         if (buttonFindMatch == null) {
-            searchButtonFindMatch();
+            searchButtonFindMatch(true);
         }
         return buttonFindMatch;
     }
@@ -36,7 +36,7 @@ public class BattleBeginScreen extends Screen {
         return isDisplayedByImageSearch(this::searchButtonFindMatch);
     }
 
-    private void searchButtonFindMatch() {
-        buttonFindMatch = searchImage(getClass().getResource("button_find_match.png"), AREA_BUTTON_FIND_MATCH);
+    private void searchButtonFindMatch(boolean debug) {
+        buttonFindMatch = searchImage(getClass().getResource("button_find_match.png"), AREA_BUTTON_FIND_MATCH, debug);
     }
 }

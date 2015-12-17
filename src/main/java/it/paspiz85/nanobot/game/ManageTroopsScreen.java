@@ -34,7 +34,7 @@ public final class ManageTroopsScreen extends Screen {
 
     public Point getButtonTrainClose() {
         if (buttonTrainClose == null) {
-            searchButtonTrainClose();
+            searchButtonTrainClose(true);
         }
         return buttonTrainClose;
     }
@@ -74,11 +74,11 @@ public final class ManageTroopsScreen extends Screen {
         return troopsInfo;
     }
 
-    private void searchButtonTrainClose() {
-        buttonTrainClose = searchImage(getClass().getResource("button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE);
+    private void searchButtonTrainClose(boolean debug) {
+        buttonTrainClose = searchImage(getClass().getResource("button_train_close.png"), AREA_BUTTON_TRAIN_CLOSE, debug);
     }
 
-    private void searchIconCampFull() {
-        searchImage(getClass().getResource("icon_camp_full.png"), AREA_ICON_CAMP_FULL);
+    private void searchIconCampFull(boolean debug) {
+        searchImage(getClass().getResource("icon_camp_full.png"), AREA_ICON_CAMP_FULL, debug);
     }
 }

@@ -14,7 +14,7 @@ public class PlatformScreen extends Screen {
     }
 
     public Point getButtonPlayGame() {
-        return searchButtonPlayGame();
+        return searchButtonPlayGame(true);
     }
 
     @Override
@@ -22,7 +22,7 @@ public class PlatformScreen extends Screen {
         return isDisplayedByImageSearch(this::searchButtonPlayGame);
     }
 
-    private Point searchButtonPlayGame() {
-        return searchImage(getClass().getResource("coc.png"), null);
+    private Point searchButtonPlayGame(boolean debug) {
+        return searchImage(getClass().getResource("coc.png"), null, debug);
     }
 }

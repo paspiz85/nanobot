@@ -154,7 +154,7 @@ public class AttackScreen extends Screen {
 
     public Point getButtonNext() {
         if (buttonNext == null) {
-            searchButtonNext();
+            searchButtonNext(true);
         }
         return buttonNext;
     }
@@ -251,7 +251,7 @@ public class AttackScreen extends Screen {
          */
     }
 
-    private void searchButtonNext() {
-        buttonNext = searchImage(getClass().getResource("button_next.png"), AREA_NEXT_BUTTON);
+    private void searchButtonNext(boolean debug) {
+        buttonNext = searchImage(getClass().getResource("button_next.png"), AREA_NEXT_BUTTON, debug);
     }
 }
